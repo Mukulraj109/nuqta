@@ -5,7 +5,8 @@
  */
 
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import { ScrollView, View, Text, StyleSheet, RefreshControl, Pressable, Animated, ActivityIndicator, Modal, Platform } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, RefreshControl, Pressable, ActivityIndicator, Modal, Platform } from 'react-native';
+import Animated, { runOnJS, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useRouter } from 'expo-router';
 import { BRAND } from '@/constants/brand';
 import { Ionicons } from '@expo/vector-icons';
@@ -138,7 +139,7 @@ function FoodDiningCategoryPage() {
   const placeholders = tabPlaceholders[activeTab] || tabPlaceholders.delivery;
 
   // Animation ref for ticker
-  const fadeAnim = useRef(new Animated.Value(1)).current;
+  const fadeAnim = useSharedValue(1);
 
   // Compare section refs
   const scrollViewRef = useRef<ScrollView>(null);
@@ -259,9 +260,11 @@ function FoodDiningCategoryPage() {
   useEffect(() => {
     if (recentOrders.length > 1) {
       const timer = setInterval(() => {
-        Animated.timing(fadeAnim, { toValue: 0, duration: 300, useNativeDriver: true }).start(() => {
-          setTickerIndex((prev) => (prev + 1) % recentOrders.length);
-          Animated.timing(fadeAnim, { toValue: 1, duration: 300, useNativeDriver: true }).start();
+        fadeAnim.value = withTiming(0, { duration: 300 }, (finished) => {
+          if (finished) {
+            runOnJS(setTickerIndex)((prev: number) => (prev + 1) % recentOrders.length);
+            fadeAnim.value = withTiming(1, { duration: 300 });
+          }
         });
       }, 4000);
       return () => {

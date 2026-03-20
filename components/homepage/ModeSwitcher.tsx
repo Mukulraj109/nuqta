@@ -17,18 +17,18 @@
  * Design Reference: rezprive-main/src/components/ModeSwitcher.tsx
  */
 
-import React, { useRef, useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   Pressable,
-  Animated,
   LayoutChangeEvent,
   Platform,
   AccessibilityInfo,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -95,8 +95,8 @@ export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
   const router = useRouter();
 
   // Animation values
-  const pillPosition = useRef(new Animated.Value(0)).current;
-  const priveGlowOpacity = useRef(new Animated.Value(0)).current;
+  const pillPosition = useSharedValue(0);
+  const priveGlowOpacity = useSharedValue(0);
 
   // Tab layouts for animation
   const [tabLayouts, setTabLayouts] = useState<Record<ModeId, TabLayout>>({
@@ -132,13 +132,8 @@ export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
     const targetLayout = tabLayouts[activeMode];
     if (!targetLayout.width) return;
 
-    const anim = Animated.timing(pillPosition, {
-      toValue: targetLayout.x,
-      duration: Timing.normal, // 250ms
-      useNativeDriver: true,
-    });
-    anim.start();
-    return () => { anim.stop(); };
+    pillPosition.value = withTiming(targetLayout.x, { duration: Timing.normal });
+    // cleanup handled by reanimated
   }, [activeMode, tabLayouts, layoutsReady, pillPosition]);
 
   // Privé glow animation (once per session for eligible users)
@@ -148,22 +143,17 @@ export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
       !priveEligibility.hasSeenGlowThisSession
     ) {
       // Pulse glow animation
-      const anim = Animated.sequence([
-        Animated.timing(priveGlowOpacity, {
-          toValue: 0.8,
-          duration: 500,
-          useNativeDriver: true,
-        }),
-        Animated.timing(priveGlowOpacity, {
-          toValue: 0,
-          duration: 500,
-          useNativeDriver: true,
-        }),
-      ]);
-      anim.start();
-      return () => { anim.stop(); };
+      priveGlowOpacity.value = withSequence(withTiming(0.8, { duration: 500 }), withTiming(0, { duration: 500 }));
     }
   }, [priveEligibility.isEligible, priveEligibility.hasSeenGlowThisSession, priveGlowOpacity]);
+
+  const priveGlowStyle = useAnimatedStyle(() => ({
+    opacity: priveGlowOpacity.value,
+  }));
+
+  const pillAnimStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: pillPosition.value }],
+  }));
 
   // Handle mode press
   const handleModePress = useCallback(
@@ -218,12 +208,12 @@ export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
               styles.slidingPill,
               {
                 width: activeLayout.width,
-                transform: [{ translateX: pillPosition }],
                 backgroundColor:
                   activeMode === 'prive'
                     ? activeModeConfig?.activeColor
                     : activeModeConfig?.activeColor,
               },
+              pillAnimStyle,
             ]}
           >
             {/* Gradient for Privé mode */}
@@ -273,7 +263,7 @@ export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
                 <Animated.View
                   style={[
                     styles.priveGlow,
-                    { opacity: priveGlowOpacity },
+                    priveGlowStyle,
                   ]}
                 />
               )}

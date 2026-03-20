@@ -16,11 +16,17 @@ import {
   Dimensions,
   Platform,
   ActivityIndicator,
-  Animated,
   NativeSyntheticEvent,
   NativeScrollEvent,
   ViewToken,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  interpolate,
+  SharedValue,
+} from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -104,6 +110,26 @@ interface MallHeroBannerProps {
   onBannerPress?: (banner: MallBanner) => void;
 }
 
+// Individual pagination dot with reanimated
+const PaginationDot: React.FC<{ index: number; activeIndex: SharedValue<number> }> = memo(({ index, activeIndex }) => {
+  const dotStyle = useAnimatedStyle(() => {
+    const isActive = activeIndex.value === index ? 1 : 0;
+    return {
+      width: withSpring(isActive ? DOT_ACTIVE_WIDTH : DOT_SIZE, { damping: 15, stiffness: 120 }),
+      opacity: withSpring(isActive ? 1 : 0.35, { damping: 15, stiffness: 120 }),
+    };
+  });
+
+  return <Animated.View style={[paginationDotStyle, dotStyle]} />;
+});
+
+// Static style for pagination dot (height + borderRadius)
+const paginationDotStyle = {
+  height: DOT_SIZE,
+  borderRadius: DOT_SIZE / 2,
+  backgroundColor: colors.nileBlue,
+};
+
 const isValidImageUrl = (url: string | undefined): boolean => {
   if (!url || typeof url !== 'string') return false;
   return url.startsWith('http://') || url.startsWith('https://');
@@ -118,26 +144,12 @@ const MallHeroBanner: React.FC<MallHeroBannerProps> = ({
   const currentIndexRef = useRef(0);
   const autoScrollTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const isUserScrolling = useRef(false);
-  const dotAnimations = useRef<Animated.Value[]>([]);
+  const activeIndexShared = useSharedValue(0);
 
   const displayBanners = (!banners || banners.length === 0) ? DEFAULT_BANNERS : banners;
 
-  // Initialize dot animations
-  if (dotAnimations.current.length !== displayBanners.length) {
-    dotAnimations.current = displayBanners.map((_, i) =>
-      new Animated.Value(i === 0 ? 1 : 0)
-    );
-  }
-
   const animateDots = useCallback((activeIndex: number) => {
-    dotAnimations.current.forEach((anim, i) => {
-      Animated.spring(anim, {
-        toValue: i === activeIndex ? 1 : 0,
-        useNativeDriver: false,
-        friction: 8,
-        tension: 60,
-      }).start();
-    });
+    activeIndexShared.value = activeIndex;
   }, []);
 
   const scrollToIndex = useCallback((index: number) => {
@@ -310,30 +322,13 @@ const MallHeroBanner: React.FC<MallHeroBannerProps> = ({
       {/* External animated pagination dots */}
       {displayBanners.length > 1 && (
         <View style={styles.paginationContainer}>
-          {displayBanners.map((_, index) => {
-            const dotWidth = dotAnimations.current[index]?.interpolate({
-              inputRange: [0, 1],
-              outputRange: [DOT_SIZE, DOT_ACTIVE_WIDTH],
-            }) ?? DOT_SIZE;
-
-            const dotOpacity = dotAnimations.current[index]?.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0.35, 1],
-            }) ?? 0.35;
-
-            return (
-              <Animated.View
-                key={index}
-                style={[
-                  styles.paginationDot,
-                  {
-                    width: dotWidth,
-                    opacity: dotOpacity,
-                  },
-                ]}
-              />
-            );
-          })}
+          {displayBanners.map((_, index) => (
+            <PaginationDot
+              key={index}
+              index={index}
+              activeIndex={activeIndexShared}
+            />
+          ))}
         </View>
       )}
     </View>
@@ -494,11 +489,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
     gap: 6,
   },
-  paginationDot: {
-    height: DOT_SIZE,
-    borderRadius: DOT_SIZE / 2,
-    backgroundColor: colors.nileBlue,
-  },
+  // paginationDot style moved to module-level for reanimated PaginationDot component
   loadingContainer: {
     paddingHorizontal: BANNER_HORIZONTAL_PADDING,
   },

@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import { View, StyleSheet, Animated } from 'react-native';
+import React, { useEffect} from 'react';
+import { View, StyleSheet} from 'react-native';
+import Animated, { useSharedValue, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { useStockStatus } from '@/hooks/useStockStatus';
@@ -23,42 +24,20 @@ function StockBadge({
     lowStockThreshold,
   });
 
-  const scaleAnim = useRef(new Animated.Value(0)).current;
-  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const scaleAnim = useSharedValue(0);
+  const pulseAnim = useSharedValue(1);
 
   // Entrance animation
   useEffect(() => {
-    const anim = Animated.spring(scaleAnim, {
-      toValue: 1,
-      tension: 100,
-      friction: 7,
-      useNativeDriver: true,
-    });
-    anim.start();
-
-    return () => { anim.stop(); };
-}, []);
+    scaleAnim.value = withSpring(1);
+  }, []);
 
   // Pulse animation for low stock
   useEffect(() => {
     if (isLowStock) {
-      const pulse = Animated.loop(
-        Animated.sequence([
-          Animated.timing(pulseAnim, {
-            toValue: 1.05,
-            duration: 800,
-            useNativeDriver: true,
-          }),
-          Animated.timing(pulseAnim, {
-            toValue: 1,
-            duration: 800,
-            useNativeDriver: true,
-          }),
-        ])
-      );
-      pulse.start();
-      return () => pulse.stop();
-    }
+      pulseAnim.value = withRepeat(withSequence(withTiming(1.05, { duration: 800 })), -1);
+      
+      }
   }, [isLowStock]);
 
   // Determine badge styling based on stock status

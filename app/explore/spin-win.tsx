@@ -7,11 +7,18 @@ import {
   ScrollView,
   Pressable,
   Dimensions,
-  Animated,
   Easing,
   ActivityIndicator,
-  RefreshControl,
+  RefreshControl
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+  runOnJS,
+  Easing as ReanimatedEasing,
+} from 'react-native-reanimated';
 import { GamePageSkeleton } from '@/components/skeletons';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -48,7 +55,10 @@ function SpinWinPage() {
   const { actions: gamificationActions } = useGamification();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
-  const spinAnim = useRef(new Animated.Value(0)).current;
+  const spinAnim = useSharedValue(0);
+  const spinStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${spinAnim.value}deg` }],
+  }));
   const fetchingRef = useRef(false);
   const hasFetchedRef = useRef(false);
 
@@ -163,12 +173,7 @@ function SpinWinPage() {
         const actualCoinsWon = coinsAdded || rewardValue || 0;
         const updatedBalance = newBalance;
 
-        Animated.timing(spinAnim, {
-          toValue: newRotation,
-          duration: 4000,
-          easing: Easing.out(Easing.cubic),
-          useNativeDriver: true,
-        }).start(() => {
+        const onSpinComplete = () => {
           if (!isMounted()) return;
           setSpinning(false);
           if (!isMounted()) return;
@@ -183,6 +188,13 @@ function SpinWinPage() {
           if (actualCoinsWon > 0) {
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
           }
+        };
+
+        spinAnim.value = withTiming(newRotation, {
+          duration: 4000,
+          easing: ReanimatedEasing.out(ReanimatedEasing.cubic),
+        }, (finished) => {
+          if (finished) runOnJS(onSpinComplete)();
         });
       } else {
         if (!isMounted()) return;
@@ -196,10 +208,7 @@ function SpinWinPage() {
     }
   };
 
-  const spin = spinAnim.interpolate({
-    inputRange: [0, 360],
-    outputRange: ['0deg', '360deg'],
-  });
+  // Rotation handled by spinStyle useAnimatedStyle above
 
   return (
     <View style={styles.container}>
@@ -305,9 +314,7 @@ function SpinWinPage() {
             <Animated.View
               style={[
                 styles.wheel,
-                {
-                  transform: [{ rotate: spin }],
-                },
+                spinStyle,
               ]}
             >
               {prizes.map((prize, index) => {

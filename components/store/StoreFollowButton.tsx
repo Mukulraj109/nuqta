@@ -5,9 +5,9 @@ import {
   StyleSheet,
   Pressable,
   ActivityIndicator,
-  Animated,
   Platform,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { useIsAuthenticated } from '@/stores/selectors';
 import { useToast } from '@/hooks/useToast';
@@ -71,8 +71,8 @@ function StoreFollowButton({
   const isMounted = useIsMounted();
 
   // Animation values
-  const [scaleAnim] = useState(new Animated.Value(1));
-  const [heartScale] = useState(new Animated.Value(1));
+  const scaleAnim = useSharedValue(1);
+  const heartScale = useSharedValue(1);
 
   // Check follow status on mount if user is authenticated
   useEffect(() => {
@@ -116,18 +116,7 @@ function StoreFollowButton({
    * Animate button press
    */
   const animatePress = () => {
-    Animated.sequence([
-      Animated.timing(scaleAnim, {
-        toValue: 0.95,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(scaleAnim, {
-        toValue: 1,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    scaleAnim.value = withSequence(withTiming(0.95, { duration: 100 }), withTiming(1, { duration: 100 }));
   };
 
   /**
@@ -135,18 +124,7 @@ function StoreFollowButton({
    */
   const animateHeart = (shouldAnimate: boolean) => {
     if (shouldAnimate) {
-      Animated.sequence([
-        Animated.timing(heartScale, {
-          toValue: 1.3,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(heartScale, {
-          toValue: 1,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-      ]).start();
+      heartScale.value = withSequence(withTiming(1.3, { duration: 200 }), withTiming(1, { duration: 200 }));
     }
   };
 

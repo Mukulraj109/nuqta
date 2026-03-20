@@ -6,15 +6,22 @@
  * This is a simpler approach that reuses the existing QRScanner for actual scanning.
  */
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
-  Animated,
   Dimensions,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withRepeat,
+  withSequence,
+  interpolate,
+} from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 
@@ -41,32 +48,21 @@ function ScannerPlaceholder({
   onPress,
   height = 270
 }: ScannerPlaceholderProps) {
-  const scanLineAnim = useRef(new Animated.Value(0)).current;
+  const scanLineAnim = useSharedValue(0);
 
   useEffect(() => {
-    // Animate scan line up and down
-    const scanLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(scanLineAnim, {
-          toValue: 1,
-          duration: 2000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(scanLineAnim, {
-          toValue: 0,
-          duration: 2000,
-          useNativeDriver: true,
-        }),
-      ])
+    scanLineAnim.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 2000 }),
+        withTiming(0, { duration: 2000 })
+      ),
+      -1
     );
-    scanLoop.start();
-    return () => scanLoop.stop();
   }, []);
 
-  const translateY = scanLineAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, SCANNER_SIZE - 4],
-  });
+  const scanLineStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: interpolate(scanLineAnim.value, [0, 1], [0, SCANNER_SIZE - 4]) }],
+  }));
 
   return (
     <Pressable
@@ -96,7 +92,7 @@ function ScannerPlaceholder({
           <Animated.View
             style={[
               styles.scanLine,
-              { transform: [{ translateY }] },
+              scanLineStyle,
             ]}
           />
 

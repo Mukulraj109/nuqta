@@ -10,9 +10,15 @@ import {
   Pressable,
   StatusBar,
   Platform,
-  Animated,
-  Modal,
+  Modal
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withSpring,
+  withTiming } from 'react-native-reanimated';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -54,8 +60,15 @@ function OrderConfirmationPage() {
   }>({ title: '', message: '', icon: 'checkmark-circle', iconColor: colors.success });
 
   // Animation values
-  const [successAnim] = useState(new Animated.Value(0));
-  const [contentAnim] = useState(new Animated.Value(0));
+  const successAnim = useSharedValue(0);
+  const contentAnim = useSharedValue(0);
+  const successAnimStyle = useAnimatedStyle(() => ({
+    opacity: successAnim.value,
+    transform: [{ scale: interpolate(successAnim.value, [0, 1], [0.5, 1]) }],
+  }));
+  const contentAnimStyle = useAnimatedStyle(() => ({
+    opacity: contentAnim.value,
+  }));
 
   useEffect(() => {
     if (orderId) {
@@ -71,21 +84,8 @@ function OrderConfirmationPage() {
       trackPositiveAction();
       setShowConfetti(true);
       // Animate success icon
-      const anim = Animated.sequence([
-        Animated.spring(successAnim, {
-          toValue: 1,
-          tension: 50,
-          friction: 7,
-          useNativeDriver: true,
-        }),
-        Animated.timing(contentAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-      ]);
-      anim.start();
-      return () => anim.stop();
+      successAnim.value = withSpring(1, { damping: 7, stiffness: 50 });
+      contentAnim.value = withTiming(1, { duration: 300 });
     }
   }, [order]);
 
@@ -126,8 +126,7 @@ function OrderConfirmationPage() {
       title,
       message,
       icon: isSuccess ? 'checkmark-circle' : 'alert-circle',
-      iconColor: isSuccess ? colors.success : colors.warningScale[400],
-    });
+      iconColor: isSuccess ? colors.success : colors.warningScale[400] });
     setModalVisible(true);
   };
 
@@ -165,8 +164,7 @@ function OrderConfirmationPage() {
     storeName: storeData?.name || 'Store',
     cashbackEarned: order?.totals?.cashback || 0,
     orderTotal: order?.totals?.total || 0,
-    reviewAllowed: isImmediateExperience || isOrderCompleted,
-  });
+    reviewAllowed: isImmediateExperience || isOrderCompleted });
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -175,8 +173,7 @@ function OrderConfirmationPage() {
       month: 'short',
       year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit',
-    });
+      minute: '2-digit' });
   };
 
   const getPaymentMethodDisplay = (method: string) => {
@@ -185,8 +182,7 @@ function OrderConfirmationPage() {
       card: 'Card',
       upi: 'UPI',
       cod: 'Cash on Delivery',
-      netbanking: 'Net Banking',
-    };
+      netbanking: 'Net Banking' };
     return methods[method] || method;
   };
 
@@ -200,8 +196,7 @@ function OrderConfirmationPage() {
     return deliveryDate.toLocaleDateString('en-IN', {
       weekday: 'long',
       day: 'numeric',
-      month: 'short',
-    });
+      month: 'short' });
   };
 
   if (loading) {
@@ -250,17 +245,7 @@ function OrderConfirmationPage() {
         <Animated.View
           style={[
             styles.successSection,
-            {
-              opacity: successAnim,
-              transform: [
-                {
-                  scale: successAnim.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [0.5, 1],
-                  }),
-                },
-              ],
-            },
+            successAnimStyle,
           ]}
         >
           <View style={styles.successIconContainer}>
@@ -273,7 +258,7 @@ function OrderConfirmationPage() {
         </Animated.View>
 
         {/* Order Details Card */}
-        <Animated.View style={[styles.card, { opacity: contentAnim }]}>
+        <Animated.View style={[styles.card, contentAnimStyle]}>
           <ThemedText style={styles.cardTitle}>Order Details</ThemedText>
 
           <View style={styles.orderInfo}>
@@ -306,7 +291,7 @@ function OrderConfirmationPage() {
         </Animated.View>
 
         {/* Fulfillment / Delivery Information */}
-        <Animated.View style={[styles.card, { opacity: contentAnim }]}>
+        <Animated.View style={[styles.card, contentAnimStyle]}>
           {/* Fulfillment type badge */}
           {(order as any).fulfillmentType && (order as any).fulfillmentType !== 'delivery' && (
             <View style={{ flexDirection: 'row', marginBottom: 12 }}>
@@ -401,7 +386,7 @@ function OrderConfirmationPage() {
         </Animated.View>
 
         {/* Order Items */}
-        <Animated.View style={[styles.card, { opacity: contentAnim }]}>
+        <Animated.View style={[styles.card, contentAnimStyle]}>
           <ThemedText style={styles.cardTitle}>Order Items ({order.items.length})</ThemedText>
 
           {order.items.map((item, index) => (
@@ -421,7 +406,7 @@ function OrderConfirmationPage() {
         </Animated.View>
 
         {/* Order Summary */}
-        <Animated.View style={[styles.card, { opacity: contentAnim }]}>
+        <Animated.View style={[styles.card, contentAnimStyle]}>
           <ThemedText style={styles.cardTitle}>Order Summary</ThemedText>
 
           <View style={styles.summaryRows}>
@@ -478,7 +463,7 @@ function OrderConfirmationPage() {
         </Animated.View>
 
         {/* Rewards Breakdown Card */}
-        <Animated.View style={[{ marginBottom: 16 }, { opacity: contentAnim }]}>
+        <Animated.View style={[{ marginBottom: 16 }, contentAnimStyle]}>
           <RewardsBreakdownCard
             totalEarned={rewards.totalEarned}
             totalPossible={rewards.totalPossible}
@@ -553,236 +538,190 @@ function OrderConfirmationPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background.secondary,
-  },
+    backgroundColor: Colors.background.secondary },
   headerGradient: {
     paddingTop: Platform.OS === 'android' ? 40 : 50,
     paddingBottom: 20,
-    paddingHorizontal: 20,
-  },
+    paddingHorizontal: 20 },
   headerContent: {
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   headerTitle: {
     ...Typography.h3,
     fontWeight: '600',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse },
   content: {
     flex: 1,
-    padding: 16,
-  },
+    padding: 16 },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   loadingText: {
     marginTop: Spacing.base,
     ...Typography.bodyLarge,
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
   errorContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: Spacing.lg,
-  },
+    padding: Spacing.lg },
   errorTitle: {
     ...Typography.h2,
     fontWeight: '600',
     color: Colors.text.primary,
     marginTop: Spacing.base,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   errorMessage: {
     ...Typography.bodyLarge,
     color: Colors.text.tertiary,
     textAlign: 'center',
-    marginBottom: Spacing.xl,
-  },
+    marginBottom: Spacing.xl },
   successSection: {
     alignItems: 'center',
     paddingVertical: Spacing['2xl'],
     backgroundColor: Colors.background.primary,
     borderRadius: BorderRadius.lg,
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base },
   successIconContainer: {
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base },
   successTitle: {
     ...Typography.h2,
     fontWeight: '700',
     color: Colors.text.primary,
     marginBottom: Spacing.sm,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   successSubtitle: {
     ...Typography.bodyLarge,
     color: Colors.text.tertiary,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   card: {
     backgroundColor: Colors.background.primary,
     borderRadius: BorderRadius.lg,
     padding: Spacing.base,
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base },
   cardTitle: {
     ...Typography.h4,
     fontWeight: '600',
     color: Colors.text.primary,
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base },
   orderInfo: {
-    gap: 12,
-  },
+    gap: 12 },
   infoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   infoLabel: {
     ...Typography.body,
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
   infoValue: {
     ...Typography.body,
     fontWeight: '500',
-    color: Colors.text.primary,
-  },
+    color: Colors.text.primary },
   statusBadge: {
     paddingHorizontal: 12,
     paddingVertical: 4,
-    borderRadius: 12,
-  },
+    borderRadius: 12 },
   paidBadge: {
-    backgroundColor: Colors.background.secondary,
-  },
+    backgroundColor: Colors.background.secondary },
   statusText: {
     ...Typography.bodySmall,
     fontWeight: '600',
-    color: Colors.success,
-  },
+    color: Colors.success },
   deliveryInfo: {
     flexDirection: 'row',
     gap: 12,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   deliveryIconContainer: {
     width: 40,
     height: 40,
     borderRadius: BorderRadius.xl,
     backgroundColor: Colors.background.secondary,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   deliveryDetails: {
-    flex: 1,
-  },
+    flex: 1 },
   deliveryAddress: {
     ...Typography.bodyLarge,
     fontWeight: '600',
     color: Colors.text.primary,
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs },
   deliveryAddressText: {
     ...Typography.body,
     color: Colors.text.tertiary,
-    lineHeight: 20,
-  },
+    lineHeight: 20 },
   deliveryPhone: {
     ...Typography.body,
     color: Colors.text.tertiary,
-    marginTop: Spacing.xs,
-  },
+    marginTop: Spacing.xs },
   estimatedDelivery: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
     backgroundColor: colors.linen,
     padding: 12,
-    borderRadius: 8,
-  },
+    borderRadius: 8 },
   estimatedDeliveryText: {
     ...Typography.body,
     fontWeight: '500',
-    color: Colors.gold,
-  },
+    color: Colors.gold },
   orderItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.background.secondary,
-  },
+    borderBottomColor: Colors.background.secondary },
   itemInfo: {
-    flex: 1,
-  },
+    flex: 1 },
   itemName: {
     ...Typography.body,
     fontWeight: '500',
     color: Colors.text.primary,
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs },
   itemVariant: {
     ...Typography.bodySmall,
     color: Colors.text.tertiary,
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   itemQuantity: {
     ...Typography.bodySmall,
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
   itemPrice: {
     ...Typography.body,
     fontWeight: '600',
-    color: Colors.text.primary,
-  },
+    color: Colors.text.primary },
   summaryRows: {
-    gap: 12,
-  },
+    gap: 12 },
   summaryRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   summaryLabel: {
     ...Typography.body,
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
   summaryValue: {
     ...Typography.body,
     fontWeight: '500',
-    color: Colors.text.primary,
-  },
+    color: Colors.text.primary },
   divider: {
     height: 1,
     backgroundColor: Colors.border.default,
-    marginVertical: Spacing.sm,
-  },
+    marginVertical: Spacing.sm },
   totalLabel: {
     ...Typography.bodyLarge,
     fontWeight: '600',
-    color: Colors.text.primary,
-  },
+    color: Colors.text.primary },
   totalValue: {
     ...Typography.h4,
     fontWeight: '700',
-    color: Colors.brand.purpleLight,
-  },
+    color: Colors.brand.purpleLight },
   bottomSpacing: {
-    height: 100,
-  },
+    height: 100 },
   actionButtons: {
     flexDirection: 'row',
     gap: Spacing.md,
     padding: Spacing.base,
     backgroundColor: Colors.background.primary,
     borderTopWidth: 1,
-    borderTopColor: Colors.border.default,
-  },
+    borderTopColor: Colors.border.default },
   secondaryButton: {
     flex: 1,
     backgroundColor: Colors.background.primary,
@@ -791,13 +730,11 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     paddingVertical: Spacing.base,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   secondaryButtonText: {
     ...Typography.bodyLarge,
     fontWeight: '600',
-    color: Colors.brand.purpleLight,
-  },
+    color: Colors.brand.purpleLight },
   primaryButton: {
     flex: 1,
     backgroundColor: Colors.brand.purpleLight,
@@ -806,21 +743,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   primaryButtonText: {
     ...Typography.bodyLarge,
     fontWeight: '600',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse },
   // Cross-platform modal styles
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
-  },
+    padding: 20 },
   modalContent: {
     backgroundColor: Colors.background.primary,
     borderRadius: BorderRadius.xl,
@@ -830,47 +764,37 @@ const styles = StyleSheet.create({
     width: '100%',
     ...Platform.select({
       web: {
-        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-      },
+        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)' },
       default: {
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 25 },
         shadowOpacity: 0.25,
         shadowRadius: 50,
-        elevation: 25,
-      },
-    }),
-  },
+        elevation: 25 } }) },
   modalIconContainer: {
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base },
   modalTitle: {
     ...Typography.h3,
     fontWeight: '700',
     color: Colors.text.primary,
     textAlign: 'center',
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   modalMessage: {
     ...Typography.body,
     color: Colors.text.tertiary,
     textAlign: 'center',
     lineHeight: 20,
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg },
   modalButton: {
     backgroundColor: Colors.brand.purpleLight,
     paddingHorizontal: Spacing['2xl'],
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.md,
     minWidth: 120,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   modalButtonText: {
     ...Typography.bodyLarge,
     fontWeight: '600',
-    color: Colors.text.inverse,
-  },
-});
+    color: Colors.text.inverse } });
 
 export default withErrorBoundary(OrderConfirmationPage, 'OrderConfirmation');

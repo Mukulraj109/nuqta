@@ -12,10 +12,13 @@ import {
   StatusBar,
   Platform,
   ActivityIndicator,
-  Animated,
   TextInput,
-  Modal,
-} from 'react-native';
+  Modal} from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  interpolate} from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -89,9 +92,9 @@ function PaymentPage() {
   }, []);
 
   // Animation values
-  const fadeAnim = useRef(new Animated.Value(1)).current;
-  const slideAnim = useRef(new Animated.Value(0)).current;
-  const progressAnim = useRef(new Animated.Value(0)).current;
+  const fadeAnim = useSharedValue(1);
+  const slideAnim = useSharedValue(0);
+  const progressAnim = useSharedValue(0);
 
   useEffect(() => {
     loadPaymentMethods();
@@ -139,31 +142,23 @@ function PaymentPage() {
   }, [currentStep]);
 
   const animateEntrance = () => {
-    fadeAnim.setValue(0.3);
-    slideAnim.setValue(20);
-
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 400,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 400,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    fadeAnim.value = 0.3;
+    slideAnim.value = 20;
+    fadeAnim.value = withTiming(1, { duration: 400 });
+    slideAnim.value = withTiming(0, { duration: 400 });
   };
 
   const animateProgress = () => {
-    progressAnim.setValue(0);
-    Animated.timing(progressAnim, {
-      toValue: 1,
-      duration: 2000,
-      useNativeDriver: false,
-    }).start();
+    progressAnim.value = 0;
+    progressAnim.value = withTiming(1, { duration: 2000 });
   };
+
+  const stepContainerStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ translateY: slideAnim.value }]}));
+
+  const progressFillStyle = useAnimatedStyle(() => ({
+    width: `${interpolate(progressAnim.value, [0, 1], [0, 100])}%`}));
 
   const loadPaymentMethods = async () => {
     setIsLoading(true);
@@ -336,8 +331,7 @@ function PaymentPage() {
             if (status === 'processing') setProcessingStatus('Processing your payment...');
             if (status === 'completed') setProcessingStatus('Payment confirmed!');
           },
-          shouldAbort: () => pollingAbortedRef.current,
-        }
+          shouldAbort: () => pollingAbortedRef.current}
       );
 
       // If component unmounted during polling, don't update state
@@ -406,10 +400,7 @@ function PaymentPage() {
     <Animated.View
       style={[
         styles.stepContainer,
-        {
-          opacity: fadeAnim,
-          transform: [{ translateY: slideAnim }],
-        },
+        stepContainerStyle,
       ]}
     >
       <ThemedText style={styles.stepTitle}>Choose Payment Method</ThemedText>
@@ -473,8 +464,7 @@ function PaymentPage() {
           styles.stepContainer,
           {
             opacity: fadeAnim,
-            transform: [{ translateY: slideAnim }],
-          },
+            transform: [{ translateY: slideAnim }]},
         ]}
       >
         <View style={styles.methodHeader}>
@@ -666,12 +656,7 @@ function PaymentPage() {
           <Animated.View
             style={[
               styles.progressFill,
-              {
-                width: progressAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: ['0%', '100%'],
-                }),
-              },
+              progressFillStyle,
             ]}
           />
         </View>
@@ -859,10 +844,7 @@ function PaymentPage() {
                       colorText: Colors.text.primary,
                       colorDanger: Colors.error,
                       fontFamily: 'system-ui, -apple-system, sans-serif',
-                      borderRadius: '12px',
-                    },
-                  },
-                }}
+                      borderRadius: '12px'}}}}
               >
                 <StripeCardForm
                   clientSecret={stripeClientSecret}
@@ -883,8 +865,7 @@ function PaymentPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background.secondary,
-  },
+    backgroundColor: Colors.background.secondary},
   headerBg: {
     paddingTop: Platform.OS === 'ios' ? 50 : StatusBar.currentHeight || 40,
     paddingBottom: Spacing.xl,
@@ -894,63 +875,52 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 8,
-    elevation: 8,
-  },
+    elevation: 8},
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.base,
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base},
   backButton: {
     width: 36,
     height: 36,
     borderRadius: 18,
     backgroundColor: 'rgba(255,255,255,0.2)',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center'},
   headerTitle: {
     color: Colors.text.inverse,
     ...Typography.h4,
-    fontWeight: '700',
-  },
+    fontWeight: '700'},
   placeholder: {
-    width: 36,
-  },
+    width: 36},
   amountSection: {
     alignItems: 'center',
-    paddingHorizontal: Spacing.lg,
-  },
+    paddingHorizontal: Spacing.lg},
   amountContextLabel: {
     color: 'rgba(255,255,255,0.7)',
     ...Typography.bodySmall,
     fontWeight: '600',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs},
   amountLabel: {
     color: 'rgba(255,255,255,0.75)',
     fontSize: 13,
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs},
   amountValue: {
     color: Colors.text.inverse,
     fontSize: 32,
     fontWeight: '900',
-    letterSpacing: -0.5,
-  },
+    letterSpacing: -0.5},
   content: {
     flex: 1,
     paddingHorizontal: Spacing.base,
-    paddingTop: Spacing.md,
-  },
+    paddingTop: Spacing.md},
   scrollContent: {
     paddingBottom: 100,
-    flexGrow: 1,
-  },
+    flexGrow: 1},
   stepContainer: {
     backgroundColor: Colors.background.primary,
     borderRadius: BorderRadius.xl,
@@ -959,22 +929,18 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.base,
     ...Shadows.medium,
     borderWidth: 1,
-    borderColor: Colors.border.light,
-  },
+    borderColor: Colors.border.light},
   stepTitle: {
     ...Typography.h4,
     fontWeight: '700',
     color: Colors.text.primary,
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs},
   stepSubtitle: {
     fontSize: 13,
     color: Colors.text.tertiary,
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base},
   methodsGrid: {
-    gap: 10,
-  },
+    gap: 10},
   methodCard: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -983,56 +949,44 @@ const styles = StyleSheet.create({
     padding: 14,
     borderWidth: 1.5,
     borderColor: Colors.border.default,
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle},
   methodIconContainer: {
     width: 44,
     height: 44,
     borderRadius: BorderRadius.md,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 14,
-  },
+    marginRight: 14},
   methodInfo: {
-    flex: 1,
-  },
+    flex: 1},
   methodName: {
     fontSize: 15,
     fontWeight: '700',
     color: Colors.text.primary,
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs},
   methodDetails: {
     flexDirection: 'row',
     gap: 10,
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   feeBadge: {
     paddingHorizontal: Spacing.sm,
     paddingVertical: 2,
-    borderRadius: 6,
-  },
+    borderRadius: 6},
   feeBadgeFree: {
-    backgroundColor: Colors.successScale[50],
-  },
+    backgroundColor: Colors.successScale[50]},
   feeBadgeWarning: {
-    backgroundColor: Colors.warningScale[50],
-  },
+    backgroundColor: Colors.warningScale[50]},
   feeText: {
     fontSize: 11,
-    fontWeight: '600',
-  },
+    fontWeight: '600'},
   feeTextFree: {
-    color: Colors.success,
-  },
+    color: Colors.success},
   feeTextWarning: {
-    color: colors.brand.amberDeep,
-  },
+    color: colors.brand.amberDeep},
   methodTime: {
     ...Typography.bodySmall,
     color: Colors.text.tertiary,
-    fontWeight: '500',
-  },
+    fontWeight: '500'},
   securityRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1041,43 +995,35 @@ const styles = StyleSheet.create({
     marginTop: Spacing.base,
     paddingTop: 14,
     borderTopWidth: 1,
-    borderTopColor: Colors.border.light,
-  },
+    borderTopColor: Colors.border.light},
   securityText: {
     ...Typography.caption,
     color: Colors.text.tertiary,
-    fontWeight: '500',
-  },
+    fontWeight: '500'},
   methodHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: Spacing.lg,
     paddingBottom: Spacing.base,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.border.light,
-  },
+    borderBottomColor: Colors.border.light},
   methodHeaderInfo: {
-    marginLeft: 14,
-  },
+    marginLeft: 14},
   methodHeaderName: {
     ...Typography.bodyLarge,
     fontWeight: '700',
     color: Colors.text.primary,
-    marginBottom: 2,
-  },
+    marginBottom: 2},
   methodHeaderGateway: {
     fontSize: 13,
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary},
   formContainer: {
-    gap: 14,
-  },
+    gap: 14},
   formLabel: {
     fontSize: 13,
     fontWeight: '600',
     color: Colors.text.primary,
-    marginBottom: 6,
-  },
+    marginBottom: 6},
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1085,17 +1031,14 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     borderWidth: 1.5,
     borderColor: Colors.border.default,
-    paddingHorizontal: 14,
-  },
+    paddingHorizontal: 14},
   inputIcon: {
-    marginRight: 10,
-  },
+    marginRight: 10},
   textInput: {
     flex: 1,
     paddingVertical: 14,
     fontSize: 15,
-    color: Colors.text.primary,
-  },
+    color: Colors.text.primary},
   stripeInfo: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1104,19 +1047,16 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     padding: Spacing.base,
     borderWidth: 1,
-    borderColor: '#A7F3D0',
-  },
+    borderColor: '#A7F3D0'},
   stripeInfoText: {
     flex: 1,
     fontSize: 13,
     color: '#065F46',
-    lineHeight: 18,
-  },
+    lineHeight: 18},
   walletGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 10,
-  },
+    gap: 10},
   walletOption: {
     flex: 1,
     minWidth: '45%',
@@ -1125,114 +1065,93 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     padding: 14,
     borderWidth: 1.5,
-    borderColor: Colors.border.default,
-  },
+    borderColor: Colors.border.default},
   selectedWalletOption: {
     borderColor: Colors.nileBlue,
-    backgroundColor: '#F0F4F8',
-  },
+    backgroundColor: '#F0F4F8'},
   walletIcon: {
     width: 36,
     height: 36,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 6,
-  },
+    marginBottom: 6},
   walletText: {
     ...Typography.caption,
     fontWeight: '600',
-    color: Colors.text.primary,
-  },
+    color: Colors.text.primary},
   payButton: {
-    marginTop: 6,
-  },
+    marginTop: 6},
   payButtonGradient: {
     flexDirection: 'row',
     gap: 8,
     borderRadius: BorderRadius.md,
     paddingVertical: Spacing.base,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center'},
   payButtonText: {
     color: Colors.text.inverse,
     ...Typography.bodyLarge,
-    fontWeight: '700',
-  },
+    fontWeight: '700'},
   disabledButton: {
-    opacity: 0.5,
-  },
+    opacity: 0.5},
   processingContainer: {
     alignItems: 'center',
-    paddingVertical: 40,
-  },
+    paddingVertical: 40},
   processingIcon: {
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg},
   processingTitle: {
     fontSize: 22,
     fontWeight: '700',
     color: Colors.text.primary,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm},
   processingSubtitle: {
     ...Typography.body,
     color: Colors.text.tertiary,
     textAlign: 'center',
-    marginBottom: 30,
-  },
+    marginBottom: 30},
   progressContainer: {
     width: '100%',
     alignItems: 'center',
-    paddingHorizontal: Spacing.xl,
-  },
+    paddingHorizontal: Spacing.xl},
   progressBar: {
     width: '100%',
     height: 6,
     backgroundColor: Colors.border.default,
     borderRadius: 3,
     overflow: 'hidden',
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md},
   progressFill: {
     height: '100%',
     backgroundColor: Colors.nileBlue,
-    borderRadius: 3,
-  },
+    borderRadius: 3},
   progressText: {
     fontSize: 13,
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary},
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   loadingText: {
     marginTop: Spacing.md,
     fontSize: 14,
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary},
   serviceInfo: {
     alignItems: 'center',
     marginBottom: Spacing.md,
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.2)',
-  },
+    borderBottomColor: 'rgba(255, 255, 255, 0.2)'},
   serviceName: {
     color: Colors.text.inverse,
     fontSize: 16,
     fontWeight: '600',
-    marginBottom: 4,
-  },
+    marginBottom: 4},
   serviceType: {
     color: 'rgba(255,255,255,0.7)',
     fontSize: 12,
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
+    letterSpacing: 0.5},
   discountBadge: {
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
@@ -1241,44 +1160,37 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(16, 185, 129, 0.15)',
     paddingHorizontal: Spacing.md,
     paddingVertical: 6,
-    borderRadius: BorderRadius.sm,
-  },
+    borderRadius: BorderRadius.sm},
   discountText: {
     color: Colors.success,
     fontSize: 13,
-    fontWeight: '600',
-  },
+    fontWeight: '600'},
   cashbackInfo: {
     color: 'rgba(255,255,255,0.7)',
     fontSize: 12,
     marginTop: Spacing.sm,
-    fontWeight: '500',
-  },
+    fontWeight: '500'},
   walletRechargeNote: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    marginTop: Spacing.sm,
-  },
+    marginTop: Spacing.sm},
   walletRechargeText: {
     color: 'rgba(255,255,255,0.7)',
     fontSize: 12,
-    fontWeight: '500',
-  },
+    fontWeight: '500'},
   // Stripe Card Modal
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'flex-end',
-  },
+    justifyContent: 'flex-end'},
   modalContent: {
     backgroundColor: Colors.background.primary,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: Spacing.lg,
     paddingBottom: Platform.OS === 'ios' ? 40 : 20,
-    maxHeight: '80%',
-  },
+    maxHeight: '80%'},
   modalHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -1286,35 +1198,29 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.base,
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.border.light,
-  },
+    borderBottomColor: Colors.border.light},
   modalTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: Colors.text.primary,
-  },
+    color: Colors.text.primary},
   modalClose: {
     width: 32,
     height: 32,
     borderRadius: BorderRadius.lg,
     backgroundColor: Colors.background.secondary,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center'},
   // Payment Failed
   failedContainer: {
     alignItems: 'center',
-    paddingVertical: Spacing['2xl'],
-  },
+    paddingVertical: Spacing['2xl']},
   failedIconCircle: {
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base},
   failedTitle: {
     fontSize: 22,
     fontWeight: '700',
     color: Colors.text.primary,
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base},
   failedErrorBox: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1325,41 +1231,33 @@ const styles = StyleSheet.create({
     marginBottom: 28,
     borderWidth: 1,
     borderColor: Colors.errorScale[200],
-    width: '100%',
-  },
+    width: '100%'},
   failedErrorText: {
     flex: 1,
     fontSize: 13,
     color: Colors.error,
-    lineHeight: 18,
-  },
+    lineHeight: 18},
   retryButtonWrapper: {
     width: '100%',
     borderRadius: BorderRadius.md,
     overflow: 'hidden',
-    marginBottom: 14,
-  },
+    marginBottom: 14},
   retryButton: {
     flexDirection: 'row',
     gap: 8,
     borderRadius: BorderRadius.md,
     paddingVertical: Spacing.base,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center'},
   retryButtonText: {
     color: Colors.text.inverse,
     fontSize: 16,
-    fontWeight: '700',
-  },
+    fontWeight: '700'},
   changMethodButton: {
-    paddingVertical: 10,
-  },
+    paddingVertical: 10},
   changeMethodText: {
     fontSize: 14,
     color: Colors.text.tertiary,
-    fontWeight: '600',
-  },
-});
+    fontWeight: '600'}});
 
 export default withErrorBoundary(PaymentPage, 'Payment');

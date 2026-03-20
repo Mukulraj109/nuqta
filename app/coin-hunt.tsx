@@ -4,16 +4,20 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
  * Exact match to Rez_v-2-main/src/pages/earn/CoinHunt.jsx
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
   Dimensions,
-  Animated,
-  Platform,
+  Platform
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -29,8 +33,39 @@ interface Coin {
   x: number;
   y: number;
   value: number;
-  animation: Animated.Value;
 }
+
+const CoinItem = React.memo(({ coin, onCatch }: { coin: Coin; onCatch: (coin: Coin) => void }) => {
+  const anim = useSharedValue(1);
+  const animStyle = useAnimatedStyle(() => ({
+    opacity: anim.value,
+    transform: [{ scale: anim.value }],
+  }));
+
+  const handlePress = () => {
+    anim.value = withTiming(0, { duration: 150 });
+    onCatch(coin);
+  };
+
+  return (
+    <Animated.View
+      style={[
+        styles.coinWrapper,
+        { left: coin.x, top: coin.y },
+        animStyle,
+      ]}
+    >
+      <Pressable onPress={handlePress}>
+        <LinearGradient
+          colors={[colors.warningScale[400], Colors.warning]}
+          style={styles.coin}
+        >
+          <Text style={styles.coinValue}>+{coin.value}</Text>
+        </LinearGradient>
+      </Pressable>
+    </Animated.View>
+  );
+});
 
 const CoinHuntScreen: React.FC = () => {
   const router = useRouter();
@@ -81,7 +116,6 @@ const CoinHuntScreen: React.FC = () => {
       x: Math.random() * (SCREEN_WIDTH - 80) + 20,
       y: Math.random() * (GAME_AREA_HEIGHT - 100) + 20,
       value: [5, 10, 15, 25][Math.floor(Math.random() * 4)],
-      animation: new Animated.Value(1),
     };
 
     setCoins(prev => [...prev, newCoin]);
@@ -103,17 +137,10 @@ const CoinHuntScreen: React.FC = () => {
     coinIdRef.current = 0;
   };
 
-  const catchCoin = (coin: Coin) => {
-    // Animate coin out
-    Animated.timing(coin.animation, {
-      toValue: 0,
-      duration: 150,
-      useNativeDriver: true,
-    }).start();
-
+  const catchCoin = useCallback((coin: Coin) => {
     setScore(prev => prev + coin.value);
     setCoins(prev => prev.filter(c => c.id !== coin.id));
-  };
+  }, []);
 
   // Cleanup all coin timeouts on unmount
   useEffect(() => {
@@ -188,30 +215,7 @@ const CoinHuntScreen: React.FC = () => {
           >
             {/* Coins */}
             {gameStarted && coins.map(coin => (
-              <Animated.View
-                key={coin.id}
-                style={[
-                  styles.coinWrapper,
-                  {
-                    left: coin.x,
-                    top: coin.y,
-                    opacity: coin.animation,
-                    transform: [{ scale: coin.animation }],
-                  },
-                ]}
-              >
-                <Pressable
-                  onPress={() => catchCoin(coin)}
-                 
-                >
-                  <LinearGradient
-                    colors={[colors.warningScale[400], Colors.warning]}
-                    style={styles.coin}
-                  >
-                    <Text style={styles.coinValue}>+{coin.value}</Text>
-                  </LinearGradient>
-                </Pressable>
-              </Animated.View>
+              <CoinItem key={coin.id} coin={coin} onCatch={catchCoin} />
             ))}
 
             {/* Game Over Overlay */}

@@ -8,16 +8,15 @@
  * Light Peach (#ffd7b5), Linen (#faf1e0)
  */
 
-import React, { memo, useRef, useEffect } from 'react';
+import React, { memo, useEffect} from 'react';
 import { BRAND } from '@/constants/brand';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
-  Platform,
-  Animated,
-} from 'react-native';
+  Platform} from 'react-native';
+import Animated, { useSharedValue, withDelay, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -25,65 +24,25 @@ import { colors } from '@/constants/theme';
 
 const CashStorePromoBanner: React.FC = () => {
   const router = useRouter();
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const scaleAnim = useRef(new Animated.Value(0.95)).current;
-  const badgePulseAnim = useRef(new Animated.Value(1)).current;
-  const arrowAnim = useRef(new Animated.Value(0)).current;
+  const fadeAnim = useSharedValue(0);
+  const scaleAnim = useSharedValue(0.95);
+  const badgePulseAnim = useSharedValue(1);
+  const arrowAnim = useSharedValue(0);
 
   useEffect(() => {
     // Entry animation
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 500,
-        delay: 100,
-        useNativeDriver: true,
-      }),
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        friction: 8,
-        tension: 40,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    fadeAnim.value = withDelay(100, withTiming(1, { duration: 500 }));
+      scaleAnim.value = withSpring(1);
 
     // Badge pulse animation
-    const pulseLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(badgePulseAnim, {
-          toValue: 1.08,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(badgePulseAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    pulseLoop.start();
-
+    badgePulseAnim.value = withRepeat(withSequence(withTiming(1.08, { duration: 1000 })), -1);
+    
     // Arrow bounce
-    const arrowLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(arrowAnim, {
-          toValue: 4,
-          duration: 600,
-          useNativeDriver: true,
-        }),
-        Animated.timing(arrowAnim, {
-          toValue: 0,
-          duration: 600,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    arrowLoop.start();
-
+    arrowAnim.value = withRepeat(withSequence(withTiming(4, { duration: 600 })), -1);
+    
     return () => {
-      pulseLoop.stop();
-      arrowLoop.stop();
+      // animation auto-cancels
+      // animation auto-cancels
     };
   }, []);
 

@@ -1,5 +1,5 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState} from 'react';
 import {
   View,
   ScrollView,
@@ -9,9 +9,15 @@ import {
   Platform,
   Dimensions,
   ActivityIndicator,
-  Animated,
-  Share as RNShare,
+  Share as RNShare
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withSpring,
+  withTiming} from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
@@ -42,61 +48,39 @@ function BrandDetailPage() {
   const [isFavorite, setIsFavorite] = useState(false);
 
   // Animations
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(30)).current;
-  const scaleAnim = useRef(new Animated.Value(0.95)).current;
-  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(30);
+  const scaleAnim = useSharedValue(0.95);
+  const pulseAnim = useSharedValue(1);
   const isMounted = useIsMounted();
+
+  const heroAnimStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ translateY: slideAnim.value }, { scale: scaleAnim.value }]}));
+  const fadeSlideAnimStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ translateY: slideAnim.value }]}));
+  const actionAnimStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ translateY: slideAnim.value }, { scale: pulseAnim.value }]}));
 
   useEffect(() => {
     let isMounted = true;
 
     if (brand) {
-      const animation = Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 600,
-          useNativeDriver: true,
-        }),
-        Animated.spring(slideAnim, {
-          toValue: 0,
-          tension: 50,
-          friction: 8,
-          useNativeDriver: true,
-        }),
-        Animated.spring(scaleAnim, {
-          toValue: 1,
-          tension: 50,
-          friction: 7,
-          useNativeDriver: true,
-        }),
-      ]);
+      // Entrance animations
+      fadeAnim.value = withTiming(1, { duration: 600 });
+      slideAnim.value = withSpring(0, { damping: 8, stiffness: 50 });
+      scaleAnim.value = withSpring(1, { damping: 7, stiffness: 50 });
 
       // Pulse animation for CTA
-      const pulse = Animated.loop(
-        Animated.sequence([
-          Animated.timing(pulseAnim, {
-            toValue: 1.02,
-            duration: 1500,
-            useNativeDriver: true,
-          }),
-          Animated.timing(pulseAnim, {
-            toValue: 1,
-            duration: 1500,
-            useNativeDriver: true,
-          }),
-        ])
-      );
-
-      if (isMounted) {
-        animation.start();
-        pulse.start();
-      }
+      pulseAnim.value = withRepeat(withSequence(
+          withTiming(1.02, { duration: 1500 }),
+          withTiming(1, { duration: 1500 })
+        ), -1);
 
       return () => {
         isMounted = false;
-        animation.stop();
-        pulse.stop();
       };
     }
   }, [brand]);
@@ -127,8 +111,7 @@ function BrandDetailPage() {
         categories: [brandRes.data.category || ''],
         featured: brandRes.data.isFeatured || false,
         newlyAdded: brandRes.data.isNewlyAdded || false,
-        offers: [],
-      };
+        offers: [] };
 
       if (!isMounted()) return;
       setDenominations(brandRes.data.denominations || [100, 500, 1000, 2000]);
@@ -226,8 +209,7 @@ function BrandDetailPage() {
         styles.heroSection,
         {
           opacity: fadeAnim,
-          transform: [{ translateY: slideAnim }, { scale: scaleAnim }],
-        }
+          transform: [{ translateY: slideAnim }, { scale: scaleAnim }] }
       ]}
     >
       {/* Logo with glow effect */}
@@ -270,8 +252,7 @@ function BrandDetailPage() {
         styles.statsContainer,
         {
           opacity: fadeAnim,
-          transform: [{ translateY: slideAnim }],
-        }
+          transform: [{ translateY: slideAnim }] }
       ]}
     >
       {/* Rating Card */}
@@ -324,8 +305,7 @@ function BrandDetailPage() {
         styles.noticeSection,
         {
           opacity: fadeAnim,
-          transform: [{ translateY: slideAnim }],
-        }
+          transform: [{ translateY: slideAnim }] }
       ]}
     >
       <View style={[
@@ -358,8 +338,7 @@ function BrandDetailPage() {
         styles.actionSection,
         {
           opacity: fadeAnim,
-          transform: [{ translateY: slideAnim }, { scale: pulseAnim }],
-        }
+          transform: [{ translateY: slideAnim }, { scale: pulseAnim }] }
       ]}
     >
       <Pressable
@@ -396,8 +375,7 @@ function BrandDetailPage() {
         styles.timelineSection,
         {
           opacity: fadeAnim,
-          transform: [{ translateY: slideAnim }],
-        }
+          transform: [{ translateY: slideAnim }] }
       ]}
     >
       <ThemedText style={styles.timelineSectionTitle}>How it works</ThemedText>
@@ -450,8 +428,7 @@ function BrandDetailPage() {
         styles.bottomActions,
         {
           opacity: fadeAnim,
-          transform: [{ translateY: slideAnim }],
-        }
+          transform: [{ translateY: slideAnim }] }
       ]}
     >
       <Pressable style={styles.bottomActionButton}>
@@ -562,8 +539,7 @@ function BrandDetailPage() {
           backgroundColor: brand.backgroundColor,
           logoColor: brand.logoColor,
           cashbackRate: brand.cashbackRate,
-          description: brand.description,
-        } : null}
+          description: brand.description } : null}
         denominations={denominations}
         onClose={() => setShowPurchaseModal(false)}
         onSuccess={handlePurchaseSuccess}
@@ -575,14 +551,12 @@ function BrandDetailPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background.secondary,
-  },
+    backgroundColor: Colors.background.secondary },
 
   // Background
   backgroundGradient: {
     ...StyleSheet.absoluteFillObject,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   bgOrb1: {
     position: 'absolute',
     width: 200,
@@ -591,8 +565,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 205, 87, 0.08)',
     top: height * 0.25,
     right: -80,
-    opacity: 0.3,
-  },
+    opacity: 0.3 },
   bgOrb2: {
     position: 'absolute',
     width: 150,
@@ -601,8 +574,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 205, 87, 0.12)',
     bottom: 150,
     left: -50,
-    opacity: 0.25,
-  },
+    opacity: 0.25 },
 
   // Header
   header: {
@@ -610,8 +582,7 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.lg,
     paddingHorizontal: Spacing.lg,
     position: 'relative',
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   headerOrb1: {
     position: 'absolute',
     width: 120,
@@ -619,8 +590,7 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     backgroundColor: 'rgba(255, 255, 255, 0.15)',
     top: -40,
-    right: -20,
-  },
+    right: -20 },
   headerOrb2: {
     position: 'absolute',
     width: 80,
@@ -628,18 +598,15 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     bottom: -20,
-    left: 40,
-  },
+    left: 40 },
   headerGlassOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-  },
+    backgroundColor: 'rgba(255, 255, 255, 0.1)' },
   headerContent: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    zIndex: 1,
-  },
+    zIndex: 1 },
   glassButton: {
     width: 44,
     height: 44,
@@ -648,11 +615,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
-  },
+    borderColor: 'rgba(255, 255, 255, 0.3)' },
   favoriteActive: {
-    backgroundColor: 'rgba(255, 255, 255, 0.35)',
-  },
+    backgroundColor: 'rgba(255, 255, 255, 0.35)' },
   headerTitle: {
     ...Typography.h3,
     fontWeight: '700',
@@ -660,31 +625,25 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'center',
     letterSpacing: -0.3,
-    marginHorizontal: Spacing.md,
-  },
+    marginHorizontal: Spacing.md },
   headerActions: {
     flexDirection: 'row',
-    gap: 10,
-  },
+    gap: 10 },
 
   // Content
   content: {
-    flex: 1,
-  },
+    flex: 1 },
   scrollContent: {
-    paddingBottom: 120,
-  },
+    paddingBottom: 120 },
 
   // Hero Section
   heroSection: {
     alignItems: 'center',
     paddingVertical: Spacing['2xl'],
-    paddingHorizontal: Spacing.lg,
-  },
+    paddingHorizontal: Spacing.lg },
   logoWrapper: {
     position: 'relative',
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base },
   logoGlow: {
     position: 'absolute',
     top: -10,
@@ -692,8 +651,7 @@ const styles = StyleSheet.create({
     right: -10,
     bottom: -10,
     borderRadius: 34,
-    backgroundColor: 'rgba(0, 192, 106, 0.15)',
-  },
+    backgroundColor: 'rgba(0, 192, 106, 0.15)' },
   brandLogo: {
     width: 100,
     height: 100,
@@ -707,8 +665,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 16,
     elevation: 10,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   logoShine: {
     position: 'absolute',
     top: 0,
@@ -717,19 +674,16 @@ const styles = StyleSheet.create({
     height: '45%',
     backgroundColor: 'rgba(255, 255, 255, 0.4)',
     borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-  },
+    borderTopRightRadius: 25 },
   brandLogoText: {
     fontSize: 48,
-    marginTop: Spacing.sm,
-  },
+    marginTop: Spacing.sm },
   brandName: {
     fontSize: 26,
     fontWeight: '800',
     color: Colors.nileBlue,
     letterSpacing: -0.5,
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
   featuredBadge: {
     borderRadius: BorderRadius.xl,
     overflow: 'hidden',
@@ -737,28 +691,24 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
-    elevation: 4,
-  },
+    elevation: 4 },
   featuredGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 14,
     paddingVertical: Spacing.sm,
-    gap: 6,
-  },
+    gap: 6 },
   featuredText: {
     ...Typography.bodySmall,
     fontWeight: '700',
     color: Colors.nileBlue,
-    letterSpacing: 0.3,
-  },
+    letterSpacing: 0.3 },
 
   // Stats
   statsContainer: {
     paddingHorizontal: Spacing.lg,
     gap: Spacing.md,
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base },
   statCard: {
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderRadius: BorderRadius.xl,
@@ -771,8 +721,7 @@ const styles = StyleSheet.create({
     shadowRadius: 20,
     elevation: 6,
     position: 'relative',
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   cardShine: {
     position: 'absolute',
     top: 0,
@@ -781,82 +730,68 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: 'rgba(255, 255, 255, 0.4)',
     transform: [{ skewY: '-2deg' }],
-    marginTop: -15,
-  },
+    marginTop: -15 },
   statRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 14,
-  },
+    gap: 14 },
   statIconContainer: {
     width: 48,
     height: 48,
     borderRadius: 14,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   statContent: {
-    flex: 1,
-  },
+    flex: 1 },
   statValue: {
     ...Typography.bodyLarge,
     fontWeight: '700',
     color: Colors.nileBlue,
     letterSpacing: -0.2,
-    marginBottom: 3,
-  },
+    marginBottom: 3 },
   statSubtext: {
     ...Typography.bodySmall,
     fontWeight: '500',
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
 
   // Notice
   noticeSection: {
     paddingHorizontal: Spacing.lg,
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg },
   noticeCard: {
     borderRadius: BorderRadius.xl,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(0, 192, 106, 0.2)',
-  },
+    borderColor: 'rgba(0, 192, 106, 0.2)' },
   noticeGradient: {
-    padding: 18,
-  },
+    padding: 18 },
   noticeHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    marginBottom: 10,
-  },
+    marginBottom: 10 },
   noticeIconContainer: {
     width: 32,
     height: 32,
     borderRadius: 10,
     backgroundColor: 'rgba(0, 192, 106, 0.15)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   noticeTitle: {
     ...Typography.body,
     fontWeight: '700',
     color: Colors.nileBlue,
-    letterSpacing: -0.2,
-  },
+    letterSpacing: -0.2 },
   noticeText: {
     ...Typography.body,
     color: Colors.gold,
     lineHeight: 20,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
 
   // Action Button
   actionSection: {
     paddingHorizontal: Spacing.lg,
-    marginBottom: Spacing.xl,
-  },
+    marginBottom: Spacing.xl },
   rewardButton: {
     borderRadius: BorderRadius.xl,
     overflow: 'hidden',
@@ -864,56 +799,48 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.4,
     shadowRadius: 20,
-    elevation: 10,
-  },
+    elevation: 10 },
   rewardButtonGradient: {
     paddingVertical: 18,
     paddingHorizontal: Spacing.xl,
     position: 'relative',
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   buttonShine: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     height: '50%',
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-  },
+    backgroundColor: 'rgba(255, 255, 255, 0.2)' },
   rewardButtonContent: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   rewardIconContainer: {
     width: 40,
     height: 40,
     borderRadius: BorderRadius.md,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   rewardButtonText: {
     fontSize: 17,
     fontWeight: '700',
     color: Colors.text.inverse,
     letterSpacing: -0.2,
-    flex: 1,
-  },
+    flex: 1 },
 
   // Timeline
   timelineSection: {
     paddingHorizontal: Spacing.lg,
-    marginBottom: Spacing.xl,
-  },
+    marginBottom: Spacing.xl },
   timelineSectionTitle: {
     ...Typography.h4,
     fontWeight: '700',
     color: Colors.nileBlue,
     letterSpacing: -0.3,
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base },
   timelineContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -922,108 +849,90 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.xl,
     padding: Spacing.lg,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.5)',
-  },
+    borderColor: 'rgba(255, 255, 255, 0.5)' },
   timelineStep: {
     alignItems: 'center',
-    flex: 1,
-  },
+    flex: 1 },
   timelineStepNumber: {
     marginBottom: Spacing.md,
     shadowColor: Colors.gold,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
-    elevation: 4,
-  },
+    elevation: 4 },
   stepNumberGradient: {
     width: 44,
     height: 44,
     borderRadius: 22,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   stepNumber: {
     ...Typography.h4,
     fontWeight: '800',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse },
   timelineStepContent: {
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   timelineStepTitle: {
     ...Typography.body,
     fontWeight: '700',
     color: Colors.nileBlue,
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   timelineStepSubtitle: {
     ...Typography.bodySmall,
     color: Colors.text.tertiary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   timelineConnector: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg },
   connectorDash: {
     width: 10,
     height: 3,
     backgroundColor: Colors.gold,
     borderRadius: 2,
-    opacity: 0.4,
-  },
+    opacity: 0.4 },
 
   // Bottom Actions
   bottomActions: {
     paddingHorizontal: Spacing.lg,
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   bottomActionButton: {
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderRadius: BorderRadius.lg,
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.5)',
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   bottomActionInner: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: Spacing.base,
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   bottomActionIcon: {
     width: 40,
     height: 40,
     borderRadius: BorderRadius.md,
     backgroundColor: 'rgba(255, 205, 87, 0.1)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   bottomActionText: {
     flex: 1,
     ...Typography.body,
     fontWeight: '600',
-    color: Colors.nileBlue,
-  },
+    color: Colors.nileBlue },
 
   // Loading
   loadingContainer: {
     flex: 1,
-    backgroundColor: Colors.background.secondary,
-  },
+    backgroundColor: Colors.background.secondary },
   loadingHeader: {
     paddingTop: Platform.OS === 'android' ? 50 : 60,
     paddingBottom: Spacing.lg,
-    paddingHorizontal: Spacing.lg,
-  },
+    paddingHorizontal: Spacing.lg },
   loadingContent: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   loaderWrapper: {
     width: 80,
     height: 80,
@@ -1033,25 +942,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: Spacing.lg,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.5)',
-  },
+    borderColor: 'rgba(255, 255, 255, 0.5)' },
   loadingText: {
     ...Typography.body,
     color: Colors.text.tertiary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
 
   // Error
   errorContainer: {
     flex: 1,
-    backgroundColor: Colors.background.secondary,
-  },
+    backgroundColor: Colors.background.secondary },
   errorContent: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: Spacing['2xl'],
-  },
+    paddingHorizontal: Spacing['2xl'] },
   errorIconContainer: {
     width: 100,
     height: 100,
@@ -1061,36 +966,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: Spacing.lg,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.5)',
-  },
+    borderColor: 'rgba(255, 255, 255, 0.5)' },
   errorTitle: {
     fontSize: 22,
     fontWeight: '700',
     color: Colors.nileBlue,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   errorText: {
     ...Typography.body,
     color: Colors.text.tertiary,
     textAlign: 'center',
     lineHeight: 20,
-    marginBottom: Spacing.xl,
-  },
+    marginBottom: Spacing.xl },
   backButton: {
     paddingHorizontal: Spacing['2xl'],
     paddingVertical: 14,
-    borderRadius: 14,
-  },
+    borderRadius: 14 },
   backButtonText: {
     ...Typography.body,
     fontWeight: '600',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse },
 
   // Bottom Space
   bottomSpace: {
-    height: 60,
-  },
-});
+    height: 60 } });
 
 export default withErrorBoundary(BrandDetailPage, 'VoucherBrandId');

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import {
   View,
   Modal,
@@ -6,10 +6,9 @@ import {
   TouchableWithoutFeedback,
   StyleSheet,
   Dimensions,
-  Animated,
   ScrollView,
-  TextInput,
-} from 'react-native';
+  TextInput} from 'react-native';
+import Animated, { useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
@@ -39,13 +38,13 @@ function DealFilterModal({
   const [selectedFilter, setSelectedFilter] = useState<FilterOption>(currentFilter);
   const [searchTerm, setSearchTerm] = useState('');
   
-  const slideAnim = useRef(new Animated.Value(screenData.height)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useSharedValue(screenData.height);
+  const fadeAnim = useSharedValue(0);
 
   useEffect(() => {
     const subscription = Dimensions.addEventListener('change', ({ window }) => {
       setScreenData(window);
-      slideAnim.setValue(window.height);
+      slideAnim.value = window.height;
     });
 
     return () => subscription?.remove();
@@ -63,40 +62,18 @@ function DealFilterModal({
   const styles = createStyles(screenData);
 
   useEffect(() => {
-    let _anim: Animated.CompositeAnimation;
+    let _anim: any;
     if (visible) {
-      _anim = Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.spring(slideAnim, {
-          toValue: 0,
-          tension: 100,
-          friction: 8,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      fadeAnim.value = withTiming(1, { duration: 200 });
+      slideAnim.value = withSpring(0);
+      
     } else {
-      _anim = Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 150,
-          useNativeDriver: true,
-        }),
-        Animated.timing(slideAnim, {
-          toValue: screenData.height,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      fadeAnim.value = withTiming(0, { duration: 150 });
+      slideAnim.value = withTiming(screenData.height, { duration: 200 });
+      
     }
   
-    return () => _anim.stop();
-}, [visible, fadeAnim, slideAnim]);
+    }, [visible, fadeAnim, slideAnim]);
 
   const handleBackdropPress = () => {
     onClose();

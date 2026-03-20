@@ -1,5 +1,8 @@
 import React from 'react';
-import { Animated, Platform } from 'react-native';
+import {
+  Platform,
+  Animated,
+} from 'react-native';
 
 /**
  * Shared Skeleton Animation — Module-level Singleton
@@ -10,6 +13,10 @@ import { Animated, Platform } from 'react-native';
  *
  * This is a module-level singleton (NOT a React context/provider).
  * The animation starts on first access and runs forever.
+ *
+ * NOTE: This intentionally uses RN's Animated API (not reanimated) because it operates
+ * at module scope outside of React components. Reanimated's shared values require
+ * React component context. The consumers of this value use it with RN's Animated.View.
  */
 
 let _sharedShimmerValue: Animated.Value | null = null;

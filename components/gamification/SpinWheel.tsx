@@ -1,14 +1,14 @@
 // Spin Wheel Component
 // Interactive spinning wheel game with prizes
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
   Pressable,
-  Animated,
   Dimensions,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, interpolate } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { platformAlert } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
@@ -46,7 +46,7 @@ function SpinWheel({ segments = DEFAULT_SEGMENTS, onSpinComplete }: SpinWheelPro
   const [canSpin, setCanSpin] = useState(true);
   const [nextSpinTime, setNextSpinTime] = useState<string | null>(null);
   const isMounted = useIsMounted();
-  const rotateAnim = useRef(new Animated.Value(0)).current;
+  const rotateAnim = useSharedValue(0);
 
   useEffect(() => {
     checkEligibility();
@@ -88,11 +88,10 @@ function SpinWheel({ segments = DEFAULT_SEGMENTS, onSpinComplete }: SpinWheelPro
         const targetRotation = 360 * 5 + segmentIndex * segmentAngle; // 5 full rotations + target segment
 
         // Animate spin
-        Animated.timing(rotateAnim, {
-          toValue: targetRotation,
-          duration: 4000,
-          useNativeDriver: true,
-        }).start(() => {
+        rotateAnim.value = withTiming(targetRotation, { duration: 4000 });
+
+        // After animation completes, update state
+        setTimeout(() => {
           if (!isMounted()) return;
           setIsSpinning(false);
           setCanSpin(false);
@@ -111,7 +110,7 @@ function SpinWheel({ segments = DEFAULT_SEGMENTS, onSpinComplete }: SpinWheelPro
               },
             ]
           );
-        });
+        }, 4100);
       } else {
         throw new Error(response.error || 'Failed to spin wheel');
       }
@@ -159,10 +158,9 @@ function SpinWheel({ segments = DEFAULT_SEGMENTS, onSpinComplete }: SpinWheelPro
     });
   };
 
-  const spin = rotateAnim.interpolate({
-    inputRange: [0, 360],
-    outputRange: ['0deg', '360deg'],
-  });
+  const spinStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${rotateAnim.value}deg` }],
+  }));
 
   return (
     <View style={styles.container}>
@@ -177,9 +175,7 @@ function SpinWheel({ segments = DEFAULT_SEGMENTS, onSpinComplete }: SpinWheelPro
         <Animated.View
           style={[
             styles.wheel,
-            {
-              transform: [{ rotate: spin }],
-            },
+            spinStyle,
           ]}
         >
           {renderWheelSegments()}

@@ -3,7 +3,11 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Complete trial period management system with beautiful UI and animations
 
 import React, { useState, useEffect, useLayoutEffect } from 'react';
-import { View, StyleSheet, ScrollView, Pressable, StatusBar, ActivityIndicator, Animated, Dimensions } from 'react-native';
+import { View, StyleSheet, ScrollView, Pressable, StatusBar, ActivityIndicator, Dimensions } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useNavigation } from 'expo-router';
@@ -37,8 +41,10 @@ function TrialPage() {
   const [stats, setStats] = useState<any>(null);
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
   const [expandedTerms, setExpandedTerms] = useState(false);
-  const [fadeAnim] = useState(new Animated.Value(0));
-  const [slideAnim] = useState(new Animated.Value(screenHeight));
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(screenHeight);
+  const fadeStyle = useAnimatedStyle(() => ({ opacity: fadeAnim.value }));
+  const slideStyle = useAnimatedStyle(() => ({ transform: [{ translateY: slideAnim.value }] }));
 
   // Get subscription data
   const subscription = state.currentSubscription;
@@ -48,8 +54,7 @@ function TrialPage() {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerShown: false,
-    });
+      headerShown: false });
   }, [navigation]);
   const isMounted = useIsMounted();
 
@@ -58,20 +63,8 @@ function TrialPage() {
     if (isOnTrial) {
       fetchTrialStats();
       // Animate in
-      const anim = Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 500,
-          useNativeDriver: true,
-        }),
-        Animated.timing(slideAnim, {
-          toValue: 0,
-          duration: 600,
-          useNativeDriver: true,
-        }),
-      ]);
-      anim.start();
-      return () => anim.stop();
+      fadeAnim.value = withTiming(1, { duration: 500 });
+      slideAnim.value = withTiming(0, { duration: 600 });
     } else {
       // Not on trial, redirect
       router.replace('/subscription/manage');
@@ -167,8 +160,7 @@ function TrialPage() {
                 ? new Date(subscription.startDate).toLocaleDateString('en-IN', {
                     year: 'numeric',
                     month: 'short',
-                    day: 'numeric',
-                  })
+                    day: 'numeric' })
                 : 'N/A'}
             </ThemedText>
           </View>
@@ -185,8 +177,7 @@ function TrialPage() {
                 ? new Date(subscription.endDate).toLocaleDateString('en-IN', {
                     year: 'numeric',
                     month: 'short',
-                    day: 'numeric',
-                  })
+                    day: 'numeric' })
                 : 'N/A'}
             </ThemedText>
           </View>
@@ -464,7 +455,7 @@ function TrialPage() {
   }
 
   return (
-    <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
+    <Animated.View style={[styles.container, fadeStyle]}>
       <StatusBar barStyle="light-content" backgroundColor={Colors.brand.purpleLight} />
 
       {/* Trial Ending Soon Banner */}
@@ -518,7 +509,7 @@ function TrialPage() {
       </LinearGradient>
 
       <Animated.ScrollView
-        style={[styles.scrollView, { transform: [{ translateY: slideAnim }] }]}
+        style={[styles.scrollView, slideStyle]}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
@@ -556,91 +547,74 @@ function TrialPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background.secondary,
-  },
+    backgroundColor: Colors.background.secondary },
   header: {
     paddingTop: StatusBar.currentHeight || 50,
     paddingBottom: Spacing.base,
-    paddingHorizontal: Spacing.lg,
-  },
+    paddingHorizontal: Spacing.lg },
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   backButton: {
-    padding: Spacing.sm,
-  },
+    padding: Spacing.sm },
   headerTitle: {
     color: Colors.text.inverse,
     ...Typography.h3,
     fontWeight: 'bold',
     flex: 1,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   headerRight: {
     width: 60,
-    alignItems: 'flex-end',
-  },
+    alignItems: 'flex-end' },
   scrollView: {
-    flex: 1,
-  },
+    flex: 1 },
   scrollContent: {
-    paddingBottom: 120,
-  },
+    paddingBottom: 120 },
   urgentBanner: {
     paddingVertical: Spacing.md,
     paddingHorizontal: Spacing.base,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   urgentBannerContent: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   urgentBannerText: {
-    flex: 1,
-  },
+    flex: 1 },
   urgentTitle: {
     color: Colors.text.inverse,
     ...Typography.body,
-    fontWeight: 'bold',
-  },
+    fontWeight: 'bold' },
   urgentSubtitle: {
     color: 'rgba(255, 255, 255, 0.9)',
     ...Typography.bodySmall,
-    marginTop: 2,
-  },
+    marginTop: 2 },
   urgentButton: {
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     paddingHorizontal: Spacing.md,
     paddingVertical: 6,
     borderRadius: BorderRadius.sm,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.4)',
-  },
+    borderColor: 'rgba(255, 255, 255, 0.4)' },
   urgentButtonText: {
     color: Colors.text.inverse,
     ...Typography.bodySmall,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   countdownSection: {
     alignItems: 'center',
     paddingVertical: Spacing.lg,
-    paddingHorizontal: Spacing.lg,
-  },
+    paddingHorizontal: Spacing.lg },
   detailsCard: {
     marginHorizontal: Spacing.lg,
     marginBottom: Spacing.xl,
     backgroundColor: Colors.background.primary,
     borderRadius: BorderRadius.lg,
     padding: Spacing.lg,
-    ...Shadows.medium,
-  },
+    ...Shadows.medium },
   detailsHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -648,13 +622,11 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.base,
     paddingBottom: Spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.border.default,
-  },
+    borderBottomColor: Colors.border.default },
   detailsTitle: {
     ...Typography.bodyLarge,
     fontWeight: 'bold',
-    color: Colors.text.primary,
-  },
+    color: Colors.text.primary },
   autoRenewBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -662,64 +634,52 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: BorderRadius.sm,
-    gap: 6,
-  },
+    gap: 6 },
   autoRenewText: {
     ...Typography.caption,
     fontWeight: '600',
-    color: Colors.brand.purpleLight,
-  },
+    color: Colors.brand.purpleLight },
   detailsContent: {
-    gap: Spacing.base,
-  },
+    gap: Spacing.base },
   detailRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   detailIcon: {
     width: 40,
     height: 40,
     borderRadius: 10,
     backgroundColor: Colors.background.secondary,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   detailInfo: {
     flex: 1,
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   detailLabel: {
     ...Typography.bodySmall,
     color: Colors.text.tertiary,
     fontWeight: '500',
-    marginBottom: 3,
-  },
+    marginBottom: 3 },
   detailValue: {
     ...Typography.body,
     fontSize: 15,
     fontWeight: 'bold',
-    color: Colors.text.primary,
-  },
+    color: Colors.text.primary },
   section: {
     marginHorizontal: Spacing.lg,
-    marginBottom: 28,
-  },
+    marginBottom: 28 },
   sectionTitle: {
     ...Typography.h4,
     fontWeight: 'bold',
     color: Colors.text.primary,
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base },
   statsGrid: {
     flexDirection: 'row',
     gap: Spacing.md,
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
   ctaContainer: {
     marginTop: Spacing.lg,
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   primaryButton: {
     backgroundColor: Colors.brand.purpleLight,
     paddingVertical: Spacing.base,
@@ -729,13 +689,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
-    ...Shadows.purpleMedium,
-  },
+    ...Shadows.purpleMedium },
   primaryButtonText: {
     color: Colors.text.inverse,
     ...Typography.bodyLarge,
-    fontWeight: 'bold',
-  },
+    fontWeight: 'bold' },
   secondaryButton: {
     backgroundColor: Colors.background.primary,
     paddingVertical: Spacing.base,
@@ -747,16 +705,13 @@ const styles = StyleSheet.create({
     gap: 10,
     borderWidth: 1.5,
     borderColor: Colors.border.default,
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle },
   secondaryButtonText: {
     color: Colors.brand.purpleLight,
     ...Typography.bodyLarge,
-    fontWeight: 'bold',
-  },
+    fontWeight: 'bold' },
   buttonDisabled: {
-    opacity: 0.6,
-  },
+    opacity: 0.6 },
   termsHeader: {
     backgroundColor: Colors.background.primary,
     borderRadius: BorderRadius.md,
@@ -764,25 +719,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle },
   termsTitle: {
     ...Typography.bodyLarge,
     fontWeight: 'bold',
-    color: Colors.text.primary,
-  },
+    color: Colors.text.primary },
   termsContent: {
     backgroundColor: Colors.background.primary,
     borderRadius: BorderRadius.md,
     padding: Spacing.base,
     marginTop: Spacing.sm,
     gap: Spacing.base,
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle },
   termItem: {
     flexDirection: 'row',
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   termBullet: {
     width: 28,
     height: 28,
@@ -790,44 +741,35 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.brand.purpleLight,
     justifyContent: 'center',
     alignItems: 'center',
-    minWidth: 28,
-  },
+    minWidth: 28 },
   termBulletText: {
     color: Colors.text.inverse,
     ...Typography.bodySmall,
-    fontWeight: 'bold',
-  },
+    fontWeight: 'bold' },
   termTitle: {
     ...Typography.body,
     fontWeight: 'bold',
     color: Colors.text.primary,
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs },
   termDescription: {
     ...Typography.bodySmall,
     fontSize: 13,
     color: Colors.text.tertiary,
-    lineHeight: 18,
-  },
+    lineHeight: 18 },
   footerSpacing: {
-    height: Spacing.lg,
-  },
+    height: Spacing.lg },
   loadingContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 60,
-    gap: Spacing.base,
-  },
+    gap: Spacing.base },
   loadingText: {
     ...Typography.h4,
     fontWeight: 'bold',
-    color: Colors.text.primary,
-  },
+    color: Colors.text.primary },
   loadingSubtext: {
     ...Typography.body,
     color: Colors.text.tertiary,
-    textAlign: 'center',
-  },
-});
+    textAlign: 'center' } });
 
 export default withErrorBoundary(TrialPage, 'SubscriptionTrial');

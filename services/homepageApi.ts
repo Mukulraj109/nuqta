@@ -19,6 +19,7 @@ import { withRetry, createErrorResponse, logApiRequest, logApiResponse } from '@
 import { validateProductArray, validateStoreArray } from '@/utils/responseValidators';
 import apiClient, { ApiResponse } from './apiClient';
 import cacheService from './cacheService';
+import { useUserIdentityStore } from '@/stores/userIdentityStore';
 
 const devLog = {
   log: __DEV__ ? console.log.bind(console) : () => {},
@@ -328,6 +329,15 @@ export class HomepageApiService {
       const currentRegion = apiClient.getRegion();
       const batchParams: Record<string, any> = { region: currentRegion };
       if (userId) batchParams.userId = userId;
+
+      // Send identity segment for server-side personalization context
+      const identityState = useUserIdentityStore.getState();
+      if (identityState.segment && identityState.segment !== 'normal') {
+        batchParams.segment = identityState.segment;
+      }
+      if (identityState.featureLevel > 1) {
+        batchParams.featureLevel = identityState.featureLevel;
+      }
 
       logApiRequest('GET', ENDPOINTS.HOMEPAGE, { batch: true, region: currentRegion });
 

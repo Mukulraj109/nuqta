@@ -27,7 +27,7 @@ const OptionCard: React.FC<OptionCardProps> = ({
     subtitle,
     icon,
     onPress,
-    colors = [colors.neutral[100], colors.neutral[50]],
+    colors: gradientColors = [colors.neutral[100], colors.neutral[50]],
     iconColor = colors.infoScale[400],
     index = 0,
 }) => {
@@ -66,7 +66,7 @@ const OptionCard: React.FC<OptionCardProps> = ({
             onPressOut={handlePressOut}
         >
             <LinearGradient
-                colors={colors}
+                colors={gradientColors}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.gradient}

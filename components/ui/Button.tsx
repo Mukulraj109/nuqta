@@ -1,12 +1,14 @@
-import React, { useRef, useCallback, useMemo } from 'react';
+import React, {  useCallback, useMemo } from 'react';
 import {
   Pressable,
   Text,
   ActivityIndicator,
   ViewStyle,
-  TextStyle,
-  Animated,
-} from 'react-native';
+  TextStyle} from 'react-native';
+import Animated, {
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { typography, spacing, borderRadius } from '@/constants/theme';
@@ -55,7 +57,7 @@ function Button({
   testID,
 }: ButtonProps) {
   const { colors, shadows } = useTheme();
-  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const scaleAnim = useSharedValue(1);
   const sizeConfig = SIZE_CONFIG[size];
   const isInteractive = !disabled && !loading;
 
@@ -78,21 +80,13 @@ function Button({
   const textColor = variantText[variant];
 
   const handlePressIn = useCallback(() => {
-    Animated.spring(scaleAnim, {
-      toValue: 0.98,
-      useNativeDriver: true,
-      damping: 15,
-      stiffness: 200,
-    }).start();
+    scaleAnim.value = withSpring(0.98, { damping: 15,
+      stiffness: 200 });
   }, [scaleAnim]);
 
   const handlePressOut = useCallback(() => {
-    Animated.spring(scaleAnim, {
-      toValue: 1,
-      useNativeDriver: true,
-      damping: 15,
-      stiffness: 200,
-    }).start();
+    scaleAnim.value = withSpring(1, { damping: 15,
+      stiffness: 200 });
   }, [scaleAnim]);
 
   const handlePress = useCallback(() => {

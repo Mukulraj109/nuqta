@@ -3,15 +3,15 @@
  * Loading skeleton for events grid
  */
 
-import React, { memo, useEffect, useRef } from 'react';
+import React, { memo, useEffect } from 'react';
 import { colors } from '@/constants/theme';
 import {
   View,
   StyleSheet,
-  Animated,
   Dimensions,
   Platform,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence, withRepeat, interpolate } from 'react-native-reanimated';
 
 const { width: screenWidth } = Dimensions.get('window');
 const CARD_WIDTH = (screenWidth - 48) / 2;
@@ -22,33 +22,15 @@ interface EventsGridSkeletonProps {
 }
 
 const SkeletonCard: React.FC = () => {
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
-    const animation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmerAnim, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    animation.start();
-    return () => animation.stop();
-  }, [shimmerAnim]);
+    shimmerAnim.value = withRepeat(withSequence(withTiming(1, { duration: 1000 }), withTiming(0, { duration: 1000 })), -1);
+      }, [shimmerAnim]);
 
-  const shimmerStyle = {
-    opacity: shimmerAnim.interpolate({
-      inputRange: [0, 1],
-      outputRange: [0.3, 0.7],
-    }),
-  };
+  const shimmerStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(shimmerAnim.value, [0, 1], [0.3, 0.7]),
+  }));
 
   return (
     <View style={styles.card}>

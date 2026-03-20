@@ -1,5 +1,5 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -7,10 +7,16 @@ import {
   ScrollView,
   Pressable,
   Dimensions,
-  Animated,
-  Easing,
-  ActivityIndicator,
+  ActivityIndicator
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming,
+  Easing} from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -59,8 +65,7 @@ const COLORS = {
   error: colors.error,
   errorBg: colors.errorScale[50],
 
-  shadow: 'rgba(26, 58, 82, 0.08)',
-};
+  shadow: 'rgba(26, 58, 82, 0.08)' };
 
 interface Prize {
   id: number;
@@ -73,33 +78,29 @@ interface Prize {
 
 // Confetti particle for celebration
 const ConfettiParticle: React.FC<{ delay: number; color: string }> = ({ delay, color }) => {
-  const translateY = useRef(new Animated.Value(0)).current;
-  const translateX = useRef(new Animated.Value(0)).current;
-  const opacity = useRef(new Animated.Value(0)).current;
-  const rotate = useRef(new Animated.Value(0)).current;
+  const translateY = useSharedValue(0);
+  const translateX = useSharedValue(0);
+  const opacity = useSharedValue(0);
+  const rotate = useSharedValue(0);
 
   useEffect(() => {
-    let currentAnim: Animated.CompositeAnimation | undefined;
     const startAnimation = () => {
-      translateY.setValue(0);
-      translateX.setValue(Math.random() * 200 - 100);
-      opacity.setValue(1);
-      rotate.setValue(0);
-      currentAnim = Animated.parallel([
-        Animated.timing(translateY, { toValue: 300, duration: 2500, easing: Easing.out(Easing.quad), useNativeDriver: true }),
-        Animated.timing(opacity, { toValue: 0, duration: 2500, useNativeDriver: true }),
-        Animated.timing(rotate, { toValue: 1, duration: 2500, useNativeDriver: true }),
-      ]);
-      currentAnim.start(() => startAnimation());
+      translateY.value = 0;
+      translateX.value = Math.random() * 200 - 100;
+      opacity.value = 1;
+      rotate.value = 0;
+
+      translateY.value = withTiming(300, { duration: 2500, easing: Easing.out(Easing.quad) });
+      opacity.value = withTiming(0, { duration: 2500 });
+      rotate.value = withTiming(1, { duration: 2500 });
     };
     const timeout = setTimeout(startAnimation, delay);
     return () => {
       clearTimeout(timeout);
-      currentAnim?.stop();
     };
   }, []);
 
-  const spin = rotate.interpolate({ inputRange: [0, 1], outputRange: ['0deg', '360deg'] });
+  const spin = interpolate(rotate.value, [0, 1], ['0deg', '360deg']);
 
   return (
     <Animated.View style={[styles.confetti, { backgroundColor: color, transform: [{ translateY }, { translateX }, { rotate: spin }], opacity }]} />
@@ -119,8 +120,8 @@ const LuckyDraw = () => {
   const [maxPlays, setMaxPlays] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const spinValue = useRef(new Animated.Value(0)).current;
-  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const spinValue = useSharedValue(0);
+  const pulseAnim = useSharedValue(1);
   const isMounted = useIsMounted();
 
   const prizes: Prize[] = [
@@ -159,14 +160,10 @@ const LuckyDraw = () => {
   // Pulse animation for spin button
   useEffect(() => {
     if (gameState === 'start' && todayPlays < maxPlays) {
-      const loop = Animated.loop(
-        Animated.sequence([
-          Animated.timing(pulseAnim, { toValue: 1.05, duration: 800, useNativeDriver: true }),
-          Animated.timing(pulseAnim, { toValue: 1, duration: 800, useNativeDriver: true }),
-        ])
-      );
-      loop.start();
-      return () => loop.stop();
+      pulseAnim.value = withRepeat(withSequence(
+          withTiming(1.05, { duration: 800 }),
+          withTiming(1, { duration: 800 }),
+        ), -1);
     }
   }, [gameState, todayPlays, maxPlays]);
 
@@ -177,13 +174,8 @@ const LuckyDraw = () => {
     setGameState('spinning');
     setError(null);
 
-    spinValue.setValue(0);
-    Animated.timing(spinValue, {
-      toValue: 1,
-      duration: 3000,
-      easing: Easing.out(Easing.cubic),
-      useNativeDriver: true,
-    }).start();
+    spinValue.value = 0;
+    spinValue.value = withTiming(1, { duration: 3000, easing: Easing.out(Easing.cubic) });
 
     try {
       const response = await gameApi.spinWheel();
@@ -222,10 +214,7 @@ const LuckyDraw = () => {
     setGameState('start');
   };
 
-  const spinRotation = spinValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '1800deg'],
-  });
+  const spinRotation = interpolate(spinValue.value, [0, 1], ['0deg', '1800deg']);
 
   return (
     <View style={styles.container}>
@@ -453,12 +442,10 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row', alignItems: 'center', paddingHorizontal: Spacing.base,
     paddingTop: 52, paddingBottom: Spacing.base, gap: Spacing.md,
-    backgroundColor: COLORS.surface, borderBottomWidth: 1, borderBottomColor: COLORS.border,
-  },
+    backgroundColor: COLORS.surface, borderBottomWidth: 1, borderBottomColor: COLORS.border },
   backButton: {
     width: 44, height: 44, borderRadius: BorderRadius.md,
-    backgroundColor: COLORS.surfaceSecondary, justifyContent: 'center', alignItems: 'center',
-  },
+    backgroundColor: COLORS.surfaceSecondary, justifyContent: 'center', alignItems: 'center' },
   headerCenter: { flex: 1 },
   headerTitleRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm },
   headerIconText: { ...Typography.h2, fontSize: 24 },
@@ -466,8 +453,7 @@ const styles = StyleSheet.create({
   headerSubtitle: { ...Typography.bodySmall, fontSize: 13, color: COLORS.textMuted, marginTop: 2 },
   coinsBadge: {
     flexDirection: 'row', alignItems: 'center', gap: 6,
-    paddingHorizontal: 14, paddingVertical: Spacing.sm, borderRadius: BorderRadius.xl, backgroundColor: COLORS.goldBg,
-  },
+    paddingHorizontal: 14, paddingVertical: Spacing.sm, borderRadius: BorderRadius.xl, backgroundColor: COLORS.goldBg },
   coinIcon: { width: 20, height: 20 },
   coinsText: { ...Typography.body, fontSize: 15, fontWeight: '700', color: COLORS.goldDark },
 
@@ -477,12 +463,10 @@ const styles = StyleSheet.create({
   // Hero Card
   heroCard: {
     padding: 28, borderRadius: BorderRadius['2xl'], alignItems: 'center', marginBottom: Spacing.lg,
-    overflow: 'hidden', position: 'relative',
-  },
+    overflow: 'hidden', position: 'relative' },
   heroIconBg: {
     width: 80, height: 80, borderRadius: 40, backgroundColor: 'rgba(255,255,255,0.2)',
-    justifyContent: 'center', alignItems: 'center', marginBottom: Spacing.base,
-  },
+    justifyContent: 'center', alignItems: 'center', marginBottom: Spacing.base },
   heroIconText: { fontSize: 40 },
   heroTitle: { ...Typography.h1, fontWeight: '800', color: Colors.text.inverse, marginBottom: Spacing.sm },
   heroSubtitle: { ...Typography.body, fontSize: 15, color: 'rgba(255,255,255,0.9)', marginBottom: Spacing.xl },
@@ -498,42 +482,34 @@ const styles = StyleSheet.create({
 
   // Wheel
   wheelContainer: {
-    alignItems: 'center', marginBottom: Spacing.lg, position: 'relative',
-  },
+    alignItems: 'center', marginBottom: Spacing.lg, position: 'relative' },
   wheelShadow: {
-    shadowColor: COLORS.amber, shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.2, shadowRadius: 24, elevation: 8,
-  },
+    shadowColor: COLORS.amber, shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.2, shadowRadius: 24, elevation: 8 },
   wheel: {
-    width: width - 80, aspectRatio: 1, borderRadius: (width - 80) / 2, overflow: 'hidden',
-  },
+    width: width - 80, aspectRatio: 1, borderRadius: (width - 80) / 2, overflow: 'hidden' },
   wheelGradient: {
     flex: 1, justifyContent: 'center', alignItems: 'center',
-    borderWidth: 4, borderColor: COLORS.border, borderRadius: (width - 80) / 2,
-  },
+    borderWidth: 4, borderColor: COLORS.border, borderRadius: (width - 80) / 2 },
   wheelIcon: { fontSize: 64 },
   wheelText: { ...Typography.h4, fontWeight: '700', color: COLORS.navy, marginTop: Spacing.sm },
   wheelTouchable: {
-    position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-  },
+    position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 },
 
   // Result
   resultContainer: { gap: Spacing.base },
   resultCard: {
     borderRadius: BorderRadius['2xl'], overflow: 'hidden',
-    shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 8 }, shadowOpacity: 1, shadowRadius: 20, elevation: 8,
-  },
+    shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 8 }, shadowOpacity: 1, shadowRadius: 20, elevation: 8 },
   resultGradient: { padding: Spacing['2xl'], alignItems: 'center' },
   resultIconWrapper: {
     width: 96, height: 96, borderRadius: 48, backgroundColor: 'rgba(255,255,255,0.2)',
-    justifyContent: 'center', alignItems: 'center', marginBottom: Spacing.lg,
-  },
+    justifyContent: 'center', alignItems: 'center', marginBottom: Spacing.lg },
   resultIconText: { fontSize: 48 },
   resultTitle: { ...Typography.display, fontWeight: '800', color: Colors.text.inverse, marginBottom: Spacing.xs },
   resultSubtitleText: { ...Typography.h3, fontWeight: '700', color: Colors.text.inverse, marginBottom: Spacing.lg },
   earnedBox: {
     paddingHorizontal: Spacing['2xl'], paddingVertical: Spacing.lg, borderRadius: BorderRadius.lg,
-    backgroundColor: 'rgba(255,255,255,0.15)', alignItems: 'center',
-  },
+    backgroundColor: 'rgba(255,255,255,0.15)', alignItems: 'center' },
   earnedRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 6 },
   earnedCoin: { width: 36, height: 36 },
   earnedValue: { fontSize: 44, fontWeight: '800', color: Colors.text.inverse },
@@ -541,48 +517,41 @@ const styles = StyleSheet.create({
 
   // Confetti
   confettiContainer: {
-    position: 'absolute', top: 0, left: 0, right: 0, height: 200, pointerEvents: 'none', overflow: 'hidden', zIndex: 10,
-  },
+    position: 'absolute', top: 0, left: 0, right: 0, height: 200, pointerEvents: 'none', overflow: 'hidden', zIndex: 10 },
   confetti: { position: 'absolute', width: 10, height: 10, borderRadius: 2, left: '50%', top: -10 },
 
   // Error
   errorContainer: { padding: Spacing.xl, alignItems: 'center', gap: Spacing.base },
   errorIconBg: {
     width: 80, height: 80, borderRadius: 40, backgroundColor: COLORS.errorBg,
-    justifyContent: 'center', alignItems: 'center',
-  },
+    justifyContent: 'center', alignItems: 'center' },
   errorTitle: { ...Typography.h2, fontWeight: '700', color: COLORS.error },
   errorText: { ...Typography.body, color: COLORS.textMuted, textAlign: 'center' },
   retryButton: {
     flexDirection: 'row', alignItems: 'center', gap: Spacing.sm,
-    paddingVertical: 14, paddingHorizontal: Spacing['2xl'], borderRadius: BorderRadius.md,
-  },
+    paddingVertical: 14, paddingHorizontal: Spacing['2xl'], borderRadius: BorderRadius.md },
   retryButtonText: { ...Typography.body, fontWeight: '600', color: Colors.text.inverse },
 
   // Prize Table
   prizeTable: {
     backgroundColor: COLORS.surface, borderRadius: BorderRadius.xl, padding: Spacing.lg, marginBottom: Spacing.lg,
-    shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 1, shadowRadius: 12, elevation: 4,
-  },
+    shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 1, shadowRadius: 12, elevation: 4 },
   prizeTableHeader: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm, marginBottom: Spacing.base },
   prizeTableTitle: { ...Typography.h4, fontSize: 17, fontWeight: '700', color: COLORS.navy },
   prizeRow: {
     flexDirection: 'row', alignItems: 'center', gap: Spacing.md,
-    padding: Spacing.md, borderRadius: 14, backgroundColor: COLORS.surfaceSecondary, marginBottom: Spacing.sm,
-  },
+    padding: Spacing.md, borderRadius: 14, backgroundColor: COLORS.surfaceSecondary, marginBottom: Spacing.sm },
   prizeIconBg: { width: 44, height: 44, borderRadius: 22, justifyContent: 'center', alignItems: 'center' },
   prizeIcon: { fontSize: 24 },
   prizeInfo: { flex: 1 },
   prizeName: { ...Typography.body, fontSize: 15, fontWeight: '600', color: COLORS.navy, marginBottom: 2 },
   prizeChanceBadge: {
     alignSelf: 'flex-start', paddingHorizontal: Spacing.sm, paddingVertical: 2, borderRadius: BorderRadius.sm,
-    backgroundColor: COLORS.amberBg,
-  },
+    backgroundColor: COLORS.amberBg },
   prizeChance: { ...Typography.caption, fontWeight: '600', color: COLORS.amber },
   prizeValueBadge: {
     flexDirection: 'row', alignItems: 'center', gap: Spacing.xs,
-    paddingHorizontal: 10, paddingVertical: 6, borderRadius: BorderRadius.md,
-  },
+    paddingHorizontal: 10, paddingVertical: 6, borderRadius: BorderRadius.md },
   prizeValueIcon: { width: 16, height: 16 },
   prizeValue: { ...Typography.body, fontSize: 15, fontWeight: '700' },
 
@@ -590,16 +559,13 @@ const styles = StyleSheet.create({
   spinButtonWrapper: { borderRadius: BorderRadius.lg, overflow: 'hidden' },
   spinButton: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 10, paddingVertical: 18, borderRadius: BorderRadius.lg,
-  },
+    gap: 10, paddingVertical: 18, borderRadius: BorderRadius.lg },
   spinButtonText: { ...Typography.h4, fontSize: 17, fontWeight: '700', color: Colors.text.inverse },
 
   // Actions
   secondaryAction: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: Spacing.sm,
-    paddingVertical: Spacing.base, borderRadius: BorderRadius.lg, backgroundColor: COLORS.surface, borderWidth: 1, borderColor: COLORS.border,
-  },
-  secondaryActionText: { ...Typography.body, fontSize: 15, fontWeight: '600', color: COLORS.textMuted },
-});
+    paddingVertical: Spacing.base, borderRadius: BorderRadius.lg, backgroundColor: COLORS.surface, borderWidth: 1, borderColor: COLORS.border },
+  secondaryActionText: { ...Typography.body, fontSize: 15, fontWeight: '600', color: COLORS.textMuted } });
 
 export default withErrorBoundary(LuckyDraw, 'PlayandearnLuckydraw');

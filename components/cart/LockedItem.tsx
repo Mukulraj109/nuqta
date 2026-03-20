@@ -1,12 +1,11 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useState} from 'react';
 import {
   View,
   Pressable,
   StyleSheet,
-  Animated,
   Dimensions,
-  Platform,
-} from 'react-native';
+  Platform} from 'react-native';
+import Animated, { runOnJS, useSharedValue, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
@@ -55,9 +54,9 @@ function LockedItem({
   const currencySymbol = getCurrencySymbol();
   const { width } = Dimensions.get('window');
   const isSmallScreen = width < 360;
-  const scaleAnim = useRef(new Animated.Value(1)).current;
-  const fadeAnim = useRef(new Animated.Value(1)).current;
-  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const scaleAnim = useSharedValue(1);
+  const fadeAnim = useSharedValue(1);
+  const pulseAnim = useSharedValue(1);
 
   // Live countdown state
   const [timeLeft, setTimeLeft] = useState({
@@ -97,31 +96,18 @@ function LockedItem({
 
   // Pulse animation for urgent timer
   useEffect(() => {
-    let animation: Animated.CompositeAnimation | null = null;
+    let animation: any | null = null;
 
     if (timeLeft.isCritical && !timeLeft.isExpired) {
-      animation = Animated.loop(
-        Animated.sequence([
-          Animated.timing(pulseAnim, {
-            toValue: 1.05,
-            duration: 500,
-            useNativeDriver: true,
-          }),
-          Animated.timing(pulseAnim, {
-            toValue: 1,
-            duration: 500,
-            useNativeDriver: true,
-          }),
-        ])
-      );
-      animation.start();
+      animation = pulseAnim.value = withRepeat(withSequence(withTiming(1.05, { duration: 500 })), -1);
+      
     }
 
     return () => {
       if (animation) {
-        animation.stop();
+        // animation auto-cancels
       }
-      pulseAnim.setValue(1);
+      pulseAnim.value = 1;
     };
   }, [timeLeft.isCritical, timeLeft.isExpired]);
 
@@ -129,40 +115,17 @@ function LockedItem({
 
   const handleUnlock = () => {
     if (showAnimation) {
-      Animated.parallel([
-        Animated.timing(scaleAnim, {
-          toValue: 0.8,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-      ]).start(() => {
-        onUnlock(item.id, item.productId || item.id);
-      });
+      scaleAnim.value = withTiming(0.8, { duration: 200 });
+      fadeAnim.value = withTiming(0, { duration: 200 });
+      onUnlock(item.id, item.productId || item.id);
     } else {
       onUnlock(item.id, item.productId || item.id);
     }
   };
 
   const handleMoveToCart = () => {
-    Animated.sequence([
-      Animated.timing(scaleAnim, {
-        toValue: 0.98,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(scaleAnim, {
-        toValue: 1,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
+    scaleAnim.value = withSequence(withTiming(0.98, { duration: 100 }), withTiming(1, { duration: 100 }));
       onMoveToCart(item.id, item.productId || item.id);
-    });
   };
 
   // Get timer color based on urgency

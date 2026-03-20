@@ -9,10 +9,15 @@ import {
   InteractionManager,
   Platform,
   Text,
-  Animated,
   StatusBar,
-  ScrollView,
+  ScrollView
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
@@ -44,9 +49,12 @@ function UGCDetailScreen() {
   const videoRef = useRef<Video | null>(null);
 
   // Animation refs
-  const likeScale = useRef(new Animated.Value(1)).current;
-  const heartOpacity = useRef(new Animated.Value(0)).current;
-  const playPauseOpacity = useRef(new Animated.Value(0)).current;
+  const likeScale = useSharedValue(1);
+  const heartOpacity = useSharedValue(0);
+  const playPauseOpacity = useSharedValue(0);
+  const likeScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: likeScale.value }] }));
+  const heartOpacityStyle = useAnimatedStyle(() => ({ opacity: heartOpacity.value }));
+  const playPauseOpacityStyle = useAnimatedStyle(() => ({ opacity: playPauseOpacity.value }));
 
   // View tracking ref - prevents counting same video multiple times in a session
   const viewTrackedRef = useRef<Set<string>>(new Set());
@@ -92,8 +100,7 @@ function UGCDetailScreen() {
   // Product interaction
   const { addToCart, navigateToProduct } = useProductInteraction({
     onSuccess: () => {},
-    onError: () => {},
-  });
+    onError: () => {}});
 
   // Parse params item or fetch video from API (combined into single effect)
   useEffect(() => {
@@ -132,8 +139,7 @@ function UGCDetailScreen() {
           const normalizedVideo = {
             ...videoData,
             _id: extractedVideoId,
-            products: videoData.products || videoData.relatedProducts || [],
-          };
+            products: videoData.products || videoData.relatedProducts || []};
           setVideo(normalizedVideo);
         } else {
           if (!isMounted()) return;
@@ -344,8 +350,7 @@ function UGCDetailScreen() {
         name: product.name || product.title || 'Product',
         title: product.title || product.name || 'Product',
         image,
-        price: typeof price === 'number' ? price : 0,
-      };
+        price: typeof price === 'number' ? price : 0};
     });
   }, [video]);
 
@@ -355,11 +360,11 @@ function UGCDetailScreen() {
       handleLike();
     }
     // Show heart animation
-    Animated.sequence([
-      Animated.timing(heartOpacity, { toValue: 1, duration: 200, useNativeDriver: true }),
-      Animated.delay(600),
-      Animated.timing(heartOpacity, { toValue: 0, duration: 200, useNativeDriver: true }),
-    ]).start();
+    heartOpacity.value = withSequence(
+      withTiming(1, { duration: 200 }),
+      withTiming(1, { duration: 600 }),
+      withTiming(0, { duration: 200 })
+    );
   }, [isLiked]);
 
   // Video press - toggle play/pause
@@ -386,11 +391,11 @@ function UGCDetailScreen() {
         }
       }
       // Show play/pause indicator
-      Animated.sequence([
-        Animated.timing(playPauseOpacity, { toValue: 1, duration: 100, useNativeDriver: true }),
-        Animated.delay(500),
-        Animated.timing(playPauseOpacity, { toValue: 0, duration: 200, useNativeDriver: true }),
-      ]).start();
+      playPauseOpacity.value = withSequence(
+        withTiming(1, { duration: 100 }),
+        withTiming(1, { duration: 500 }),
+        withTiming(0, { duration: 200 })
+      );
     }
     lastTap.current = now;
   }, [handleDoubleTap, isPlaying]);
@@ -454,10 +459,10 @@ function UGCDetailScreen() {
     }
 
     // Animate
-    Animated.sequence([
-      Animated.timing(likeScale, { toValue: 1.4, duration: 100, useNativeDriver: true }),
-      Animated.timing(likeScale, { toValue: 1, duration: 100, useNativeDriver: true }),
-    ]).start();
+    likeScale.value = withSequence(
+      withTiming(1.4, { duration: 100 }),
+      withTiming(1, { duration: 100 })
+    );
 
     try {
       if (!video?._id) return;
@@ -540,8 +545,7 @@ function UGCDetailScreen() {
           itemType: 'store',
           itemId: storeIdToFollow,
           notes: `Following ${creatorName}`,
-          priority: 'medium',
-        });
+          priority: 'medium'});
         if (!response.success) {
           throw new Error(response.message || 'Failed to follow');
         }
@@ -646,8 +650,7 @@ function UGCDetailScreen() {
                 width: '150%',
                 height: '150%',
                 top: '-25%',
-                left: '-25%',
-              },
+                left: '-25%'},
             ]}
             resizeMode={ResizeMode.COVER}
             isLooping={true}
@@ -752,14 +755,14 @@ function UGCDetailScreen() {
       </Pressable>
 
       {/* Play/Pause Indicator */}
-      <Animated.View style={[styles.playPauseIndicator, { opacity: playPauseOpacity }]}>
+      <Animated.View style={[styles.playPauseIndicator, playPauseOpacityStyle]}>
         <View style={styles.playPauseCircle}>
           <Ionicons name={isPlaying ? 'pause' : 'play'} size={50} color={Colors.text.inverse} />
         </View>
       </Animated.View>
 
       {/* Double Tap Heart Animation */}
-      <Animated.View style={[styles.heartAnimation, { opacity: heartOpacity }]}>
+      <Animated.View style={[styles.heartAnimation, heartOpacityStyle]}>
         <Ionicons name="heart" size={120} color={Colors.error} />
       </Animated.View>
 
@@ -821,7 +824,7 @@ function UGCDetailScreen() {
 
         {/* Like */}
         <Pressable style={styles.actionButton} onPress={handleLike}>
-          <Animated.View style={{ transform: [{ scale: likeScale }] }}>
+          <Animated.View style={likeScaleStyle}>
             <Ionicons
               name={isLiked ? 'heart' : 'heart-outline'}
               size={32}
@@ -952,37 +955,30 @@ const styles = StyleSheet.create({
     backgroundColor: colors.text.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    ...(Platform.OS === 'web' && { overflow: 'hidden' as const }),
-  },
+    ...(Platform.OS === 'web' && { overflow: 'hidden' as const })},
   backgroundVideo: {
     opacity: 0.7,
-    transform: [{ scale: 1.5 }],
-  },
+    transform: [{ scale: 1.5 }]},
   darkOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-  },
+    backgroundColor: 'rgba(0, 0, 0, 0.3)'},
   loadingText: {
     color: Colors.text.tertiary,
     marginTop: Spacing.base,
-    ...Typography.bodyLarge,
-  },
+    ...Typography.bodyLarge},
   errorText: {
     color: Colors.text.tertiary,
     marginTop: Spacing.base,
-    ...Typography.bodyLarge,
-  },
+    ...Typography.bodyLarge},
   retryButton: {
     marginTop: Spacing.lg,
     backgroundColor: Colors.brand.purpleLight,
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md,
-    borderRadius: 25,
-  },
+    borderRadius: 25},
   retryButtonText: {
     color: Colors.text.inverse,
-    fontWeight: '600',
-  },
+    fontWeight: '600'},
 
   // Overlays
   topGradient: {
@@ -990,39 +986,34 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    height: 150,
-  },
+    height: 150},
   bottomGradient: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    height: SCREEN_HEIGHT * 0.5,
-  },
+    height: SCREEN_HEIGHT * 0.5},
 
   // Play/Pause Indicator
   playPauseIndicator: {
     position: 'absolute',
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 10,
-  },
+    zIndex: 10},
   playPauseCircle: {
     width: 80,
     height: 80,
     borderRadius: 40,
     backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
 
   // Heart Animation
   heartAnimation: {
     position: 'absolute',
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 10,
-  },
+    zIndex: 10},
 
   // Top Bar
   topBar: {
@@ -1034,28 +1025,24 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: Spacing.base,
-    zIndex: 20,
-  },
+    zIndex: 20},
   backButton: {
     width: 40,
     height: 40,
     borderRadius: BorderRadius.xl,
     backgroundColor: 'rgba(0,0,0,0.3)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   topBarRight: {
     flexDirection: 'row',
-    gap: Spacing.md,
-  },
+    gap: Spacing.md},
   topBarButton: {
     width: 40,
     height: 40,
     borderRadius: BorderRadius.xl,
     backgroundColor: 'rgba(0,0,0,0.3)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   cartBadge: {
     position: 'absolute',
     top: -2,
@@ -1065,13 +1052,11 @@ const styles = StyleSheet.create({
     minWidth: 18,
     height: 18,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   cartBadgeText: {
     color: Colors.text.inverse,
     ...Typography.overline,
-    fontWeight: '700',
-  },
+    fontWeight: '700'},
 
   // Social Actions (Right Side)
   socialActions: {
@@ -1080,18 +1065,15 @@ const styles = StyleSheet.create({
     bottom: Platform.OS === 'ios' ? 280 : 260, // Moved up further to avoid bottom nav bar
     alignItems: 'center',
     gap: Spacing.lg,
-    zIndex: 20,
-  },
+    zIndex: 20},
   creatorAvatarContainer: {
-    marginBottom: 10,
-  },
+    marginBottom: 10},
   creatorAvatar: {
     width: 52,
     height: 52,
     borderRadius: 26,
     borderWidth: 2,
-    borderColor: Colors.text.inverse,
-  },
+    borderColor: Colors.text.inverse},
   followBadge: {
     position: 'absolute',
     bottom: -8,
@@ -1104,17 +1086,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: colors.text.primary,
-  },
+    borderColor: colors.text.primary},
   actionButton: {
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   actionCount: {
     color: Colors.text.inverse,
     ...Typography.bodySmall,
     fontWeight: '600',
-    marginTop: Spacing.xs,
-  },
+    marginTop: Spacing.xs},
 
   // Bottom Content
   bottomContent: {
@@ -1122,136 +1101,113 @@ const styles = StyleSheet.create({
     left: 12,
     right: 60,
     bottom: Platform.OS === 'ios' ? 100 : 80, // Moved up further to avoid bottom nav bar
-    zIndex: 20,
-  },
+    zIndex: 20},
   creatorInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm},
   creatorName: {
     color: Colors.text.inverse,
     ...Typography.bodyLarge,
-    fontWeight: '700',
-  },
+    fontWeight: '700'},
   followButton: {
     marginLeft: Spacing.md,
     backgroundColor: Colors.error,
     paddingHorizontal: Spacing.base,
     paddingVertical: 6,
-    borderRadius: 4,
-  },
+    borderRadius: 4},
   followButtonText: {
     color: Colors.text.inverse,
     ...Typography.bodySmall,
-    fontWeight: '600',
-  },
+    fontWeight: '600'},
   followingBadge: {
     marginLeft: Spacing.md,
     borderWidth: 1,
     borderColor: Colors.text.inverse,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.xs,
-    borderRadius: 4,
-  },
+    borderRadius: 4},
   followingText: {
     color: Colors.text.inverse,
-    ...Typography.bodySmall,
-  },
+    ...Typography.bodySmall},
   caption: {
     color: Colors.text.inverse,
     ...Typography.body,
     lineHeight: 20,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm},
   tagsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: Spacing.sm,
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md},
   tag: {
     color: Colors.text.inverse,
     ...Typography.body,
-    fontWeight: '600',
-  },
+    fontWeight: '600'},
 
   // Products Section
   productsSection: {
     backgroundColor: 'rgba(255,255,255,0.1)',
     borderRadius: BorderRadius.md,
     padding: 10,
-    ...Platform.select({ web: { backdropFilter: 'blur(10px)' } as any, default: {} }),
-  },
+    ...Platform.select({ web: { backdropFilter: 'blur(10px)' } as any, default: {} })},
   productsHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: Spacing.sm,
-    gap: 6,
-  },
+    gap: 6},
   productsTitle: {
     color: Colors.text.inverse,
     ...Typography.bodySmall,
     fontWeight: '600',
-    flex: 1,
-  },
+    flex: 1},
   productsBadge: {
     backgroundColor: Colors.brand.purpleLight,
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: BorderRadius.sm,
-  },
+    borderRadius: BorderRadius.sm},
   productsBadgeText: {
     color: Colors.text.inverse,
     ...Typography.overline,
-    fontWeight: '700',
-  },
+    fontWeight: '700'},
   productsList: {
     flexDirection: 'row',
     gap: 10,
-    paddingRight: Spacing.xs,
-  },
+    paddingRight: Spacing.xs},
   productCard: {
     width: 120,
     backgroundColor: 'rgba(255,255,255,0.15)',
     borderRadius: 10,
     padding: Spacing.sm,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'},
   productImage: {
     width: '100%',
     height: 70,
     borderRadius: BorderRadius.sm,
     backgroundColor: Colors.text.primary,
-    marginBottom: 6,
-  },
+    marginBottom: 6},
   productInfo: {
-    flex: 1,
-  },
+    flex: 1},
   productName: {
     color: Colors.text.inverse,
     ...Typography.caption,
     fontWeight: '500',
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs},
   productPriceRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between'},
   productPrice: {
     color: Colors.gold,
     ...Typography.bodySmall,
-    fontWeight: '700',
-  },
+    fontWeight: '700'},
   addToCartButton: {
     width: 24,
     height: 24,
     borderRadius: BorderRadius.md,
     backgroundColor: Colors.brand.purpleLight,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
 
   // Progress Bar
   progressBarContainer: {
@@ -1260,12 +1216,9 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 3,
-    backgroundColor: 'rgba(255,255,255,0.2)',
-  },
+    backgroundColor: 'rgba(255,255,255,0.2)'},
   progressBar: {
     height: '100%',
-    backgroundColor: Colors.background.primary,
-  },
-});
+    backgroundColor: Colors.background.primary}});
 
 export default withErrorBoundary(UGCDetailScreen, 'UGCDetailScreen');

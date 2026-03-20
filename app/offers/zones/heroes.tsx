@@ -4,7 +4,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
  * Fetches real data from backend API for Defence/Healthcare/Teachers/Seniors
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import {
   View,
   ScrollView,
@@ -12,9 +12,15 @@ import {
   Pressable,
   StatusBar,
   Platform,
-  Dimensions,
-  Animated,
+  Dimensions
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -65,8 +71,7 @@ const PROFILE_CONFIG: Record<string, { emoji: string; gradientColors: string[] }
   'senior': { emoji: '👴', gradientColors: [colors.warningScale[400], colors.warningScale[700], colors.brand.amberDeep] },
   'teachers': { emoji: '📚', gradientColors: [colors.brand.purpleLight, colors.brand.purple, colors.brand.purpleDeep] },
   'government': { emoji: '🏛️', gradientColors: [colors.brand.indigo, '#4F46E5', '#4338CA'] },
-  'differently-abled': { emoji: '♿', gradientColors: [colors.brand.pink, colors.deepPink, '#BE185D'] },
-};
+  'differently-abled': { emoji: '♿', gradientColors: [colors.brand.pink, colors.deepPink, '#BE185D'] } };
 
 function HeroesZonePage() {
   const isMounted = useIsMounted();
@@ -83,19 +88,22 @@ function HeroesZonePage() {
   const [loadingOffers, setLoadingOffers] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
+  const shimmerOpacityStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(shimmerAnim.value, [0, 1], [0.3, 0.7]),
+  }));
   const bottomPadding = 80 + 70 + insets.bottom;
 
   useEffect(() => {
     fetchProfiles();
-    const shimmerLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, { toValue: 1, duration: 1000, useNativeDriver: true }),
-        Animated.timing(shimmerAnim, { toValue: 0, duration: 1000, useNativeDriver: true }),
-      ])
+    shimmerAnim.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 1000 }),
+        withTiming(0, { duration: 1000 })
+      ),
+      -1
     );
-    shimmerLoop.start();
-    return () => shimmerLoop.stop();
+    return () => { shimmerAnim.value = 0; };
   }, []);
 
   // Auto-select profile from URL param after profiles are loaded
@@ -119,8 +127,7 @@ function HeroesZonePage() {
         if (!isMounted()) return;
         setProfileOffers(prev => ({
           ...prev,
-          [slug]: Array.isArray(offersData) ? offersData : [],
-        }));
+          [slug]: Array.isArray(offersData) ? offersData : [] }));
       }
     } catch (err) {
       // silently handle
@@ -186,8 +193,7 @@ function HeroesZonePage() {
       'senior': 'senior',
       'teachers': 'teacher',
       'government': 'government',
-      'differently-abled': 'differentlyAbled',
-    };
+      'differently-abled': 'differentlyAbled' };
     const zone = slugToZone[profileSlug] || profileSlug;
 
     router.push({
@@ -213,8 +219,7 @@ function HeroesZonePage() {
       'senior': 'senior',
       'teachers': 'teacher',
       'government': 'government',
-      'differently-abled': 'differentlyAbled',
-    };
+      'differently-abled': 'differentlyAbled' };
 
     const key = slugToVerificationKey[profile.slug];
     return key ? verifications[key]?.verified === true : false;
@@ -229,7 +234,7 @@ function HeroesZonePage() {
       <Animated.View
         style={[
           styles.skeletonHeader,
-          { opacity: shimmerAnim.interpolate({ inputRange: [0, 1], outputRange: [0.3, 0.7] }) },
+          shimmerOpacityStyle,
         ]}
       />
     </View>
@@ -312,13 +317,13 @@ function HeroesZonePage() {
                   <Animated.View
                     style={[
                       styles.skeletonDeal,
-                      { opacity: shimmerAnim.interpolate({ inputRange: [0, 1], outputRange: [0.3, 0.7] }) },
+                      shimmerOpacityStyle,
                     ]}
                   />
                   <Animated.View
                     style={[
                       styles.skeletonDeal,
-                      { opacity: shimmerAnim.interpolate({ inputRange: [0, 1], outputRange: [0.3, 0.7] }) },
+                      shimmerOpacityStyle,
                     ]}
                   />
                 </View>
@@ -571,7 +576,6 @@ const styles = StyleSheet.create({
   fixedCTA: { position: 'absolute', bottom: 70, left: 0, right: 0, padding: Spacing.base, backgroundColor: Colors.background.primary, borderTopWidth: 1, borderTopColor: Colors.border.light, ...Shadows.medium },
   ctaButton: { borderRadius: BorderRadius.lg, overflow: 'hidden' },
   ctaGradient: { paddingVertical: Spacing.base, alignItems: 'center', justifyContent: 'center' },
-  ctaButtonText: { ...Typography.button, color: colors.background.primary, fontWeight: '600' },
-});
+  ctaButtonText: { ...Typography.button, color: colors.background.primary, fontWeight: '600' } });
 
 export default withErrorBoundary(HeroesZonePage, 'OffersZonesHeroes');

@@ -6,10 +6,16 @@ import {
   StyleSheet,
   ScrollView,
   Pressable,
-  Dimensions,
-  Animated,
-  Easing,
-} from 'react-native';
+  Dimensions} from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSpring,
+  withSequence,
+  withRepeat,
+  interpolate,
+  Easing} from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -56,8 +62,7 @@ const COLORS = {
   error: colors.error,
   errorBg: colors.errorScale[50],
 
-  shadow: 'rgba(26, 58, 82, 0.08)',
-};
+  shadow: 'rgba(26, 58, 82, 0.08)'};
 
 interface Coin {
   id: number;
@@ -68,27 +73,25 @@ interface Coin {
 
 // Animated Coin Component
 const AnimatedCoin: React.FC<{ coin: Coin; onCatch: () => void }> = ({ coin, onCatch }) => {
-  const scaleAnim = useRef(new Animated.Value(0)).current;
-  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const scaleAnim = useSharedValue(0);
+  const pulseAnim = useSharedValue(1);
 
   useEffect(() => {
     // Pop-in animation
-    Animated.spring(scaleAnim, {
-      toValue: 1,
-      friction: 6,
-      tension: 120,
-      useNativeDriver: true,
-    }).start();
+    scaleAnim.value = withSpring(1, { damping: 6, stiffness: 120 });
 
     // Pulse animation
-    const pulseLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(pulseAnim, { toValue: 1.1, duration: 500, useNativeDriver: true }),
-        Animated.timing(pulseAnim, { toValue: 1, duration: 500, useNativeDriver: true }),
-      ])
+    pulseAnim.value = withRepeat(
+      withSequence(
+        withTiming(1.1, { duration: 500 }),
+        withTiming(1, { duration: 500 }),
+      ),
+      -1
     );
-    pulseLoop.start();
-    return () => pulseLoop.stop();
+    return () => {
+      scaleAnim.value = 0;
+      pulseAnim.value = 1;
+    };
   }, []);
 
   const bgColors: [string, string] = coin.value >= 20 ? [COLORS.goldDark, COLORS.amber] : [COLORS.gold, COLORS.primary];
@@ -98,7 +101,7 @@ const AnimatedCoin: React.FC<{ coin: Coin; onCatch: () => void }> = ({ coin, onC
       onPress={onCatch}
       style={[styles.coinButton, { left: `${coin.x}%`, top: `${coin.y}%` }]}
     >
-      <Animated.View style={{ transform: [{ scale: Animated.multiply(scaleAnim, pulseAnim) }] }}>
+      <Animated.View style={{ transform: [{ scale: scaleAnim.value * pulseAnim.value }] }}>
         <LinearGradient
           colors={bgColors}
           style={styles.coinGradient}
@@ -112,35 +115,30 @@ const AnimatedCoin: React.FC<{ coin: Coin; onCatch: () => void }> = ({ coin, onC
 
 // Confetti particle for celebration
 const ConfettiParticle: React.FC<{ delay: number; color: string }> = ({ delay, color }) => {
-  const translateY = useRef(new Animated.Value(0)).current;
-  const translateX = useRef(new Animated.Value(0)).current;
-  const opacity = useRef(new Animated.Value(0)).current;
-  const rotate = useRef(new Animated.Value(0)).current;
+  const translateY = useSharedValue(0);
+  const translateX = useSharedValue(0);
+  const opacity = useSharedValue(0);
+  const rotate = useSharedValue(0);
 
   useEffect(() => {
-    let currentAnim: Animated.CompositeAnimation | undefined;
     const startAnimation = () => {
-      translateY.setValue(0);
-      translateX.setValue(Math.random() * 200 - 100);
-      opacity.setValue(1);
-      rotate.setValue(0);
+      translateY.value = 0;
+      translateX.value = Math.random() * 200 - 100;
+      opacity.value = 1;
+      rotate.value = 0;
 
-      currentAnim = Animated.parallel([
-        Animated.timing(translateY, { toValue: 300, duration: 2500, easing: Easing.out(Easing.quad), useNativeDriver: true }),
-        Animated.timing(opacity, { toValue: 0, duration: 2500, useNativeDriver: true }),
-        Animated.timing(rotate, { toValue: 1, duration: 2500, useNativeDriver: true }),
-      ]);
-      currentAnim.start(() => startAnimation());
+      translateY.value = withTiming(300, { duration: 2500, easing: Easing.out(Easing.quad) });
+      opacity.value = withTiming(0, { duration: 2500 });
+      rotate.value = withTiming(1, { duration: 2500 });
     };
 
     const timeout = setTimeout(startAnimation, delay);
     return () => {
       clearTimeout(timeout);
-      currentAnim?.stop();
     };
   }, []);
 
-  const spin = rotate.interpolate({ inputRange: [0, 1], outputRange: ['0deg', '360deg'] });
+  const spin = interpolate(rotate.value, [0, 1], ['0deg', '360deg']);
 
   return (
     <Animated.View
@@ -165,7 +163,9 @@ const CoinHunt = () => {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [coinsCollected, setCoinsCollected] = useState(0);
 
-  const progressAnim = useRef(new Animated.Value(1)).current;
+  const progressAnim = useSharedValue(1);
+
+  const isMounted = useIsMounted();
 
   // Fetch daily limits and wallet balance on mount
   const fetchData = async () => {
@@ -176,7 +176,6 @@ const CoinHunt = () => {
         gameApi.getDailyLimits(),
         refreshWallet(),
       ]);
-      const isMounted = useIsMounted();
 
       if (limitsResponse.data) {
         const huntLimits = limitsResponse.data.coin_hunt;
@@ -199,20 +198,13 @@ const CoinHunt = () => {
   }, []);
 
   useEffect(() => {
-    let progressAnimation: Animated.CompositeAnimation | undefined;
     if (gameState === 'playing' && timeLeft > 0) {
       const timer = setTimeout(() => {
         setTimeLeft(prev => prev - 1);
-        progressAnimation = Animated.timing(progressAnim, {
-          toValue: (timeLeft - 1) / 30,
-          duration: 1000,
-          useNativeDriver: false,
-        });
-        progressAnimation.start();
+        progressAnim.value = withTiming((timeLeft - 1) / 30, { duration: 1000 });
       }, 1000);
       return () => {
         clearTimeout(timer);
-        progressAnimation?.stop();
       };
     } else if (timeLeft === 0 && gameState === 'playing') {
       endGame();
@@ -279,7 +271,7 @@ const CoinHunt = () => {
     setTimeLeft(30);
     setCoins([]);
     setCoinsCollected(0);
-    progressAnim.setValue(1);
+    progressAnim.value = 1;
 
     try {
       const response = await gameApi.startCoinHunt();
@@ -307,10 +299,7 @@ const CoinHunt = () => {
     return { text: 'Keep Hunting!', icon: 'refresh' as const, color: COLORS.textMuted };
   };
 
-  const progressWidth = progressAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0%', '100%'],
-  });
+  const progressWidth = interpolate(progressAnim.value, [0, 1], ['0%', '100%']);
 
   return (
     <View style={styles.container}>
@@ -630,12 +619,10 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row', alignItems: 'center', paddingHorizontal: Spacing.base,
     paddingTop: 52, paddingBottom: Spacing.base, gap: Spacing.md,
-    backgroundColor: COLORS.surface, borderBottomWidth: 1, borderBottomColor: COLORS.border,
-  },
+    backgroundColor: COLORS.surface, borderBottomWidth: 1, borderBottomColor: COLORS.border},
   backButton: {
     width: 44, height: 44, borderRadius: BorderRadius.md,
-    backgroundColor: COLORS.surfaceSecondary, justifyContent: 'center', alignItems: 'center',
-  },
+    backgroundColor: COLORS.surfaceSecondary, justifyContent: 'center', alignItems: 'center'},
   headerCenter: { flex: 1 },
   headerTitleRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm },
   headerIconText: { ...Typography.h2, fontSize: 24 },
@@ -643,15 +630,13 @@ const styles = StyleSheet.create({
   headerSubtitle: { ...Typography.bodySmall, fontSize: 13, color: COLORS.textMuted, marginTop: 2 },
   timerBadge: {
     flexDirection: 'row', alignItems: 'center', gap: 6,
-    paddingHorizontal: 14, paddingVertical: Spacing.sm, borderRadius: BorderRadius.xl, backgroundColor: COLORS.amberBg,
-  },
+    paddingHorizontal: 14, paddingVertical: Spacing.sm, borderRadius: BorderRadius.xl, backgroundColor: COLORS.amberBg},
   timerBadgeWarning: { backgroundColor: COLORS.errorBg },
   timerText: { ...Typography.body, fontSize: 15, fontWeight: '700', color: COLORS.amber },
   timerTextWarning: { color: COLORS.error },
   coinsBadge: {
     flexDirection: 'row', alignItems: 'center', gap: 6,
-    paddingHorizontal: 14, paddingVertical: Spacing.sm, borderRadius: BorderRadius.xl, backgroundColor: COLORS.goldBg,
-  },
+    paddingHorizontal: 14, paddingVertical: Spacing.sm, borderRadius: BorderRadius.xl, backgroundColor: COLORS.goldBg},
   coinIcon: { width: 20, height: 20 },
   coinsText: { ...Typography.body, fontSize: 15, fontWeight: '700', color: COLORS.goldDark },
 
@@ -660,23 +645,19 @@ const styles = StyleSheet.create({
 
   // Error
   errorCard: {
-    padding: Spacing.base, backgroundColor: COLORS.errorBg, borderRadius: BorderRadius.md, marginBottom: Spacing.base, alignItems: 'center', gap: Spacing.sm,
-  },
+    padding: Spacing.base, backgroundColor: COLORS.errorBg, borderRadius: BorderRadius.md, marginBottom: Spacing.base, alignItems: 'center', gap: Spacing.sm},
   errorText: { color: '#991B1B', ...Typography.body, textAlign: 'center' },
   retryBtn: {
-    marginTop: Spacing.xs, paddingHorizontal: Spacing.lg, paddingVertical: Spacing.sm, backgroundColor: COLORS.error, borderRadius: BorderRadius.sm,
-  },
+    marginTop: Spacing.xs, paddingHorizontal: Spacing.lg, paddingVertical: Spacing.sm, backgroundColor: COLORS.error, borderRadius: BorderRadius.sm},
   retryBtnText: { color: Colors.text.inverse, fontWeight: '600' },
 
   // Hero Card
   heroCard: {
     padding: 28, borderRadius: BorderRadius['2xl'], alignItems: 'center', marginBottom: Spacing.lg,
-    overflow: 'hidden', position: 'relative',
-  },
+    overflow: 'hidden', position: 'relative'},
   heroIconBg: {
     width: 80, height: 80, borderRadius: 40, backgroundColor: 'rgba(255,255,255,0.2)',
-    justifyContent: 'center', alignItems: 'center', marginBottom: Spacing.base,
-  },
+    justifyContent: 'center', alignItems: 'center', marginBottom: Spacing.base},
   heroIconText: { fontSize: 40 },
   heroTitle: { ...Typography.h1, fontWeight: '800', color: Colors.text.inverse, marginBottom: Spacing.sm },
   heroSubtitle: { ...Typography.body, fontSize: 15, color: 'rgba(255,255,255,0.9)', textAlign: 'center', marginBottom: Spacing.xl },
@@ -693,8 +674,7 @@ const styles = StyleSheet.create({
   // How to Play
   howToPlayCard: {
     backgroundColor: COLORS.surface, borderRadius: BorderRadius.xl, padding: Spacing.lg, marginBottom: Spacing.lg,
-    shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 1, shadowRadius: 12, elevation: 4,
-  },
+    shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 1, shadowRadius: 12, elevation: 4},
   howToPlayHeader: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm, marginBottom: Spacing.base },
   howToPlayTitle: { ...Typography.h4, fontSize: 17, fontWeight: '700', color: COLORS.navy },
   stepsContainer: { gap: 14 },
@@ -710,16 +690,14 @@ const styles = StyleSheet.create({
   startButtonWrapper: { borderRadius: BorderRadius.lg, overflow: 'hidden' },
   startButton: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 10, paddingVertical: 18, borderRadius: BorderRadius.lg,
-  },
+    gap: 10, paddingVertical: 18, borderRadius: BorderRadius.lg},
   startButtonText: { ...Typography.h4, fontSize: 17, fontWeight: '700', color: Colors.text.inverse },
 
   // Game Stats Bar
   gameStatsBar: {
     flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.surface,
     borderRadius: BorderRadius.lg, padding: Spacing.base, marginBottom: Spacing.base,
-    shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 1, shadowRadius: 8, elevation: 2,
-  },
+    shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 1, shadowRadius: 8, elevation: 2},
   gameStatItem: { flex: 1, alignItems: 'center' },
   gameStatLabel: { ...Typography.overline, fontWeight: '600', color: COLORS.textLight, marginBottom: Spacing.xs, letterSpacing: 0.5 },
   gameStatValue: { ...Typography.h3, fontWeight: '700', color: COLORS.navy },
@@ -730,22 +708,17 @@ const styles = StyleSheet.create({
   // Game Area
   gameContainer: {
     borderRadius: BorderRadius['2xl'], overflow: 'hidden', marginBottom: Spacing.base,
-    shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 1, shadowRadius: 12, elevation: 4,
-  },
+    shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 1, shadowRadius: 12, elevation: 4},
   gameArea: {
-    aspectRatio: 4 / 3, borderRadius: BorderRadius['2xl'], borderWidth: 2, borderColor: COLORS.border, position: 'relative',
-  },
+    aspectRatio: 4 / 3, borderRadius: BorderRadius['2xl'], borderWidth: 2, borderColor: COLORS.border, position: 'relative'},
   coinButton: {
-    position: 'absolute', width: 56, height: 56,
-  },
+    position: 'absolute', width: 56, height: 56},
   coinGradient: {
     width: 56, height: 56, borderRadius: 28, justifyContent: 'center', alignItems: 'center',
-    shadowColor: COLORS.amber, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.4, shadowRadius: 8, elevation: 8,
-  },
+    shadowColor: COLORS.amber, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.4, shadowRadius: 8, elevation: 8},
   coinValue: { ...Typography.bodySmall, fontSize: 13, fontWeight: '800', color: Colors.text.inverse },
   waitingLabel: {
-    position: 'absolute', top: '45%', left: 0, right: 0, alignItems: 'center', gap: Spacing.sm,
-  },
+    position: 'absolute', top: '45%', left: 0, right: 0, alignItems: 'center', gap: Spacing.sm},
   waitingText: { ...Typography.body, color: COLORS.textLight, fontWeight: '500' },
 
   // Progress Bar
@@ -759,19 +732,16 @@ const styles = StyleSheet.create({
 
   // Confetti
   confettiContainer: {
-    position: 'absolute', top: 0, left: 0, right: 0, height: 200, pointerEvents: 'none', overflow: 'hidden',
-  },
+    position: 'absolute', top: 0, left: 0, right: 0, height: 200, pointerEvents: 'none', overflow: 'hidden'},
   confetti: { position: 'absolute', width: 10, height: 10, borderRadius: 2, left: '50%', top: -10 },
 
   // Result Card
   resultCard: {
     borderRadius: BorderRadius['2xl'], overflow: 'hidden', marginBottom: Spacing.lg,
-    shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 8 }, shadowOpacity: 1, shadowRadius: 20, elevation: 8,
-  },
+    shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 8 }, shadowOpacity: 1, shadowRadius: 20, elevation: 8},
   resultGradient: { padding: Spacing['2xl'], alignItems: 'center' },
   resultIconWrapper: {
-    width: 96, height: 96, borderRadius: 48, justifyContent: 'center', alignItems: 'center', marginBottom: Spacing.lg,
-  },
+    width: 96, height: 96, borderRadius: 48, justifyContent: 'center', alignItems: 'center', marginBottom: Spacing.lg},
   resultTitle: { ...Typography.display, fontWeight: '800', marginBottom: Spacing.sm },
   resultSubtitle: { ...Typography.body, fontSize: 15, marginBottom: Spacing.xl },
   earnedBox: { paddingHorizontal: Spacing['2xl'], paddingVertical: Spacing.lg, borderRadius: BorderRadius.lg, alignItems: 'center' },
@@ -784,8 +754,7 @@ const styles = StyleSheet.create({
   statsGrid: { flexDirection: 'row', gap: Spacing.md, marginBottom: Spacing.lg },
   statCard: {
     flex: 1, backgroundColor: COLORS.surface, borderRadius: BorderRadius.lg, padding: Spacing.base, alignItems: 'center',
-    shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 1, shadowRadius: 8, elevation: 2,
-  },
+    shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 1, shadowRadius: 8, elevation: 2},
   statIconBg: { width: 44, height: 44, borderRadius: 22, justifyContent: 'center', alignItems: 'center', marginBottom: 10 },
   statValue: { ...Typography.h3, fontWeight: '700', color: COLORS.navy, marginBottom: Spacing.xs },
   statLabel: { ...Typography.caption, fontWeight: '600', color: COLORS.textMuted, textTransform: 'uppercase', letterSpacing: 0.5 },
@@ -793,14 +762,11 @@ const styles = StyleSheet.create({
   // Actions
   actionsContainer: { gap: Spacing.md },
   primaryAction: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, paddingVertical: 18, borderRadius: BorderRadius.lg,
-  },
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, paddingVertical: 18, borderRadius: BorderRadius.lg},
   primaryActionText: { ...Typography.bodyLarge, fontWeight: '700', color: Colors.text.inverse },
   secondaryAction: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: Spacing.sm,
-    paddingVertical: Spacing.base, borderRadius: BorderRadius.lg, backgroundColor: COLORS.surface, borderWidth: 1, borderColor: COLORS.border,
-  },
-  secondaryActionText: { ...Typography.body, fontSize: 15, fontWeight: '600', color: COLORS.textMuted },
-});
+    paddingVertical: Spacing.base, borderRadius: BorderRadius.lg, backgroundColor: COLORS.surface, borderWidth: 1, borderColor: COLORS.border},
+  secondaryActionText: { ...Typography.body, fontSize: 15, fontWeight: '600', color: COLORS.textMuted }});
 
 export default withErrorBoundary(CoinHunt, 'PlayandearnCoinhunt');

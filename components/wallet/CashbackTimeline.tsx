@@ -2,8 +2,16 @@
  * CashbackTimeline — Visual status tracker for cashback transactions
  * Shows progression: Pending → Verified → Credited
  */
-import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Animated, Easing } from 'react-native';
+import React, { useEffect} from 'react';
+import { View, Text, StyleSheet} from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming,
+  Easing,
+} from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 
@@ -20,27 +28,17 @@ interface CashbackTimelineProps {
 }
 
 function CashbackTimeline({ steps }: CashbackTimelineProps) {
-  const pulseAnim = useRef(new Animated.Value(0.4)).current;
+  const pulseAnim = useSharedValue(0.4);
+  const pulseAnimStyle = useAnimatedStyle(() => ({ opacity: pulseAnim.value }));
 
   useEffect(() => {
-    const pulse = Animated.loop(
-      Animated.sequence([
-        Animated.timing(pulseAnim, {
-          toValue: 1,
-          duration: 800,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
-        Animated.timing(pulseAnim, {
-          toValue: 0.4,
-          duration: 800,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
-      ])
+    pulseAnim.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 800 }),
+        withTiming(0.4, { duration: 800 })
+      ),
+      -1
     );
-    pulse.start();
-    return () => pulse.stop();
   }, [pulseAnim]);
 
   const formatDate = (iso: string) => {
@@ -62,7 +60,7 @@ function CashbackTimeline({ steps }: CashbackTimelineProps) {
                   <Ionicons name="checkmark" size={10} color="#fff" />
                 </View>
               ) : step.isCurrent ? (
-                <Animated.View style={[styles.dot, styles.dotCurrent, { opacity: pulseAnim }]}>
+                <Animated.View style={[styles.dot, styles.dotCurrent, pulseAnimStyle]}>
                   <View style={styles.dotInner} />
                 </Animated.View>
               ) : (
@@ -105,86 +103,68 @@ function CashbackTimeline({ steps }: CashbackTimelineProps) {
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 8,
-    paddingHorizontal: 4,
-  },
+    paddingHorizontal: 4 },
   stepRow: {
     flexDirection: 'row',
-    minHeight: 48,
-  },
+    minHeight: 48 },
   dotColumn: {
     width: 28,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   dot: {
     width: 20,
     height: 20,
     borderRadius: 10,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   dotComplete: {
-    backgroundColor: '#10B981',
-  },
+    backgroundColor: '#10B981' },
   dotCurrent: {
     backgroundColor: colors.brand.purple,
     width: 22,
     height: 22,
-    borderRadius: 11,
-  },
+    borderRadius: 11 },
   dotInner: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#fff',
-  },
+    backgroundColor: '#fff' },
   dotPending: {
     backgroundColor: colors.neutral[300],
     width: 14,
     height: 14,
     borderRadius: 7,
-    marginTop: 3,
-  },
+    marginTop: 3 },
   line: {
     width: 2,
     flex: 1,
     marginVertical: 4,
-    minHeight: 16,
-  },
+    minHeight: 16 },
   lineComplete: {
-    backgroundColor: '#10B981',
-  },
+    backgroundColor: '#10B981' },
   linePending: {
-    backgroundColor: colors.neutral[200],
-  },
+    backgroundColor: colors.neutral[200] },
   content: {
     flex: 1,
     paddingLeft: 10,
-    paddingBottom: 12,
-  },
+    paddingBottom: 12 },
   label: {
     fontSize: 14,
     fontWeight: '500',
-    color: colors.neutral[400],
-  },
+    color: colors.neutral[400] },
   labelComplete: {
     color: '#111827',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   labelCurrent: {
     color: colors.brand.purple,
-    fontWeight: '700',
-  },
+    fontWeight: '700' },
   timestamp: {
     fontSize: 11,
     color: colors.neutral[500],
-    marginTop: 2,
-  },
+    marginTop: 2 },
   estimate: {
     fontSize: 11,
     color: colors.brand.purple,
     fontWeight: '500',
-    marginTop: 2,
-  },
-});
+    marginTop: 2 } });
 
 export default React.memo(CashbackTimeline);

@@ -8,10 +8,11 @@ import {
   StyleSheet,
   Pressable,
   ScrollView,
-  Animated,
-  Easing,
-  useWindowDimensions,
-} from "react-native";
+  useWindowDimensions} from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  withTiming,
+  Easing} from 'react-native-reanimated';
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
@@ -83,14 +84,13 @@ export default memo(function ProductScreen({
   cardType,
   quantity = 1,
   isLocked = false,
-  onLockSuccess,
-}: ProductInfoProps) {
+  onLockSuccess}: ProductInfoProps) {
   const isMounted = useIsMounted();
   const router = useRouter();
   const { state: locationState } = useLocation();
   const cartActions = useCartActions();
   const [active, setActive] = useState("visit"); // 'visit' | 'book'
-  const translateX = useRef(new Animated.Value(0)).current;
+  const translateX = useSharedValue(0);
   const containerWidthRef = useRef(0);
   const { width: screenW } = useWindowDimensions();
 
@@ -117,8 +117,7 @@ export default memo(function ProductScreen({
           ? `${dynamicData.cashback.percentage}%`
           : '5%',
         category: dynamicData.productType === 'service' ? 'service' : 'products',
-        quantity: quantity,
-      });
+        quantity: quantity});
 
       // Navigate to cart after short delay for feedback
       setTimeout(() => {
@@ -171,16 +170,11 @@ export default memo(function ProductScreen({
     containerWidthRef.current = w;
     // ensure slider initial position matches active
     const half = w / 2;
-    translateX.setValue(active === "visit" ? 0 : half);
+    translateX.value = active === "visit" ? 0 : half;
   };
 
-  const animateTo = (toValue:any) => {
-    Animated.timing(translateX, {
-      toValue,
-      duration: 220,
-      easing: Easing.out(Easing.cubic),
-      useNativeDriver: true,
-    }).start();
+  const animateTo = (toValue: number) => {
+    translateX.value = withTiming(toValue, { duration: 220, easing: Easing.out(Easing.cubic) });
   };
 
   const onStoreVisitPress = () => {
@@ -203,8 +197,7 @@ export default memo(function ProductScreen({
         category: dynamicData.category || '',
         location: dynamicData.store?.location || null,
         deliveryTime: dynamicData.store?.operationalInfo?.deliveryTime || '30-45 mins',
-        minimumOrder: dynamicData.store?.operationalInfo?.minimumOrder || 0,
-      };
+        minimumOrder: dynamicData.store?.operationalInfo?.minimumOrder || 0};
 
       // Navigate to MainStorePage with store data as query params
       router.push({
@@ -358,8 +351,7 @@ export default memo(function ProductScreen({
                   styles.slider,
                   {
                     transform: [{ translateX }],
-                    pointerEvents: 'none',
-                  },
+                    pointerEvents: 'none'},
                 ]}
               >
                 <LinearGradient
@@ -458,62 +450,52 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "500",
     color: colors.neutral[500],
-    marginBottom: 8,
-  },
+    marginBottom: 8},
   categoryTagContainer: {
     flexDirection: "row",
-    marginBottom: 10,
-  },
+    marginBottom: 10},
   categoryTag: {
     backgroundColor: colors.indigoMist,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#C7D2FE",
-  },
+    borderColor: "#C7D2FE"},
   categoryTagText: {
     fontSize: 12,
     fontWeight: "600",
-    color: colors.brand.indigo,
-  },
+    color: colors.brand.indigo},
   description: { fontSize: 14, color: "#555", marginBottom: 12 },
   locationRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 10,
-  },
+    marginBottom: 10},
   locationText: {
     fontSize: 14,
     marginLeft: 6,
     color: colors.neutral[700],
-    flex: 1,
-  },
+    flex: 1},
   distanceText: {
     fontSize: 14,
     marginLeft: 6,
     color: colors.lightMustard,
-    fontWeight: "700",
-  },
+    fontWeight: "700"},
   availabilityRow: {
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-    marginBottom: 14,
-  },
+    marginBottom: 14},
   openBadge: {
     backgroundColor: colors.successScale[100],
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderWidth: 1,
-    borderColor: colors.brand.greenDark,
-  },
+    borderColor: colors.brand.greenDark},
   openText: {
     color: colors.brand.greenDark,
     fontSize: 13,
-    fontWeight: "600",
-  },
+    fontWeight: "600"},
   deliveryBadge: {
     flexDirection: "row",
     alignItems: "center",
@@ -521,13 +503,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 6,
-    gap: 6,
-  },
+    gap: 6},
   deliveryText: {
     fontSize: 13,
     color: colors.neutral[500],
-    fontWeight: "500",
-  },
+    fontWeight: "500"},
   ratingRow: { flexDirection: "row", alignItems: "center", marginBottom: 12 },
   ratingBadge: {
     flexDirection: "row",
@@ -535,8 +515,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.neutral[100],
     paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 14,
-  },
+    borderRadius: 14},
   ratingText: { marginLeft: 6, fontWeight: "700" },
   reviewCount: { marginLeft: 12, fontWeight: "600", color: colors.neutral[500], fontSize: 14 },
 
@@ -549,8 +528,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: colors.tint.slate,
-  },
+    borderColor: colors.tint.slate},
   peopleNumber: { fontSize: 17, fontWeight: "800", color: colors.neutral[900] },
   avatarGroup: { flexDirection: "row", marginLeft: 10 },
   avatar: { width: 28, height: 28, borderRadius: 14, borderWidth: 2, borderColor: colors.background.primary },
@@ -567,44 +545,35 @@ const styles = StyleSheet.create({
     position: "relative",
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 8,
-  },
+    marginBottom: 8},
   slider: {
     position: "absolute",
     left: 0,
     top: 0,
     bottom: 0,
     width: "50%", // slider occupies half
-    borderRadius: 28,
-  },
+    borderRadius: 28},
   sliderGradient: {
     flex: 1,
   
     // small inset so it looks like half pill (optional)
     margin: 4,
-    borderRadius: 24,
-  },
+    borderRadius: 24},
   segmentButton: {
     flex: 1,
     height: "100%",
     justifyContent: "center",
-    alignItems: "center",
-  },
+    alignItems: "center"},
   segmentContent: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
-  },
+    gap: 8},
   segmentText: {
     marginLeft: 8,
     fontWeight: "700",
     fontSize: 15,
-    letterSpacing: 0.3,
-  },
+    letterSpacing: 0.3},
   segmentTextActive: {
-    color: colors.background.primary,
-  },
+    color: colors.background.primary},
   segmentTextInactive: {
-    color: colors.lightMustard,
-  },
-});
+    color: colors.lightMustard}});

@@ -1,14 +1,17 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import React, { useState, useEffect,  useLayoutEffect } from 'react';
 import {
   View,
   ScrollView,
   StyleSheet,
   Pressable,
   Platform,
-  Animated,
-  TextInput,
+  TextInput
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming } from 'react-native-reanimated';
 import { useRouter, useLocalSearchParams, useNavigation } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -109,14 +112,17 @@ function ProjectDetailPage() {
   const [showSubmissionForm, setShowSubmissionForm] = useState(false);
   const [userSubmission, setUserSubmission] = useState<ProjectSubmission | null>(null);
 
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(30)).current;
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(30);
+  const contentAnimStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ translateY: slideAnim.value }],
+  }));
 
   // Hide the default navigation header
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerShown: false,
-    });
+      headerShown: false });
   }, [navigation]);
   const isMounted = useIsMounted();
 
@@ -160,10 +166,8 @@ function ProjectDetailPage() {
           setUserSubmission(null);
         }
         
-        Animated.parallel([
-          Animated.timing(fadeAnim, { toValue: 1, duration: 500, useNativeDriver: true }),
-          Animated.timing(slideAnim, { toValue: 0, duration: 500, useNativeDriver: true }),
-        ]).start();
+        fadeAnim.value = withTiming(1, { duration: 500 });
+        slideAnim.value = withTiming(0, { duration: 500 });
       } else {
         throw new Error('Failed to load project');
       }
@@ -192,8 +196,7 @@ function ProjectDetailPage() {
         projectId,
         content: data.content,
         contentType: data.contentType,
-        metadata: data.metadata,
-      });
+        metadata: data.metadata });
 
       if (response.success) {
         // Check if this was an update or new submission
@@ -284,10 +287,7 @@ function ProjectDetailPage() {
         contentContainerStyle={styles.scrollContent}
       >
         <Animated.View
-          style={{
-            opacity: fadeAnim,
-            transform: [{ translateY: slideAnim }],
-          }}
+          style={contentAnimStyle}
         >
           {/* Header */}
           <View style={styles.header}>
@@ -483,8 +483,7 @@ function ProjectDetailPage() {
                   submitting={submitting}
                   existingSubmission={userSubmission ? {
                     content: userSubmission.content,
-                    status: userSubmission.status,
-                  } : undefined}
+                    status: userSubmission.status } : undefined}
                 />
               ) : (
                 <View>
@@ -549,9 +548,7 @@ function ProjectDetailPage() {
                           pathname: '/submission-detail',
                           params: {
                             submissionId: userSubmission._id,
-                            projectId: projectId,
-                          },
-                        } as any);
+                            projectId: projectId } } as any);
                       }}
                       accessible={true}
                       accessibilityLabel="View full submission details"
@@ -577,31 +574,25 @@ function ProjectDetailPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background.secondary,
-  },
+    backgroundColor: Colors.background.secondary },
   scrollView: {
-    flex: 1,
-  },
+    flex: 1 },
   scrollContent: {
-    paddingBottom: 40,
-  },
+    paddingBottom: 40 },
   centerContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 40,
-  },
+    paddingHorizontal: 40 },
   loadingText: {
     marginTop: Spacing.base,
     ...Typography.bodyLarge,
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
   errorText: {
     marginTop: Spacing.base,
     ...Typography.h4,
     fontWeight: '700',
-    color: Colors.error,
-  },
+    color: Colors.error },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -610,118 +601,97 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.base,
     backgroundColor: Colors.background.primary,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.border.default,
-  },
+    borderBottomColor: Colors.border.default },
   backButton: {
     width: 40,
     height: 40,
     borderRadius: BorderRadius.xl,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.background.secondary,
-  },
+    backgroundColor: Colors.background.secondary },
   headerTitle: {
     ...Typography.h3,
     fontWeight: '800',
     color: Colors.text.primary,
-    letterSpacing: -0.5,
-  },
+    letterSpacing: -0.5 },
   headerRight: {
-    width: 40,
-  },
+    width: 40 },
   backButtonText: {
     ...Typography.bodyLarge,
     fontWeight: '700',
     color: Colors.brand.purple,
-    marginTop: Spacing.base,
-  },
+    marginTop: Spacing.base },
   projectCard: {
     margin: Spacing.lg,
     borderRadius: BorderRadius.xl,
     overflow: 'hidden',
-    ...Shadows.strong,
-  },
+    ...Shadows.strong },
   cardGradient: {
-    padding: Spacing.lg,
-  },
+    padding: Spacing.lg },
   titleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base },
   projectTitle: {
     ...Typography.h2,
     fontWeight: '800',
     color: Colors.text.primary,
     flex: 1,
-    marginRight: Spacing.md,
-  },
+    marginRight: Spacing.md },
   featuredBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.warningScale[50],
     paddingHorizontal: 10,
     paddingVertical: 6,
-    borderRadius: BorderRadius.md,
-  },
+    borderRadius: BorderRadius.md },
   featuredText: {
     ...Typography.caption,
     fontWeight: '700',
     color: Colors.warning,
-    marginLeft: Spacing.xs,
-  },
+    marginLeft: Spacing.xs },
   metaRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: Spacing.lg,
-    flexWrap: 'wrap',
-  },
+    flexWrap: 'wrap' },
   difficultyBadge: {
     paddingHorizontal: Spacing.md,
     paddingVertical: 6,
     borderRadius: BorderRadius.md,
-    marginRight: Spacing.md,
-  },
+    marginRight: Spacing.md },
   difficultyText: {
     ...Typography.bodySmall,
     fontWeight: '700',
-    textTransform: 'capitalize',
-  },
+    textTransform: 'capitalize' },
   metaItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: Spacing.base,
-  },
+    marginRight: Spacing.base },
   metaText: {
     ...Typography.body,
     color: Colors.text.tertiary,
-    marginLeft: 6,
-  },
+    marginLeft: 6 },
   rewardText: {
     ...Typography.bodyLarge,
     fontWeight: '800',
     color: Colors.success,
-    marginLeft: 6,
-  },
+    marginLeft: 6 },
   description: {
     ...Typography.bodyLarge,
     color: Colors.text.secondary,
     lineHeight: 24,
-    marginBottom: Spacing.xl,
-  },
+    marginBottom: Spacing.xl },
   section: {
-    marginBottom: Spacing.xl,
-  },
+    marginBottom: Spacing.xl },
   sectionTitle: {
     ...Typography.h4,
     fontWeight: '800',
     color: Colors.text.primary,
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
   instructionItem: {
     flexDirection: 'row',
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
   instructionNumber: {
     width: 28,
     height: 28,
@@ -729,65 +699,54 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.brand.purple,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: Spacing.md,
-  },
+    marginRight: Spacing.md },
   instructionNumberText: {
     ...Typography.body,
     fontWeight: '800',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse },
   instructionText: {
     flex: 1,
     ...Typography.body,
     fontSize: 15,
     color: Colors.text.secondary,
-    lineHeight: 22,
-  },
+    lineHeight: 22 },
   tagsContainer: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
+    flexWrap: 'wrap' },
   tag: {
     paddingHorizontal: Spacing.md,
     paddingVertical: 6,
     borderRadius: BorderRadius.lg,
     backgroundColor: colors.indigoMist,
     marginRight: Spacing.sm,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   tagText: {
     ...Typography.bodySmall,
     fontWeight: '600',
-    color: Colors.brand.purple,
-  },
+    color: Colors.brand.purple },
   statsRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     paddingVertical: Spacing.base,
     backgroundColor: Colors.background.secondary,
-    borderRadius: BorderRadius.md,
-  },
+    borderRadius: BorderRadius.md },
   statItem: {
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   statValue: {
     ...Typography.h3,
     fontWeight: '800',
     color: Colors.text.primary,
-    marginTop: Spacing.sm,
-  },
+    marginTop: Spacing.sm },
   statLabel: {
     ...Typography.bodySmall,
     color: Colors.text.tertiary,
-    marginTop: Spacing.xs,
-  },
+    marginTop: Spacing.xs },
   submissionStatusContainer: {
     marginTop: Spacing.lg,
     padding: Spacing.base,
     backgroundColor: Colors.background.primary,
     borderRadius: BorderRadius.lg,
-    ...Shadows.medium,
-  },
+    ...Shadows.medium },
   statusBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -796,46 +755,38 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: BorderRadius.xl,
     gap: 6,
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
   statusBadgeText: {
     ...Typography.body,
     fontWeight: '700',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse },
   reviewCommentsContainer: {
     marginTop: Spacing.md,
     padding: Spacing.md,
     backgroundColor: Colors.background.secondary,
-    borderRadius: BorderRadius.sm,
-  },
+    borderRadius: BorderRadius.sm },
   reviewCommentsLabel: {
     ...Typography.bodySmall,
     fontWeight: '700',
     color: Colors.text.tertiary,
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs },
   reviewCommentsText: {
     ...Typography.body,
     color: Colors.text.primary,
-    lineHeight: 20,
-  },
+    lineHeight: 20 },
   qualityScoreContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: Spacing.sm,
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   qualityScoreLabel: {
     ...Typography.body,
     fontWeight: '600',
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
   qualityScoreText: {
     ...Typography.bodyLarge,
     fontWeight: '700',
-    color: Colors.brand.purple,
-  },
+    color: Colors.brand.purple },
   paidAmountContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -843,16 +794,13 @@ const styles = StyleSheet.create({
     padding: Spacing.sm,
     backgroundColor: Colors.successScale[50],
     borderRadius: BorderRadius.sm,
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   paidAmountText: {
     ...Typography.body,
     fontWeight: '700',
-    color: colors.successScale[700],
-  },
+    color: colors.successScale[700] },
   submissionForm: {
-    marginTop: Spacing.sm,
-  },
+    marginTop: Spacing.sm },
   submitButton: {
     flex: 1,
     flexDirection: 'row',
@@ -861,16 +809,13 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: BorderRadius.md,
     backgroundColor: Colors.brand.purple,
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   submitButtonDisabled: {
-    opacity: 0.6,
-  },
+    opacity: 0.6 },
   submitButtonText: {
     ...Typography.bodyLarge,
     fontWeight: '700',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse },
   viewSubmissionButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -879,14 +824,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.base,
     borderRadius: BorderRadius.md,
     backgroundColor: colors.indigoMist,
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   viewSubmissionButtonText: {
     ...Typography.body,
     fontWeight: '700',
-    color: Colors.brand.purple,
-  },
-});
+    color: Colors.brand.purple } });
 
 
 export default withErrorBoundary(ProjectDetailPage, 'ProjectDetail');

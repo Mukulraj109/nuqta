@@ -21,9 +21,16 @@ import {
   StyleSheet,
   ScrollView,
   Pressable,
-  Animated,
-  RefreshControl,
-} from 'react-native';
+  RefreshControl} from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedReaction,
+  withTiming,
+  runOnJS,
+  useAnimatedStyle,
+  withSequence,
+  withRepeat,
+  interpolate} from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import {
@@ -32,8 +39,7 @@ import {
   PRIVE_RADIUS,
   PILLAR_CONFIG,
   IMPROVEMENT_TIPS,
-  PillarId,
-} from '@/components/prive/priveTheme';
+  PillarId} from '@/components/prive/priveTheme';
 import { usePriveEligibility, getQuickWins } from '@/hooks/usePriveEligibility';
 import { ELIGIBILITY_THRESHOLDS } from '@/types/mode.types';
 import priveApi from '@/services/priveApi';
@@ -58,42 +64,35 @@ const TIER_DEFS: TierDef[] = [
     minScore: ELIGIBILITY_THRESHOLDS.ENTRY_TIER,
     icon: '◇',
     color: '#CD7F32',
-    description: 'Welcome to the inner circle',
-  },
+    description: 'Welcome to the inner circle'},
   {
     id: 'signature',
     name: 'Signature',
     minScore: ELIGIBILITY_THRESHOLDS.SIGNATURE_TIER,
     icon: '◈',
     color: '#C0C0C0',
-    description: 'Premium access granted',
-  },
+    description: 'Premium access granted'},
   {
     id: 'elite',
     name: 'Elite',
     minScore: ELIGIBILITY_THRESHOLDS.ELITE_TIER,
     icon: '✦',
     color: colors.brand.goldBright,
-    description: 'Top-tier access unlocked',
-  },
+    description: 'Top-tier access unlocked'},
 ];
 
 // ─── Shimmer Skeleton ────────────────────────────────────────────────────────
 const ShimmerSkeleton = () => {
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
-    const loop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, { toValue: 1, duration: 1000, useNativeDriver: true }),
-        Animated.timing(shimmerAnim, { toValue: 0, duration: 1000, useNativeDriver: true }),
-      ])
-    );
-    loop.start();
-    return () => loop.stop();
+    shimmerAnim.value = withRepeat(withSequence(
+        withTiming(1, { duration: 1000 }),
+        withTiming(0, { duration: 1000 }),
+      ), -1);
   }, []);
 
-  const opacity = shimmerAnim.interpolate({ inputRange: [0, 1], outputRange: [0.3, 0.7] });
+  const opacity = interpolate(shimmerAnim.value, [0, 1], [0.3, 0.7]);
 
   return (
     <View style={styles.skeletonContainer}>
@@ -141,29 +140,18 @@ const ShimmerSkeleton = () => {
 // ─── Animated Progress Bar with Tier Milestones ──────────────────────────────
 const TierProgressBar = React.memo(({
   score,
-  nextTierThreshold,
-}: {
+  nextTierThreshold}: {
   score: number;
   nextTierThreshold: number;
 }) => {
-  const widthAnim = useRef(new Animated.Value(0)).current;
+  const widthAnim = useSharedValue(0);
   const maxScore = 100;
 
   useEffect(() => {
-    const anim = Animated.timing(widthAnim, {
-      toValue: score,
-      duration: 1000,
-      useNativeDriver: false,
-    });
-    anim.start();
-    return () => anim.stop();
+    widthAnim.value = withTiming(score, { duration: 1000 });
   }, [score]);
 
-  const width = widthAnim.interpolate({
-    inputRange: [0, maxScore],
-    outputRange: ['0%', '100%'],
-    extrapolate: 'clamp',
-  });
+  const width = interpolate(widthAnim.value, [0, maxScore], ['0%', '100%'], 'clamp');
 
   return (
     <View>
@@ -235,34 +223,28 @@ const HeroSection = React.memo(({
   tier,
   trustScore,
   nextTierName,
-  pointsToNextTier,
-}: {
+  pointsToNextTier}: {
   score: number;
   tier: string;
   trustScore: number;
   nextTierName?: string;
   pointsToNextTier?: number;
 }) => {
-  const countAnim = useRef(new Animated.Value(0)).current;
+  const countAnim = useSharedValue(0);
   const [displayScore, setDisplayScore] = useState(0);
 
   useEffect(() => {
-    countAnim.setValue(0);
-    const anim = Animated.timing(countAnim, {
-      toValue: score,
-      duration: 1200,
-      useNativeDriver: false,
-    });
-    anim.start();
-
-    const listener = countAnim.addListener(({ value }) => {
-      setDisplayScore(Math.round(value * 10) / 10);
-    });
-    return () => {
-      anim.stop();
-      countAnim.removeListener(listener);
-    };
+    countAnim.value = 0;
+    countAnim.value = withTiming(score, { duration: 1200 });
   }, [score]);
+
+  useAnimatedReaction(
+    () => countAnim.value,
+    (val) => {
+      runOnJS(setDisplayScore)(Math.round(val * 10) / 10);
+    },
+    [score]
+  );
 
   const getTierColor = () => {
     switch (tier) {
@@ -324,8 +306,7 @@ const HeroSection = React.memo(({
 const TierRow = React.memo(({
   tier,
   currentScore,
-  currentTier,
-}: {
+  currentTier}: {
   tier: TierDef;
   currentScore: number;
   currentTier: string;
@@ -562,22 +543,18 @@ function TierProgressScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1},
   scrollView: {
     flex: 1,
-    paddingHorizontal: PRIVE_SPACING.xl,
-  },
+    paddingHorizontal: PRIVE_SPACING.xl},
 
   // ─── Skeleton ─────────────────────────────────────────────
   skeletonContainer: {
-    marginTop: PRIVE_SPACING.sm,
-  },
+    marginTop: PRIVE_SPACING.sm},
   shimmerLine: {
     height: 14,
     borderRadius: 4,
-    backgroundColor: PRIVE_COLORS.border.primary,
-  },
+    backgroundColor: PRIVE_COLORS.border.primary},
 
   // ─── Hero Section ─────────────────────────────────────────
   heroCard: {
@@ -587,29 +564,24 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: PRIVE_COLORS.border.goldMuted,
     marginTop: PRIVE_SPACING.sm,
-    marginBottom: PRIVE_SPACING.lg,
-  },
+    marginBottom: PRIVE_SPACING.lg},
   heroContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   heroLabel: {
     fontSize: 12,
     color: PRIVE_COLORS.text.tertiary,
     letterSpacing: 1,
     textTransform: 'uppercase',
-    marginBottom: PRIVE_SPACING.xs,
-  },
+    marginBottom: PRIVE_SPACING.xs},
   heroScoreValue: {
     fontSize: 42,
     fontWeight: '200',
-    color: PRIVE_COLORS.gold.primary,
-  },
+    color: PRIVE_COLORS.gold.primary},
   heroSubtext: {
     fontSize: 12,
-    color: PRIVE_COLORS.text.tertiary,
-  },
+    color: PRIVE_COLORS.text.tertiary},
 
   // ─── Trust Banner ─────────────────────────────────────────
   trustBanner: {
@@ -619,15 +591,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(244, 67, 54, 0.15)',
     borderRadius: PRIVE_RADIUS.md,
     padding: PRIVE_SPACING.md,
-    marginBottom: PRIVE_SPACING.lg,
-  },
+    marginBottom: PRIVE_SPACING.lg},
   trustBannerText: {
     flex: 1,
     fontSize: 12,
     color: '#F44336',
     fontWeight: '500',
-    lineHeight: 18,
-  },
+    lineHeight: 18},
 
   // ─── Tier Badge ───────────────────────────────────────────
   tierBadge: {
@@ -636,16 +606,13 @@ const styles = StyleSheet.create({
     gap: PRIVE_SPACING.xs,
     paddingHorizontal: PRIVE_SPACING.md,
     paddingVertical: PRIVE_SPACING.sm,
-    borderRadius: PRIVE_RADIUS.sm,
-  },
+    borderRadius: PRIVE_RADIUS.sm},
   tierBadgeIcon: {
     fontSize: 14,
-    color: PRIVE_COLORS.gold.primary,
-  },
+    color: PRIVE_COLORS.gold.primary},
   tierBadgeText: {
     fontSize: 14,
-    fontWeight: '600',
-  },
+    fontWeight: '600'},
 
   // ─── Progress Card ────────────────────────────────────────
   progressCard: {
@@ -654,63 +621,53 @@ const styles = StyleSheet.create({
     padding: PRIVE_SPACING.xl,
     borderWidth: 1,
     borderColor: PRIVE_COLORS.border.primary,
-    marginBottom: PRIVE_SPACING.lg,
-  },
+    marginBottom: PRIVE_SPACING.lg},
   sectionTitle: {
     fontSize: 14,
     fontWeight: '600',
     color: PRIVE_COLORS.text.primary,
-    marginBottom: PRIVE_SPACING.lg,
-  },
+    marginBottom: PRIVE_SPACING.lg},
   milestoneLabels: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: PRIVE_SPACING.xs,
     height: 16,
-    position: 'relative',
-  },
+    position: 'relative'},
   milestoneLabel: {
     fontSize: 10,
-    color: PRIVE_COLORS.text.tertiary,
-  },
+    color: PRIVE_COLORS.text.tertiary},
   progressTrack: {
     height: 12,
     backgroundColor: PRIVE_COLORS.border.primary,
     borderRadius: 6,
     overflow: 'hidden',
-    position: 'relative',
-  },
+    position: 'relative'},
   milestoneMarker: {
     position: 'absolute',
     top: 0,
     bottom: 0,
     width: 2,
     backgroundColor: PRIVE_COLORS.transparent.white20,
-    zIndex: 1,
-  },
+    zIndex: 1},
   progressFill: {
     height: '100%',
     borderRadius: 6,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'},
   tierNameLabels: {
     flexDirection: 'row',
     height: 16,
     marginTop: PRIVE_SPACING.xs,
-    position: 'relative',
-  },
+    position: 'relative'},
   tierNameLabel: {
     fontSize: 9,
     color: PRIVE_COLORS.text.disabled,
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
+    letterSpacing: 0.5},
   progressSubtext: {
     fontSize: 13,
     color: PRIVE_COLORS.text.secondary,
     textAlign: 'center',
-    marginTop: PRIVE_SPACING.md,
-  },
+    marginTop: PRIVE_SPACING.md},
 
   // ─── Suggestion Card ──────────────────────────────────────
   suggestionCard: {
@@ -719,28 +676,23 @@ const styles = StyleSheet.create({
     padding: PRIVE_SPACING.lg,
     borderWidth: 1,
     borderColor: PRIVE_COLORS.border.goldMuted,
-    marginBottom: PRIVE_SPACING.lg,
-  },
+    marginBottom: PRIVE_SPACING.lg},
   suggestionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: PRIVE_SPACING.sm,
-    marginBottom: PRIVE_SPACING.sm,
-  },
+    marginBottom: PRIVE_SPACING.sm},
   suggestionTitle: {
     fontSize: 13,
     fontWeight: '600',
-    color: PRIVE_COLORS.gold.primary,
-  },
+    color: PRIVE_COLORS.gold.primary},
   suggestionText: {
     fontSize: 13,
     color: PRIVE_COLORS.text.secondary,
-    lineHeight: 20,
-  },
+    lineHeight: 20},
   suggestionBold: {
     fontWeight: '600',
-    color: PRIVE_COLORS.text.primary,
-  },
+    color: PRIVE_COLORS.text.primary},
 
   // ─── Tiers Card ───────────────────────────────────────────
   tiersCard: {
@@ -749,86 +701,70 @@ const styles = StyleSheet.create({
     padding: PRIVE_SPACING.xl,
     borderWidth: 1,
     borderColor: PRIVE_COLORS.border.primary,
-    marginBottom: PRIVE_SPACING.lg,
-  },
+    marginBottom: PRIVE_SPACING.lg},
   tierRow: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: PRIVE_SPACING.lg,
     borderBottomWidth: 1,
-    borderBottomColor: PRIVE_COLORS.transparent.white08,
-  },
+    borderBottomColor: PRIVE_COLORS.transparent.white08},
   tierRowLocked: {
-    opacity: 0.5,
-  },
+    opacity: 0.5},
   tierRowCurrent: {
     opacity: 1,
     backgroundColor: PRIVE_COLORS.transparent.gold05,
     marginHorizontal: -PRIVE_SPACING.lg,
     paddingHorizontal: PRIVE_SPACING.lg,
-    borderRadius: PRIVE_RADIUS.md,
-  },
+    borderRadius: PRIVE_RADIUS.md},
   tierIconContainer: {
     width: 40,
     height: 40,
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: PRIVE_SPACING.md,
-  },
+    marginRight: PRIVE_SPACING.md},
   tierIcon: {
-    fontSize: 20,
-  },
+    fontSize: 20},
   tierInfo: {
-    flex: 1,
-  },
+    flex: 1},
   tierNameRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: PRIVE_SPACING.sm,
-  },
+    gap: PRIVE_SPACING.sm},
   tierName: {
     fontSize: 16,
     fontWeight: '600',
-    color: PRIVE_COLORS.text.primary,
-  },
+    color: PRIVE_COLORS.text.primary},
   tierNameLocked: {
-    color: PRIVE_COLORS.text.secondary,
-  },
+    color: PRIVE_COLORS.text.secondary},
   currentBadge: {
     paddingHorizontal: PRIVE_SPACING.sm,
     paddingVertical: 2,
-    borderRadius: PRIVE_RADIUS.sm,
-  },
+    borderRadius: PRIVE_RADIUS.sm},
   currentBadgeText: {
     fontSize: 10,
     fontWeight: '700',
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
+    letterSpacing: 0.5},
   tierDescription: {
     fontSize: 12,
     color: PRIVE_COLORS.text.tertiary,
-    marginTop: 2,
-  },
+    marginTop: 2},
   tierStatusContainer: {
-    marginLeft: PRIVE_SPACING.md,
-  },
+    marginLeft: PRIVE_SPACING.md},
   achievedCircle: {
     width: 28,
     height: 28,
     borderRadius: 14,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center'},
   lockedCircle: {
     width: 28,
     height: 28,
     borderRadius: 14,
     backgroundColor: PRIVE_COLORS.transparent.white08,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center'},
 
   // ─── Info Card ────────────────────────────────────────────
   infoCard: {
@@ -837,32 +773,27 @@ const styles = StyleSheet.create({
     padding: PRIVE_SPACING.xl,
     borderWidth: 1,
     borderColor: PRIVE_COLORS.border.primary,
-    marginBottom: PRIVE_SPACING.lg,
-  },
+    marginBottom: PRIVE_SPACING.lg},
   infoTitle: {
     fontSize: 14,
     fontWeight: '600',
     color: PRIVE_COLORS.text.primary,
-    marginBottom: PRIVE_SPACING.sm,
-  },
+    marginBottom: PRIVE_SPACING.sm},
   infoText: {
     fontSize: 13,
     color: PRIVE_COLORS.text.secondary,
     lineHeight: 20,
-    marginBottom: PRIVE_SPACING.md,
-  },
+    marginBottom: PRIVE_SPACING.md},
   infoRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: PRIVE_SPACING.sm,
-    marginTop: PRIVE_SPACING.sm,
-  },
+    marginTop: PRIVE_SPACING.sm},
   infoRowText: {
     flex: 1,
     fontSize: 12,
     color: PRIVE_COLORS.text.secondary,
-    lineHeight: 18,
-  },
+    lineHeight: 18},
 
   // ─── Error State ──────────────────────────────────────────
   errorContainer: {
@@ -872,24 +803,19 @@ const styles = StyleSheet.create({
     marginTop: PRIVE_SPACING.sm,
     marginBottom: PRIVE_SPACING.md,
     alignItems: 'center',
-    gap: PRIVE_SPACING.md,
-  },
+    gap: PRIVE_SPACING.md},
   errorText: {
     color: PRIVE_COLORS.status.error,
     fontSize: 13,
-    textAlign: 'center',
-  },
+    textAlign: 'center'},
   retryButton: {
     backgroundColor: PRIVE_COLORS.gold.primary,
     paddingHorizontal: PRIVE_SPACING.xl,
     paddingVertical: PRIVE_SPACING.sm,
-    borderRadius: PRIVE_RADIUS.md,
-  },
+    borderRadius: PRIVE_RADIUS.md},
   retryButtonText: {
     color: PRIVE_COLORS.text.inverse,
     fontSize: 13,
-    fontWeight: '600',
-  },
-});
+    fontWeight: '600'}});
 
 export default withErrorBoundary(TierProgressScreen, 'PriveTierProgress');

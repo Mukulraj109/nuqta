@@ -17,6 +17,7 @@ import { useRouter } from 'expo-router';
 import { categoriesApi, Category } from '@/services/categoriesApi';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { useUserIdentityStore } from '@/stores/userIdentityStore';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_GAP = 12;
@@ -130,21 +131,35 @@ const FALLBACK_CATEGORIES: CategoryData[] = [
   },
 ];
 
+// Segment-based category priority — reorders displayed categories for verified users
+const SEGMENT_CATEGORY_PRIORITY: Record<string, string[]> = {
+  verified_healthcare: ['health', 'beauty', 'grocery'],
+  verified_student: ['food-dining', 'fashion', 'electronics'],
+  verified_employee: ['food-dining', 'electronics', 'fashion'],
+  verified_defence: ['electronics', 'grocery', 'health'],
+  verified_teacher: ['electronics', 'food-dining', 'beauty'],
+  verified_senior: ['health', 'grocery', 'food-dining'],
+  verified_government: ['electronics', 'food-dining', 'grocery'],
+  verified_differentlyAbled: ['health', 'grocery', 'food-dining'],
+};
+
 const ShopByCategorySection: React.FC = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
+  const [allCategories, setAllCategories] = useState<CategoryData[]>([]);
   const [categories, setCategories] = useState<CategoryData[]>(FALLBACK_CATEGORIES);
   const [totalCategories, setTotalCategories] = useState(15);
   const isMounted = useIsMounted();
+  const { segment } = useUserIdentityStore();
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         setIsLoading(true);
-        const response = await categoriesApi.getFeaturedCategories(undefined, 5);
+        const response = await categoriesApi.getFeaturedCategories(undefined, 12);
 
         if (response.success && response.data && response.data.length > 0) {
-          const transformed = response.data.slice(0, 3).map((cat: Category) => {
+          const transformed = response.data.map((cat: Category) => {
             const style = CATEGORY_STYLES[cat.slug] || CATEGORY_STYLES.electronics;
             return {
               id: cat._id,
@@ -159,7 +174,7 @@ const ShopByCategorySection: React.FC = () => {
             };
           });
           if (!isMounted()) return;
-          setCategories(transformed);
+          setAllCategories(transformed);
 
           // Get total count
           const allResponse = await categoriesApi.getCategories({ isActive: true });
@@ -178,6 +193,25 @@ const ShopByCategorySection: React.FC = () => {
 
     fetchCategories();
   }, []);
+
+  // Reorder categories based on user segment, then take top 3
+  useEffect(() => {
+    if (allCategories.length === 0) return;
+    const prioritySlugs = SEGMENT_CATEGORY_PRIORITY[segment];
+    if (!prioritySlugs || prioritySlugs.length === 0) {
+      setCategories(allCategories.slice(0, 3));
+      return;
+    }
+    const sorted = [...allCategories].sort((a, b) => {
+      const aIdx = prioritySlugs.indexOf(a.slug);
+      const bIdx = prioritySlugs.indexOf(b.slug);
+      if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+      if (aIdx !== -1) return -1;
+      if (bIdx !== -1) return 1;
+      return 0;
+    });
+    setCategories(sorted.slice(0, 3));
+  }, [allCategories, segment]);
 
   const handlePress = (slug: string) => {
     router.push(`/MainCategory/${slug}` as any);

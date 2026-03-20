@@ -6,10 +6,9 @@ import {
   View,
   Pressable,
   StyleSheet,
-  Animated,
   Platform,
-  LayoutChangeEvent,
-} from 'react-native';
+  LayoutChangeEvent} from 'react-native';
+import Animated, { interpolate, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { ThemedText } from '@/components/ThemedText';
 import { AccountTabsProps, AccountTabType } from '@/types/account.types';
 import { TAB_ORDER } from '@/data/accountData';
@@ -23,19 +22,10 @@ function getTabIndex(tab: AccountTabType): number {
 
 function AccountTabs({ tabs, activeTab, onTabPress }: AccountTabsProps) {
   const [containerWidth, setContainerWidth] = useState(0);
-  const pillAnim = useRef(new Animated.Value(getTabIndex(activeTab))).current;
+  const pillAnim = useSharedValue(getTabIndex(activeTab));
 
   useEffect(() => {
-    const anim = Animated.spring(pillAnim, {
-      toValue: getTabIndex(activeTab),
-      damping: Timing.springSmooth.damping,
-      stiffness: Timing.springSmooth.stiffness,
-      mass: Timing.springSmooth.mass,
-      useNativeDriver: true,
-    });
-    anim.start();
-
-    return () => { anim.stop(); };
+    pillAnim.value = withSpring(getTabIndex(activeTab), { damping: Timing.springSmooth.damping, stiffness: Timing.springSmooth.stiffness, mass: Timing.springSmooth.mass });
   }, [activeTab, pillAnim]);
 
   const handleLayout = useCallback((e: LayoutChangeEvent) => {
@@ -44,10 +34,9 @@ function AccountTabs({ tabs, activeTab, onTabPress }: AccountTabsProps) {
 
   const tabWidth = containerWidth / tabs.length;
 
-  const translateX = pillAnim.interpolate({
-    inputRange: [0, 1, 2],
-    outputRange: [PILL_INSET, tabWidth + PILL_INSET, tabWidth * 2 + PILL_INSET],
-  });
+  const pillStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: interpolate(pillAnim.value, [0, 1, 2], [PILL_INSET, tabWidth + PILL_INSET, tabWidth * 2 + PILL_INSET]) }],
+  }));
 
   return (
     <View
@@ -62,8 +51,8 @@ function AccountTabs({ tabs, activeTab, onTabPress }: AccountTabsProps) {
             styles.pill,
             {
               width: tabWidth - PILL_INSET * 2,
-              transform: [{ translateX }],
             },
+            pillStyle,
           ]}
         />
       )}

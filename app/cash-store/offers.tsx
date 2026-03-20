@@ -1,5 +1,5 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect} from 'react';
 import {
   View,
   ScrollView,
@@ -8,10 +8,16 @@ import {
   Pressable,
   RefreshControl,
   Platform,
-  Animated,
   StatusBar,
-  Dimensions,
+  Dimensions
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -124,32 +130,21 @@ const SkeletonBlock = React.memo(({ width: w, height: h, style, index = 0 }: {
   style?: any;
   index?: number;
 }) => {
-  const shimmer = useRef(new Animated.Value(0)).current;
+  const shimmer = useSharedValue(0);
 
   useEffect(() => {
-    const loop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmer, {
-          toValue: 1,
-          duration: 1000,
-          delay: index * 100,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmer, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
+    shimmer.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 1000 }),
+        withTiming(0, { duration: 1000 })
+      ),
+      -1
     );
-    loop.start();
-    return () => loop.stop();
   }, [index]);
 
-  const opacity = shimmer.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0.3, 0.7],
-  });
+  const shimmerStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(shimmer.value, [0, 1], [0.3, 0.7]),
+  }));
 
   return (
     <Animated.View
@@ -158,9 +153,8 @@ const SkeletonBlock = React.memo(({ width: w, height: h, style, index = 0 }: {
           width: w as any,
           height: h,
           borderRadius: 12,
-          backgroundColor: '#E8E2DB',
-          opacity,
-        },
+          backgroundColor: '#E8E2DB' },
+        shimmerStyle,
         style,
       ]}
     />
@@ -725,15 +719,12 @@ function OffersPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F4F1ED',
-  },
+    backgroundColor: '#F4F1ED' },
   scrollView: {
-    flex: 1,
-  },
+    flex: 1 },
   scrollContent: {
     flexGrow: 1,
-    paddingBottom: 120,
-  },
+    paddingBottom: 120 },
 
   // ── Sticky Header ──
   stickyHeader: {
@@ -741,42 +732,36 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.base,
     paddingBottom: Spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: '#EDEAE6',
-  },
+    borderBottomColor: '#EDEAE6' },
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingTop: 10,
-    gap: 10,
-  },
+    gap: 10 },
   backBtn: {
     width: Spacing['2xl'],
     height: Spacing['2xl'],
     borderRadius: Spacing.base,
     backgroundColor: '#F4F1ED',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   headerTitle: {
     flex: 1,
     ...Typography.h4,
     fontWeight: '700',
     color: Colors.nileBlue,
-    letterSpacing: -0.3,
-  },
+    letterSpacing: -0.3 },
 
   // ── Skeleton ──
   skeletonWrap: {
-    padding: Spacing.base,
-  },
+    padding: Spacing.base },
 
   // ── Error State ──
   errorContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 80,
-    paddingHorizontal: Spacing['2xl'],
-  },
+    paddingHorizontal: Spacing['2xl'] },
   errorIconWrap: {
     width: 72,
     height: 72,
@@ -784,15 +769,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(232,116,79,0.1)',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 18,
-  },
+    marginBottom: 18 },
   errorTitle: {
     fontSize: 15,
     fontWeight: '600',
     color: Colors.nileBlue,
     textAlign: 'center',
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base },
   retryBtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -800,14 +783,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.nileBlue,
     paddingHorizontal: Spacing.lg,
     paddingVertical: 10,
-    borderRadius: BorderRadius.xl,
-  },
+    borderRadius: BorderRadius.xl },
   retryText: {
     ...Typography.bodySmall,
     fontSize: 13,
     fontWeight: '600',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse },
 
   // ── Error Banner (partial failure) ──
   errorBanner: {
@@ -819,32 +800,27 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.warningScale[50],
     paddingHorizontal: 14,
     paddingVertical: 10,
-    borderRadius: BorderRadius.md,
-  },
+    borderRadius: BorderRadius.md },
   errorBannerText: {
     flex: 1,
     ...Typography.bodySmall,
     fontWeight: '500',
-    color: colors.brand.amberDark,
-  },
+    color: colors.brand.amberDark },
   errorBannerRetry: {
     ...Typography.bodySmall,
     fontWeight: '700',
-    color: colors.brand.amberDeep,
-  },
+    color: colors.brand.amberDeep },
 
   // ── Hero Banner ──
   heroBannerWrap: {
     paddingHorizontal: Spacing.base,
     paddingTop: Spacing.base,
-    paddingBottom: Spacing.xs,
-  },
+    paddingBottom: Spacing.xs },
   heroBanner: {
     borderRadius: BorderRadius.xl,
     padding: Spacing.lg,
     overflow: 'hidden',
-    position: 'relative',
-  },
+    position: 'relative' },
   heroDecorCircle: {
     position: 'absolute',
     top: -20,
@@ -852,8 +828,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: 'rgba(255,255,255,0.05)',
-  },
+    backgroundColor: 'rgba(255,255,255,0.05)' },
   heroDecorCircle2: {
     position: 'absolute',
     bottom: -30,
@@ -861,101 +836,85 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: 'rgba(255,255,255,0.03)',
-  },
+    backgroundColor: 'rgba(255,255,255,0.03)' },
   heroContent: {
     position: 'relative',
-    zIndex: 1,
-  },
+    zIndex: 1 },
   heroIconRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   heroIconBadge: {
     width: 36,
     height: 36,
     borderRadius: BorderRadius.md,
     backgroundColor: Colors.gold,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   heroCountBadge: {
     backgroundColor: 'rgba(255,255,255,0.15)',
     paddingHorizontal: 10,
     paddingVertical: 4,
-    borderRadius: 10,
-  },
+    borderRadius: 10 },
   heroCountText: {
     ...Typography.bodySmall,
     fontWeight: '600',
-    color: 'rgba(255,255,255,0.9)',
-  },
+    color: 'rgba(255,255,255,0.9)' },
   heroTitle: {
     fontSize: 22,
     fontWeight: '800',
     color: Colors.text.inverse,
     marginBottom: Spacing.xs,
-    letterSpacing: -0.3,
-  },
+    letterSpacing: -0.3 },
   heroSubtitle: {
     fontSize: 13,
     color: 'rgba(255,255,255,0.7)',
-    lineHeight: 18,
-  },
+    lineHeight: 18 },
 
   // ── Sections ──
   section: {
     paddingHorizontal: Spacing.base,
-    marginTop: Spacing.lg,
-  },
+    marginTop: Spacing.lg },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.sm,
-    marginBottom: 14,
-  },
+    marginBottom: 14 },
   sectionIconWrap: {
     width: 30,
     height: 30,
     borderRadius: 10,
     backgroundColor: 'rgba(236,72,153,0.12)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   sectionTitle: {
     flex: 1,
     ...Typography.bodyLarge,
     fontWeight: '700',
     color: Colors.nileBlue,
-    letterSpacing: -0.2,
-  },
+    letterSpacing: -0.2 },
   seeAllBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 2,
     paddingVertical: Spacing.xs,
-    paddingHorizontal: 6,
-  },
+    paddingHorizontal: 6 },
   seeAllText: {
     fontSize: 13,
     fontWeight: '600',
-    color: Colors.nileBlue,
-  },
+    color: Colors.nileBlue },
   sectionCountBadge: {
     backgroundColor: Colors.background.primary,
     paddingHorizontal: 10,
     paddingVertical: 3,
     borderRadius: BorderRadius.md,
     borderWidth: 1,
-    borderColor: '#EDEAE6',
-  },
+    borderColor: '#EDEAE6' },
   sectionCountText: {
     ...Typography.bodySmall,
     fontWeight: '700',
-    color: '#7C8A97',
-  },
+    color: '#7C8A97' },
 
   // ── Featured Coupon Card ──
   couponCard: {
@@ -966,52 +925,43 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: '#EDEAE6',
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle },
   couponLeft: {
     width: 90,
     backgroundColor: Colors.nileBlue,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: Spacing.md,
-  },
+    padding: Spacing.md },
   couponDiscountBadge: {
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   couponDiscountText: {
     ...Typography.bodyLarge,
     fontWeight: '800',
     color: Colors.gold,
     textAlign: 'center',
-    letterSpacing: -0.3,
-  },
+    letterSpacing: -0.3 },
   couponDivider: {
     width: 1,
-    backgroundColor: '#EDEAE6',
-  },
+    backgroundColor: '#EDEAE6' },
   couponRight: {
     flex: 1,
     padding: Spacing.md,
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   couponTitle: {
     ...Typography.body,
     fontWeight: '700',
     color: Colors.nileBlue,
     marginBottom: 3,
-    letterSpacing: -0.2,
-  },
+    letterSpacing: -0.2 },
   couponDesc: {
     ...Typography.bodySmall,
     color: '#7C8A97',
-    marginBottom: 6,
-  },
+    marginBottom: 6 },
   couponMeta: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.sm,
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs },
   couponCodeBadge: {
     backgroundColor: '#F4F1ED',
     paddingHorizontal: Spacing.sm,
@@ -1019,46 +969,38 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     borderWidth: 1,
     borderStyle: 'dashed',
-    borderColor: '#D5CFC8',
-  },
+    borderColor: '#D5CFC8' },
   couponCodeText: {
     ...Typography.caption,
     fontWeight: '700',
     color: Colors.nileBlue,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-  },
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace' },
   couponTimeBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 3,
-  },
+    gap: 3 },
   couponTimeText: {
     fontSize: 10,
     fontWeight: '500',
-    color: '#7C8A97',
-  },
+    color: '#7C8A97' },
   couponMinOrder: {
     fontSize: 11,
-    color: '#A0A8B1',
-  },
+    color: '#A0A8B1' },
 
   // ── Campaign Cards (horizontal scroll) ──
   campaignScroll: {
-    paddingRight: Spacing.base,
-  },
+    paddingRight: Spacing.base },
   campaignCard: {
     width: SCREEN_WIDTH * 0.72,
     marginRight: Spacing.md,
     borderRadius: 18,
     overflow: 'hidden',
-    ...Shadows.medium,
-  },
+    ...Shadows.medium },
   campaignGradient: {
     padding: 18,
     borderRadius: 18,
     overflow: 'hidden',
-    position: 'relative',
-  },
+    position: 'relative' },
   campaignDecorCircle: {
     position: 'absolute',
     top: -20,
@@ -1066,14 +1008,12 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: 'rgba(255,255,255,0.06)',
-  },
+    backgroundColor: 'rgba(255,255,255,0.06)' },
   campaignTopRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   multiplierBadge: {
     width: 48,
     height: 48,
@@ -1085,14 +1025,12 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
-    elevation: 4,
-  },
+    elevation: 4 },
   multiplierText: {
     fontSize: 19,
     fontWeight: '900',
     color: Colors.nileBlue,
-    letterSpacing: -0.5,
-  },
+    letterSpacing: -0.5 },
   campaignTimeBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1100,39 +1038,32 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.15)',
     paddingHorizontal: 9,
     paddingVertical: 4,
-    borderRadius: 10,
-  },
+    borderRadius: 10 },
   campaignTimeBadgeEnded: {
-    backgroundColor: 'rgba(239,68,68,0.15)',
-  },
+    backgroundColor: 'rgba(239,68,68,0.15)' },
   campaignTimeText: {
     ...Typography.caption,
     fontWeight: '600',
-    color: 'rgba(255,255,255,0.9)',
-  },
+    color: 'rgba(255,255,255,0.9)' },
   campaignTitle: {
     ...Typography.h4,
     fontSize: 17,
     fontWeight: '800',
     color: Colors.text.inverse,
     marginBottom: Spacing.xs,
-    letterSpacing: -0.2,
-  },
+    letterSpacing: -0.2 },
   campaignSubtitle: {
     ...Typography.bodySmall,
     color: 'rgba(255,255,255,0.65)',
-    marginBottom: 10,
-  },
+    marginBottom: 10 },
   campaignStoreCount: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 5,
-  },
+    gap: 5 },
   campaignStoreCountText: {
     ...Typography.bodySmall,
     fontWeight: '600',
-    color: 'rgba(255,255,255,0.75)',
-  },
+    color: 'rgba(255,255,255,0.75)' },
 
   // ── Coin Drop Card ──
   dropCard: {
@@ -1144,14 +1075,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderWidth: 1,
     borderColor: '#EDEAE6',
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle },
   dropLeft: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   dropLogoWrap: {
     width: 48,
     height: 48,
@@ -1161,81 +1090,66 @@ const styles = StyleSheet.create({
     borderColor: '#EDEAE6',
     justifyContent: 'center',
     alignItems: 'center',
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   dropLogo: {
     width: 40,
     height: 40,
-    resizeMode: 'contain',
-  },
+    resizeMode: 'contain' },
   dropLogoFallback: {
     width: 48,
     height: 48,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   dropInfo: {
-    flex: 1,
-  },
+    flex: 1 },
   dropStoreName: {
     fontSize: 15,
     fontWeight: '700',
     color: Colors.nileBlue,
     marginBottom: Spacing.xs,
-    letterSpacing: -0.2,
-  },
+    letterSpacing: -0.2 },
   dropRatesRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    marginBottom: 6,
-  },
+    marginBottom: 6 },
   dropNormalRate: {
     fontSize: 13,
     fontWeight: '500',
     color: '#B0A99F',
     textDecorationLine: 'line-through',
-    textDecorationColor: '#B0A99F',
-  },
+    textDecorationColor: '#B0A99F' },
   dropBoostedRate: {
     fontSize: 15,
     fontWeight: '800',
     color: colors.brand.sand,
-    letterSpacing: -0.2,
-  },
+    letterSpacing: -0.2 },
   dropMetaRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   categoryTag: {
     backgroundColor: '#F4F1ED',
     paddingHorizontal: Spacing.sm,
     paddingVertical: 3,
-    borderRadius: BorderRadius.sm,
-  },
+    borderRadius: BorderRadius.sm },
   categoryTagText: {
     ...Typography.caption,
     fontWeight: '600',
-    color: '#7C8A97',
-  },
+    color: '#7C8A97' },
   dropTimeRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 3,
-  },
+    gap: 3 },
   dropTimeText: {
     fontSize: 11,
     fontWeight: '500',
-    color: '#A0A8B1',
-  },
+    color: '#A0A8B1' },
   dropTimeEnded: {
-    color: Colors.error,
-  },
+    color: Colors.error },
   dropRightArea: {
     marginLeft: 10,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   dropMultiplierBadge: {
     width: 44,
     height: 44,
@@ -1247,19 +1161,16 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
-    elevation: 3,
-  },
+    elevation: 3 },
   dropMultiplierText: {
     ...Typography.bodyLarge,
     fontWeight: '900',
     color: Colors.nileBlue,
-    letterSpacing: -0.3,
-  },
+    letterSpacing: -0.3 },
 
   // ── Brand Cards (horizontal scroll) ──
   brandsScroll: {
-    paddingRight: Spacing.base,
-  },
+    paddingRight: Spacing.base },
   brandCard: {
     width: 110,
     backgroundColor: Colors.background.primary,
@@ -1269,8 +1180,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#EDEAE6',
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle },
   brandLogoWrap: {
     width: 52,
     height: 52,
@@ -1279,54 +1189,46 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   brandLogo: {
     width: 44,
     height: 44,
-    resizeMode: 'contain',
-  },
+    resizeMode: 'contain' },
   brandLogoFallback: {
     width: 52,
     height: 52,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   brandName: {
     ...Typography.bodySmall,
     fontWeight: '700',
     color: Colors.nileBlue,
     textAlign: 'center',
     marginBottom: Spacing.xs,
-    letterSpacing: -0.2,
-  },
+    letterSpacing: -0.2 },
   brandRateBadge: {
     backgroundColor: 'rgba(16,185,129,0.1)',
     paddingHorizontal: Spacing.sm,
     paddingVertical: 3,
     borderRadius: BorderRadius.sm,
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs },
   brandRateText: {
     ...Typography.caption,
     fontWeight: '700',
-    color: Colors.success,
-  },
+    color: Colors.success },
   brandCategory: {
     ...Typography.overline,
     fontWeight: '500',
     color: '#A0A8B1',
     textAlign: 'center',
     letterSpacing: 0,
-    textTransform: 'none',
-  },
+    textTransform: 'none' },
 
   // ── Quick Actions ──
   quickActionsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 10,
-  },
+    gap: 10 },
   quickActionCard: {
     width: (SCREEN_WIDTH - Spacing['2xl'] - 10) / 2,
     backgroundColor: Colors.background.primary,
@@ -1336,21 +1238,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
     borderWidth: 1,
-    borderColor: '#EDEAE6',
-  },
+    borderColor: '#EDEAE6' },
   quickActionIcon: {
     width: 38,
     height: 38,
     borderRadius: BorderRadius.md,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   quickActionLabel: {
     fontSize: 13,
     fontWeight: '600',
     color: Colors.nileBlue,
-    flex: 1,
-  },
+    flex: 1 },
 
   // ── Empty State ──
   emptyContainer: {
@@ -1358,8 +1257,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 80,
-    paddingHorizontal: Spacing['2xl'],
-  },
+    paddingHorizontal: Spacing['2xl'] },
   emptyIconWrap: {
     width: 72,
     height: 72,
@@ -1367,22 +1265,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(196,149,106,0.1)',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 18,
-  },
+    marginBottom: 18 },
   emptyTitle: {
     ...Typography.h4,
     fontSize: 17,
     fontWeight: '700',
     color: Colors.nileBlue,
     marginBottom: 6,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   emptySubtitle: {
     ...Typography.body,
     color: '#A0A8B1',
     textAlign: 'center',
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg },
   browseBtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1390,17 +1285,14 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.nileBlue,
     paddingHorizontal: Spacing.lg,
     paddingVertical: 10,
-    borderRadius: BorderRadius.xl,
-  },
+    borderRadius: BorderRadius.xl },
   browseBtnText: {
     fontSize: 13,
     fontWeight: '600',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse },
 
   // Extracted inline styles
   headerSpacer: { width: 32 },
-  bottomSpacer: { height: 100 },
-});
+  bottomSpacer: { height: 100 } });
 
 export default withErrorBoundary(OffersPage, 'CashStoreOffers');

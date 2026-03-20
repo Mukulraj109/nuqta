@@ -1,6 +1,9 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
-import React, { useRef, useState } from "react";
-import { View, Pressable, StyleSheet, ViewStyle, TextStyle, Linking, Platform, Animated } from "react-native";
+import React, { useState } from "react";
+import { View, Pressable, StyleSheet, ViewStyle, TextStyle, Linking, Platform} from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  withSpring} from 'react-native-reanimated';
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { triggerImpact, triggerNotification } from "@/utils/haptics";
@@ -14,8 +17,7 @@ import {
   BorderRadius,
   Typography,
   IconSize,
-  Timing,
-} from "@/constants/DesignSystem";
+  Timing } from "@/constants/DesignSystem";
 import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ActionButtonProps {
@@ -59,17 +61,13 @@ function Section2({ dynamicData, cardType }: Section2Props){
   const [showContactModal, setShowContactModal] = useState(false);
 
   // Animation refs for each button
-  const button1ScaleAnim = useRef(new Animated.Value(1)).current;
-  const button2ScaleAnim = useRef(new Animated.Value(1)).current;
-  const button3ScaleAnim = useRef(new Animated.Value(1)).current;
+  const button1ScaleAnim = useSharedValue(1);
+  const button2ScaleAnim = useSharedValue(1);
+  const button3ScaleAnim = useSharedValue(1);
 
   // Animation helper
-  const animateScale = (animValue: Animated.Value, toValue: number) => {
-    Animated.spring(animValue, {
-      toValue,
-      useNativeDriver: true,
-      ...Timing.springBouncy,
-    }).start();
+  const animateScale = (animValue: { value: number }, toValue: number) => {
+    animValue.value = withSpring(toValue);
   };
 
   // Get animation ref by index
@@ -122,8 +120,7 @@ function Section2({ dynamicData, cardType }: Section2Props){
         pathname: '/StoreProductsPage',
         params: {
           storeId: storeId,
-          storeName: storeName,
-        }
+          storeName: storeName }
       } as any);
     } catch (error) {
       platformAlert('Error', 'Unable to view store products');
@@ -269,19 +266,16 @@ const styles = StyleSheet.create<Styles>({
   container: {
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.base,
-    backgroundColor: Colors.background.primary,
-  },
+    backgroundColor: Colors.background.primary },
 
   // Modern Button Row
   buttonRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    gap: Spacing.md - 2,
-  },
+    gap: Spacing.md - 2 },
 
   buttonWrapper: {
-    flex: 1,
-  },
+    flex: 1 },
 
   // Modern Button with Purple Border
   button: {
@@ -295,20 +289,16 @@ const styles = StyleSheet.create<Styles>({
     backgroundColor: Colors.background.primary,
     ...Shadows.purpleSubtle,
     flexDirection: "column",
-    gap: Spacing.xs,
-  },
+    gap: Spacing.xs },
 
   buttonIcon: {
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
 
   // Modern Typography
   buttonText: {
     ...Typography.caption,
     fontWeight: "600",
     color: Colors.primary[600],
-    textAlign: "center",
-  },
-});
+    textAlign: "center" } });
 
 export default withErrorBoundary(Section2, 'StoreSectionSection2');

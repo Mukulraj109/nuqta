@@ -1,13 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   StyleSheet,
   Modal,
   Pressable,
-  Animated,
   Dimensions,
   Platform,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring, interpolate } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
@@ -37,48 +37,31 @@ function CelebrationModal({
 }: CelebrationModalProps) {
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
-  const scaleAnim = useRef(new Animated.Value(0)).current;
-  const rotateAnim = useRef(new Animated.Value(0)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useSharedValue(0);
+  const rotateAnim = useSharedValue(0);
+  const fadeAnim = useSharedValue(0);
 
   useEffect(() => {
     if (visible) {
       // Reset animations
-      scaleAnim.setValue(0);
-      rotateAnim.setValue(0);
-      fadeAnim.setValue(0);
+      scaleAnim.value = 0;
+      rotateAnim.value = 0;
+      fadeAnim.value = 0;
 
       // Start animations
-      const anim = Animated.parallel([
-        Animated.spring(scaleAnim, {
-          toValue: 1,
-          tension: 50,
-          friction: 7,
-          useNativeDriver: true,
-        }),
-        Animated.timing(rotateAnim, {
-          toValue: 1,
-          duration: 800,
-          useNativeDriver: true,
-        }),
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-      ]);
-      anim.start();
+      scaleAnim.value = withSpring(1, { stiffness: 50, damping: 7 });
+      rotateAnim.value = withTiming(1, { duration: 800 });
+      fadeAnim.value = withTiming(1, { duration: 300 });
 
-      return () => { anim.stop(); };
+      // cleanup handled by reanimated
     }
   }, [visible]);
 
-  if (!result) return null;
+  const rotationStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: interpolate(rotateAnim.value, [0, 1], ['0deg', '360deg']) }],
+  }));
 
-  const rotation = rotateAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'],
-  });
+  if (!result) return null;
 
   const getPrizeIcon = () => {
     switch (result.prize?.type) {
@@ -160,9 +143,7 @@ function CelebrationModal({
           <Animated.View
             style={[
               styles.iconContainer,
-              {
-                transform: [{ rotate: rotation }],
-              },
+              rotationStyle,
             ]}
           >
             <LinearGradient

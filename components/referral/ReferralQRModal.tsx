@@ -1,15 +1,20 @@
 // Referral QR Modal Component
 // Modal for displaying and sharing QR code with referral code
 
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   StyleSheet,
   Modal,
   Pressable,
-  Animated,
   Platform,
   Linking} from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -47,46 +52,28 @@ function ReferralQRModal({
 
   const [isDownloading, setIsDownloading] = useState(false);
   const isMounted = useIsMounted();
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(300)).current;
-  const viewShotRef = useRef<ViewShot>(null);
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(300);
+  const viewShotRef = React.useRef<ViewShot>(null);
 
   // Animate modal entrance
   React.useEffect(() => {
-    let _anim: Animated.CompositeAnimation;
     if (visible) {
-      _anim = Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        Animated.spring(slideAnim, {
-          toValue: 0,
-          tension: 65,
-          friction: 11,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      fadeAnim.value = withTiming(1, { duration: 300 });
+      slideAnim.value = withSpring(0, { damping: 14, stiffness: 65 });
     } else {
-      _anim = Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(slideAnim, {
-          toValue: 300,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      fadeAnim.value = withTiming(0, { duration: 200 });
+      slideAnim.value = withTiming(300, { duration: 200 });
     }
-  
-    return () => _anim.stop();
-}, [visible]);
+  }, [visible]);
+
+  const overlayStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+  }));
+
+  const modalSlideStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: slideAnim.value }],
+  }));
 
   // Handle QR code download
   const handleDownloadQR = async () => {
@@ -290,9 +277,7 @@ function ReferralQRModal({
       <Animated.View
         style={[
           styles.overlay,
-          {
-            opacity: fadeAnim,
-          },
+          overlayStyle,
         ]}
       >
         <Pressable
@@ -306,9 +291,7 @@ function ReferralQRModal({
         <Animated.View
           style={[
             styles.modalContainer,
-            {
-              transform: [{ translateY: slideAnim }],
-            },
+            modalSlideStyle,
           ]}
         >
           {/* Header */}

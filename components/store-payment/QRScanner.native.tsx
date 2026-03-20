@@ -9,17 +9,24 @@
  * - Security badges
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
-  Animated,
   Dimensions,
   Platform,
   StatusBar,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withRepeat,
+  withSequence,
+  interpolate,
+} from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { CameraView, useCameraPermissions, BarcodeScanningResult } from 'expo-camera';
 import { Ionicons } from '@expo/vector-icons';
@@ -54,30 +61,20 @@ function QRScanner({ onScan, onClose, onManualEntry }: QRScannerProps) {
   const [scanned, setScanned] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [flashOn, setFlashOn] = useState(false);
-  const scanLineAnim = useRef(new Animated.Value(0)).current;
+  const scanLineAnim = useSharedValue(0);
 
   useEffect(() => {
     StatusBar.setBarStyle('light-content');
 
-    // Animate the scan line
-    const scanLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(scanLineAnim, {
-          toValue: 1,
-          duration: 2500,
-          useNativeDriver: true,
-        }),
-        Animated.timing(scanLineAnim, {
-          toValue: 0,
-          duration: 0,
-          useNativeDriver: true,
-        }),
-      ])
+    scanLineAnim.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 2500 }),
+        withTiming(0, { duration: 0 })
+      ),
+      -1
     );
-    scanLoop.start();
 
     return () => {
-      scanLoop.stop();
       StatusBar.setBarStyle('dark-content');
     };
   }, []);
@@ -118,15 +115,10 @@ function QRScanner({ onScan, onClose, onManualEntry }: QRScannerProps) {
     }, 3000);
   };
 
-  const translateY = scanLineAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, SCANNER_SIZE - 4],
-  });
-
-  const opacity = scanLineAnim.interpolate({
-    inputRange: [0, 0.1, 0.9, 1],
-    outputRange: [0, 1, 1, 0],
-  });
+  const scanLineStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: interpolate(scanLineAnim.value, [0, 1], [0, SCANNER_SIZE - 4]) }],
+    opacity: interpolate(scanLineAnim.value, [0, 0.1, 0.9, 1], [0, 1, 1, 0]),
+  }));
 
   // Permission states
   if (!permission) {
@@ -214,10 +206,7 @@ function QRScanner({ onScan, onClose, onManualEntry }: QRScannerProps) {
           <Animated.View
             style={[
               styles.scanLine,
-              {
-                transform: [{ translateY }],
-                opacity,
-              },
+              scanLineStyle,
             ]}
           />
 

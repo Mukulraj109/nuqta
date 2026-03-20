@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import {
   View,
   Modal,
@@ -6,10 +6,10 @@ import {
   TouchableWithoutFeedback,
   StyleSheet,
   Dimensions,
-  Animated,
   ScrollView,
   Share,
   Clipboard} from 'react-native';
+import Animated, { interpolate, runOnJS, useAnimatedStyle, useSharedValue, withDelay, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
@@ -46,14 +46,14 @@ function DealSharingModal({
   const [copyFeedback, setCopyFeedback] = useState(false);
   const isMounted = useIsMounted();
   
-  const slideAnim = useRef(new Animated.Value(screenData.height)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const feedbackAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useSharedValue(screenData.height);
+  const fadeAnim = useSharedValue(0);
+  const feedbackAnim = useSharedValue(0);
 
   useEffect(() => {
     const subscription = Dimensions.addEventListener('change', ({ window }) => {
       setScreenData(window);
-      slideAnim.setValue(window.height);
+      slideAnim.value = window.height;
     });
 
     return () => subscription?.remove();
@@ -62,61 +62,30 @@ function DealSharingModal({
   const styles = createStyles(screenData);
 
   useEffect(() => {
-    let _anim: Animated.CompositeAnimation;
+    let _anim: any;
     if (visible) {
-      _anim = Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.spring(slideAnim, {
-          toValue: 0,
-          tension: 100,
-          friction: 8,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      fadeAnim.value = withTiming(1, { duration: 200 });
+      slideAnim.value = withSpring(0);
+      
     } else {
-      _anim = Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 150,
-          useNativeDriver: true,
-        }),
-        Animated.timing(slideAnim, {
-          toValue: screenData.height,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      fadeAnim.value = withTiming(0, { duration: 150 });
+      slideAnim.value = withTiming(screenData.height, { duration: 200 });
+      
     }
   
-    return () => _anim.stop();
-}, [visible, fadeAnim, slideAnim]);
+    }, [visible, fadeAnim, slideAnim]);
 
   // Copy feedback animation
   useEffect(() => {
     if (copyFeedback) {
-      const anim = Animated.sequence([
-        Animated.timing(feedbackAnim, {
-          toValue: 1,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.delay(1500),
-        Animated.timing(feedbackAnim, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-      ]);
-      anim.start(() => {
-        setCopyFeedback(false);
-      });
-      return () => anim.stop();
+      feedbackAnim.value = withSequence(
+        withTiming(1, { duration: 200 }),
+        withDelay(1500, withTiming(0, { duration: 200 }, (finished) => {
+          if (finished) {
+            runOnJS(setCopyFeedback)(false);
+          }
+        }))
+      );
     }
   }, [copyFeedback, feedbackAnim]);
 
@@ -385,10 +354,7 @@ ${deal.description || 'Don\'t miss out on this incredible offer!'}
               {
                 opacity: feedbackAnim,
                 transform: [{
-                  translateY: feedbackAnim.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [100, 0],
-                  }),
+                  translateY: interpolate(feedbackAnim.value, [0, 1], [100, 0]),
                 }],
                 pointerEvents: 'none',
               }

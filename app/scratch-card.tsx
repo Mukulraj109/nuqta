@@ -11,9 +11,13 @@ import {
   Pressable,
   StatusBar,
   Dimensions,
-  Animated,
-  ActivityIndicator,
+  ActivityIndicator
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming} from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -50,14 +54,13 @@ function ScratchCardPage() {
     checkEligibility,
     createSession,
     revealPrize,
-    retryClaim,
-  } = useScratchCard();
+    retryClaim} = useScratchCard();
 
   const [isAnimating, setIsAnimating] = useState(false);
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const scaleAnim = useRef(new Animated.Value(0.8)).current;
-  const scratchAnim = useRef(new Animated.Value(1)).current;
-  const prizeScaleAnim = useRef(new Animated.Value(0)).current;
+  const fadeAnim = useSharedValue(0);
+  const scaleAnim = useSharedValue(0.8);
+  const scratchAnim = useSharedValue(1);
+  const prizeScaleAnim = useSharedValue(0);
   const hasLoadedRef = useRef(false);
   const hasAnimatedRef = useRef(false);
   const isFirstFocusRef = useRef(true);
@@ -94,14 +97,10 @@ function ScratchCardPage() {
   useEffect(() => {
     if ((cardState === 'available' || cardState === 'scratching') && !hasAnimatedRef.current) {
       hasAnimatedRef.current = true;
-      fadeAnim.setValue(0);
-      scaleAnim.setValue(0.8);
-      const anim = Animated.parallel([
-        Animated.timing(fadeAnim, { toValue: 1, duration: 600, useNativeDriver: true }),
-        Animated.spring(scaleAnim, { toValue: 1, tension: 50, friction: 7, useNativeDriver: true }),
-      ]);
-      anim.start();
-      return () => anim.stop();
+      fadeAnim.value = 0;
+      scaleAnim.value = 0.8;
+      fadeAnim.value = withTiming(1, { duration: 600 });
+      scaleAnim.value = withSpring(1, { damping: 7, stiffness: 50 });
     }
   }, [cardState]);
 
@@ -133,12 +132,10 @@ function ScratchCardPage() {
     setIsAnimating(true);
 
     // Animate scratch-off effect
-    Animated.timing(scratchAnim, {
-      toValue: 0,
-      duration: 800,
-      useNativeDriver: true,
-    }).start(async () => {
-      // After animation, call server to generate prize + credit wallet
+    scratchAnim.value = withTiming(0, { duration: 800 });
+
+    // After animation, call server to generate prize + credit wallet
+    setTimeout(async () => {
       const wonPrize = await revealPrize(session.sessionId);
 
       if (wonPrize) {
@@ -146,13 +143,8 @@ function ScratchCardPage() {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
 
         // Animate prize reveal
-        prizeScaleAnim.setValue(0);
-        Animated.spring(prizeScaleAnim, {
-          toValue: 1,
-          tension: 50,
-          friction: 6,
-          useNativeDriver: true,
-        }).start();
+        prizeScaleAnim.value = 0;
+        prizeScaleAnim.value = withSpring(1, { damping: 6, stiffness: 50 });
 
         // Refresh wallet balance from server
         try {
@@ -164,7 +156,7 @@ function ScratchCardPage() {
       }
       if (!isMounted()) return;
       setIsAnimating(false);
-    });
+    }, 850);
   }, [session, isAnimating, revealPrize, scratchAnim, prizeScaleAnim, gamificationActions, refreshWallet]);
 
   /** Retry failed claim */
@@ -189,8 +181,8 @@ function ScratchCardPage() {
 
   const handlePlayAgain = useCallback(() => {
     // Reset animations for next card
-    scratchAnim.setValue(1);
-    prizeScaleAnim.setValue(0);
+    scratchAnim.value = 1;
+    prizeScaleAnim.value = 0;
     hasAnimatedRef.current = false;
     checkEligibility();
   }, [checkEligibility, scratchAnim, prizeScaleAnim]);
@@ -463,51 +455,42 @@ function ScratchCardPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background.secondary,
-  },
+    backgroundColor: Colors.background.secondary},
   headerBg: {
     paddingTop: StatusBar.currentHeight || 50,
     paddingBottom: Spacing.lg,
     paddingHorizontal: Spacing.lg,
     borderBottomLeftRadius: 25,
     borderBottomRightRadius: 25,
-    ...Shadows.medium,
-  },
+    ...Shadows.medium},
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between'},
   backButton: {
-    padding: Spacing.sm,
-  },
+    padding: Spacing.sm},
   headerTitle: {
     color: Colors.text.inverse,
     ...Typography.h3,
     fontWeight: 'bold',
     flex: 1,
-    textAlign: 'center',
-  },
+    textAlign: 'center'},
   headerRight: {
-    width: 40,
-  },
+    width: 40},
   content: {
     flex: 1,
     paddingHorizontal: Spacing.lg,
     paddingTop: Spacing.xl,
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   centerContent: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 40,
-  },
+    paddingHorizontal: 40},
   loadingText: {
     ...Typography.bodyLarge,
     color: Colors.text.tertiary,
-    marginTop: Spacing.base,
-  },
+    marginTop: Spacing.base},
   remainingBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -515,86 +498,73 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.xl,
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg},
   remainingText: {
     ...Typography.body,
     color: Colors.brand.purple,
     fontWeight: '600',
-    marginLeft: 6,
-  },
+    marginLeft: 6},
   cardContainer: {
     alignItems: 'center',
-    marginBottom: Spacing.xl,
-  },
+    marginBottom: Spacing.xl},
   scratchCard: {
     width: width * 0.8,
     height: width * 0.8,
     borderRadius: BorderRadius.xl,
     overflow: 'hidden',
     backgroundColor: Colors.background.primary,
-    ...Shadows.strong,
-  },
+    ...Shadows.strong},
   scratchSurface: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    zIndex: 2,
-  },
+    zIndex: 2},
   scratchGradient: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: Spacing.lg,
-  },
+    padding: Spacing.lg},
   scratchText: {
     color: Colors.text.inverse,
     ...Typography.h4,
     fontWeight: 'bold',
     marginTop: Spacing.base,
-    textAlign: 'center',
-  },
+    textAlign: 'center'},
   scratchSubtext: {
     color: Colors.text.inverse,
     ...Typography.body,
     marginTop: Spacing.sm,
     textAlign: 'center',
-    opacity: 0.9,
-  },
+    opacity: 0.9},
   prizeContent: {
     flex: 1,
     backgroundColor: Colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: Spacing.lg,
-  },
+    padding: Spacing.lg},
   prizeIcon: {
     width: 80,
     height: 80,
     borderRadius: BorderRadius.full,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg},
   prizeTitle: {
     ...Typography.h2,
     fontWeight: 'bold',
     color: Colors.text.primary,
     marginBottom: Spacing.sm,
-    textAlign: 'center',
-  },
+    textAlign: 'center'},
   prizeDescription: {
     ...Typography.bodyLarge,
     color: Colors.text.tertiary,
-    textAlign: 'center',
-  },
+    textAlign: 'center'},
   buttonArea: {
     width: '100%',
     alignItems: 'center',
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg},
   actionButton: {
     backgroundColor: Colors.brand.purple,
     paddingHorizontal: Spacing['2xl'],
@@ -608,78 +578,64 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
-    elevation: 6,
-  },
+    elevation: 6},
   disabledButton: {
     backgroundColor: colors.brand.purpleSoft,
-    shadowOpacity: 0.1,
-  },
+    shadowOpacity: 0.1},
   actionButtonText: {
     color: Colors.text.inverse,
     ...Typography.bodyLarge,
-    fontWeight: '700',
-  },
+    fontWeight: '700'},
   revealedButtons: {
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   instructionsContainer: {
     backgroundColor: Colors.background.primary,
     borderRadius: BorderRadius.lg,
     padding: Spacing.lg,
     width: '100%',
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle},
   instructionsTitle: {
     ...Typography.h4,
     fontWeight: 'bold',
     color: Colors.text.primary,
     marginBottom: Spacing.md,
-    textAlign: 'center',
-  },
+    textAlign: 'center'},
   instructionsText: {
     ...Typography.body,
     color: Colors.text.tertiary,
     lineHeight: 22,
-    textAlign: 'center',
-  },
+    textAlign: 'center'},
   lockedTitle: {
     ...Typography.h2,
     fontWeight: 'bold',
     color: Colors.text.primary,
     marginTop: Spacing.lg,
     marginBottom: Spacing.md,
-    textAlign: 'center',
-  },
+    textAlign: 'center'},
   lockedDescription: {
     ...Typography.bodyLarge,
     color: Colors.text.tertiary,
     textAlign: 'center',
     lineHeight: 24,
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg},
   cooldownTimer: {
     fontSize: 36,
     fontWeight: '800',
     color: Colors.warning,
-    marginBottom: Spacing.xl,
-  },
+    marginBottom: Spacing.xl},
   statsText: {
     ...Typography.body,
     color: Colors.text.tertiary,
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg},
   errorContainer: {
     backgroundColor: Colors.errorScale[50],
     borderRadius: BorderRadius.md,
     padding: Spacing.md,
     marginTop: Spacing.md,
-    width: '100%',
-  },
+    width: '100%'},
   errorText: {
     ...Typography.body,
     color: Colors.error,
-    textAlign: 'center',
-  },
-});
+    textAlign: 'center'}});
 
 export default withErrorBoundary(ScratchCardPage, 'ScratchCard');

@@ -8,9 +8,9 @@ import {
   StyleSheet,
   Pressable,
   ActivityIndicator,
-  Animated,
   Platform,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { ProductItem } from '@/types/homepage.types';
@@ -45,7 +45,7 @@ function ShoppableProductCard({
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [isAdding, setIsAdding] = useState(false);
-  const [scaleAnim] = useState(new Animated.Value(1));
+  const scaleAnim = useSharedValue(1);
   const isMounted = useIsMounted();
 
   // Normalize price and rating using utility functions
@@ -101,18 +101,7 @@ function ShoppableProductCard({
       setIsAdding(true);
 
       // Animate button press
-      Animated.sequence([
-        Animated.timing(scaleAnim, {
-          toValue: 0.95,
-          duration: 100,
-          useNativeDriver: true,
-        }),
-        Animated.timing(scaleAnim, {
-          toValue: 1,
-          duration: 100,
-          useNativeDriver: true,
-        }),
-      ]).start();
+      scaleAnim.value = withSequence(withTiming(0.95, { duration: 100 }), withTiming(1, { duration: 100 }));
 
       await onAddToCart();
     } catch (error) {
@@ -129,18 +118,7 @@ function ShoppableProductCard({
   const handlePress = useCallback(() => {
     if (!onPress) return;
 
-    Animated.sequence([
-      Animated.timing(scaleAnim, {
-        toValue: 0.97,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(scaleAnim, {
-        toValue: 1,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    scaleAnim.value = withSequence(withTiming(0.97, { duration: 100 }), withTiming(1, { duration: 100 }));
 
     onPress();
   }, [onPress, scaleAnim]);

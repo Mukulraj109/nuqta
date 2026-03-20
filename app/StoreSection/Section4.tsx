@@ -1,15 +1,16 @@
 // Section4.tsx - Premium Glassmorphism Design
 // Card Offers Section - Green & Gold Theme
 
-import React, { useState, useEffect, memo, useRef } from "react";
+import React, { useState, useEffect, memo} from "react";
 import {
   View,
   StyleSheet,
   ActivityIndicator,
   Platform,
-  Pressable,
-  Animated,
-} from "react-native";
+  Pressable} from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  withSpring} from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { type ImageSource } from 'expo-image';
 import { Ionicons } from "@expo/vector-icons";
@@ -31,8 +32,7 @@ const GLASS = {
   tintedGreenBg: 'rgba(255, 205, 87, 0.08)',
   tintedGreenBorder: 'rgba(255, 205, 87, 0.2)',
   tintedGoldBg: 'rgba(255, 200, 87, 0.12)',
-  tintedGoldBorder: 'rgba(255, 200, 87, 0.35)',
-};
+  tintedGoldBorder: 'rgba(255, 200, 87, 0.35)' };
 
 
 interface Section4Props {
@@ -56,8 +56,7 @@ export default memo(function Section4({
   productPrice = 1000,
   storeId,
   testID,
-  onPress,
-}: Section4Props) {
+  onPress }: Section4Props) {
   const isMounted = useIsMounted();
   const [loading, setLoading] = useState<boolean>(true);
   const [errored, setErrored] = useState<boolean>(false);
@@ -67,15 +66,10 @@ export default memo(function Section4({
   const [subtitle, setSubtitle] = useState(initialSubtitle);
 
   // Animation refs
-  const cardScale = useRef(new Animated.Value(1)).current;
+  const cardScale = useSharedValue(1);
 
   const animatePress = (toValue: number) => {
-    Animated.spring(cardScale, {
-      toValue,
-      useNativeDriver: true,
-      friction: 8,
-      tension: 100,
-    }).start();
+    cardScale.value = withSpring(toValue, { damping: 8, stiffness: 100 });
   };
 
   const handlePress = () => {
@@ -96,8 +90,7 @@ export default memo(function Section4({
         storeId,
         orderValue: productPrice,
         page: 1,
-        limit: 10,
-      });
+        limit: 10 });
 
       if (response.success && response.data?.discounts && response.data.discounts.length > 0) {
         if (!isMounted()) return;
@@ -143,8 +136,7 @@ export default memo(function Section4({
     ? {
         onPress: handlePress,
         onPressIn: () => animatePress(0.97),
-        onPressOut: () => animatePress(1),
-      }
+        onPressOut: () => animatePress(1) }
     : {};
 
   return (
@@ -248,8 +240,7 @@ export default memo(function Section4({
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: Spacing.base,
-    paddingVertical: Spacing.sm,
-  },
+    paddingVertical: Spacing.sm },
 
   cardWrapper: {
     borderRadius: BorderRadius.lg,
@@ -260,38 +251,30 @@ const styles = StyleSheet.create({
         shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.15,
-        shadowRadius: 12,
-      },
+        shadowRadius: 12 },
       android: {
-        elevation: 6,
-      },
-    }),
+        elevation: 6 } }),
     borderWidth: 1,
-    borderColor: Colors.border.default,
-  },
+    borderColor: Colors.border.default },
 
   card: {
     borderRadius: BorderRadius.lg,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
 
   cardAndroid: {
-    backgroundColor: Colors.background.primary,
-  },
+    backgroundColor: Colors.background.primary },
 
   cardContent: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 14,
-  },
+    padding: 14 },
 
   glassHighlight: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    height: 0,
-  },
+    height: 0 },
 
   // Icon Container
   iconContainer: {
@@ -306,34 +289,27 @@ const styles = StyleSheet.create({
         shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.3,
-        shadowRadius: 6,
-      },
+        shadowRadius: 6 },
       android: {
-        elevation: 4,
-      },
-    }),
-  },
+        elevation: 4 } }) },
 
   // Text Container
   textContainer: {
     flex: 1,
-    justifyContent: "center",
-  },
+    justifyContent: "center" },
 
   title: {
     ...Typography.body,
     fontWeight: "700",
     color: Colors.text.primary,
     marginBottom: 3,
-    lineHeight: 20,
-  },
+    lineHeight: 20 },
 
   subtitle: {
     ...Typography.bodySmall,
     color: Colors.text.tertiary,
     lineHeight: 18,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
 
   // Right Coupon Visual
   rightContainer: {
@@ -341,8 +317,7 @@ const styles = StyleSheet.create({
     height: 70,
     alignItems: "center",
     justifyContent: "center",
-    marginLeft: Spacing.xs,
-  },
+    marginLeft: Spacing.xs },
 
   couponWrapper: {
     width: 60,
@@ -358,20 +333,15 @@ const styles = StyleSheet.create({
         shadowColor: colors.lightMustard,
         shadowOffset: { width: 2, height: 3 },
         shadowOpacity: 0.2,
-        shadowRadius: 8,
-      },
+        shadowRadius: 8 },
       android: {
-        elevation: 5,
-      },
-    }),
+        elevation: 5 } }),
     borderWidth: 1,
-    borderColor: 'rgba(255, 205, 87, 0.15)',
-  },
+    borderColor: 'rgba(255, 205, 87, 0.15)' },
 
   couponImage: {
     width: "100%",
-    height: "100%",
-  },
+    height: "100%" },
 
   loaderContainer: {
     position: "absolute",
@@ -379,21 +349,18 @@ const styles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: Colors.gold,
-  },
+    backgroundColor: Colors.gold },
 
   fallback: {
     width: "100%",
     height: "100%",
     alignItems: "center",
-    justifyContent: "center",
-  },
+    justifyContent: "center" },
 
   fallbackPercent: {
     color: Colors.text.inverse,
     ...Typography.h3,
-    fontWeight: "800",
-  },
+    fontWeight: "800" },
 
   // Badge
   couponBadge: {
@@ -414,25 +381,18 @@ const styles = StyleSheet.create({
         shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
-        shadowRadius: 4,
-      },
+        shadowRadius: 4 },
       android: {
-        elevation: 4,
-      },
-    }),
-  },
+        elevation: 4 } }) },
 
   couponBadgeText: {
     color: Colors.gold,
     fontWeight: "800",
-    ...Typography.bodySmall,
-  },
+    ...Typography.bodySmall },
 
   // Divider
   divider: {
     marginTop: Spacing.md,
     borderBottomWidth: 1,
     borderStyle: "dashed",
-    borderColor: Colors.border.default,
-  },
-});
+    borderColor: Colors.border.default } });

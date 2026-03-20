@@ -1,5 +1,5 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -8,10 +8,15 @@ import {
   Pressable,
   Dimensions,
   TextInput,
-  Animated,
-  Easing,
-  ActivityIndicator,
+  ActivityIndicator
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withTiming,
+  Easing} from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -59,8 +64,7 @@ const COLORS = {
   error: Colors.error,
   errorBg: Colors.errorScale[50],
 
-  shadow: 'rgba(26, 58, 82, 0.08)',
-};
+  shadow: 'rgba(26, 58, 82, 0.08)' };
 
 interface Product {
   id: number;
@@ -80,35 +84,30 @@ interface Feedback {
 
 // Confetti particle for celebration
 const ConfettiParticle: React.FC<{ delay: number; color: string }> = ({ delay, color }) => {
-  const translateY = useRef(new Animated.Value(0)).current;
-  const translateX = useRef(new Animated.Value(0)).current;
-  const opacity = useRef(new Animated.Value(0)).current;
-  const rotate = useRef(new Animated.Value(0)).current;
+  const translateY = useSharedValue(0);
+  const translateX = useSharedValue(0);
+  const opacity = useSharedValue(0);
+  const rotate = useSharedValue(0);
 
   useEffect(() => {
-    let currentAnim: Animated.CompositeAnimation | undefined;
     const startAnimation = () => {
-      translateY.setValue(0);
-      translateX.setValue(Math.random() * 200 - 100);
-      opacity.setValue(1);
-      rotate.setValue(0);
+      translateY.value = 0;
+      translateX.value = Math.random() * 200 - 100;
+      opacity.value = 1;
+      rotate.value = 0;
 
-      currentAnim = Animated.parallel([
-        Animated.timing(translateY, { toValue: 300, duration: 2500, easing: Easing.out(Easing.quad), useNativeDriver: true }),
-        Animated.timing(opacity, { toValue: 0, duration: 2500, useNativeDriver: true }),
-        Animated.timing(rotate, { toValue: 1, duration: 2500, useNativeDriver: true }),
-      ]);
-      currentAnim.start(() => startAnimation());
+      translateY.value = withTiming(300, { duration: 2500, easing: Easing.out(Easing.quad) });
+      opacity.value = withTiming(0, { duration: 2500 });
+      rotate.value = withTiming(1, { duration: 2500 });
     };
 
     const timeout = setTimeout(startAnimation, delay);
     return () => {
       clearTimeout(timeout);
-      currentAnim?.stop();
     };
   }, []);
 
-  const spin = rotate.interpolate({ inputRange: [0, 1], outputRange: ['0deg', '360deg'] });
+  const spin = interpolate(rotate.value, [0, 1], ['0deg', '360deg']);
 
   return (
     <Animated.View
@@ -138,7 +137,7 @@ const GuessPrice = () => {
   const [startingGame, setStartingGame] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
 
-  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const scaleAnim = useSharedValue(1);
   const isMounted = useIsMounted();
 
   // Fetch daily limits and wallet balance
@@ -265,10 +264,10 @@ const GuessPrice = () => {
     }
 
     // Feedback animation
-    Animated.sequence([
-      Animated.timing(scaleAnim, { toValue: 1.03, duration: 150, useNativeDriver: true }),
-      Animated.timing(scaleAnim, { toValue: 1, duration: 150, useNativeDriver: true }),
-    ]).start();
+    scaleAnim.value = withSequence(
+      withTiming(1.03, { duration: 150 }),
+      withTiming(1, { duration: 150 }),
+    );
 
     if (!isMounted()) return;
     setScore(score + earnedCoins);
@@ -628,12 +627,10 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16,
     paddingTop: 52, paddingBottom: 16, gap: 12,
-    backgroundColor: COLORS.surface, borderBottomWidth: 1, borderBottomColor: COLORS.border,
-  },
+    backgroundColor: COLORS.surface, borderBottomWidth: 1, borderBottomColor: COLORS.border },
   backButton: {
     width: 44, height: 44, borderRadius: 12,
-    backgroundColor: COLORS.surfaceSecondary, justifyContent: 'center', alignItems: 'center',
-  },
+    backgroundColor: COLORS.surfaceSecondary, justifyContent: 'center', alignItems: 'center' },
   headerCenter: { flex: 1 },
   headerTitleRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   headerIconText: { fontSize: 24 },
@@ -641,13 +638,11 @@ const styles = StyleSheet.create({
   headerSubtitle: { fontSize: 13, color: COLORS.textMuted, marginTop: 2 },
   scoreBadge: {
     flexDirection: 'row', alignItems: 'center', gap: 6,
-    paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, backgroundColor: COLORS.emeraldBg,
-  },
+    paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, backgroundColor: COLORS.emeraldBg },
   scoreText: { fontSize: 15, fontWeight: '700', color: COLORS.emerald },
   coinsBadge: {
     flexDirection: 'row', alignItems: 'center', gap: 6,
-    paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, backgroundColor: COLORS.goldBg,
-  },
+    paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, backgroundColor: COLORS.goldBg },
   coinIcon: { width: 20, height: 20 },
   coinsText: { fontSize: 15, fontWeight: '700', color: COLORS.goldDark },
   miniCoin: { width: 18, height: 18 },
@@ -658,12 +653,10 @@ const styles = StyleSheet.create({
   // Hero Card
   heroCard: {
     padding: 28, borderRadius: 24, alignItems: 'center', marginBottom: 20,
-    overflow: 'hidden', position: 'relative',
-  },
+    overflow: 'hidden', position: 'relative' },
   heroIconBg: {
     width: 80, height: 80, borderRadius: 40, backgroundColor: 'rgba(255,255,255,0.2)',
-    justifyContent: 'center', alignItems: 'center', marginBottom: 16,
-  },
+    justifyContent: 'center', alignItems: 'center', marginBottom: 16 },
   heroIconText: { fontSize: 40 },
   heroTitle: { fontSize: 28, fontWeight: '800', color: colors.background.primary, marginBottom: 8 },
   heroSubtitle: { fontSize: 15, color: 'rgba(255,255,255,0.9)', textAlign: 'center', marginBottom: 24 },
@@ -680,20 +673,17 @@ const styles = StyleSheet.create({
   // Rules Card
   rulesCard: {
     backgroundColor: COLORS.surface, borderRadius: 20, padding: 20, marginBottom: 20,
-    shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 1, shadowRadius: 12, elevation: 4,
-  },
+    shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 1, shadowRadius: 12, elevation: 4 },
   rulesHeader: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 16 },
   rulesTitle: { fontSize: 17, fontWeight: '700', color: COLORS.navy },
   ruleRow: {
     flexDirection: 'row', alignItems: 'center', gap: 12,
-    padding: 12, borderRadius: 12, backgroundColor: COLORS.surfaceSecondary, marginBottom: 8,
-  },
+    padding: 12, borderRadius: 12, backgroundColor: COLORS.surfaceSecondary, marginBottom: 8 },
   ruleIconBg: { width: 32, height: 32, borderRadius: 16, justifyContent: 'center', alignItems: 'center' },
   ruleRange: { flex: 1, fontSize: 14, fontWeight: '500', color: COLORS.navy },
   ruleCoinsBadge: {
     flexDirection: 'row', alignItems: 'center', gap: 4,
-    paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12,
-  },
+    paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
   ruleCoinIcon: { width: 14, height: 14 },
   ruleCoins: { fontSize: 14, fontWeight: '700' },
 
@@ -701,88 +691,73 @@ const styles = StyleSheet.create({
   startButtonWrapper: { borderRadius: 16, overflow: 'hidden' },
   startButton: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 10, paddingVertical: 18, borderRadius: 16,
-  },
+    gap: 10, paddingVertical: 18, borderRadius: 16 },
   startButtonText: { fontSize: 17, fontWeight: '700', color: colors.background.primary },
 
   // Error
   errorContainer: { padding: 24, alignItems: 'center', gap: 16 },
   errorIconBg: {
     width: 80, height: 80, borderRadius: 40, backgroundColor: COLORS.errorBg,
-    justifyContent: 'center', alignItems: 'center',
-  },
+    justifyContent: 'center', alignItems: 'center' },
   errorTitle: { fontSize: 24, fontWeight: '700', color: COLORS.error },
   errorText: { fontSize: 14, color: COLORS.textMuted, textAlign: 'center' },
   retryButton: {
     flexDirection: 'row', alignItems: 'center', gap: 8,
-    paddingVertical: 14, paddingHorizontal: 32, borderRadius: 12,
-  },
+    paddingVertical: 14, paddingHorizontal: 32, borderRadius: 12 },
   retryButtonText: { fontSize: 14, fontWeight: '600', color: colors.background.primary },
 
   // Playing
   progressText: { fontSize: 13, color: COLORS.textMuted, textAlign: 'center', marginBottom: 16, fontWeight: '600' },
   productCard: {
     backgroundColor: COLORS.surface, borderRadius: 20, padding: 24, alignItems: 'center',
-    shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 1, shadowRadius: 12, elevation: 4,
-  },
+    shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 1, shadowRadius: 12, elevation: 4 },
   productImageContainer: {
     width: 128, height: 128, borderRadius: 20, backgroundColor: COLORS.surfaceSecondary,
-    justifyContent: 'center', alignItems: 'center', marginBottom: 16,
-  },
+    justifyContent: 'center', alignItems: 'center', marginBottom: 16 },
   productImage: { fontSize: 64 },
   productName: { fontSize: 22, fontWeight: '700', color: COLORS.navy, marginBottom: 8 },
   categoryBadge: {
     flexDirection: 'row', alignItems: 'center', gap: 6,
-    paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16, backgroundColor: COLORS.emeraldBg, marginBottom: 24,
-  },
+    paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16, backgroundColor: COLORS.emeraldBg, marginBottom: 24 },
   categoryText: { fontSize: 13, fontWeight: '600', color: COLORS.emerald },
   guessContainer: { width: '100%' },
   guessLabel: { fontSize: 13, color: COLORS.textMuted, marginBottom: 8, fontWeight: '500' },
   inputWrapper: {
     flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.surfaceSecondary,
-    borderRadius: 14, borderWidth: 2, borderColor: COLORS.border, marginBottom: 16, overflow: 'hidden',
-  },
+    borderRadius: 14, borderWidth: 2, borderColor: COLORS.border, marginBottom: 16, overflow: 'hidden' },
   currencyPrefix: {
-    fontSize: 20, fontWeight: '700', color: COLORS.textMuted, paddingLeft: 16, paddingRight: 4,
-  },
+    fontSize: 20, fontWeight: '700', color: COLORS.textMuted, paddingLeft: 16, paddingRight: 4 },
   guessInput: {
-    flex: 1, padding: 16, color: COLORS.navy, fontSize: 24, fontWeight: '700',
-  },
+    flex: 1, padding: 16, color: COLORS.navy, fontSize: 24, fontWeight: '700' },
   submitButton: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 8, paddingVertical: 14, borderRadius: 14,
-  },
+    gap: 8, paddingVertical: 14, borderRadius: 14 },
   submitButtonText: { fontSize: 15, fontWeight: '700', color: colors.background.primary },
   feedbackContainer: { width: '100%', gap: 12 },
   feedbackCard: {
-    padding: 20, borderRadius: 16, alignItems: 'center', borderWidth: 1, gap: 8,
-  },
+    padding: 20, borderRadius: 16, alignItems: 'center', borderWidth: 1, gap: 8 },
   feedbackMessage: { fontSize: 18, fontWeight: '700' },
   feedbackCoins: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   feedbackCoinIcon: { width: 24, height: 24 },
   feedbackCoinsText: { fontSize: 24, fontWeight: '800' },
   actualPriceCard: {
-    padding: 16, borderRadius: 14, backgroundColor: COLORS.surfaceSecondary, alignItems: 'center',
-  },
+    padding: 16, borderRadius: 14, backgroundColor: COLORS.surfaceSecondary, alignItems: 'center' },
   actualPriceLabel: { fontSize: 12, color: COLORS.textMuted, marginBottom: 4, fontWeight: '500' },
   actualPriceValue: { fontSize: 24, fontWeight: '700', color: COLORS.navy },
   percentOffText: { fontSize: 12, color: COLORS.textMuted, marginTop: 8 },
 
   // Confetti
   confettiContainer: {
-    position: 'absolute', top: 0, left: 0, right: 0, height: 200, pointerEvents: 'none', overflow: 'hidden',
-  },
+    position: 'absolute', top: 0, left: 0, right: 0, height: 200, pointerEvents: 'none', overflow: 'hidden' },
   confetti: { position: 'absolute', width: 10, height: 10, borderRadius: 2, left: '50%', top: -10 },
 
   // Result Card
   resultCard: {
     borderRadius: 24, overflow: 'hidden', marginBottom: 20,
-    shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 8 }, shadowOpacity: 1, shadowRadius: 20, elevation: 8,
-  },
+    shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 8 }, shadowOpacity: 1, shadowRadius: 20, elevation: 8 },
   resultGradient: { padding: 32, alignItems: 'center' },
   resultIconWrapper: {
-    width: 96, height: 96, borderRadius: 48, justifyContent: 'center', alignItems: 'center', marginBottom: 20,
-  },
+    width: 96, height: 96, borderRadius: 48, justifyContent: 'center', alignItems: 'center', marginBottom: 20 },
   resultTitle: { fontSize: 32, fontWeight: '800', marginBottom: 8 },
   resultSubtitle: { fontSize: 15, marginBottom: 24 },
   earnedBox: { paddingHorizontal: 32, paddingVertical: 20, borderRadius: 16, alignItems: 'center' },
@@ -795,14 +770,11 @@ const styles = StyleSheet.create({
   actionsContainer: { gap: 12 },
   primaryAction: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 10, paddingVertical: 18, borderRadius: 16,
-  },
+    gap: 10, paddingVertical: 18, borderRadius: 16 },
   primaryActionText: { fontSize: 16, fontWeight: '700', color: colors.background.primary },
   secondaryAction: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
-    paddingVertical: 16, borderRadius: 16, backgroundColor: COLORS.surface, borderWidth: 1, borderColor: COLORS.border,
-  },
-  secondaryActionText: { fontSize: 15, fontWeight: '600', color: COLORS.textMuted },
-});
+    paddingVertical: 16, borderRadius: 16, backgroundColor: COLORS.surface, borderWidth: 1, borderColor: COLORS.border },
+  secondaryActionText: { fontSize: 15, fontWeight: '600', color: COLORS.textMuted } });
 
 export default withErrorBoundary(GuessPrice, 'PlayandearnGuessprice');

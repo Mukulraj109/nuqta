@@ -1,14 +1,16 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
-import React, { useRef } from "react";
+import React, {} from "react";
 import {
   View,
   StyleSheet,
   Dimensions,
   Pressable,
   Platform,
-  GestureResponderEvent,
-  Animated,
-} from "react-native";
+  GestureResponderEvent} from "react-native";
+import Animated, {
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 import { Ionicons } from "@expo/vector-icons";
 import { triggerImpact } from "@/utils/haptics";
 import { ThemedText } from "@/components/ThemedText";
@@ -19,8 +21,7 @@ import {
   BorderRadius,
   Typography,
   IconSize,
-  Timing,
-} from "@/constants/DesignSystem";
+  Timing } from "@/constants/DesignSystem";
 
 interface CashbackOfferProps {
   percentage?: string;        // e.g. "10%" or "10"
@@ -35,13 +36,12 @@ function CashbackOffer({
   title = "Cash back",
   showIcon = true,
   onPress,
-  compact = false,
-}: CashbackOfferProps) {
+  compact = false }: CashbackOfferProps) {
   const { width } = Dimensions.get("window");
   const isSmallScreen = width < 360 || compact;
 
   // Animation ref for micro-interactions
-  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const scaleAnim = useSharedValue(1);
 
   // ensure percentage always ends with % (allow "10" or "10%")
   const pct = percentage.toString().trim().endsWith("%")
@@ -51,19 +51,11 @@ function CashbackOffer({
   // Handlers with haptic feedback & animations
   const handlePressIn = () => {
     triggerImpact('Light');
-    Animated.spring(scaleAnim, {
-      toValue: 0.96,
-      useNativeDriver: true,
-      ...Timing.springBouncy,
-    }).start();
+    scaleAnim.value = withSpring(0.96, { ...Timing.springBouncy });
   };
 
   const handlePressOut = () => {
-    Animated.spring(scaleAnim, {
-      toValue: 1,
-      useNativeDriver: true,
-      ...Timing.springBouncy,
-    }).start();
+    scaleAnim.value = withSpring(1, { ...Timing.springBouncy });
   };
 
   const handlePress = (e: GestureResponderEvent) => {
@@ -135,15 +127,13 @@ function CashbackOffer({
    =========================== */
 const styles = StyleSheet.create({
   wrapper: {
-    backgroundColor: "transparent",
-  },
+    backgroundColor: "transparent" },
   wrapperCompact: {
     // shrink outer spacing for tighter layouts
   },
   pressable: {
     overflow: "hidden",
-    borderRadius: BorderRadius.md,
-  },
+    borderRadius: BorderRadius.md },
 
   // Modern Card with Purple Tint
   card: {
@@ -156,14 +146,12 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     borderWidth: 1,
     borderColor: Colors.primary[100],
-    ...Shadows.purpleSubtle,
-  },
+    ...Shadows.purpleSubtle },
 
   cardCompact: {
     paddingVertical: Spacing.sm,
     paddingHorizontal: 10,
-    borderRadius: 10,
-  },
+    borderRadius: 10 },
 
   // Modern Icon Container
   iconWrap: {
@@ -172,15 +160,13 @@ const styles = StyleSheet.create({
     height: 34,
     borderRadius: 10,
     justifyContent: "center",
-    alignItems: "center",
-  },
+    alignItems: "center" },
 
   iconWrapCompact: {
     width: 30,
     height: 30,
     marginRight: Spacing.sm,
-    borderRadius: BorderRadius.sm,
-  },
+    borderRadius: BorderRadius.sm },
 
   iconBg: {
     width: 30,
@@ -188,34 +174,27 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.sm,
     backgroundColor: Colors.primary[50],
     justifyContent: "center",
-    alignItems: "center",
-  },
+    alignItems: "center" },
 
   textWrap: {
     flex: 1,
-    minWidth: 0,
-  },
+    minWidth: 0 },
 
   // Modern Typography
   title: {
     ...Typography.body,
     fontWeight: "600",
-    color: Colors.gray[600],
-  },
+    color: Colors.gray[600] },
 
   titleCompact: {
-    fontSize: 13,
-  },
+    fontSize: 13 },
 
   percentage: {
     color: Colors.primary[700],
     fontWeight: "800",
-    ...Typography.body,
-  },
+    ...Typography.body },
 
   percentageCompact: {
-    fontSize: 13,
-  },
-});
+    fontSize: 13 } });
 
 export default withErrorBoundary(CashbackOffer, 'MainStoreSectionCashbackOffer');

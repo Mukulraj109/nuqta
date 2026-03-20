@@ -4,7 +4,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
  * Fetches real data from backend API
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import {
   View,
   ScrollView,
@@ -12,9 +12,15 @@ import {
   Pressable,
   StatusBar,
   Platform,
-  Dimensions,
-  Animated,
+  Dimensions
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -82,21 +88,24 @@ function CorporateZonePage() {
   const [selectedTime, setSelectedTime] = useState('all');
   const [error, setError] = useState<string | null>(null);
 
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
+  const shimmerOpacityStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(shimmerAnim.value, [0, 1], [0.3, 0.7]),
+  }));
   const bottomPadding = 80 + 70 + insets.bottom;
 
   const isVerified = user?.verifications?.corporate?.verified === true || zoneInfo?.userEligible === true;
 
   useEffect(() => {
     fetchZoneData();
-    const shimmerLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, { toValue: 1, duration: 1000, useNativeDriver: true }),
-        Animated.timing(shimmerAnim, { toValue: 0, duration: 1000, useNativeDriver: true }),
-      ])
+    shimmerAnim.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 1000 }),
+        withTiming(0, { duration: 1000 })
+      ),
+      -1
     );
-    shimmerLoop.start();
-    return () => shimmerLoop.stop();
+    return () => { shimmerAnim.value = 0; };
   }, []);
 
   const fetchZoneData = async () => {
@@ -119,8 +128,7 @@ function CorporateZonePage() {
             offersCount: zone.offersCount || 0,
             verificationRequired: zone.verificationRequired,
             eligibilityDetails: zone.eligibilityDetails,
-            userEligible: zone.userEligible,
-          });
+            userEligible: zone.userEligible });
         }
       }
 
@@ -153,7 +161,7 @@ function CorporateZonePage() {
   const renderSkeletonCard = () => (
     <View style={styles.dealCard}>
       <Animated.View
-        style={[styles.skeletonImage, { opacity: shimmerAnim.interpolate({ inputRange: [0, 1], outputRange: [0.3, 0.7] }) }]}
+        style={[styles.skeletonImage, shimmerOpacityStyle]}
       />
       <View style={styles.dealContent}>
         <View style={[styles.skeletonText, { width: '40%', marginBottom: 8 }]} />
@@ -462,7 +470,6 @@ const styles = StyleSheet.create({
   fixedCTA: { position: 'absolute', bottom: 70, left: 0, right: 0, padding: Spacing.base, backgroundColor: Colors.background.primary, borderTopWidth: 1, borderTopColor: Colors.border.light, ...Shadows.medium },
   ctaButton: { borderRadius: BorderRadius.lg, overflow: 'hidden' },
   ctaGradient: { paddingVertical: Spacing.base, alignItems: 'center', justifyContent: 'center' },
-  ctaButtonText: { ...Typography.button, color: colors.background.primary, fontWeight: '600' },
-});
+  ctaButtonText: { ...Typography.button, color: colors.background.primary, fontWeight: '600' } });
 
 export default withErrorBoundary(CorporateZonePage, 'OffersZonesCorporate');

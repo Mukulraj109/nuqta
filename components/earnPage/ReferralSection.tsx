@@ -1,5 +1,6 @@
-import React, { useRef, useEffect } from 'react';
-import { View, Pressable, StyleSheet, Animated, Platform } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Pressable, StyleSheet, Platform } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring, interpolate } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
@@ -15,61 +16,72 @@ function ReferralSection({
 }: ReferralSectionProps) {
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(30)).current;
-  const scaleAnim = useRef(new Animated.Value(0.95)).current;
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(30);
+  const scaleAnim = useSharedValue(0.95);
 
   useEffect(() => {
-    const anim = Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 600,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 600,
-        useNativeDriver: true,
-      }),
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        tension: 50,
-        friction: 7,
-        useNativeDriver: true,
-      }),
-    ]);
-    anim.start();
-
-    return () => { anim.stop(); };
+    fadeAnim.value = withTiming(1, { duration: 600 });
+    slideAnim.value = withTiming(0, { duration: 600 });
+    scaleAnim.value = withSpring(1);
   }, []);
 
+  const containerStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [
+      { translateY: slideAnim.value },
+      { scale: scaleAnim.value },
+    ],
+  }));
+
+  const headerStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [
+      { translateY: interpolate(fadeAnim.value, [0, 1], [10, 0]) },
+    ],
+  }));
+
+  const coinFadeStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ scale: interpolate(fadeAnim.value, [0, 1], [0, 1]) }],
+  }));
+
+  const phoneLeftStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ translateX: interpolate(fadeAnim.value, [0, 1], [-20, 0]) }],
+  }));
+
+  const phoneRightStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ translateX: interpolate(fadeAnim.value, [0, 1], [20, 0]) }],
+  }));
+
+  const arrowStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ scale: interpolate(fadeAnim.value, [0, 1], [0, 1]) }],
+  }));
+
+  const statsCardStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ scale: interpolate(fadeAnim.value, [0, 1], [0.8, 1]) }],
+  }));
+
+  const statsSlideUpStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: interpolate(fadeAnim.value, [0, 1], [20, 0]) }],
+  }));
+
+  const stepsSlideStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: interpolate(fadeAnim.value, [0, 1], [30, 0]) }],
+  }));
+
   return (
-    <Animated.View 
-      style={[
-        styles.container,
-        {
-          opacity: fadeAnim,
-          transform: [
-            { translateY: slideAnim },
-            { scale: scaleAnim },
-          ],
-        },
-      ]}
+    <Animated.View
+      style={[styles.container, containerStyle]}
     >
-      <Animated.View 
+      <Animated.View
         style={[
           styles.header,
-          {
-            opacity: fadeAnim,
-            transform: [
-              {
-                translateY: fadeAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [10, 0],
-                }),
-              },
-            ],
-          },
+          headerStyle,
         ]}
       >
         <View style={styles.titleContainer}>
@@ -80,21 +92,8 @@ function ReferralSection({
         </View>
       </Animated.View>
       
-      <Animated.View 
-        style={[
-          styles.card,
-          {
-            opacity: fadeAnim,
-            transform: [
-              {
-                translateY: fadeAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [20, 0],
-                }),
-              },
-            ],
-          },
-        ]}
+      <Animated.View
+        style={[styles.card, headerStyle]}
       >
         <LinearGradient
           colors={[colors.background.primary, colors.tint.coolGray, colors.tint.slate]}
@@ -115,17 +114,7 @@ function ReferralSection({
                   style={[
                     styles.coin,
                     styles[`coin${idx}` as keyof typeof styles],
-                    {
-                      opacity: fadeAnim,
-                      transform: [
-                        {
-                          scale: fadeAnim.interpolate({
-                            inputRange: [0, 1],
-                            outputRange: [0, 1],
-                          }),
-                        },
-                      ],
-                    },
+                    coinFadeStyle,
                   ]}
                 >
                   <LinearGradient
@@ -146,17 +135,7 @@ function ReferralSection({
                   style={[
                     styles.phone,
                     styles.phoneLeft,
-                    {
-                      opacity: fadeAnim,
-                      transform: [
-                        {
-                          translateX: fadeAnim.interpolate({
-                            inputRange: [0, 1],
-                            outputRange: [-20, 0],
-                          }),
-                        },
-                      ],
-                    },
+                    phoneLeftStyle,
                   ]}
                 >
                   <LinearGradient
@@ -179,17 +158,7 @@ function ReferralSection({
                   style={[
                     styles.phone,
                     styles.phoneRight,
-                    {
-                      opacity: fadeAnim,
-                      transform: [
-                        {
-                          translateX: fadeAnim.interpolate({
-                            inputRange: [0, 1],
-                            outputRange: [20, 0],
-                          }),
-                        },
-                      ],
-                    },
+                    phoneRightStyle,
                   ]}
                 >
                   <LinearGradient
@@ -211,17 +180,7 @@ function ReferralSection({
                 style={[
                   styles.person,
                   styles.personLeft,
-                  {
-                    opacity: fadeAnim,
-                    transform: [
-                      {
-                        scale: fadeAnim.interpolate({
-                          inputRange: [0, 1],
-                          outputRange: [0, 1],
-                        }),
-                      },
-                    ],
-                  },
+                  arrowStyle,
                 ]}
               >
                 <LinearGradient
@@ -238,17 +197,7 @@ function ReferralSection({
                 style={[
                   styles.person,
                   styles.personRight,
-                  {
-                    opacity: fadeAnim,
-                    transform: [
-                      {
-                        scale: fadeAnim.interpolate({
-                          inputRange: [0, 1],
-                          outputRange: [0, 1],
-                        }),
-                      },
-                    ],
-                  },
+                  arrowStyle,
                 ]}
               >
                 <LinearGradient
@@ -267,17 +216,7 @@ function ReferralSection({
           <Animated.View 
             style={[
               styles.stats,
-              {
-                opacity: fadeAnim,
-                transform: [
-                  {
-                    translateY: fadeAnim.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [15, 0],
-                    }),
-                  },
-                ],
-              },
+              statsSlideUpStyle,
             ]}
           >
             {[
@@ -309,17 +248,7 @@ function ReferralSection({
           <Animated.View 
             style={[
               styles.actions,
-              {
-                opacity: fadeAnim,
-                transform: [
-                  {
-                    translateY: fadeAnim.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [15, 0],
-                    }),
-                  },
-                ],
-              },
+              statsSlideUpStyle,
             ]}
           >
             <Pressable 

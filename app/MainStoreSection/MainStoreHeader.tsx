@@ -1,6 +1,6 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // MainStoreHeader.tsx - Redesigned for new MainStorePage UI
-import React, { useRef } from "react";
+import React, {} from "react";
 import {
   View,
   Pressable,
@@ -8,9 +8,11 @@ import {
   Platform,
   Dimensions,
   StatusBar,
-  Animated,
-  Share,
-} from "react-native";
+  Share } from "react-native";
+import Animated, {
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { triggerImpact } from "@/utils/haptics";
@@ -20,8 +22,7 @@ import {
   Colors,
   Spacing,
   Shadows,
-  BorderRadius,
-} from "@/constants/DesignSystem";
+  BorderRadius } from "@/constants/DesignSystem";
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 
@@ -44,8 +45,7 @@ function MainStoreHeader({
   isFavorited = false,
   showBack = true,
   userCoins = 0,
-  storeId,
-}: MainStoreHeaderProps) {
+  storeId }: MainStoreHeaderProps) {
   const router = useRouter();
   const { width, height } = Dimensions.get("window");
   const isSmall = width < 360;
@@ -53,9 +53,9 @@ function MainStoreHeader({
     Platform.OS === "ios" ? (height >= 812 ? 50 : 24) : Platform.OS === "web" ? 8 : StatusBar.currentHeight ?? 24;
 
   // Animation refs
-  const backButtonScaleAnim = useRef(new Animated.Value(1)).current;
-  const favoriteScaleAnim = useRef(new Animated.Value(1)).current;
-  const shareScaleAnim = useRef(new Animated.Value(1)).current;
+  const backButtonScaleAnim = useSharedValue(1);
+  const favoriteScaleAnim = useSharedValue(1);
+  const shareScaleAnim = useSharedValue(1);
 
   // Handlers with haptic feedback
   const handleBack = () => {
@@ -74,8 +74,7 @@ function MainStoreHeader({
     try {
       await Share.share({
         message: `Check out ${storeName} on ${BRAND.APP_NAME}! Get amazing cashback and rewards.`,
-        title: storeName,
-      });
+        title: storeName });
     } catch (error) {
     }
   };
@@ -90,13 +89,8 @@ function MainStoreHeader({
   };
 
   // Animation handlers
-  const animateScale = (animValue: Animated.Value, toValue: number) => {
-    Animated.spring(animValue, {
-      toValue,
-      useNativeDriver: true,
-      tension: 100,
-      friction: 8,
-    }).start();
+  const animateScale = (animValue: Animated.SharedValue<number>, toValue: number) => {
+    animValue.value = withSpring(toValue);
   };
 
   return (
@@ -199,72 +193,56 @@ const styles = StyleSheet.create({
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.04,
-        shadowRadius: 3,
-      },
+        shadowRadius: 3 },
       android: {
-        elevation: 2,
-      },
+        elevation: 2 },
       web: {
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)',
-      },
-    }),
-  },
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)' } }) },
   inner: {
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 16,
     paddingVertical: 12,
-    minHeight: 60,
-  },
+    minHeight: 60 },
   backButtonWrapper: {
-    marginRight: 8,
-  },
+    marginRight: 8 },
   backButton: {
     width: 36,
     height: 36,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 12,
-    backgroundColor: colors.neutral[100],
-  },
+    backgroundColor: colors.neutral[100] },
   titleContainer: {
     flex: 1,
-    paddingHorizontal: 4,
-  },
+    paddingHorizontal: 4 },
   title: {
     fontSize: 18,
     fontWeight: "700",
     color: colors.nileBlue,
-    letterSpacing: -0.3,
-  },
+    letterSpacing: -0.3 },
   titleSmall: {
-    fontSize: 16,
-  },
+    fontSize: 16 },
   subtitle: {
     fontSize: 13,
     color: colors.neutral[500],
     marginTop: 2,
-    fontWeight: "500",
-  },
+    fontWeight: "500" },
   subtitleSmall: {
-    fontSize: 11,
-  },
+    fontSize: 11 },
   rightActions: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
-  },
+    gap: 8 },
   actionButton: {
     width: 36,
     height: 36,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 12,
-    backgroundColor: colors.neutral[100],
-  },
+    backgroundColor: colors.neutral[100] },
   actionButtonActive: {
-    backgroundColor: "#FF4757",
-  },
+    backgroundColor: "#FF4757" },
   coinButton: {
     flexDirection: "row",
     alignItems: "center",
@@ -272,22 +250,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
-    gap: 6,
-  },
+    gap: 6 },
   coinIcon: {
     width: 20,
     height: 20,
     justifyContent: "center",
-    alignItems: "center",
-  },
+    alignItems: "center" },
   coinEmoji: {
-    fontSize: 14,
-  },
+    fontSize: 14 },
   coinText: {
     fontSize: 14,
     fontWeight: "700",
-    color: colors.background.primary,
-  },
-});
+    color: colors.background.primary } });
 
 export default withErrorBoundary(MainStoreHeader, 'MainStoreSectionMainStoreHeader');

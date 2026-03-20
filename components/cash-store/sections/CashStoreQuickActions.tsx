@@ -5,7 +5,7 @@
  * Features: Animated icons, notification badges, gradient backgrounds
  */
 
-import React, { memo, useRef, useEffect } from 'react';
+import React, { memo, useEffect} from 'react';
 import { BRAND } from '@/constants/brand';
 import {
   View,
@@ -13,9 +13,8 @@ import {
   StyleSheet,
   Pressable,
   Platform,
-  Animated,
-  Dimensions,
-} from 'react-native';
+  Dimensions} from 'react-native';
+import Animated, { useSharedValue, withDelay, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { CashStoreQuickAction } from '../../../types/cash-store.types';
@@ -88,60 +87,24 @@ const ActionCard: React.FC<{
   index: number;
   onPress: () => void;
 }> = memo(({ action, index, onPress }) => {
-  const scaleAnim = useRef(new Animated.Value(0.9)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const iconBounceAnim = useRef(new Animated.Value(1)).current;
+  const scaleAnim = useSharedValue(0.9);
+  const fadeAnim = useSharedValue(0);
+  const iconBounceAnim = useSharedValue(1);
 
   useEffect(() => {
     // Staggered entry animation
-    const anim = Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 400,
-        delay: index * 100,
-        useNativeDriver: true,
-      }),
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        friction: 8,
-        tension: 40,
-        delay: index * 100,
-        useNativeDriver: true,
-      }),
-    ]);
-    anim.start();
-
-    return () => { anim.stop(); };
-}, [index]);
+    fadeAnim.value = withDelay(index * 100, withTiming(1, { duration: 400 }));
+    scaleAnim.value = withDelay(index * 100, withSpring(1));
+  }, [index]);
 
   const handlePressIn = () => {
-    Animated.parallel([
-      Animated.spring(scaleAnim, {
-        toValue: 0.95,
-        friction: 8,
-        useNativeDriver: true,
-      }),
-      Animated.sequence([
-        Animated.timing(iconBounceAnim, {
-          toValue: 1.2,
-          duration: 100,
-          useNativeDriver: true,
-        }),
-        Animated.spring(iconBounceAnim, {
-          toValue: 1,
-          friction: 4,
-          useNativeDriver: true,
-        }),
-      ]),
-    ]).start();
+    scaleAnim.value = withSpring(0.95);
+    iconBounceAnim.value = withTiming(1.2, { duration: 100 });
+    iconBounceAnim.value = withSpring(1);
   };
 
   const handlePressOut = () => {
-    Animated.spring(scaleAnim, {
-      toValue: 1,
-      friction: 8,
-      useNativeDriver: true,
-    }).start();
+    scaleAnim.value = withSpring(1);
   };
 
   const isLight = action.id === 'track-cashback';

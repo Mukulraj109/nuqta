@@ -6,8 +6,8 @@ import {
   Pressable,
   Platform,
   ActivityIndicator,
-  Animated,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { ProductItem } from '@/types/homepage.types';
@@ -46,7 +46,7 @@ function StoreProductCard({
   const [showVariantModal, setShowVariantModal] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isTogglingWishlist, setIsTogglingWishlist] = useState(false);
-  const [heartScale] = useState(new Animated.Value(1));
+  const heartScale = useSharedValue(1);
   const isMounted = useIsMounted();
 
   // Get main image or fallback
@@ -194,18 +194,7 @@ function StoreProductCard({
     if (isTogglingWishlist) return;
 
     // Animate heart
-    Animated.sequence([
-      Animated.timing(heartScale, {
-        toValue: 1.3,
-        duration: 150,
-        useNativeDriver: true,
-      }),
-      Animated.timing(heartScale, {
-        toValue: 1,
-        duration: 150,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    heartScale.value = withSequence(withTiming(1.3, { duration: 150 }), withTiming(1, { duration: 150 }));
 
     setIsTogglingWishlist(true);
     try {

@@ -2,7 +2,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Cashback Page
 // View and manage cashback earnings — Cash Store theme
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback} from 'react';
 import {
   View,
   ScrollView,
@@ -12,9 +12,12 @@ import {
   Platform,
   RefreshControl,
   ActivityIndicator,
-  Animated,
-  Text,
+  Text
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -22,8 +25,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import cashbackService, {
   CashbackSummary,
   UserCashback,
-  CashbackCampaign,
-} from '@/services/cashbackApi';
+  CashbackCampaign } from '@/services/cashbackApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
@@ -52,8 +54,7 @@ function CashbackPage() {
     pendingCount: 0,
     creditedCount: 0,
     expiredCount: 0,
-    cancelledCount: 0,
-  });
+    cancelledCount: 0 });
   const [cashbacks, setCashbacks] = useState<UserCashback[]>([]);
   const [pendingReady, setPendingReady] = useState<UserCashback[]>([]);
   const [expiringSoon, setExpiringSoon] = useState<UserCashback[]>([]);
@@ -63,7 +64,10 @@ function CashbackPage() {
   const [historyTotal, setHistoryTotal] = useState(0);
 
   // Animations
-  const totalAnim = useRef(new Animated.Value(0)).current;
+  const totalAnim = useSharedValue(0);
+  const totalAnimStyle = useAnimatedStyle(() => ({
+    opacity: totalAnim.value,
+  }));
 
   useEffect(() => {
     loadData();
@@ -74,13 +78,7 @@ function CashbackPage() {
   }, [activeTab]);
 
   useEffect(() => {
-    const anim = Animated.timing(totalAnim, {
-      toValue: 1,
-      duration: 600,
-      useNativeDriver: true,
-    });
-    anim.start();
-    return () => { anim.stop(); };
+    totalAnim.value = withTiming(1, { duration: 600 });
   }, [summary.totalEarned]);
 
   const loadData = async () => {
@@ -200,8 +198,7 @@ function CashbackPage() {
     return date.toLocaleDateString('en-IN', {
       day: 'numeric',
       month: 'short',
-      year: 'numeric',
-    });
+      year: 'numeric' });
   };
 
   const getSourceIcon = (source: string): string => {
@@ -298,7 +295,7 @@ function CashbackPage() {
         }
       >
         {/* ─── Total Earned Hero ──────────────────────────────── */}
-        <Animated.View style={[styles.heroCard, { opacity: totalAnim }]}>
+        <Animated.View style={[styles.heroCard, totalAnimStyle]}>
           <LinearGradient
             colors={[colors.nileBlue, '#234b6b']}
             start={{ x: 0, y: 0 }}
@@ -616,8 +613,7 @@ const SummaryCard = React.memo(({
   count,
   color,
   icon,
-  currencySymbol,
-}: {
+  currencySymbol }: {
   title: string;
   amount: number;
   count: number;
@@ -647,8 +643,7 @@ const CashbackHistoryCard = React.memo(({
   formatDate,
   getSourceIcon,
   getSourceLabel,
-  getStatusColor,
-}: {
+  getStatusColor }: {
   cashback: UserCashback;
   index: number;
   formatAmount: (n: number) => string;
@@ -657,22 +652,18 @@ const CashbackHistoryCard = React.memo(({
   getSourceLabel: (s: string) => string;
   getStatusColor: (s: string) => string;
 }) => {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const fadeAnim = useSharedValue(0);
+  const fadeAnimStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+  }));
   const statusColor = getStatusColor(cashback.status);
 
   useEffect(() => {
-    const anim = Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 250,
-      delay: Math.min(index * 40, 200),
-      useNativeDriver: true,
-    });
-    anim.start();
-    return () => { anim.stop(); };
+    fadeAnim.value = withTiming(1, { duration: 250 });
   }, [index]);
 
   return (
-    <Animated.View style={[styles.historyCard, { opacity: fadeAnim }]}>
+    <Animated.View style={[styles.historyCard, fadeAnimStyle]}>
       {/* Source icon */}
       <View style={[styles.historyIcon, { backgroundColor: `${statusColor}12` }]}>
         <Ionicons name={getSourceIcon(cashback.source) as any} size={20} color={statusColor} />
@@ -731,50 +722,43 @@ const CashbackHistoryCard = React.memo(({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F4F1ED',
-  },
+    backgroundColor: '#F4F1ED' },
 
   // ── Header ──
   header: {
     backgroundColor: Colors.background.primary,
     paddingBottom: Spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: '#EDEAE6',
-  },
+    borderBottomColor: '#EDEAE6' },
   headerContent: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: Spacing.base,
     paddingTop: 10,
-    gap: 10,
-  },
+    gap: 10 },
   backButton: {
     width: Spacing['2xl'],
     height: Spacing['2xl'],
     borderRadius: Spacing.base,
     backgroundColor: '#F4F1ED',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   headerTitle: {
     flex: 1,
     fontSize: 17,
     fontWeight: '700',
     color: Colors.nileBlue,
-    letterSpacing: -0.3,
-  },
+    letterSpacing: -0.3 },
   walletButton: {
     width: Spacing['2xl'],
     height: Spacing['2xl'],
     borderRadius: Spacing.base,
     backgroundColor: '#F4F1ED',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
 
   content: {
-    flex: 1,
-  },
+    flex: 1 },
 
   // ── Hero Card ──
   heroCard: {
@@ -784,90 +768,74 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: { shadowColor: Colors.nileBlue, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 12 },
       android: { elevation: 6 },
-      web: { boxShadow: '0 4px 12px rgba(26,58,82,0.15)' },
-    }),
-  },
+      web: { boxShadow: '0 4px 12px rgba(26,58,82,0.15)' } }) },
   heroGradient: {
     padding: Spacing.lg,
     position: 'relative',
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   decoCircle: {
     position: 'absolute',
     borderRadius: 50,
-    backgroundColor: 'rgba(255,255,255,0.05)',
-  },
+    backgroundColor: 'rgba(255,255,255,0.05)' },
   heroRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base },
   heroLeft: {},
   heroLabel: {
     fontSize: 13,
     color: 'rgba(255,255,255,0.7)',
     fontWeight: '500',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   heroAmount: {
     fontSize: 30,
     fontWeight: '800',
     color: Colors.text.inverse,
-    letterSpacing: -0.5,
-  },
+    letterSpacing: -0.5 },
   heroIconWrap: {
     width: Spacing['4xl'],
     height: Spacing['4xl'],
     borderRadius: Spacing.xl,
     backgroundColor: 'rgba(255,255,255,0.08)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   heroStatsRow: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'rgba(255,255,255,0.08)',
     borderRadius: BorderRadius.md,
     paddingVertical: 10,
-    paddingHorizontal: Spacing.md,
-  },
+    paddingHorizontal: Spacing.md },
   heroStat: {
     flex: 1,
     alignItems: 'center',
-    gap: 3,
-  },
+    gap: 3 },
   heroStatDot: {
     width: 6,
     height: 6,
-    borderRadius: 3,
-  },
+    borderRadius: 3 },
   heroStatLabel: {
     fontSize: 10,
     color: 'rgba(255,255,255,0.6)',
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   heroStatValue: {
     fontSize: 12,
     color: Colors.text.inverse,
-    fontWeight: '700',
-  },
+    fontWeight: '700' },
   heroStatDivider: {
     width: 1,
     height: Spacing.xl,
-    backgroundColor: 'rgba(255,255,255,0.12)',
-  },
+    backgroundColor: 'rgba(255,255,255,0.12)' },
 
   // ── Summary Cards ──
   summarySection: {
     paddingHorizontal: Spacing.base,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   summaryGrid: {
     flexDirection: 'row',
     gap: 10,
-    marginBottom: 10,
-  },
+    marginBottom: 10 },
   summaryCard: {
     flex: 1,
     backgroundColor: Colors.background.primary,
@@ -876,37 +844,30 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: { shadowColor: '#8B7355', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.06, shadowRadius: 4 },
       android: { elevation: 1 },
-      web: { boxShadow: '0 1px 4px rgba(139,115,85,0.06)' },
-    }),
-  },
+      web: { boxShadow: '0 1px 4px rgba(139,115,85,0.06)' } }) },
   summaryTop: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   summaryIconWrap: {
     width: 28,
     height: 28,
     borderRadius: BorderRadius.sm,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   summaryCountBadge: {
     fontSize: 12,
-    fontWeight: '700',
-  },
+    fontWeight: '700' },
   summaryTitle: {
     fontSize: 11,
     color: '#7C8A97',
     marginBottom: 2,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   summaryAmount: {
     fontSize: 16,
     fontWeight: '800',
-    letterSpacing: -0.3,
-  },
+    letterSpacing: -0.3 },
 
   // ── Redeem ──
   redeemCard: {
@@ -917,40 +878,33 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: { shadowColor: Colors.success, shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.2, shadowRadius: 6 },
       android: { elevation: 4 },
-      web: { boxShadow: '0 3px 8px rgba(5,150,105,0.2)' },
-    }),
-  },
+      web: { boxShadow: '0 3px 8px rgba(5,150,105,0.2)' } }) },
   redeemGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingVertical: 14,
-    paddingHorizontal: Spacing.base,
-  },
+    paddingHorizontal: Spacing.base },
   redeemLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   redeemIconWrap: {
     width: 36,
     height: 36,
     borderRadius: BorderRadius.md,
     backgroundColor: 'rgba(255,255,255,0.2)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   redeemLabel: {
     fontSize: 11,
     color: 'rgba(255,255,255,0.8)',
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   redeemAmount: {
     fontSize: 20,
     fontWeight: '800',
     color: Colors.text.inverse,
-    letterSpacing: -0.3,
-  },
+    letterSpacing: -0.3 },
   redeemBtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -958,13 +912,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.primary,
     paddingHorizontal: 14,
     paddingVertical: Spacing.sm,
-    borderRadius: 10,
-  },
+    borderRadius: 10 },
   redeemBtnText: {
     fontSize: 13,
     fontWeight: '700',
-    color: Colors.success,
-  },
+    color: Colors.success },
 
   // ── Expiring Soon ──
   expiringCard: {
@@ -977,63 +929,52 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     borderWidth: 1,
     borderColor: colors.warningScale[200],
-    gap: 10,
-  },
+    gap: 10 },
   expiringIcon: {
     width: 32,
     height: 32,
     borderRadius: 10,
     backgroundColor: 'rgba(245,158,11,0.12)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   expiringContent: {
-    flex: 1,
-  },
+    flex: 1 },
   expiringTitle: {
     fontSize: 13,
     fontWeight: '700',
-    color: colors.brand.amberDark,
-  },
+    color: colors.brand.amberDark },
   expiringSubtext: {
     fontSize: 11,
     color: colors.brand.amberDeep,
-    marginTop: 1,
-  },
+    marginTop: 1 },
   expiringAction: {
     paddingHorizontal: Spacing.md,
     paddingVertical: 6,
     backgroundColor: Colors.warning,
-    borderRadius: BorderRadius.sm,
-  },
+    borderRadius: BorderRadius.sm },
   expiringActionText: {
     fontSize: 12,
     fontWeight: '600',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse },
 
   // ── Campaigns ──
   section: {
     paddingHorizontal: Spacing.base,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 10,
-  },
+    marginBottom: 10 },
   sectionTitle: {
     fontSize: 15,
     fontWeight: '700',
     color: Colors.nileBlue,
-    letterSpacing: -0.2,
-  },
+    letterSpacing: -0.2 },
   seeAllText: {
     fontSize: 12,
     fontWeight: '600',
-    color: colors.brand.sand,
-  },
+    color: colors.brand.sand },
   campaignCard: {
     marginBottom: 10,
     borderRadius: 14,
@@ -1041,75 +982,61 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: { shadowColor: Colors.nileBlue, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4 },
       android: { elevation: 3 },
-      web: { boxShadow: '0 2px 4px rgba(26,58,82,0.1)' },
-    }),
-  },
+      web: { boxShadow: '0 2px 4px rgba(26,58,82,0.1)' } }) },
   campaignGradient: {
-    padding: 14,
-  },
+    padding: 14 },
   campaignRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 6,
-  },
+    marginBottom: 6 },
   campaignInfo: {
     flex: 1,
-    marginRight: 10,
-  },
+    marginRight: 10 },
   campaignName: {
     fontSize: 14,
     fontWeight: '700',
     color: Colors.text.inverse,
-    marginBottom: 3,
-  },
+    marginBottom: 3 },
   campaignDesc: {
     fontSize: 12,
     color: 'rgba(255,255,255,0.7)',
-    lineHeight: 16,
-  },
+    lineHeight: 16 },
   campaignRateBadge: {
     backgroundColor: 'rgba(232,184,150,0.25)',
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: 10,
-  },
+    borderRadius: 10 },
   campaignRateValue: {
     fontSize: 14,
     fontWeight: '800',
-    color: colors.brand.sand,
-  },
+    color: colors.brand.sand },
   campaignTags: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 6,
-    marginTop: Spacing.sm,
-  },
+    marginTop: Spacing.sm },
   campaignTag: {
     backgroundColor: 'rgba(255,255,255,0.12)',
     paddingHorizontal: 9,
     paddingVertical: 3,
-    borderRadius: 6,
-  },
+    borderRadius: 6 },
   campaignTagText: {
     fontSize: 10,
     color: 'rgba(255,255,255,0.8)',
     fontWeight: '600',
-    textTransform: 'capitalize',
-  },
+    textTransform: 'capitalize' },
   campaignValidity: {
     fontSize: 10,
     color: 'rgba(255,255,255,0.5)',
-    marginTop: Spacing.sm,
-  },
+    marginTop: Spacing.sm },
 
   // ── Quick Actions ──
   quickActions: {
     flexDirection: 'row',
     paddingHorizontal: Spacing.base,
     marginBottom: Spacing.base,
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   quickAction: {
     flex: 1,
     alignItems: 'center',
@@ -1120,29 +1047,24 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: { shadowColor: '#8B7355', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 3 },
       android: { elevation: 1 },
-      web: { boxShadow: '0 1px 3px rgba(139,115,85,0.05)' },
-    }),
-  },
+      web: { boxShadow: '0 1px 3px rgba(139,115,85,0.05)' } }) },
   quickActionIcon: {
     width: Spacing['2xl'],
     height: Spacing['2xl'],
     borderRadius: 10,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   quickActionLabel: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#7C8A97',
-  },
+    color: '#7C8A97' },
 
   // ── Tabs ──
   tabsContainer: {
     flexDirection: 'row',
     paddingHorizontal: Spacing.base,
     gap: 6,
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs },
   tab: {
     flex: 1,
     paddingVertical: Spacing.sm,
@@ -1150,35 +1072,28 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#EDEAE6',
-  },
+    borderColor: '#EDEAE6' },
   activeTab: {
     backgroundColor: Colors.nileBlue,
-    borderColor: Colors.nileBlue,
-  },
+    borderColor: Colors.nileBlue },
   tabText: {
     fontSize: 12,
     color: '#7C8A97',
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   activeTabText: {
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse },
 
   // ── History ──
   historySection: {
-    padding: Spacing.base,
-  },
+    padding: Spacing.base },
   historyTitle: {
     fontSize: 14,
     fontWeight: '700',
     color: Colors.nileBlue,
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
   historyCount: {
     fontWeight: '500',
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
   historyCard: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -1190,75 +1105,60 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: { shadowColor: '#8B7355', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 3 },
       android: { elevation: 1 },
-      web: { boxShadow: '0 1px 3px rgba(139,115,85,0.05)' },
-    }),
-  },
+      web: { boxShadow: '0 1px 3px rgba(139,115,85,0.05)' } }) },
   historyIcon: {
     width: 38,
     height: 38,
     borderRadius: 10,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   historyInfo: {
-    flex: 1,
-  },
+    flex: 1 },
   historyDesc: {
     fontSize: 13,
     fontWeight: '600',
     color: Colors.nileBlue,
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs },
   historyMeta: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-  },
+    gap: 6 },
   historyDate: {
     fontSize: 11,
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
   historyDot: {
     width: 3,
     height: 3,
     borderRadius: 1.5,
-    backgroundColor: colors.neutral[300],
-  },
+    backgroundColor: colors.neutral[300] },
   historySource: {
     fontSize: 11,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   historyExpiryRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.xs,
-    marginTop: Spacing.xs,
-  },
+    marginTop: Spacing.xs },
   historyExpiryText: {
     fontSize: 10,
     color: Colors.warning,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   historyRight: {
     alignItems: 'flex-end',
-    gap: Spacing.xs,
-  },
+    gap: Spacing.xs },
   historyAmount: {
     fontSize: 15,
     fontWeight: '800',
-    letterSpacing: -0.3,
-  },
+    letterSpacing: -0.3 },
   statusPill: {
     paddingHorizontal: Spacing.sm,
     paddingVertical: 2,
-    borderRadius: 6,
-  },
+    borderRadius: 6 },
   statusPillText: {
     fontSize: 9,
     fontWeight: '700',
     textTransform: 'uppercase',
-    letterSpacing: 0.3,
-  },
+    letterSpacing: 0.3 },
 
   // ── Error ──
   errorContainer: {
@@ -1270,30 +1170,25 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     borderWidth: 1,
     borderColor: colors.errorScale[200],
-    gap: 10,
-  },
+    gap: 10 },
   errorText: {
     flex: 1,
     fontSize: 12,
-    color: Colors.error,
-  },
+    color: Colors.error },
   retryButton: {
     backgroundColor: Colors.nileBlue,
     paddingHorizontal: 14,
     paddingVertical: 6,
-    borderRadius: BorderRadius.sm,
-  },
+    borderRadius: BorderRadius.sm },
   retryButtonText: {
     color: Colors.text.inverse,
     fontSize: 12,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
 
   // ── Empty ──
   emptyContainer: {
     padding: Spacing['3xl'],
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   emptyIconWrap: {
     width: 56,
     height: 56,
@@ -1301,32 +1196,26 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(196,149,106,0.1)',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
   emptyText: {
     fontSize: 15,
     color: Colors.nileBlue,
     fontWeight: '700',
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs },
   emptySubtext: {
     fontSize: 12,
     color: '#A0A8B1',
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
 
   // ── Loading ──
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: Spacing['3xl'],
-  },
+    padding: Spacing['3xl'] },
   loadingText: {
     fontSize: 13,
     color: '#7C8A97',
-    marginTop: Spacing.md,
-  },
-});
+    marginTop: Spacing.md } });
 
 export default withErrorBoundary(CashbackPage, 'AccountCashback');

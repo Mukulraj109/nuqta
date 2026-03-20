@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Modal,
   Pressable,
-  Animated,
   Dimensions,
   TextInput,
   ScrollView,
@@ -13,6 +12,12 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSpring,
+} from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ReportModalProps, REPORT_REASONS, ReportReason } from '@/types/report.types';
@@ -34,45 +39,27 @@ function ReportModal({
 
   const { isSubmitting, error, success, submitReport, reset, clearError } = useVideoReport();
 
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(screenHeight)).current;
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(screenHeight);
 
   // Animation effects
   useEffect(() => {
-    let _anim: Animated.CompositeAnimation;
     if (visible) {
-      _anim = Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        Animated.spring(slideAnim, {
-          toValue: 0,
-          bounciness: 8,
-          speed: 12,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      fadeAnim.value = withTiming(1, { duration: 300 });
+      slideAnim.value = withSpring(0, { damping: 12, stiffness: 120 });
     } else {
-      _anim = Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(slideAnim, {
-          toValue: screenHeight,
-          duration: 250,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      fadeAnim.value = withTiming(0, { duration: 200 });
+      slideAnim.value = withTiming(screenHeight, { duration: 250 });
     }
-  
-    return () => _anim.stop();
-}, [visible]);
+  }, [visible]);
+
+  const overlayAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+  }));
+
+  const modalSlideStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: slideAnim.value }],
+  }));
 
   // Handle success state
   useEffect(() => {
@@ -138,9 +125,7 @@ function ReportModal({
       <Animated.View
         style={[
           styles.overlay,
-          {
-            opacity: fadeAnim,
-          },
+          overlayAnimatedStyle,
         ]}
       >
         <Pressable
@@ -152,9 +137,7 @@ function ReportModal({
         <Animated.View
           style={[
             styles.modalContainer,
-            {
-              transform: [{ translateY: slideAnim }],
-            },
+            modalSlideStyle,
           ]}
         >
           <KeyboardAvoidingView

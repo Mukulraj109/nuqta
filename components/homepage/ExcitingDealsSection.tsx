@@ -3,7 +3,7 @@
  * Premium UI with modern design, smooth animations, and proper data handling
  */
 
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -11,8 +11,8 @@ import {
   Pressable,
   ScrollView,
   Dimensions,
-  Animated,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence, withRepeat, interpolate } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -60,51 +60,35 @@ const parseCashbackPercent = (cashback?: string): number => {
 
 // Skeleton loader with shimmer animation
 const SkeletonLoader: React.FC = () => {
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
-    const animation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmerAnim, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    animation.start();
-    return () => animation.stop();
+    shimmerAnim.value = withRepeat(withSequence(withTiming(1, { duration: 1000 }), withTiming(0, { duration: 1000 })), -1);
   }, [shimmerAnim]);
 
-  const opacity = shimmerAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0.3, 0.7],
-  });
+  const shimmerStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(shimmerAnim.value, [0, 1], [0.3, 0.7]),
+  }));
 
   return (
     <View style={styles.container}>
       {/* Header Skeleton */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <Animated.View style={[styles.skeletonIcon, { opacity }]} />
+          <Animated.View style={[styles.skeletonIcon, shimmerStyle]} />
           <View>
-            <Animated.View style={[styles.skeletonTitle, { opacity }]} />
-            <Animated.View style={[styles.skeletonSubtitle, { opacity }]} />
+            <Animated.View style={[styles.skeletonTitle, shimmerStyle]} />
+            <Animated.View style={[styles.skeletonSubtitle, shimmerStyle]} />
           </View>
         </View>
-        <Animated.View style={[styles.skeletonButton, { opacity }]} />
+        <Animated.View style={[styles.skeletonButton, shimmerStyle]} />
       </View>
 
       {/* Category Skeleton */}
       <View style={styles.categoriesContainer}>
         {[1, 2].map((key) => (
           <View key={key} style={styles.categoryWrapper}>
-            <Animated.View style={[styles.skeletonCategoryHeader, { opacity }]} />
+            <Animated.View style={[styles.skeletonCategoryHeader, shimmerStyle]} />
             <View style={styles.dealsContainer}>
               <ScrollView
                 horizontal
@@ -114,10 +98,10 @@ const SkeletonLoader: React.FC = () => {
               >
                 {[1, 2, 3].map((cardKey) => (
                   <View key={cardKey} style={styles.dealCard}>
-                    <Animated.View style={[styles.skeletonDealImage, { opacity }]} />
+                    <Animated.View style={[styles.skeletonDealImage, shimmerStyle]} />
                     <View style={styles.dealInfo}>
-                      <Animated.View style={[styles.skeletonDealStore, { opacity }]} />
-                      <Animated.View style={[styles.skeletonDealValue, { opacity }]} />
+                      <Animated.View style={[styles.skeletonDealStore, shimmerStyle]} />
+                      <Animated.View style={[styles.skeletonDealValue, shimmerStyle]} />
                     </View>
                   </View>
                 ))}

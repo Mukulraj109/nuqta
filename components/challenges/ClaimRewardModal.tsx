@@ -1,14 +1,23 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Modal,
   Pressable,
-  Animated,
   Dimensions,
-  Platform,
-} from 'react-native';
+  Platform} from 'react-native';
+import Animated, {
+  useSharedValue,
+  withTiming,
+  withDelay,
+  useDerivedValue,
+  runOnJS,
+  useAnimatedStyle,
+  withSpring,
+  interpolate,
+  SharedValue,
+} from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '@/constants/theme';
@@ -40,100 +49,57 @@ function ClaimRewardModal({
   reward,
   beforeStats,
   afterStats,
-  onShare,
-}: ClaimRewardModalProps) {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const scaleAnim = useRef(new Animated.Value(0.3)).current;
-  const coinCountAnim = useRef(new Animated.Value(0)).current;
+  onShare}: ClaimRewardModalProps) {
+  const fadeAnim = useSharedValue(0);
+  const scaleAnim = useSharedValue(0.3);
+  const coinCountShared = useSharedValue(0);
+  const [displayCoinCount, setDisplayCoinCount] = useState(0);
+  const updateDisplayCount = useCallback((val: number) => {
+    setDisplayCoinCount(Math.round(val));
+  }, []);
+  useDerivedValue(() => {
+    runOnJS(updateDisplayCount)(coinCountShared.value);
+  });
   const confettiAnims = useRef(
     Array.from({ length: 20 }).map(() => ({
-      x: new Animated.Value(0),
-      y: new Animated.Value(0),
-      rotate: new Animated.Value(0),
-      opacity: new Animated.Value(1),
-    }))
+      x: { value: 0 },
+      y: { value: 0 },
+      rotate: { value: 0 },
+      opacity: { value: 1 }}))
   ).current;
 
   useEffect(() => {
     if (visible) {
       // Reset animations
-      fadeAnim.setValue(0);
-      scaleAnim.setValue(0.3);
-      coinCountAnim.setValue(0);
+      fadeAnim.value = 0;
+      scaleAnim.value = 0.3;
+      coinCountShared.value = 0;
       confettiAnims.forEach((a) => {
-        a.x.setValue(0);
-        a.y.setValue(0);
-        a.rotate.setValue(0);
-        a.opacity.setValue(1);
+        a.x.value = 0;
+        a.y.value = 0;
+        a.rotate.value = 0;
+        a.opacity.value = 1;
       });
 
       // Start animations
-      const entryAnim = Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        Animated.spring(scaleAnim, {
-          toValue: 1,
-          friction: 8,
-          tension: 40,
-          useNativeDriver: true,
-        }),
-      ]);
-      entryAnim.start();
+      fadeAnim.value = withTiming(1, { duration: 300 });
+      scaleAnim.value = withSpring(1, { damping: 8, stiffness: 40 });
 
-      // Animate coin counter
-      const coinAnim = Animated.timing(coinCountAnim, {
-        toValue: reward.coins,
-        duration: 1500,
-        useNativeDriver: false,
-      });
-      coinAnim.start();
+      // Animate coin counter (reanimated shared value)
+      coinCountShared.value = withTiming(reward.coins, { duration: 1500 });
 
       // Animate confetti
-      const confettiAnimList: Animated.CompositeAnimation[] = [];
       confettiAnims.forEach((a, index) => {
-        const delay = index * 50;
+        const delayMs = index * 50;
         const randomX = (Math.random() - 0.5) * width * 0.8;
         const randomY = Math.random() * -300 - 100;
         const randomRotate = Math.random() * 720;
 
-        const anim = Animated.parallel([
-          Animated.timing(a.x, {
-            toValue: randomX,
-            duration: 2000,
-            delay,
-            useNativeDriver: true,
-          }),
-          Animated.timing(a.y, {
-            toValue: randomY,
-            duration: 2000,
-            delay,
-            useNativeDriver: true,
-          }),
-          Animated.timing(a.rotate, {
-            toValue: randomRotate,
-            duration: 2000,
-            delay,
-            useNativeDriver: true,
-          }),
-          Animated.timing(a.opacity, {
-            toValue: 0,
-            duration: 2000,
-            delay: delay + 1000,
-            useNativeDriver: true,
-          }),
-        ]);
-        anim.start();
-        confettiAnimList.push(anim);
+        a.x.value = withDelay(delayMs, withTiming(randomX, { duration: 2000 }));
+        a.y.value = withDelay(delayMs, withTiming(randomY, { duration: 2000 }));
+        a.rotate.value = withDelay(delayMs, withTiming(randomRotate, { duration: 2000 }));
+        a.opacity.value = withDelay(delayMs + 1000, withTiming(0, { duration: 2000 }));
       });
-
-      return () => {
-        entryAnim.stop();
-        coinAnim.stop();
-        confettiAnimList.forEach((a) => a.stop());
-      };
     }
   }, [visible]);
 
@@ -147,8 +113,7 @@ function ClaimRewardModal({
             styles.modalContainer,
             {
               opacity: fadeAnim,
-              transform: [{ scale: scaleAnim }],
-            },
+              transform: [{ scale: scaleAnim }]},
           ]}
         >
           {/* Confetti particles */}
@@ -160,17 +125,12 @@ function ClaimRewardModal({
                 {
                   backgroundColor: confettiColors[index % confettiColors.length],
                   transform: [
-                    { translateX: anim.x },
-                    { translateY: anim.y },
+                    { translateX: anim.x.value },
+                    { translateY: anim.y.value },
                     {
-                      rotate: anim.rotate.interpolate({
-                        inputRange: [0, 720],
-                        outputRange: ['0deg', '720deg'],
-                      }),
-                    },
+                      rotate: `${interpolate(anim.rotate.value, [0, 720], [0, 720])}deg`},
                   ],
-                  opacity: anim.opacity,
-                },
+                  opacity: anim.opacity.value},
               ]}
             />
           ))}
@@ -192,14 +152,9 @@ function ClaimRewardModal({
               {/* Coins */}
               <View style={styles.rewardItem}>
                 <Ionicons name="diamond" size={40} color={colors.brand.goldBright} />
-                <Animated.Text style={styles.rewardAmount}>
-                  +
-                  {coinCountAnim.interpolate({
-                    inputRange: [0, reward.coins],
-                    outputRange: ['0', reward.coins.toString()],
-                    extrapolate: 'clamp',
-                  })}
-                </Animated.Text>
+                <Text style={styles.rewardAmount}>
+                  +{displayCoinCount}
+                </Text>
                 <Text style={styles.rewardLabel}>Coins</Text>
               </View>
 
@@ -279,8 +234,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   modalContainer: {
     width: width * 0.9,
     maxWidth: 400,
@@ -291,13 +245,9 @@ const styles = StyleSheet.create({
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 10 },
         shadowOpacity: 0.3,
-        shadowRadius: 20,
-      },
+        shadowRadius: 20},
       android: {
-        elevation: 10,
-      },
-    }),
-  },
+        elevation: 10}})},
   confetti: {
     position: 'absolute',
     top: '50%',
@@ -305,127 +255,103 @@ const styles = StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 5,
-    zIndex: 1000,
-  },
+    zIndex: 1000},
   modalContent: {
     padding: 32,
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   iconContainer: {
-    marginBottom: 16,
-  },
+    marginBottom: 16},
   title: {
     fontSize: 28,
     fontWeight: 'bold',
     color: colors.background.primary,
     textAlign: 'center',
-    marginBottom: 8,
-  },
+    marginBottom: 8},
   subtitle: {
     fontSize: 16,
     color: 'rgba(255, 255, 255, 0.8)',
     textAlign: 'center',
-    marginBottom: 24,
-  },
+    marginBottom: 24},
   rewardsSection: {
     width: '100%',
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderRadius: 16,
     padding: 20,
     marginBottom: 24,
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   rewardsSectionTitle: {
     fontSize: 12,
     fontWeight: 'bold',
     color: 'rgba(255, 255, 255, 0.8)',
     letterSpacing: 1,
-    marginBottom: 16,
-  },
+    marginBottom: 16},
   rewardItem: {
     alignItems: 'center',
-    gap: 8,
-  },
+    gap: 8},
   rewardAmount: {
     fontSize: 48,
     fontWeight: 'bold',
-    color: colors.background.primary,
-  },
+    color: colors.background.primary},
   rewardLabel: {
     fontSize: 16,
-    color: 'rgba(255, 255, 255, 0.8)',
-  },
+    color: 'rgba(255, 255, 255, 0.8)'},
   badgesContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 12,
     marginTop: 16,
-    justifyContent: 'center',
-  },
+    justifyContent: 'center'},
   badgeItem: {
     alignItems: 'center',
-    gap: 4,
-  },
+    gap: 4},
   badgeText: {
     fontSize: 12,
     color: 'rgba(255, 255, 255, 0.9)',
-    fontWeight: '600',
-  },
+    fontWeight: '600'},
   multiplierContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    marginTop: 16,
-  },
+    marginTop: 16},
   multiplierText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: colors.background.primary,
-  },
+    color: colors.background.primary},
   statsContainer: {
     width: '100%',
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderRadius: 16,
     padding: 16,
-    marginBottom: 24,
-  },
+    marginBottom: 24},
   statsTitle: {
     fontSize: 12,
     fontWeight: 'bold',
     color: 'rgba(255, 255, 255, 0.8)',
     letterSpacing: 1,
     marginBottom: 12,
-    textAlign: 'center',
-  },
+    textAlign: 'center'},
   statsRow: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
+    justifyContent: 'space-around'},
   statItem: {
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   statLabel: {
     fontSize: 12,
     color: 'rgba(255, 255, 255, 0.6)',
-    marginBottom: 8,
-  },
+    marginBottom: 8},
   statChange: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-  },
+    gap: 8},
   statValue: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'rgba(255, 255, 255, 0.6)',
-  },
+    color: 'rgba(255, 255, 255, 0.6)'},
   statValueAfter: {
-    color: colors.background.primary,
-  },
+    color: colors.background.primary},
   buttonContainer: {
     width: '100%',
-    gap: 12,
-  },
+    gap: 12},
   shareButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -433,26 +359,21 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingVertical: 12,
     borderRadius: 12,
-    backgroundColor: colors.background.primary,
-  },
+    backgroundColor: colors.background.primary},
   shareButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: colors.brand.purpleLight,
-  },
+    color: colors.brand.purpleLight},
   continueButton: {
     paddingVertical: 16,
     borderRadius: 12,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     borderWidth: 2,
-    borderColor: colors.background.primary,
-  },
+    borderColor: colors.background.primary},
   continueButtonText: {
     fontSize: 16,
     fontWeight: 'bold',
     color: colors.background.primary,
-    textAlign: 'center',
-  },
-});
+    textAlign: 'center'}});
 
 export default React.memo(ClaimRewardModal);

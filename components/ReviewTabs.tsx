@@ -1,11 +1,15 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Pressable,
   StyleSheet,
-  Animated,
   Dimensions,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+} from 'react-native-reanimated';
 import { ThemedText } from '@/components/ThemedText';
 import { ReviewTabsProps, TabType } from '@/types/reviews';
 import { colors } from '@/constants/theme';
@@ -18,20 +22,16 @@ const ReviewTabs: React.FC<ReviewTabsProps> = ({
 }) => {
   const screenWidth = Dimensions.get('window').width;
   const tabWidth = screenWidth / 2.3; // more dynamic than fixed 64px padding
-  const translateX = useRef(new Animated.Value(0)).current;
+  const translateX = useSharedValue(0);
 
   useEffect(() => {
     const targetX = activeTab === 'reviews' ? 0 : tabWidth;
-    const anim = Animated.spring(translateX, {
-      toValue: targetX,
-      tension: 150,
-      friction: 15,
-      useNativeDriver: true,
-    });
-    anim.start();
+    translateX.value = withSpring(targetX, { damping: 18, stiffness: 150 });
+  }, [activeTab, tabWidth]);
 
-    return () => { anim.stop(); };
-  }, [activeTab, tabWidth, translateX]);
+  const indicatorStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: translateX.value }],
+  }));
 
   const handleTabPress = (tab: TabType) => {
     onTabChange(tab);
@@ -44,10 +44,8 @@ const ReviewTabs: React.FC<ReviewTabsProps> = ({
         <Animated.View
           style={[
             styles.activeIndicator,
-            {
-              width: tabWidth,
-              transform: [{ translateX }],
-            },
+            { width: tabWidth },
+            indicatorStyle,
           ]}
         />
 

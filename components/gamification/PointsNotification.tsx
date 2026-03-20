@@ -3,15 +3,15 @@
  * Animated toast notification for points earned/spent
  */
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  Animated,
   Dimensions,
   Pressable,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring, interpolate } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 
@@ -31,33 +31,17 @@ interface PointsNotificationProps {
 }
 
 function PointsNotification({ data, onDismiss }: PointsNotificationProps) {
-  const translateY = useRef(new Animated.Value(-100)).current;
-  const opacity = useRef(new Animated.Value(0)).current;
-  const scale = useRef(new Animated.Value(0.8)).current;
+  const translateY = useSharedValue(-100);
+  const opacity = useSharedValue(0);
+  const scale = useSharedValue(0.8);
 
   const { amount, type, reason, icon, duration = 3000 } = data;
 
   useEffect(() => {
     // Entrance animation
-    const anim = Animated.parallel([
-      Animated.spring(translateY, {
-        toValue: 0,
-        friction: 8,
-        tension: 40,
-        useNativeDriver: true,
-      }),
-      Animated.timing(opacity, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-      Animated.spring(scale, {
-        toValue: 1,
-        friction: 5,
-        useNativeDriver: true,
-      }),
-    ]);
-    anim.start();
+    translateY.value = withSpring(0);
+    opacity.value = withTiming(1, { duration: 300 });
+    scale.value = withSpring(1, { damping: 5 });
 
     // Auto dismiss after duration
     const timer = setTimeout(() => {
@@ -65,31 +49,15 @@ function PointsNotification({ data, onDismiss }: PointsNotificationProps) {
     }, duration);
 
     return () => {
-      anim.stop();
       clearTimeout(timer);
-    }
+    };
   }, []);
 
   const handleDismiss = () => {
-    Animated.parallel([
-      Animated.timing(translateY, {
-        toValue: -100,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-      Animated.timing(opacity, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-      Animated.timing(scale, {
-        toValue: 0.8,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      onDismiss();
-    });
+    translateY.value = withTiming(-100, { duration: 300 });
+    opacity.value = withTiming(0, { duration: 300 });
+    scale.value = withTiming(0.8, { duration: 300 });
+    setTimeout(() => onDismiss(), 300);
   };
 
   const isEarned = type === 'earned';
@@ -143,10 +111,7 @@ function PointsNotification({ data, onDismiss }: PointsNotificationProps) {
           styles.progressBar,
           {
             backgroundColor: color,
-            width: translateY.interpolate({
-              inputRange: [-100, 0],
-              outputRange: ['0%', '100%'],
-            }),
+            width: interpolate(translateY.value, [-100, 0], ['0%', '100%']),
           },
         ]}
       />

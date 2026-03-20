@@ -8,10 +8,14 @@ import {
   ScrollView,
   Pressable,
   Dimensions,
-  ActivityIndicator,
-  Animated,
-  Easing,
-} from 'react-native';
+  ActivityIndicator} from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSequence,
+  interpolate,
+  Easing} from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -65,56 +69,34 @@ const COLORS = {
   error: Colors.error,
   errorBg: Colors.errorScale[50],
 
-  shadow: 'rgba(26, 58, 82, 0.08)',
-};
+  shadow: 'rgba(26, 58, 82, 0.08)'};
 
 // Confetti particle for celebration
 const ConfettiParticle: React.FC<{ delay: number; color: string }> = ({ delay, color }) => {
-  const translateY = useRef(new Animated.Value(0)).current;
-  const translateX = useRef(new Animated.Value(0)).current;
-  const opacity = useRef(new Animated.Value(0)).current;
-  const rotate = useRef(new Animated.Value(0)).current;
+  const translateY = useSharedValue(0);
+  const translateX = useSharedValue(0);
+  const opacity = useSharedValue(0);
+  const rotate = useSharedValue(0);
 
   useEffect(() => {
-    let currentAnim: Animated.CompositeAnimation | undefined;
     const startAnimation = () => {
-      translateY.setValue(0);
-      translateX.setValue(Math.random() * 200 - 100);
-      opacity.setValue(1);
-      rotate.setValue(0);
+      translateY.value = 0;
+      translateX.value = Math.random() * 200 - 100;
+      opacity.value = 1;
+      rotate.value = 0;
 
-      currentAnim = Animated.parallel([
-        Animated.timing(translateY, {
-          toValue: 300,
-          duration: 2500,
-          easing: Easing.out(Easing.quad),
-          useNativeDriver: true,
-        }),
-        Animated.timing(opacity, {
-          toValue: 0,
-          duration: 2500,
-          useNativeDriver: true,
-        }),
-        Animated.timing(rotate, {
-          toValue: 1,
-          duration: 2500,
-          useNativeDriver: true,
-        }),
-      ]);
-      currentAnim.start(() => startAnimation());
+      translateY.value = withTiming(300, { duration: 2500, easing: Easing.out(Easing.quad) });
+      opacity.value = withTiming(0, { duration: 2500 });
+      rotate.value = withTiming(1, { duration: 2500 });
     };
 
     const timeout = setTimeout(startAnimation, delay);
     return () => {
       clearTimeout(timeout);
-      currentAnim?.stop();
     };
   }, []);
 
-  const spin = rotate.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'],
-  });
+  const spin = interpolate(rotate.value, [0, 1], ['0deg', '360deg']);
 
   return (
     <Animated.View
@@ -123,8 +105,7 @@ const ConfettiParticle: React.FC<{ delay: number; color: string }> = ({ delay, c
         {
           backgroundColor: color,
           transform: [{ translateY }, { translateX }, { rotate: spin }],
-          opacity,
-        },
+          opacity},
       ]}
     />
   );
@@ -156,8 +137,8 @@ const Quiz = () => {
   const [fetchingQuestions, setFetchingQuestions] = useState(false);
   const [quizSessionId, setQuizSessionId] = useState<string | null>(null);
 
-  const progressAnim = useRef(new Animated.Value(1)).current;
-  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const progressAnim = useSharedValue(1);
+  const scaleAnim = useSharedValue(1);
   const isMounted = useIsMounted();
 
   // Fetch daily limits and wallet balance on mount
@@ -187,20 +168,13 @@ const Quiz = () => {
   }, []);
 
   useEffect(() => {
-    let progressAnimation: Animated.CompositeAnimation | undefined;
     if (gameState === 'playing' && timeLeft > 0 && selectedAnswer === null) {
       const timer = setTimeout(() => {
         setTimeLeft(timeLeft - 1);
-        progressAnimation = Animated.timing(progressAnim, {
-          toValue: (timeLeft - 1) / 15,
-          duration: 1000,
-          useNativeDriver: false,
-        });
-        progressAnimation.start();
+        progressAnim.value = withTiming((timeLeft - 1) / 15, { duration: 1000 });
       }, 1000);
       return () => {
         clearTimeout(timer);
-        progressAnimation?.stop();
       };
     } else if (timeLeft === 0 && selectedAnswer === null) {
       handleAnswer(-1);
@@ -222,8 +196,7 @@ const Quiz = () => {
           correctAnswer: q.correctAnswer,
           coins: q.coins,
           category: 'General',
-          difficulty: 'medium',
-        }));
+          difficulty: 'medium'}));
 
         if (mappedQuestions.length === 0) {
           platformAlert('No Questions', 'No quiz questions are available right now. Please try again later.');
@@ -252,7 +225,7 @@ const Quiz = () => {
         setCorrectCount(0);
         if (!isMounted()) return;
         setAnswers([]);
-        progressAnim.setValue(1);
+        progressAnim.value = 1;
       } else {
         platformAlert('Error', response.error || 'Failed to load quiz questions. Please try again.');
       }
@@ -287,18 +260,10 @@ const Quiz = () => {
       setCorrectCount(prev => prev + 1);
 
       // Pulse animation for correct answer
-      Animated.sequence([
-        Animated.timing(scaleAnim, {
-          toValue: 1.05,
-          duration: 150,
-          useNativeDriver: true,
-        }),
-        Animated.timing(scaleAnim, {
-          toValue: 1,
-          duration: 150,
-          useNativeDriver: true,
-        }),
-      ]).start();
+      scaleAnim.value = withSequence(
+        withTiming(1.05, { duration: 150 }),
+        withTiming(1, { duration: 150 }),
+      );
     } else {
       setStreak(0);
     }
@@ -308,7 +273,7 @@ const Quiz = () => {
         setCurrentQuestion(currentQuestion + 1);
         setSelectedAnswer(null);
         setTimeLeft(15);
-        progressAnim.setValue(1);
+        progressAnim.value = 1;
       } else {
         submitQuizResults();
       }
@@ -362,10 +327,7 @@ const Quiz = () => {
     return { text: 'Keep Practicing!', icon: 'refresh' as const, color: COLORS.textMuted };
   };
 
-  const progressWidth = progressAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0%', '100%'],
-  });
+  const progressWidth = interpolate(progressAnim.value, [0, 1], ['0%', '100%']);
 
   return (
     <View style={styles.container}>
@@ -762,8 +724,7 @@ const Quiz = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
-  },
+    backgroundColor: COLORS.background},
 
   // Header
   header: {
@@ -775,37 +736,30 @@ const styles = StyleSheet.create({
     gap: 12,
     backgroundColor: COLORS.surface,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
-  },
+    borderBottomColor: COLORS.border},
   backButton: {
     width: 44,
     height: 44,
     borderRadius: 12,
     backgroundColor: COLORS.surfaceSecondary,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   headerCenter: {
-    flex: 1,
-  },
+    flex: 1},
   headerTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-  },
+    gap: 8},
   headerIcon: {
-    fontSize: 24,
-  },
+    fontSize: 24},
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: COLORS.navy,
-  },
+    color: COLORS.navy},
   headerSubtitle: {
     fontSize: 13,
     color: COLORS.textMuted,
-    marginTop: 2,
-  },
+    marginTop: 2},
   timerBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -813,19 +767,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: COLORS.purpleBg,
-  },
+    backgroundColor: COLORS.purpleBg},
   timerBadgeWarning: {
-    backgroundColor: COLORS.errorBg,
-  },
+    backgroundColor: COLORS.errorBg},
   timerText: {
     fontSize: 15,
     fontWeight: '700',
-    color: COLORS.purple,
-  },
+    color: COLORS.purple},
   timerTextWarning: {
-    color: COLORS.error,
-  },
+    color: COLORS.error},
   coinsBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -833,24 +783,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: COLORS.goldBg,
-  },
+    backgroundColor: COLORS.goldBg},
   coinIcon: {
     width: 20,
-    height: 20,
-  },
+    height: 20},
   coinsText: {
     fontSize: 15,
     fontWeight: '700',
-    color: COLORS.goldDark,
-  },
+    color: COLORS.goldDark},
 
   scrollView: {
-    flex: 1,
-  },
+    flex: 1},
   content: {
-    padding: 16,
-  },
+    padding: 16},
 
   // Hero Card
   heroCard: {
@@ -859,79 +804,64 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
     overflow: 'hidden',
-    position: 'relative',
-  },
+    position: 'relative'},
   heroIconWrapper: {
-    marginBottom: 16,
-  },
+    marginBottom: 16},
   heroIconBg: {
     width: 80,
     height: 80,
     borderRadius: 40,
     backgroundColor: 'rgba(255,255,255,0.2)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   heroIconText: {
-    fontSize: 40,
-  },
+    fontSize: 40},
   heroTitle: {
     fontSize: 28,
     fontWeight: '800',
     color: Colors.text.inverse,
-    marginBottom: 8,
-  },
+    marginBottom: 8},
   heroSubtitle: {
     fontSize: 15,
     color: 'rgba(255,255,255,0.9)',
     textAlign: 'center',
-    marginBottom: 24,
-  },
+    marginBottom: 24},
   heroStatsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 32,
-  },
+    gap: 32},
   heroStatBox: {
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   heroStatIcon: {
     width: 28,
     height: 28,
-    marginBottom: 8,
-  },
+    marginBottom: 8},
   heroStatValue: {
     fontSize: 24,
     fontWeight: '800',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse},
   heroStatLabel: {
     fontSize: 12,
     color: 'rgba(255,255,255,0.8)',
-    marginTop: 4,
-  },
+    marginTop: 4},
   heroStatDivider: {
     width: 1,
     height: 50,
-    backgroundColor: 'rgba(255,255,255,0.3)',
-  },
+    backgroundColor: 'rgba(255,255,255,0.3)'},
   decorCircle: {
     position: 'absolute',
     borderRadius: 100,
-    backgroundColor: 'rgba(255,255,255,0.1)',
-  },
+    backgroundColor: 'rgba(255,255,255,0.1)'},
   decorCircle1: {
     width: 120,
     height: 120,
     top: -40,
-    right: -40,
-  },
+    right: -40},
   decorCircle2: {
     width: 100,
     height: 100,
     bottom: -30,
-    left: -30,
-  },
+    left: -30},
 
   // How to Play
   howToPlayCard: {
@@ -943,77 +873,63 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 1,
     shadowRadius: 12,
-    elevation: 4,
-  },
+    elevation: 4},
   howToPlayHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    marginBottom: 16,
-  },
+    marginBottom: 16},
   howToPlayTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: COLORS.navy,
-  },
+    color: COLORS.navy},
   stepsContainer: {
-    gap: 14,
-  },
+    gap: 14},
   stepRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-  },
+    gap: 12},
   stepBadge: {
     width: 32,
     height: 32,
     borderRadius: 16,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   stepBadgeText: {
     fontSize: 14,
-    fontWeight: '700',
-  },
+    fontWeight: '700'},
   stepTextContainer: {
-    flex: 1,
-  },
+    flex: 1},
   stepTitle: {
     fontSize: 14,
     fontWeight: '600',
     color: COLORS.navy,
-    marginBottom: 2,
-  },
+    marginBottom: 2},
   stepDesc: {
     fontSize: 12,
-    color: COLORS.textMuted,
-  },
+    color: COLORS.textMuted},
   stepIconBg: {
     width: 36,
     height: 36,
     borderRadius: 18,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
 
   // Start Button
   startButtonWrapper: {
     borderRadius: 16,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'},
   startButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
     paddingVertical: 18,
-    borderRadius: 16,
-  },
+    borderRadius: 16},
   startButtonText: {
     fontSize: 17,
     fontWeight: '700',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse},
 
   // Game Stats Bar
   gameStatsBar: {
@@ -1027,48 +943,39 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 1,
     shadowRadius: 8,
-    elevation: 2,
-  },
+    elevation: 2},
   gameStatItem: {
     flex: 1,
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   gameStatLabel: {
     fontSize: 10,
     fontWeight: '600',
     color: COLORS.textLight,
     marginBottom: 4,
-    letterSpacing: 0.5,
-  },
+    letterSpacing: 0.5},
   gameStatValue: {
     fontSize: 20,
     fontWeight: '700',
-    color: COLORS.navy,
-  },
+    color: COLORS.navy},
   gameStatTotal: {
     fontSize: 14,
     fontWeight: '500',
-    color: COLORS.textMuted,
-  },
+    color: COLORS.textMuted},
   gameStatDivider: {
     width: 1,
     height: 32,
-    backgroundColor: COLORS.border,
-  },
+    backgroundColor: COLORS.border},
   streakRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-  },
+    gap: 4},
   scoreRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-  },
+    gap: 4},
   miniCoin: {
     width: 18,
-    height: 18,
-  },
+    height: 18},
 
   // Question Card
   questionCard: {
@@ -1080,31 +987,26 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 1,
     shadowRadius: 12,
-    elevation: 4,
-  },
+    elevation: 4},
   categoryBadge: {
     alignSelf: 'flex-start',
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 12,
     backgroundColor: COLORS.purpleBg,
-    marginBottom: 16,
-  },
+    marginBottom: 16},
   categoryText: {
     fontSize: 12,
     fontWeight: '600',
-    color: COLORS.purple,
-  },
+    color: COLORS.purple},
   questionText: {
     fontSize: 18,
     fontWeight: '700',
     color: COLORS.navy,
     marginBottom: 24,
-    lineHeight: 26,
-  },
+    lineHeight: 26},
   optionsContainer: {
-    gap: 12,
-  },
+    gap: 12},
   optionButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1113,20 +1015,16 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.surfaceSecondary,
     borderWidth: 2,
     borderColor: COLORS.border,
-    gap: 12,
-  },
+    gap: 12},
   optionSelected: {
     borderColor: COLORS.purple,
-    backgroundColor: COLORS.purpleBg,
-  },
+    backgroundColor: COLORS.purpleBg},
   optionCorrect: {
     backgroundColor: COLORS.successBg,
-    borderColor: COLORS.success,
-  },
+    borderColor: COLORS.success},
   optionWrong: {
     backgroundColor: COLORS.errorBg,
-    borderColor: COLORS.error,
-  },
+    borderColor: COLORS.error},
   optionLetter: {
     width: 32,
     height: 32,
@@ -1135,51 +1033,41 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: COLORS.border,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   optionLetterText: {
     fontSize: 14,
     fontWeight: '700',
-    color: COLORS.textMuted,
-  },
+    color: COLORS.textMuted},
   optionText: {
     flex: 1,
     fontSize: 15,
     fontWeight: '500',
-    color: COLORS.navy,
-  },
+    color: COLORS.navy},
 
   // Progress Bar
   progressWrapper: {
-    marginBottom: 8,
-  },
+    marginBottom: 8},
   progressBg: {
     height: 10,
     backgroundColor: COLORS.surfaceSecondary,
     borderRadius: 5,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'},
   progressFill: {
     height: '100%',
     borderRadius: 5,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'},
   progressGradient: {
-    flex: 1,
-  },
+    flex: 1},
   progressLabels: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 8,
-  },
+    marginTop: 8},
   progressLabel: {
     fontSize: 11,
-    color: COLORS.textLight,
-  },
+    color: COLORS.textLight},
   progressLabelCenter: {
     fontWeight: '600',
-    color: COLORS.textMuted,
-  },
+    color: COLORS.textMuted},
 
   // Confetti
   confettiContainer: {
@@ -1189,16 +1077,14 @@ const styles = StyleSheet.create({
     right: 0,
     height: 200,
     pointerEvents: 'none',
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'},
   confetti: {
     position: 'absolute',
     width: 10,
     height: 10,
     borderRadius: 2,
     left: '50%',
-    top: -10,
-  },
+    top: -10},
 
   // Result Card
   resultCard: {
@@ -1209,72 +1095,59 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 1,
     shadowRadius: 20,
-    elevation: 8,
-  },
+    elevation: 8},
   resultGradient: {
     padding: 32,
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   resultIconWrapper: {
     width: 96,
     height: 96,
     borderRadius: 48,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
-  },
+    marginBottom: 20},
   resultTitle: {
     fontSize: 32,
     fontWeight: '800',
-    marginBottom: 8,
-  },
+    marginBottom: 8},
   resultSubtitle: {
     fontSize: 15,
-    marginBottom: 24,
-  },
+    marginBottom: 24},
   earnedBox: {
     paddingHorizontal: 32,
     paddingVertical: 20,
     borderRadius: 16,
     alignItems: 'center',
-    marginBottom: 12,
-  },
+    marginBottom: 12},
   earnedRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    marginBottom: 6,
-  },
+    marginBottom: 6},
   earnedCoin: {
     width: 36,
-    height: 36,
-  },
+    height: 36},
   earnedValue: {
     fontSize: 44,
-    fontWeight: '800',
-  },
+    fontWeight: '800'},
   earnedLabel: {
-    fontSize: 13,
-  },
+    fontSize: 13},
   streakBonusCard: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
     paddingHorizontal: 16,
     paddingVertical: 10,
-    borderRadius: 12,
-  },
+    borderRadius: 12},
   streakBonusText: {
     fontSize: 14,
-    fontWeight: '700',
-  },
+    fontWeight: '700'},
 
   // Stats Grid
   statsGrid: {
     flexDirection: 'row',
     gap: 12,
-    marginBottom: 20,
-  },
+    marginBottom: 20},
   statCard: {
     flex: 1,
     backgroundColor: COLORS.surface,
@@ -1285,47 +1158,40 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 1,
     shadowRadius: 8,
-    elevation: 2,
-  },
+    elevation: 2},
   statIconBg: {
     width: 44,
     height: 44,
     borderRadius: 22,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
-  },
+    marginBottom: 10},
   statValue: {
     fontSize: 20,
     fontWeight: '700',
     color: COLORS.navy,
-    marginBottom: 4,
-  },
+    marginBottom: 4},
   statLabel: {
     fontSize: 11,
     fontWeight: '600',
     color: COLORS.textMuted,
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
+    letterSpacing: 0.5},
 
   // Actions
   actionsContainer: {
-    gap: 12,
-  },
+    gap: 12},
   primaryAction: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
     paddingVertical: 18,
-    borderRadius: 16,
-  },
+    borderRadius: 16},
   primaryActionText: {
     fontSize: 16,
     fontWeight: '700',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse},
   secondaryAction: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1335,13 +1201,10 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: COLORS.surface,
     borderWidth: 1,
-    borderColor: COLORS.border,
-  },
+    borderColor: COLORS.border},
   secondaryActionText: {
     fontSize: 15,
     fontWeight: '600',
-    color: COLORS.textMuted,
-  },
-});
+    color: COLORS.textMuted}});
 
 export default withErrorBoundary(Quiz, 'Quiz');

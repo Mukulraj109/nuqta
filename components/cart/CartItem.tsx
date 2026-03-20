@@ -1,11 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useState} from 'react';
 import {
   View,
   Pressable,
   StyleSheet,
-  Animated,
-  Dimensions,
-} from 'react-native';
+  Dimensions} from 'react-native';
+import Animated, { runOnJS, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -28,8 +27,8 @@ function CartItem({
 }: CartItemProps) {
   const { width } = Dimensions.get('window');
   const isSmallScreen = width < 360;
-  const scaleAnim = useRef(new Animated.Value(1)).current;
-  const fadeAnim = useRef(new Animated.Value(1)).current;
+  const scaleAnim = useSharedValue(1);
+  const fadeAnim = useSharedValue(1);
   const [isUpdating, setIsUpdating] = useState(false);
   const isMounted = useIsMounted();
   const router = useRouter();
@@ -54,38 +53,16 @@ function CartItem({
 
   const handleDelete = () => {
     if (showAnimation) {
-      Animated.parallel([
-        Animated.timing(scaleAnim, {
-          toValue: 0.8,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-      ]).start(() => {
-        onRemove(item.id);
-      });
+      scaleAnim.value = withTiming(0.8, { duration: 200 });
+      fadeAnim.value = withTiming(0, { duration: 200 });
+      onRemove(item.id);
     } else {
       onRemove(item.id);
     }
   };
 
   const handlePress = () => {
-    Animated.sequence([
-      Animated.timing(scaleAnim, {
-        toValue: 0.98,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(scaleAnim, {
-        toValue: 1,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
+    scaleAnim.value = withSequence(withTiming(0.98, { duration: 100 }), withTiming(1, { duration: 100 }));
       // Navigate to ProductPage with proper parameters
       const productId = (item as any).productId || item.id;
       if (productId) {
@@ -111,7 +88,6 @@ function CartItem({
           },
         });
       }
-    });
   };
 
   // Handle quantity change from QuantitySelector

@@ -1,15 +1,15 @@
 // Scratch Card Game Component
 // Reusable scratch card component with scratch-to-reveal mechanic
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
   Dimensions,
   Pressable,
-  Animated,
   ActivityIndicator,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { platformAlert } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
@@ -47,8 +47,8 @@ function ScratchCardGame({
   const [prize, setPrize] = useState<ScratchCardPrize | null>(null);
   const [cardId, setCardId] = useState<string | null>(null);
   const isMounted = useIsMounted();
-  const scratchOpacity = useRef(new Animated.Value(1)).current;
-  const prizeScale = useRef(new Animated.Value(0.5)).current;
+  const scratchOpacity = useSharedValue(1);
+  const prizeScale = useSharedValue(0.5);
   const { actions: gamificationActions } = useGamification();
 
   // Check eligibility on mount
@@ -114,19 +114,8 @@ function ScratchCardGame({
       setIsLoading(true);
 
       // Animate scratch effect
-      Animated.parallel([
-        Animated.timing(scratchOpacity, {
-          toValue: 0,
-          duration: 500,
-          useNativeDriver: true,
-        }),
-        Animated.spring(prizeScale, {
-          toValue: 1,
-          tension: 50,
-          friction: 7,
-          useNativeDriver: true,
-        }),
-      ]).start();
+      scratchOpacity.value = withTiming(0, { duration: 500 });
+      prizeScale.value = withSpring(1, { stiffness: 50, damping: 7 });
 
       setIsScratched(true);
 
@@ -184,8 +173,8 @@ function ScratchCardGame({
     setIsScratched(false);
     setPrize(null);
     setCardId(null);
-    scratchOpacity.setValue(1);
-    prizeScale.setValue(0.5);
+    scratchOpacity.value = 1;
+    prizeScale.value = 0.5;
   };
 
   // Loading state

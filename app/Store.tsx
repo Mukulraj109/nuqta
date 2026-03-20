@@ -1,5 +1,5 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect,  useCallback } from 'react';
 import {
   View,
   Text,
@@ -9,9 +9,12 @@ import {
   Platform,
   Pressable,
   Dimensions,
-  ActivityIndicator,
-  Animated,
+  ActivityIndicator
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming } from 'react-native-reanimated';
 import { FlashList } from '@shopify/flash-list';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useHomepage, useHomepageNavigation } from '@/hooks/useHomepage';
@@ -33,8 +36,7 @@ const storeImages = {
   organic: require('@/assets/images/stores/organic.png'),
   lowestPrice: require('@/assets/images/stores/lowest-price.png'),
   cashStore: require('@/assets/images/stores/cash-store.png'),
-  rezMall: require('@/assets/images/tabs/rez-mall.png'),
-};
+  rezMall: require('@/assets/images/tabs/rez-mall.png') };
 import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
 import LocationDisplay from '@/components/location/LocationDisplay';
@@ -172,8 +174,7 @@ const mapCategoryToStore = (category: StoreCategory): Store => {
     '🌱': 'leaf',
     '💸': 'trending-down',
     '🏬': 'storefront',
-    '💵': 'card',
-  };
+    '💵': 'card' };
 
   // Map category ID to image
   const imageMap: { [key: string]: any } = {
@@ -185,8 +186,7 @@ const mapCategoryToStore = (category: StoreCategory): Store => {
     'organic': storeImages.organic,
     'lowestPrice': storeImages.lowestPrice,
     'cashStore': storeImages.cashStore,
-    'mall': storeImages.rezMall,
-  };
+    'mall': storeImages.rezMall };
 
   // Get gradient colors based on the category color
   const baseColor = displayInfo.color;
@@ -203,8 +203,7 @@ const mapCategoryToStore = (category: StoreCategory): Store => {
     'organic': 'Organic',
     'lowestPrice': 'Best Price',
     'mall': 'Mall',
-    'cashStore': 'Cash',
-  };
+    'cashStore': 'Cash' };
 
   return {
     id: category.id,
@@ -215,8 +214,7 @@ const mapCategoryToStore = (category: StoreCategory): Store => {
     gradient,
     badge: category.badgeText || badgeMap[category.id] || '',
     description: category.description,
-    count: category.count,
-  };
+    count: category.count };
 };
 
 
@@ -225,8 +223,7 @@ function ModernCardIllustration({
   image,
   gradient = [colors.lightMustard, colors.nileBlue] as const,
   badge,
-  count,
-}: {
+  count }: {
   icon?: string;
   image?: any;
   gradient?: readonly string[];
@@ -282,27 +279,19 @@ function ModernCardIllustration({
 
 function StoreCard({ item, index }: { item: Store; index: number }) {
   const router = useRouter();
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(20)).current;
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(20);
+  const cardAnimStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ translateY: slideAnim.value }],
+  }));
 
   useEffect(() => {
-    const delay = index * 80;
-    const anim = Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 400,
-        delay,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 400,
-        delay,
-        useNativeDriver: true,
-      }),
-    ]);
-    anim.start();
-    return () => anim.stop();
+    const timer = setTimeout(() => {
+      fadeAnim.value = withTiming(1, { duration: 400 });
+      slideAnim.value = withTiming(0, { duration: 400 });
+    }, index * 80);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleStorePress = async () => {
@@ -311,13 +300,11 @@ function StoreCard({ item, index }: { item: Store; index: number }) {
       pathname: '/StoreListPage' as any,
       params: {
         category,
-        title: item.title,
-      },
-    });
+        title: item.title } });
   };
 
   return (
-    <Animated.View style={{ opacity: fadeAnim, transform: [{ translateY: slideAnim }] }}>
+    <Animated.View style={cardAnimStyle}>
       <Pressable
        
         style={styles.card}
@@ -392,8 +379,7 @@ function App() {
         const mappedCategories = response.data.categories.map(mapCategoryToStore).map(store => ({
           ...store,
           badge: formatBadgeWithCurrency(store.badge),
-          description: store.id === 'budgetFriendly' ? `Everything at ${currencySymbol}1` : store.description,
-        }));
+          description: store.id === 'budgetFriendly' ? `Everything at ${currencySymbol}1` : store.description }));
         if (!isMounted()) return;
         setCategories(mappedCategories);
       } else {
@@ -406,8 +392,7 @@ function App() {
       const fallbackWithCurrency = FALLBACK_STORES.map(store => ({
         ...store,
         badge: formatBadgeWithCurrency(store.badge),
-        description: store.id === 'budgetFriendly' ? `Everything at ${currencySymbol}1` : store.description,
-      }));
+        description: store.id === 'budgetFriendly' ? `Everything at ${currencySymbol}1` : store.description }));
       if (!isMounted()) return;
       setCategories(fallbackWithCurrency);
     } finally {
@@ -430,9 +415,7 @@ function App() {
       router.push({
         pathname: '/StoreListPage' as any,
         params: {
-          search: searchQuery.trim(),
-        },
-      });
+          search: searchQuery.trim() } });
     }
   };
 
@@ -622,15 +605,13 @@ const styles = StyleSheet.create({
   header: {
     paddingTop: 50,
     paddingHorizontal: 18,
-    paddingBottom: Spacing.xl,
-  },
+    paddingBottom: Spacing.xl },
 
   headerTop: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base },
 
   locationContainer: {
     flexDirection: 'row',
@@ -639,8 +620,7 @@ const styles = StyleSheet.create({
     marginRight: Spacing.sm,
     paddingVertical: Spacing.xs,
     paddingHorizontal: Spacing.sm,
-    borderRadius: BorderRadius.sm,
-  },
+    borderRadius: BorderRadius.sm },
 
   locationDisplay: {
     backgroundColor: 'transparent',
@@ -648,21 +628,18 @@ const styles = StyleSheet.create({
     elevation: 0,
     padding: 0,
     margin: 0,
-    flex: 1,
-  },
+    flex: 1 },
 
   locationText: {
     color: Colors.text.inverse,
     fontWeight: '600',
     fontSize: 12.5,
-    lineHeight: 16,
-  },
+    lineHeight: 16 },
 
   headerRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
 
   coinsContainer: {
     flexDirection: 'row',
@@ -673,14 +650,12 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
     borderRadius: BorderRadius.xl,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.15)',
-  },
+    borderColor: 'rgba(255,255,255,0.15)' },
 
   coinsText: {
     color: Colors.text.inverse,
     ...Typography.body,
-    fontWeight: '700',
-  },
+    fontWeight: '700' },
 
   profileAvatar: {
     width: 34,
@@ -690,23 +665,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: 'rgba(255,255,255,0.3)',
-  },
+    borderColor: 'rgba(255,255,255,0.3)' },
 
   profileText: {
     color: Colors.nileBlue,
     fontWeight: 'bold',
     ...Typography.body,
-    fontSize: 15,
-  },
+    fontSize: 15 },
 
   // Search row
   searchRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 10,
-    gap: 10,
-  },
+    gap: 10 },
 
   backBtn: {
     width: 38,
@@ -715,8 +687,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.95)',
     alignItems: 'center',
     justifyContent: 'center',
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle },
 
   searchContainer: {
     flex: 1,
@@ -727,8 +698,7 @@ const styles = StyleSheet.create({
     borderRadius: 26,
     paddingHorizontal: 14,
     height: 42,
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle },
 
   searchIcon: { marginRight: Spacing.sm },
 
@@ -737,41 +707,35 @@ const styles = StyleSheet.create({
     minWidth: 0,
     color: Colors.text.primary,
     ...Typography.body,
-    paddingVertical: 0,
-  },
+    paddingVertical: 0 },
 
   // Section header
   sectionHeader: {
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs },
 
   sectionTitle: {
     ...Typography.h3,
     fontWeight: '800',
     color: Colors.text.primary,
-    letterSpacing: -0.5,
-  },
+    letterSpacing: -0.5 },
 
   sectionSubtitle: {
     ...Typography.bodySmall,
     fontSize: 13,
     fontWeight: '500',
     color: Colors.text.tertiary,
-    marginTop: 2,
-  },
+    marginTop: 2 },
 
   // Grid & cards
   flatListContent: {
     paddingHorizontal: H_PADDING,
     paddingTop: 18,
     paddingBottom: 100,
-    gap: CARD_GAP,
-  },
+    gap: CARD_GAP },
 
   gridWrap: {
     paddingHorizontal: H_PADDING,
-    paddingTop: Spacing.base,
-  },
+    paddingTop: Spacing.base },
 
   card: {
     width: CARD_WIDTH,
@@ -786,33 +750,28 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     elevation: 3,
     borderWidth: 1,
-    borderColor: 'rgba(0,0,0,0.03)',
-  },
+    borderColor: 'rgba(0,0,0,0.03)' },
 
   cardIllustration: {
     alignItems: 'center',
-    marginBottom: 10,
-  },
+    marginBottom: 10 },
 
   cardContent: {
     alignItems: 'flex-start',
-    paddingHorizontal: 2,
-  },
+    paddingHorizontal: 2 },
 
   cardTitle: {
     color: Colors.text.primary,
     ...Typography.body,
     fontWeight: '700',
     letterSpacing: -0.2,
-    marginBottom: 3,
-  },
+    marginBottom: 3 },
 
   cardDescription: {
     color: Colors.text.tertiary,
     ...Typography.caption,
     fontWeight: '500',
-    lineHeight: 15,
-  },
+    lineHeight: 15 },
 
   cardArrow: {
     position: 'absolute',
@@ -823,8 +782,7 @@ const styles = StyleSheet.create({
     borderRadius: 11,
     backgroundColor: Colors.background.secondary,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
 
   // Modern Illustration Styles
   illustrationContainer: {
@@ -832,15 +790,13 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 18,
     overflow: 'hidden',
-    position: 'relative',
-  },
+    position: 'relative' },
 
   gradientBackground: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'relative',
-  },
+    position: 'relative' },
 
   badgeContainer: {
     position: 'absolute',
@@ -851,15 +807,13 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.xs,
     borderRadius: BorderRadius.md,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.2)',
-  },
+    borderColor: 'rgba(255,255,255,0.2)' },
 
   badgeText: {
     color: Colors.text.inverse,
     ...Typography.overline,
     fontWeight: '800',
-    letterSpacing: 0.3,
-  },
+    letterSpacing: 0.3 },
 
   countContainer: {
     position: 'absolute',
@@ -868,14 +822,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.25)',
     paddingHorizontal: Spacing.sm,
     paddingVertical: 3,
-    borderRadius: 10,
-  },
+    borderRadius: 10 },
 
   countText: {
     color: 'rgba(255,255,255,0.9)',
     fontSize: 9,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
 
   iconContainer: {
     width: 52,
@@ -885,13 +837,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.15)',
-  },
+    borderColor: 'rgba(255,255,255,0.15)' },
 
   categoryImage: {
     width: 72,
-    height: 72,
-  },
+    height: 72 },
 
   decorativeCircle1: {
     position: 'absolute',
@@ -900,8 +850,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: BorderRadius.xl,
-    backgroundColor: 'rgba(255,255,255,0.12)',
-  },
+    backgroundColor: 'rgba(255,255,255,0.12)' },
 
   decorativeCircle2: {
     position: 'absolute',
@@ -910,8 +859,7 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: 'rgba(255,255,255,0.08)',
-  },
+    backgroundColor: 'rgba(255,255,255,0.08)' },
 
   decorativeCircle3: {
     position: 'absolute',
@@ -920,21 +868,18 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
     borderRadius: BorderRadius.sm,
-    backgroundColor: 'rgba(255,255,255,0.06)',
-  },
+    backgroundColor: 'rgba(255,255,255,0.06)' },
 
   // Loading and error states
   loadingContainer: {
     paddingVertical: 40,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   loadingText: {
     marginTop: Spacing.md,
     ...Typography.body,
     color: Colors.text.tertiary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   errorContainer: {
     paddingVertical: Spacing.lg,
     paddingHorizontal: Spacing.lg,
@@ -943,14 +888,12 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.base,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: colors.warningScale[200],
-  },
+    borderColor: colors.warningScale[200] },
   errorText: {
     ...Typography.body,
     color: colors.brand.amberDark,
     fontWeight: '600',
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs },
   retryButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -959,19 +902,15 @@ const styles = StyleSheet.create({
     paddingVertical: 9,
     borderRadius: BorderRadius.xl,
     gap: 6,
-    marginVertical: Spacing.sm,
-  },
+    marginVertical: Spacing.sm },
   retryButtonText: {
     ...Typography.bodySmall,
     fontSize: 13,
     fontWeight: '700',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse },
   errorSubtext: {
     ...Typography.bodySmall,
     color: '#78350F',
-    fontWeight: '400',
-  },
-});
+    fontWeight: '400' } });
 
 export default withErrorBoundary(App, 'Store');

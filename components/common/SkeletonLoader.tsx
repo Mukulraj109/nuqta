@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import { View, StyleSheet, Animated, Platform } from 'react-native';
+import React, { useEffect} from 'react';
+import { View, StyleSheet, Platform } from 'react-native';
+import Animated, { interpolate, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '@/constants/theme';
 
@@ -18,35 +19,18 @@ function SkeletonLoader({
   style,
   variant = 'rect',
 }: SkeletonLoaderProps) {
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
-    const shimmerLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmerAnim, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    shimmerLoop.start();
-
+    shimmerAnim.value = withRepeat(withSequence(withTiming(1, { duration: 1000 })), -1);
+    
     // Cleanup: stop animation on unmount to prevent memory leak
-    return () => {
-      shimmerLoop.stop();
-    };
+    
   }, []);
 
-  const translateX = shimmerAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-200, 200],
-  });
+  const shimmerStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: interpolate(shimmerAnim.value, [0, 1], [-200, 200]) }],
+  }));
 
   const finalBorderRadius = variant === 'circle' ? height / 2 : borderRadius;
   const finalWidth = variant === 'circle' ? height : width;
@@ -67,10 +51,9 @@ function SkeletonLoader({
       importantForAccessibility="no"
     >
       <Animated.View
-        style={{
+        style={[{
           flex: 1,
-          transform: [{ translateX }],
-        }}
+        }, shimmerStyle]}
       >
         <LinearGradient
           colors={[colors.neutral[200], colors.neutral[100], colors.neutral[200]]}

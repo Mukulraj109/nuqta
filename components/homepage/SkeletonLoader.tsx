@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, Animated, Dimensions, Platform } from 'react-native';
-import { useSharedShimmer } from './SharedSkeletonContext';
+import { View, StyleSheet, Dimensions, Platform } from 'react-native';
+import Animated, { useAnimatedStyle, interpolate } from 'react-native-reanimated';
+import { useShimmer } from '@/contexts/ShimmerContext';
 import { colors } from '@/constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -18,24 +19,17 @@ export function SkeletonLoader({
   borderRadius = 4,
   style
 }: SkeletonLoaderProps) {
-  // Use shared animation value (1 animation for ALL skeletons instead of 20+)
-  const shimmerAnimation = useSharedShimmer();
-
-  const opacity = shimmerAnimation.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0.3, 0.7],
-  });
+  const shimmerAnim = useShimmer();
+  const opacityStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(shimmerAnim.value, [0, 1], [0.3, 0.7]),
+  }));
 
   return (
     <Animated.View
       style={[
         styles.skeleton,
-        {
-          width,
-          height,
-          borderRadius,
-          opacity,
-        },
+        { width, height, borderRadius },
+        opacityStyle,
         style,
       ]}
       accessibilityElementsHidden={true}

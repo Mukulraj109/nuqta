@@ -8,11 +8,19 @@ import {
   Pressable,
   RefreshControl,
   Platform,
-  Animated,
   Linking,
   StatusBar,
-  Dimensions,
+  Dimensions
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
 import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
@@ -581,36 +589,29 @@ const OfferCard = React.memo(({
   onPress: () => void;
   isTracking: boolean;
 }) => {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const fadeAnim = useSharedValue(0);
+  const scaleAnim = useSharedValue(1);
   const [logoError, setLogoError] = useState(false);
 
   useEffect(() => {
-    const anim = Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 350,
-      delay: Math.min(index * 60, 300),
-      useNativeDriver: true,
-    });
-    anim.start();
-    return () => anim.stop();
+    fadeAnim.value = withTiming(1, { duration: 350 });
   }, [index]);
 
   const handlePressIn = () => {
-    Animated.spring(scaleAnim, {
-      toValue: 0.96,
-      friction: 8,
-      useNativeDriver: true,
-    }).start();
+    scaleAnim.value = withSpring(0.96);
   };
 
   const handlePressOut = () => {
-    Animated.spring(scaleAnim, {
-      toValue: 1,
-      friction: 6,
-      useNativeDriver: true,
-    }).start();
+    scaleAnim.value = withSpring(1);
   };
+
+  const offerCardStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [
+      { scale: scaleAnim.value },
+      { translateY: interpolate(fadeAnim.value, [0, 1], [10, 0]) },
+    ],
+  }));
 
   const urgent = isUrgent(offer.validUntil);
   const timeLeft = formatTimeLeft(offer.validUntil);
@@ -622,13 +623,7 @@ const OfferCard = React.memo(({
     <Animated.View
       style={[
         styles.offerCardWrapper,
-        {
-          opacity: fadeAnim,
-          transform: [
-            { scale: scaleAnim },
-            { translateY: fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [10, 0] }) },
-          ],
-        },
+        offerCardStyle,
       ]}
     >
       <Pressable
@@ -734,36 +729,29 @@ const BrandCard = React.memo(({
   showHotTag?: boolean;
   isTracking?: boolean;
 }) => {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const pressAnim = useRef(new Animated.Value(1)).current;
+  const fadeAnim = useSharedValue(0);
+  const pressAnim = useSharedValue(1);
   const [logoError, setLogoError] = useState(false);
 
   useEffect(() => {
-    const anim = Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 350,
-      delay: Math.min(index * 50, 300),
-      useNativeDriver: true,
-    });
-    anim.start();
-    return () => anim.stop();
+    fadeAnim.value = withTiming(1, { duration: 350 });
   }, [index]);
 
   const handlePressIn = () => {
-    Animated.spring(pressAnim, {
-      toValue: 0.975,
-      friction: 8,
-      useNativeDriver: true,
-    }).start();
+    pressAnim.value = withSpring(0.975);
   };
 
   const handlePressOut = () => {
-    Animated.spring(pressAnim, {
-      toValue: 1,
-      friction: 6,
-      useNativeDriver: true,
-    }).start();
+    pressAnim.value = withSpring(1);
   };
+
+  const brandCardStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [
+      { scale: pressAnim.value },
+      { translateY: interpolate(fadeAnim.value, [0, 1], [12, 0]) },
+    ],
+  }));
 
   const isHot = showHotTag || brand.cashbackRate >= 10;
   const cashbackColor = isHot ? colors.successScale[700] : Colors.nileBlue;
@@ -773,13 +761,7 @@ const BrandCard = React.memo(({
     <Animated.View
       style={[
         styles.brandCardWrapper,
-        {
-          opacity: fadeAnim,
-          transform: [
-            { scale: pressAnim },
-            { translateY: fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [12, 0] }) },
-          ],
-        },
+        brandCardStyle,
       ]}
     >
       <Pressable
@@ -868,23 +850,24 @@ const BrandCard = React.memo(({
 
 // ─── Skeleton: Offer Card ───────────────────────────────────
 const OfferSkeletonCard = React.memo(({ index }: { index: number }) => {
-  const shimmer = useRef(new Animated.Value(0)).current;
+  const shimmer = useSharedValue(0);
 
   useEffect(() => {
-    const loop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmer, { toValue: 1, duration: 1000, delay: index * 100, useNativeDriver: true }),
-        Animated.timing(shimmer, { toValue: 0, duration: 1000, useNativeDriver: true }),
-      ])
+    shimmer.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 1000 }),
+        withTiming(0, { duration: 1000 })
+      ),
+      -1
     );
-    loop.start();
-    return () => loop.stop();
   }, [index]);
 
-  const opacity = shimmer.interpolate({ inputRange: [0, 1], outputRange: [0.3, 0.8] });
+  const offerSkeletonStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(shimmer.value, [0, 1], [0.3, 0.8]),
+  }));
 
   return (
-    <Animated.View style={[styles.offerCardWrapper, { opacity }]}>
+    <Animated.View style={[styles.offerCardWrapper, offerSkeletonStyle]}>
       <View style={styles.offerCard}>
         <View style={[styles.offerLogoArea, { backgroundColor: '#F0EBE4' }]} />
         <View style={[styles.skeletonLine, { width: 100, height: 12, marginTop: 8 }]} />
@@ -897,23 +880,24 @@ const OfferSkeletonCard = React.memo(({ index }: { index: number }) => {
 
 // ─── Skeleton: Brand Card ───────────────────────────────────
 const BrandSkeletonCard = React.memo(({ index }: { index: number }) => {
-  const shimmer = useRef(new Animated.Value(0)).current;
+  const shimmer = useSharedValue(0);
 
   useEffect(() => {
-    const loop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmer, { toValue: 1, duration: 1000, delay: index * 80, useNativeDriver: true }),
-        Animated.timing(shimmer, { toValue: 0, duration: 1000, useNativeDriver: true }),
-      ])
+    shimmer.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 1000 }),
+        withTiming(0, { duration: 1000 })
+      ),
+      -1
     );
-    loop.start();
-    return () => loop.stop();
   }, [index]);
 
-  const opacity = shimmer.interpolate({ inputRange: [0, 1], outputRange: [0.3, 0.8] });
+  const brandSkeletonStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(shimmer.value, [0, 1], [0.3, 0.8]),
+  }));
 
   return (
-    <Animated.View style={[styles.brandSkeletonCard, { opacity }]}>
+    <Animated.View style={[styles.brandSkeletonCard, brandSkeletonStyle]}>
       <View style={styles.brandSkeletonLogo} />
       <View style={styles.brandSkeletonInfo}>
         <View style={[styles.skeletonLine, { width: '60%', height: 12 }]} />

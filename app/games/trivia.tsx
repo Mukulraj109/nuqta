@@ -10,9 +10,12 @@ import {
   Pressable,
   Platform,
   ScrollView,
-  Animated,
-  ActivityIndicator,
-} from 'react-native';
+  ActivityIndicator} from 'react-native';
+import Animated, {
+  useSharedValue,
+  withTiming,
+  interpolate,
+} from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { router, Stack } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -130,22 +133,17 @@ function TriviaPage() {
   const [answers, setAnswers] = useState<{ questionId: string; correct: boolean; timeTaken: number }[]>([]);
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const progressAnim = useRef(new Animated.Value(1)).current;
+  const progressAnim = useSharedValue(1);
   const optionAnimations = useRef(
-    [0, 1, 2, 3].map(() => new Animated.Value(0))
+    [0, 1, 2, 3].map(() => useSharedValue(0))
   ).current;
 
   // Timer countdown
   useEffect(() => {
-    let progressAnimation: Animated.CompositeAnimation | undefined;
+    let progressAnimation: any | undefined;
     if (gameState === 'playing') {
-      progressAnim.setValue(1);
-      progressAnimation = Animated.timing(progressAnim, {
-        toValue: 0,
-        duration: SECONDS_PER_QUESTION * 1000,
-        useNativeDriver: false,
-      });
-      progressAnimation.start();
+      progressAnim.value = 1;
+      progressAnimation = withTiming(0, { duration: SECONDS_PER_QUESTION * 1000 });
 
       timerRef.current = setInterval(() => {
         setTimeLeft(prev => {
@@ -168,15 +166,11 @@ function TriviaPage() {
   useEffect(() => {
     if (gameState === 'playing') {
       const anims = optionAnimations.map((anim, i) => {
-        anim.setValue(0);
-        return Animated.timing(anim, {
-          toValue: 1,
-          duration: 300,
-          delay: i * 100,
-          useNativeDriver: true,
-        });
+        anim.value = 0;
+        return withTiming(1, { duration: 300,
+          delay: i * 100 });
       });
-      anims.forEach(a => a.start());
+      anims.forEach(a => a);
       return () => anims.forEach(a => a.stop());
     }
   }, [gameState, currentIndex]);
@@ -386,10 +380,7 @@ function TriviaPage() {
   const renderPlayingScreen = () => {
     if (!currentQuestion) return null;
 
-    const progressWidth = progressAnim.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['0%', '100%'],
-    });
+    const progressWidth = interpolate(progressAnim.value, [0, 1], ['0%', '100%']);
 
     return (
       <View style={styles.playingContent}>
@@ -438,10 +429,7 @@ function TriviaPage() {
               style={{
                 opacity: optionAnimations[i],
                 transform: [{
-                  translateY: optionAnimations[i].interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [20, 0],
-                  }),
+                  translateY: interpolate(optionAnimations[i].value, [0, 1], [20, 0]),
                 }],
               }}
             >

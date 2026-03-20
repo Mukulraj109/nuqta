@@ -1,16 +1,20 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // TermsTransparencySection.tsx - Collapsible terms and transparency section
-import React, { useState, useRef } from "react";
+import React, { useState} from "react";
 import {
   View,
   Pressable,
   StyleSheet,
-  Animated,
   LayoutAnimation,
   Platform,
   UIManager,
-  Linking,
-} from "react-native";
+  Linking } from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  interpolate,
+} from 'react-native-reanimated';
 import { Ionicons } from "@expo/vector-icons";
 import { triggerImpact } from "@/utils/haptics";
 import { ThemedText } from "@/components/ThemedText";
@@ -18,8 +22,7 @@ import { colors } from '@/constants/theme';
 import {
   Colors,
   Spacing,
-  BorderRadius,
-} from "@/constants/DesignSystem";
+  BorderRadius } from "@/constants/DesignSystem";
 import { catchAndWarn } from '@/utils/catchAndReport';
 
 // Enable LayoutAnimation on Android
@@ -38,20 +41,15 @@ function TermsTransparencySection({
   cashbackRules = "Cashback is credited within 24 hours of purchase. Valid on all payment methods.",
   coinExpiry = "Earned coins expire after 90 days. Branded coins expire as per store policy.",
   returnImpact = "Returns will deduct earned cashback and coins from your wallet.",
-  supportEmail = "support@rez.app",
-}: TermsTransparencySectionProps) {
+  supportEmail = "support@rez.app" }: TermsTransparencySectionProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const rotateAnim = useRef(new Animated.Value(0)).current;
+  const rotateAnim = useSharedValue(0);
 
   const toggleExpand = () => {
     triggerImpact('Light');
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 
-    Animated.timing(rotateAnim, {
-      toValue: isExpanded ? 0 : 1,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
+    rotateAnim.value = withTiming(isExpanded ? 0 : 1, { duration: 200 });
 
     setIsExpanded(!isExpanded);
   };
@@ -61,23 +59,22 @@ function TermsTransparencySection({
     try { Linking.openURL(`mailto:${supportEmail}`); } catch (e) { catchAndWarn(e, 'TermsTransparencySection/openURL'); }
   };
 
-  const rotateInterpolate = rotateAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ["0deg", "180deg"],
-  });
+  const rotateStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${interpolate(rotateAnim.value, [0, 1], [0, 180])}deg` }],
+  }));
 
   return (
     <View style={styles.container}>
       {/* Header - Always Visible */}
       <Pressable
         style={styles.header}
-       
+
         onPress={toggleExpand}
         accessibilityRole="button"
         accessibilityLabel={isExpanded ? "Collapse terms" : "Expand terms"}
       >
         <ThemedText style={styles.headerTitle}>Terms & Transparency</ThemedText>
-        <Animated.View style={{ transform: [{ rotate: rotateInterpolate }] }}>
+        <Animated.View style={rotateStyle}>
           <Ionicons name="chevron-down" size={22} color={Colors.text.secondary} />
         </Animated.View>
       </Pressable>
@@ -124,45 +121,36 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.lg,
     borderWidth: 1,
     borderColor: Colors.gray[100],
-    overflow: "hidden",
-  },
+    overflow: "hidden" },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: Spacing.md,
-  },
+    padding: Spacing.md },
   headerTitle: {
     fontSize: 16,
     fontWeight: "600",
-    color: Colors.text.primary,
-  },
+    color: Colors.text.primary },
   content: {
     paddingHorizontal: Spacing.md,
     paddingBottom: Spacing.md,
     borderTopWidth: 1,
     borderTopColor: Colors.gray[100],
-    paddingTop: Spacing.md,
-  },
+    paddingTop: Spacing.md },
   termItem: {
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
   termTitle: {
     fontSize: 14,
     fontWeight: "600",
     color: Colors.text.primary,
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   termText: {
     fontSize: 13,
     color: Colors.text.secondary,
-    lineHeight: 18,
-  },
+    lineHeight: 18 },
   supportLink: {
     fontSize: 14,
     fontWeight: "600",
-    color: colors.lightMustard,
-  },
-});
+    color: colors.lightMustard } });
 
 export default withErrorBoundary(TermsTransparencySection, 'MainStoreSectionTermsTransparencySection');

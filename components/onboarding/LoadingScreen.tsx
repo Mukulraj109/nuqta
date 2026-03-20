@@ -1,5 +1,11 @@
-import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Animated, Easing, Platform } from 'react-native';
+import React, { useEffect } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Platform,
+} from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withRepeat, withSequence, interpolate, Easing } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '@/constants/theme';
 
@@ -23,80 +29,61 @@ interface LoadingScreenProps {
 }
 
 function LoadingScreen({ duration = 5000, onComplete }: LoadingScreenProps) {
-  const spinValue = useRef(new Animated.Value(0)).current;
-  const pulseValue = useRef(new Animated.Value(1)).current;
-  const progressValue = useRef(new Animated.Value(0)).current;
-  const fadeValue = useRef(new Animated.Value(0)).current;
+  const spinValue = useSharedValue(0);
+  const pulseValue = useSharedValue(1);
+  const progressValue = useSharedValue(0);
+  const fadeValue = useSharedValue(0);
 
   useEffect(() => {
     // Fade in animation
-    Animated.timing(fadeValue, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: Platform.OS !== 'web',
-    }).start();
+    fadeValue.value = withTiming(1, { duration: 500 });
 
-    // Start rotation animation
-    const spinAnimation = Animated.loop(
-      Animated.timing(spinValue, {
-        toValue: 1,
-        duration: 2000,
-        easing: Easing.linear,
-        useNativeDriver: Platform.OS !== 'web',
-      })
+    // Start rotation animation (continuous spin)
+    spinValue.value = withRepeat(
+      withTiming(1, { duration: 2000, easing: Easing.linear }),
+      -1
     );
-    spinAnimation.start();
 
     // Pulse animation for the center coin
-    const pulseAnimation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(pulseValue, {
-          toValue: 1.1,
-          duration: 800,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: Platform.OS !== 'web',
-        }),
-        Animated.timing(pulseValue, {
-          toValue: 1,
-          duration: 800,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: Platform.OS !== 'web',
-        }),
-      ])
+    pulseValue.value = withRepeat(
+      withSequence(
+        withTiming(1.1, { duration: 800, easing: Easing.inOut(Easing.ease) }),
+        withTiming(1, { duration: 800, easing: Easing.inOut(Easing.ease) }),
+      ),
+      -1
     );
-    pulseAnimation.start();
 
-    // Progress animation
-    Animated.timing(progressValue, {
-      toValue: 1,
+    // Progress animation (width)
+    progressValue.value = withTiming(1, {
       duration: duration - 500,
       easing: Easing.inOut(Easing.ease),
-      useNativeDriver: false,
-    }).start();
+    });
 
     // Complete after specified duration
     const timer = setTimeout(() => {
-      spinAnimation.stop();
-      pulseAnimation.stop();
       onComplete?.();
     }, duration);
 
     return () => {
       clearTimeout(timer);
-      spinAnimation.stop();
-      pulseAnimation.stop();
     };
-  }, [duration, onComplete, spinValue, pulseValue, progressValue, fadeValue]);
+  }, [duration, onComplete]);
 
-  const spin = spinValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'],
-  });
+  const fadeStyle = useAnimatedStyle(() => ({
+    opacity: fadeValue.value,
+  }));
 
-  const progressWidth = progressValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0%', '100%'],
-  });
+  const spinStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${interpolate(spinValue.value, [0, 1], [0, 360])}deg` }],
+  }));
+
+  const pulseStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: pulseValue.value }],
+  }));
+
+  const progressWidthStyle = useAnimatedStyle(() => ({
+    width: `${progressValue.value * 100}%`,
+  }));
 
   return (
     <View style={styles.container}>
@@ -114,7 +101,7 @@ function LoadingScreen({ duration = 5000, onComplete }: LoadingScreenProps) {
       </View>
 
       <Animated.View
-        style={[styles.content, { opacity: fadeValue }]}
+        style={[styles.content, fadeStyle]}
         accessible={true}
         accessibilityLabel="Loading your personalized experience"
         accessibilityRole="progressbar"
@@ -131,7 +118,7 @@ function LoadingScreen({ duration = 5000, onComplete }: LoadingScreenProps) {
             <Animated.View
               style={[
                 styles.spinnerOuter,
-                { transform: [{ rotate: spin }] },
+                spinStyle,
               ]}
             >
               <LinearGradient
@@ -146,7 +133,7 @@ function LoadingScreen({ duration = 5000, onComplete }: LoadingScreenProps) {
             <Animated.View
               style={[
                 styles.centerCoin,
-                { transform: [{ scale: pulseValue }] },
+                pulseStyle,
               ]}
             >
               <LinearGradient
@@ -161,7 +148,7 @@ function LoadingScreen({ duration = 5000, onComplete }: LoadingScreenProps) {
             <Animated.View
               style={[
                 styles.orbitContainer,
-                { transform: [{ rotate: spin }] },
+                spinStyle,
               ]}
             >
               <View style={[styles.orbitDot, styles.orbitDot1]} />
@@ -179,7 +166,7 @@ function LoadingScreen({ duration = 5000, onComplete }: LoadingScreenProps) {
           {/* Progress Bar */}
           <View style={styles.progressContainer}>
             <View style={styles.progressTrack}>
-              <Animated.View style={[styles.progressFill, { width: progressWidth }]}>
+              <Animated.View style={[styles.progressFill, progressWidthStyle]}>
                 <LinearGradient
                   colors={[COLORS.primary, COLORS.deepTeal]}
                   start={{ x: 0, y: 0 }}
@@ -236,7 +223,7 @@ const styles = StyleSheet.create({
     height: 200,
     top: -60,
     right: -60,
-    backgroundColor: 'rgba(26, 58, 82, 0.08)',  // Nile Blue
+    backgroundColor: 'rgba(26, 58, 82, 0.08)',
   },
   circleGold: {
     width: 150,
@@ -250,7 +237,7 @@ const styles = StyleSheet.create({
     height: 120,
     bottom: 200,
     right: -40,
-    backgroundColor: 'rgba(223, 235, 247, 0.3)',  // Lavender Mist
+    backgroundColor: 'rgba(223, 235, 247, 0.3)',
   },
 
   content: {
@@ -381,7 +368,7 @@ const styles = StyleSheet.create({
   },
   progressTrack: {
     height: 6,
-    backgroundColor: 'rgba(255, 205, 87, 0.2)',  // Light Mustard
+    backgroundColor: 'rgba(255, 205, 87, 0.2)',
     borderRadius: 3,
     overflow: 'hidden',
   },

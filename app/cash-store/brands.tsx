@@ -10,12 +10,19 @@ import {
   TextInput,
   ScrollView,
   Platform,
-  Animated,
   Linking,
   Modal,
   StatusBar,
-  Dimensions,
+  Dimensions
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated';
 import { FlashList } from '@shopify/flash-list';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { platformAlertConfirm } from '@/utils/platformAlert';
@@ -598,35 +605,24 @@ function CashStoreBrandsPage() {
 
 // ─── Skeleton Card ──────────────────────────────────────────
 const SkeletonCard = React.memo(({ index }: { index: number }) => {
-  const shimmer = useRef(new Animated.Value(0)).current;
+  const shimmer = useSharedValue(0);
 
   useEffect(() => {
-    const loop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmer, {
-          toValue: 1,
-          duration: 1000,
-          delay: index * 80,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmer, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
+    shimmer.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 1000 }),
+        withTiming(0, { duration: 1000 })
+      ),
+      -1
     );
-    loop.start();
-    return () => loop.stop();
   }, [index]);
 
-  const opacity = shimmer.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0.3, 0.8],
-  });
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(shimmer.value, [0, 1], [0.3, 0.8]),
+  }));
 
   return (
-    <Animated.View style={[styles.skeletonCard, { opacity }]}>
+    <Animated.View style={[styles.skeletonCard, animatedStyle]}>
       <View style={styles.skeletonLogo} />
       <View style={styles.skeletonInfo}>
         <View style={[styles.skeletonLine, { width: '60%', height: 12 }]} />

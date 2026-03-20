@@ -12,9 +12,8 @@ import {
   StyleSheet,
   Pressable,
   Dimensions,
-  Platform,
-  Animated,
-} from 'react-native';
+  Platform} from 'react-native';
+import Animated, { interpolate, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 import { FlashList } from '@shopify/flash-list';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -40,67 +39,27 @@ const CashStoreHeroBanner: React.FC<CashStoreHeroBannerProps> = ({
   const flatListRef = useRef<FlashList<HeroBannerType>>(null);
   const autoScrollRef = useRef<NodeJS.Timeout | null>(null);
   const activeIndexRef = useRef(0); // Ref to track current index without re-running effects
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const scaleAnim = useRef(new Animated.Value(0.95)).current;
-  const shineAnim = useRef(new Animated.Value(0)).current;
-  const badgePulseAnim = useRef(new Animated.Value(1)).current;
+  const fadeAnim = useSharedValue(0);
+  const scaleAnim = useSharedValue(0.95);
+  const shineAnim = useSharedValue(0);
+  const badgePulseAnim = useSharedValue(1);
 
   // Entry animation
   useEffect(() => {
-    const entryAnimation = Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 500,
-        useNativeDriver: true,
-      }),
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        friction: 8,
-        tension: 40,
-        useNativeDriver: true,
-      }),
-    ]);
-    entryAnimation.start();
-
+    fadeAnim.value = withTiming(1, { duration: 500 });
+      scaleAnim.value = withSpring(1);
+    
     // Start shine animation
-    const shineLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shineAnim, {
-          toValue: 1,
-          duration: 2000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shineAnim, {
-          toValue: 0,
-          duration: 0,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    shineLoop.start();
-
+    shineAnim.value = withRepeat(withSequence(withTiming(1, { duration: 2000 })), -1);
+    
     // Badge pulse animation
-    const pulseLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(badgePulseAnim, {
-          toValue: 1.1,
-          duration: 800,
-          useNativeDriver: true,
-        }),
-        Animated.timing(badgePulseAnim, {
-          toValue: 1,
-          duration: 800,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    pulseLoop.start();
-
+    badgePulseAnim.value = withRepeat(withSequence(withTiming(1.1, { duration: 800 })), -1);
+    
     // Cleanup animations on unmount
     return () => {
-      entryAnimation.stop();
-      shineLoop.stop();
-      pulseLoop.stop();
+      // animation auto-cancels
+      // animation auto-cancels
+      // animation auto-cancels
     };
   }, []);
 
@@ -194,10 +153,7 @@ const CashStoreHeroBanner: React.FC<CashStoreHeroBannerProps> = ({
                 {
                   transform: [
                     {
-                      translateX: shineAnim.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [-BANNER_WIDTH, BANNER_WIDTH],
-                      }),
+                      translateX: interpolate(shineAnim.value, [0, 1], [-BANNER_WIDTH, BANNER_WIDTH]),
                     },
                   ],
                 },
@@ -279,10 +235,7 @@ const CashStoreHeroBanner: React.FC<CashStoreHeroBannerProps> = ({
               {
                 transform: [
                   {
-                    translateX: shineAnim.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [-BANNER_WIDTH, BANNER_WIDTH],
-                    }),
+                    translateX: interpolate(shineAnim.value, [0, 1], [-BANNER_WIDTH, BANNER_WIDTH]),
                   },
                 ],
               },

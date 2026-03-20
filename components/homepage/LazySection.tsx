@@ -11,7 +11,8 @@
  */
 
 import React, { ReactNode, useRef, useState, useEffect, useCallback } from 'react';
-import { View, StyleSheet, Animated, Platform, Dimensions, ViewStyle, LayoutChangeEvent } from 'react-native';
+import { View, StyleSheet, Platform, Dimensions, ViewStyle, LayoutChangeEvent } from 'react-native';
+import Animated, { useSharedValue, useAnimatedReaction, useAnimatedStyle, withTiming, runOnJS, SharedValue } from 'react-native-reanimated';
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 interface LazySectionProps {
@@ -25,8 +26,8 @@ interface LazySectionProps {
   keepMounted?: boolean;
   style?: ViewStyle;
   placeholder?: ReactNode;
-  /** Parent ScrollView's scroll position (Animated.Value) - required for native viewport detection */
-  scrollY?: Animated.Value;
+  /** Parent ScrollView's scroll position (SharedValue) - required for native viewport detection */
+  scrollY?: SharedValue<number>;
 }
 
 /**
@@ -73,17 +74,17 @@ function useLazySectionWeb(
 
 /**
  * Native implementation using onLayout position + scrollY.
- * Listener self-removes once the section becomes visible.
+ * Reaction self-stops once the section becomes visible.
  */
 function useLazySectionNative(
   sectionY: number | null,
-  scrollY: Animated.Value | undefined,
+  scrollY: SharedValue<number> | undefined,
   rootMargin: number,
   onVisible?: () => void,
 ): boolean {
   const [isVisible, setIsVisible] = useState(false);
   const visibleRef = useRef(false);
-  const listenerIdRef = useRef<string | null>(null);
+  const visibleFlag = useSharedValue(0); // worklet-safe flag (0=hidden, 1=visible)
   const onVisibleRef = useRef(onVisible);
   onVisibleRef.current = onVisible;
 
@@ -95,39 +96,40 @@ function useLazySectionNative(
       const timer = setTimeout(() => {
         if (!visibleRef.current) {
           visibleRef.current = true;
+          visibleFlag.value = 1;
           setIsVisible(true);
           if (onVisibleRef.current) onVisibleRef.current();
         }
       }, 100);
       return () => clearTimeout(timer);
     }
+  }, [scrollY, sectionY, rootMargin]);
 
-    // Listen to scroll position — self-removes once visible
-    const listenerId = scrollY.addListener(({ value: scrollOffset }) => {
+  // Use useAnimatedReaction to observe scrollY changes
+  const markVisible = useCallback(() => {
+    if (!visibleRef.current) {
+      visibleRef.current = true;
+      setIsVisible(true);
+      if (onVisibleRef.current) onVisibleRef.current();
+    }
+  }, []);
+
+  useAnimatedReaction(
+    () => scrollY?.value ?? 0,
+    (scrollOffset) => {
+      if (Platform.OS === 'web' || visibleFlag.value === 1 || !scrollY || sectionY === null) return;
+
       const viewportBottom = scrollOffset + SCREEN_HEIGHT + rootMargin;
       const viewportTop = scrollOffset - rootMargin;
       const visible = sectionY < viewportBottom && sectionY > viewportTop - SCREEN_HEIGHT;
 
-      if (visible && !visibleRef.current) {
-        visibleRef.current = true;
-        setIsVisible(true);
-        if (onVisibleRef.current) onVisibleRef.current();
-        // Self-remove: section is keepMounted, no need to track further
-        if (listenerIdRef.current) {
-          scrollY.removeListener(listenerIdRef.current);
-          listenerIdRef.current = null;
-        }
+      if (visible) {
+        visibleFlag.value = 1;
+        runOnJS(markVisible)();
       }
-    });
-    listenerIdRef.current = listenerId;
-
-    return () => {
-      if (listenerIdRef.current) {
-        scrollY.removeListener(listenerIdRef.current);
-        listenerIdRef.current = null;
-      }
-    };
-  }, [scrollY, sectionY, rootMargin]);
+    },
+    [sectionY, rootMargin]
+  );
 
   return isVisible;
 }
@@ -152,7 +154,7 @@ const LazySection: React.FC<LazySectionProps> = ({
   const [hasLoaded, setHasLoaded] = useState(false);
   const sectionYRef = useRef<number | null>(null);
   const [sectionY, setSectionY] = useState<number | null>(null);
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const fadeAnim = useSharedValue(0);
 
   // Measure section position on layout — use measureInWindow for absolute position
   // Only measure once (subsequent layouts don't change content position)
@@ -173,21 +175,18 @@ const LazySection: React.FC<LazySectionProps> = ({
     : useLazySectionNative(sectionY, scrollY, rootMargin, onVisible);
 
   // Track if section has ever been loaded — fade in content
-  // Note: fadeAnim is stored in a ref so it's stable; no cleanup needed
-  // (stopping the animation in cleanup caused a race condition where
-  // setHasLoaded triggered re-render → cleanup killed the animation at ~0 opacity)
   useEffect(() => {
     if (isVisible && !hasLoaded) {
       setHasLoaded(true);
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 200,
-        useNativeDriver: true,
-      }).start();
+      fadeAnim.value = withTiming(1, { duration: 200 });
     }
-  }, [isVisible, hasLoaded, fadeAnim]);
+  }, [isVisible, hasLoaded]);
 
   const shouldRenderContent = hasLoaded && (keepMounted || isVisible || !unloadWhenOffscreen);
+
+  const fadeStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+  }));
 
   return (
     <View
@@ -203,7 +202,7 @@ const LazySection: React.FC<LazySectionProps> = ({
       )}
 
       {shouldRenderContent && (
-        <Animated.View style={[styles.content, { opacity: fadeAnim }]}>
+        <Animated.View style={[styles.content, fadeStyle]}>
           {renderSection()}
         </Animated.View>
       )}

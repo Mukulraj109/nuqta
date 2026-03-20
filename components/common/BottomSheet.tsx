@@ -5,17 +5,16 @@
  * Provides smooth animations and backdrop interaction.
  */
 
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect} from 'react';
 import {
   View,
   Text,
   Modal,
   StyleSheet,
-  Animated,
   Pressable,
   Dimensions,
-  ScrollView,
-} from 'react-native';
+  ScrollView} from 'react-native';
+import Animated, { interpolate, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { colors, spacing, typography, borderRadius, zIndex, timing } from '@/constants/theme';
 
 type SnapPoint = '25%' | '50%' | '75%' | '90%';
@@ -73,50 +72,28 @@ function BottomSheet({
   snapPoints = ['50%'],
   scrollable = true,
 }: BottomSheetProps) {
-  const slideAnim = useRef(new Animated.Value(0)).current;
-  const backdropAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useSharedValue(0);
+  const backdropAnim = useSharedValue(0);
+  const backdropStyle = useAnimatedStyle(() => ({ opacity: backdropAnim.value }));
 
   const screenHeight = Dimensions.get('window').height;
   const sheetHeight = screenHeight * (parseInt(snapPoints[0]) / 100);
 
   useEffect(() => {
-    let anim: Animated.CompositeAnimation;
+    let anim: any;
     if (visible) {
-      anim = Animated.parallel([
-        Animated.spring(slideAnim, {
-          toValue: 1,
-          useNativeDriver: true,
-          tension: 65,
-          friction: 11,
-        }),
-        Animated.timing(backdropAnim, {
-          toValue: 1,
-          duration: timing.duration.normal,
-          useNativeDriver: true,
-        }),
-      ]);
+      slideAnim.value = withSpring(1);
+      backdropAnim.value = withTiming(1);
     } else {
-      anim = Animated.parallel([
-        Animated.timing(slideAnim, {
-          toValue: 0,
-          duration: timing.duration.fast,
-          useNativeDriver: true,
-        }),
-        Animated.timing(backdropAnim, {
-          toValue: 0,
-          duration: timing.duration.fast,
-          useNativeDriver: true,
-        }),
-      ]);
+      slideAnim.value = withTiming(0);
+      backdropAnim.value = withTiming(0);
     }
-    anim.start();
-    return () => anim.stop();
-  }, [visible, slideAnim, backdropAnim]);
+    
+    }, [visible, slideAnim, backdropAnim]);
 
-  const translateY = slideAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [sheetHeight, 0],
-  });
+  const sheetSlideStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: interpolate(slideAnim.value, [0, 1], [sheetHeight, 0]) }],
+  }));
 
   const ContentWrapper = scrollable ? ScrollView : View;
 
@@ -131,7 +108,7 @@ function BottomSheet({
       <View style={styles.container}>
         {/* Backdrop */}
         <Animated.View
-          style={[styles.backdrop, { opacity: backdropAnim }]}
+          style={[styles.backdrop, backdropStyle]}
         >
           <Pressable
             style={StyleSheet.absoluteFill}
@@ -149,8 +126,8 @@ function BottomSheet({
             styles.sheet,
             {
               height: sheetHeight,
-              transform: [{ translateY }],
             },
+            sheetSlideStyle,
           ]}
           accessible={true}
           accessibilityRole="dialog"

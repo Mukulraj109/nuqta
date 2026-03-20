@@ -18,10 +18,17 @@ import {
   Pressable,
   TextInput,
   ActivityIndicator,
-  Animated,
   Dimensions,
   Platform,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withRepeat,
+  withSequence,
+  interpolate,
+} from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import jsQR from 'jsqr';
@@ -62,7 +69,7 @@ export default function QRScanner({ onScan, onClose }: QRScannerProps) {
   const [showManualEntry, setShowManualEntry] = useState(false);
   const [scannerStatus, setScannerStatus] = useState<'idle' | 'scanning' | 'no-detector' | 'detected'>('idle');
   const isMounted = useIsMounted();
-  const scanLineAnim = useRef(new Animated.Value(0)).current;
+  const scanLineAnim = useSharedValue(0);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -74,24 +81,15 @@ export default function QRScanner({ onScan, onClose }: QRScannerProps) {
     checkWebcamAndStart();
 
     // Animate scan line
-    const scanLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(scanLineAnim, {
-          toValue: 1,
-          duration: 2500,
-          useNativeDriver: true,
-        }),
-        Animated.timing(scanLineAnim, {
-          toValue: 0,
-          duration: 0,
-          useNativeDriver: true,
-        }),
-      ])
+    scanLineAnim.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 2500 }),
+        withTiming(0, { duration: 0 })
+      ),
+      -1
     );
-    scanLoop.start();
 
     return () => {
-      scanLoop.stop();
       stopScanning();
     };
   }, []);
@@ -121,15 +119,10 @@ export default function QRScanner({ onScan, onClose }: QRScannerProps) {
     }
   };
 
-  const translateY = scanLineAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, SCANNER_SIZE - 4],
-  });
-
-  const opacity = scanLineAnim.interpolate({
-    inputRange: [0, 0.1, 0.9, 1],
-    outputRange: [0, 1, 1, 0],
-  });
+  const scanLineStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: interpolate(scanLineAnim.value, [0, 1], [0, SCANNER_SIZE - 4]) }],
+    opacity: interpolate(scanLineAnim.value, [0, 0.1, 0.9, 1], [0, 1, 1, 0]),
+  }));
 
   const startScanning = async () => {
     if (isScanning) return;
@@ -353,7 +346,7 @@ export default function QRScanner({ onScan, onClose }: QRScannerProps) {
             <Animated.View
               style={[
                 styles.scanLine,
-                { transform: [{ translateY }], opacity },
+                scanLineStyle,
               ]}
             />
           )}

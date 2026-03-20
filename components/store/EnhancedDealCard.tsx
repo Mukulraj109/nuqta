@@ -3,9 +3,16 @@ import {
   View,
   Pressable,
   StyleSheet,
-  Animated,
   Dimensions,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSpring,
+  withSequence,
+  withRepeat,
+} from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { DealCardProps, Deal } from '@/types/deals';
@@ -37,11 +44,10 @@ function EnhancedDealCard({
   const [billPreview] = useState<number>(deal.minimumBill);
   const [showPreview, setShowPreview] = useState(false);
 
-  // Animation refs
-  const scaleAnim = useRef(new Animated.Value(1)).current;
-  const cardAnim = useRef(new Animated.Value(0)).current;
-  const previewAnim = useRef(new Animated.Value(0)).current;
-  const pulseAnim = useRef(new Animated.Value(1)).current;
+  // Animation values
+  const scaleAnim = useSharedValue(1);
+  const cardAnim = useSharedValue(0);
+  const pulseAnim = useSharedValue(1);
 
   // Countdown hook
   const countdown = useCountdown(deal.validUntil);
@@ -73,56 +79,37 @@ function EnhancedDealCard({
 
   // Initialize card animation
   useEffect(() => {
-    const anim = Animated.spring(cardAnim, {
-      toValue: 1,
-      tension: 100,
-      friction: 8,
-      useNativeDriver: true,
-    });
-    anim.start();
-
-    return () => { anim.stop(); };
-  }, [cardAnim]);
+    cardAnim.value = withSpring(1, { damping: 8, stiffness: 100 });
+  }, []);
 
   // Pulse animation for expiring soon deals
   useEffect(() => {
     if (isExpiringSoon && !countdown.isExpired) {
-      const pulse = Animated.loop(
-        Animated.sequence([
-          Animated.timing(pulseAnim, {
-            toValue: 1.02,
-            duration: 1000,
-            useNativeDriver: true,
-          }),
-          Animated.timing(pulseAnim, {
-            toValue: 1,
-            duration: 1000,
-            useNativeDriver: true,
-          }),
-        ])
+      pulseAnim.value = withRepeat(
+        withSequence(
+          withTiming(1.02, { duration: 1000 }),
+          withTiming(1, { duration: 1000 })
+        ),
+        -1
       );
-      pulse.start();
-
-      return () => pulse.stop();
+    } else {
+      pulseAnim.value = 1;
     }
-  }, [isExpiringSoon, countdown.isExpired, pulseAnim]);
+  }, [isExpiringSoon, countdown.isExpired]);
+
+  const cardAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: cardAnim.value * pulseAnim.value * scaleAnim.value }],
+    opacity: countdown.isExpired ? 0.6 : 1,
+  }));
 
   // Handle card press with animation
   const handleCardPress = () => {
     if (countdown.isExpired) return; // Prevent interaction with expired deals
 
-    Animated.sequence([
-      Animated.timing(scaleAnim, {
-        toValue: 0.95,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(scaleAnim, {
-        toValue: 1,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    scaleAnim.value = withSequence(
+      withTiming(0.95, { duration: 100 }),
+      withTiming(1, { duration: 100 })
+    );
 
     onMoreDetails(deal.id);
   };
@@ -185,10 +172,7 @@ function EnhancedDealCard({
     <Animated.View
       style={[
         styles.container,
-        {
-          transform: [{ scale: Animated.multiply(cardAnim, pulseAnim) }],
-          opacity: countdown.isExpired ? 0.6 : 1,
-        },
+        cardAnimatedStyle,
       ]}
     >
       <Pressable

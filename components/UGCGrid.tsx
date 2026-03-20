@@ -1,11 +1,16 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import {
   View,
   Pressable,
   StyleSheet,
-  Dimensions,
-  Animated,
+  Dimensions
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withSpring,
+  withTiming } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
@@ -23,8 +28,7 @@ const UGCGrid: React.FC<UGCGridProps> = ({
   ugcContent,
   onContentPress,
   onLikeContent,
-  onBookmarkContent,
-}) => {
+  onBookmarkContent }) => {
   const screenWidth = Dimensions.get('window').width;
   const itemWidth = (screenWidth - 64) / 2; // Account for padding and gap
 
@@ -50,22 +54,24 @@ const UGCGrid: React.FC<UGCGridProps> = ({
   };
 
   const renderUGCItem = ({ item }: { item: UGCContent }) => {
-    const likeScaleAnim = useRef(new Animated.Value(1)).current;
-    const bookmarkScaleAnim = useRef(new Animated.Value(1)).current;
+    const likeScaleAnim = useSharedValue(1);
+    const bookmarkScaleAnim = useSharedValue(1);
+    const likeScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: likeScaleAnim.value }] }));
+    const bookmarkScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: bookmarkScaleAnim.value }] }));
 
     const handleLikePress = () => {
-      Animated.sequence([
-        Animated.timing(likeScaleAnim, { toValue: 0.8, duration: 100, useNativeDriver: true }),
-        Animated.spring(likeScaleAnim, { toValue: 1, friction: 3, tension: 100, useNativeDriver: true }),
-      ]).start();
+      likeScaleAnim.value = withSequence(
+        withTiming(0.8, { duration: 100 }),
+        withSpring(1, { friction: 3, tension: 100 }),
+      );
       onLikeContent?.(item.id);
     };
 
     const handleBookmarkPress = () => {
-      Animated.sequence([
-        Animated.timing(bookmarkScaleAnim, { toValue: 0.8, duration: 100, useNativeDriver: true }),
-        Animated.spring(bookmarkScaleAnim, { toValue: 1, friction: 3, tension: 100, useNativeDriver: true }),
-      ]).start();
+      bookmarkScaleAnim.value = withSequence(
+        withTiming(0.8, { duration: 100 }),
+        withSpring(1, { friction: 3, tension: 100 }),
+      );
       onBookmarkContent?.(item.id);
     };
 
@@ -103,7 +109,7 @@ const UGCGrid: React.FC<UGCGridProps> = ({
           accessibilityState={{ selected: item.isBookmarked }}
           accessibilityHint={`Double tap to ${item.isBookmarked ? 'remove bookmark' : 'bookmark this post'}`}
         >
-          <Animated.View style={{ transform: [{ scale: bookmarkScaleAnim }] }}>
+          <Animated.View style={bookmarkScaleStyle}>
             <Ionicons
               name={item.isBookmarked ? "bookmark" : "bookmark-outline"}
               size={20}
@@ -121,7 +127,7 @@ const UGCGrid: React.FC<UGCGridProps> = ({
           accessibilityState={{ selected: item.isLiked }}
           accessibilityHint={`Double tap to ${item.isLiked ? 'remove like' : 'like this post'}`}
         >
-          <Animated.View style={{ transform: [{ scale: likeScaleAnim }], flexDirection: 'row', alignItems: 'center' }}>
+          <Animated.View style={[likeScaleStyle, { flexDirection: "row", alignItems: "center" }]}>
             <Ionicons
               name={item.isLiked ? "heart" : "heart-outline"}
               size={18}
@@ -211,20 +217,17 @@ const UGCGrid: React.FC<UGCGridProps> = ({
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    paddingTop: 8,
-  },
+    paddingTop: 8 },
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 60,
-    minHeight: 200,
-  },
+    minHeight: 200 },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   ugcItemWrapper: {
     // Width is set dynamically
   },
@@ -237,26 +240,22 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
     overflow: 'hidden',
-    width: '100%',
-  },
+    width: '100%' },
   imageContainer: {
     position: 'relative',
-    aspectRatio: 1,
-  },
+    aspectRatio: 1 },
   ugcImage: {
     width: '100%',
     height: '100%',
     borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-  },
+    borderTopRightRadius: 12 },
   videoIndicator: {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: [{ translateX: -12 }, { translateY: -12 }],
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    borderRadius: 12,
-  },
+    borderRadius: 12 },
   userOverlay: {
     position: 'absolute',
     bottom: 8,
@@ -266,19 +265,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
     paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 12,
-  },
+    borderRadius: 12 },
   userAvatar: {
     width: 20,
     height: 20,
     borderRadius: 10,
-    marginRight: 6,
-  },
+    marginRight: 6 },
   userName: {
     fontSize: 12,
     fontWeight: '600',
-    color: colors.background.primary,
-  },
+    color: colors.background.primary },
   bookmarkButton: {
     position: 'absolute',
     top: 8,
@@ -293,8 +289,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 3,
-    elevation: 4,
-  },
+    elevation: 4 },
   likeButton: {
     position: 'absolute',
     bottom: 8,
@@ -309,81 +304,66 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 3,
-    elevation: 4,
-  },
+    elevation: 4 },
   likeCount: {
     fontSize: 12,
     fontWeight: '700',
     color: colors.background.primary,
     marginLeft: 4,
-    letterSpacing: 0.2,
-  },
+    letterSpacing: 0.2 },
   contentInfo: {
-    padding: 12,
-  },
+    padding: 12 },
   caption: {
     fontSize: 12,
     color: colors.neutral[700],
     lineHeight: 16,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   contentStats: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   likesContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-  },
+    gap: 4 },
   likesText: {
     fontSize: 11,
     color: colors.neutral[500],
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   dateText: {
     fontSize: 11,
-    color: colors.neutral[400],
-  },
+    color: colors.neutral[400] },
   tagsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'wrap',
-    gap: 4,
-  },
+    gap: 4 },
   tag: {
     backgroundColor: colors.neutral[100],
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 4,
-  },
+    borderRadius: 4 },
   tagText: {
     fontSize: 10,
     color: colors.neutral[500],
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   moreTagsText: {
     fontSize: 10,
     color: colors.neutral[400],
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   emptyText: {
     fontSize: 16,
     fontWeight: '600',
     color: colors.neutral[500],
     marginTop: 16,
     marginBottom: 8,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   emptySubtext: {
     fontSize: 13,
     color: colors.neutral[400],
     textAlign: 'center',
     lineHeight: 18,
-    paddingHorizontal: 20,
-  },
-});
+    paddingHorizontal: 20 } });
 
 export default React.memo(UGCGrid);

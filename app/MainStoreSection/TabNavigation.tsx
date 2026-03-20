@@ -6,10 +6,14 @@ import {
   Pressable,
   StyleSheet,
   Dimensions,
-  Animated,
   LayoutChangeEvent,
   Platform,
 } from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+} from 'react-native-reanimated';
 import { triggerImpact } from "@/utils/haptics";
 import { ThemedText } from "@/components/ThemedText";
 import { colors } from '@/constants/theme';
@@ -48,12 +52,17 @@ function TabNavigation({
   const [containerWidth, setContainerWidth] = useState<number>(Dimensions.get("window").width);
   const [tabPositions, setTabPositions] = useState<{ [key: string]: { x: number; width: number } }>({});
 
-  // Animated value for underline position
-  const underlineLeft = useRef(new Animated.Value(0)).current;
-  const underlineWidth = useRef(new Animated.Value(0)).current;
+  // Animated value for underline position (reanimated for layout props)
+  const underlineLeft = useSharedValue(0);
+  const underlineWidth = useSharedValue(0);
 
-  // Animation refs for each tab
-  const scaleAnims = useRef(defaultTabs.map(() => new Animated.Value(1))).current;
+  // Scale animations for each tab
+  const scale0 = useSharedValue(1);
+  const scale1 = useSharedValue(1);
+  const scale2 = useSharedValue(1);
+  const scale3 = useSharedValue(1);
+  const scale4 = useSharedValue(1);
+  const scaleAnims = useRef([scale0, scale1, scale2, scale3, scale4]).current;
 
   // Override menu tab label if provided
   const tabs = menuTabLabel
@@ -63,25 +72,16 @@ function TabNavigation({
   const tabCount = tabs.length;
   const tabWidth = containerWidth / tabCount;
 
+  const underlineAnimStyle = useAnimatedStyle(() => ({
+    left: underlineLeft.value,
+    width: underlineWidth.value,
+  }));
+
   useEffect(() => {
     const activePosition = tabPositions[activeTab];
     if (activePosition) {
-      const anim = Animated.parallel([
-        Animated.spring(underlineLeft, {
-          toValue: activePosition.x,
-          useNativeDriver: false,
-          tension: 100,
-          friction: 12,
-        }),
-        Animated.spring(underlineWidth, {
-          toValue: activePosition.width,
-          useNativeDriver: false,
-          tension: 100,
-          friction: 12,
-        }),
-      ]);
-      anim.start();
-      return () => anim.stop();
+      underlineLeft.value = withSpring(activePosition.x, { damping: 18, stiffness: 180 });
+      underlineWidth.value = withSpring(activePosition.width, { damping: 18, stiffness: 180 });
     }
   }, [activeTab, tabPositions]);
 
@@ -99,21 +99,11 @@ function TabNavigation({
   };
 
   const handlePressIn = (index: number) => {
-    Animated.spring(scaleAnims[index], {
-      toValue: 0.95,
-      tension: 100,
-      friction: 8,
-      useNativeDriver: true,
-    }).start();
+    scaleAnims[index].value = withSpring(0.95, { damping: 8, stiffness: 100 });
   };
 
   const handlePressOut = (index: number) => {
-    Animated.spring(scaleAnims[index], {
-      toValue: 1,
-      tension: 100,
-      friction: 8,
-      useNativeDriver: true,
-    }).start();
+    scaleAnims[index].value = withSpring(1, { damping: 8, stiffness: 100 });
   };
 
   const handlePress = (tabKey: TabKey) => {
@@ -127,13 +117,16 @@ function TabNavigation({
         <View style={styles.tabsRow}>
           {tabs.map((tab, index) => {
             const isActive = tab.key === activeTab;
+            const scaleStyle = useAnimatedStyle(() => ({
+              transform: [{ scale: scaleAnims[index].value }],
+            }));
 
             return (
               <Animated.View
                 key={tab.key}
                 style={[
                   styles.tabWrapper,
-                  { transform: [{ scale: scaleAnims[index] }] },
+                  scaleStyle,
                 ]}
                 onLayout={(e) => handleTabLayout(tab.key, e)}
               >
@@ -165,10 +158,7 @@ function TabNavigation({
         <Animated.View
           style={[
             styles.underline,
-            {
-              left: underlineLeft,
-              width: underlineWidth,
-            },
+            underlineAnimStyle,
           ]}
         />
       </View>

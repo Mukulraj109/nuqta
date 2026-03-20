@@ -10,9 +10,14 @@ import {
   Pressable,
   StatusBar,
   Platform,
-  Share,
-  Animated,
+  Share
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withSpring,
+  withTiming} from 'react-native-reanimated';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -39,8 +44,15 @@ function TravelBookingConfirmationPage() {
   const [showConfetti, setShowConfetti] = useState(false);
 
   // Animation values
-  const [successAnim] = useState(new Animated.Value(0));
-  const [contentAnim] = useState(new Animated.Value(0));
+  const successAnim = useSharedValue(0);
+  const contentAnim = useSharedValue(0);
+  const successStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: successAnim.value }],
+    opacity: successAnim.value,
+  }));
+  const contentStyle = useAnimatedStyle(() => ({
+    opacity: contentAnim.value,
+  }));
   const isMounted = useIsMounted();
 
   useEffect(() => {
@@ -55,21 +67,8 @@ function TravelBookingConfirmationPage() {
   useEffect(() => {
     if (booking) {
       setShowConfetti(true);
-      const anim = Animated.sequence([
-        Animated.spring(successAnim, {
-          toValue: 1,
-          tension: 50,
-          friction: 7,
-          useNativeDriver: true,
-        }),
-        Animated.timing(contentAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-      ]);
-      anim.start();
-      return () => anim.stop();
+      successAnim.value = withSpring(1, { damping: 7, stiffness: 50 });
+      contentAnim.value = withTiming(1, { duration: 300 });
     }
   }, [booking]);
 
@@ -100,8 +99,7 @@ function TravelBookingConfirmationPage() {
       const routeText = route ? `${route.from} → ${route.to}` : '';
       await Share.share({
         message: `Travel Booking Confirmed! ${routeText}\nBooking #${booking.bookingNumber}\nDate: ${new Date(booking.bookingDate).toLocaleDateString()}\n\nBooked via ReZ App`,
-        title: 'Travel Booking Confirmation',
-      });
+        title: 'Travel Booking Confirmation' });
     } catch (error) {
       // silently handle
     }
@@ -170,10 +168,7 @@ function TravelBookingConfirmationPage() {
 
         {/* Success Header */}
         <LinearGradient colors={[Colors.nileBlue, '#0f2a3d']} style={styles.header}>
-          <Animated.View style={[styles.successIconContainer, {
-            transform: [{ scale: successAnim }],
-            opacity: successAnim,
-          }]}>
+          <Animated.View style={[styles.successIconContainer, successStyle]}>
             <View style={styles.successCircle}>
               <Ionicons name="checkmark" size={48} color={Colors.text.inverse} />
             </View>
@@ -184,7 +179,7 @@ function TravelBookingConfirmationPage() {
           </ThemedText>
         </LinearGradient>
 
-        <Animated.View style={[styles.content, { opacity: contentAnim }]}>
+        <Animated.View style={[styles.content, contentStyle]}>
 
           {/* Booking Number Card */}
           <View style={styles.card}>
@@ -361,14 +356,12 @@ const styles = StyleSheet.create({
   header: {
     paddingTop: Platform.OS === 'ios' ? 60 : 40,
     paddingBottom: 40,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   successIconContainer: { marginBottom: 16 },
   successCircle: {
     width: 80, height: 80, borderRadius: 40,
     backgroundColor: Colors.success,
-    justifyContent: 'center', alignItems: 'center',
-  },
+    justifyContent: 'center', alignItems: 'center' },
   successTitle: { ...Typography.h2, color: Colors.text.inverse, marginBottom: Spacing.sm },
   successSubtitle: { ...Typography.body, color: Colors.text.tertiary, textAlign: 'center', paddingHorizontal: 40 },
   content: { padding: Spacing.base, marginTop: -20 },
@@ -377,16 +370,14 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.lg,
     padding: Spacing.lg,
     marginBottom: Spacing.md,
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle },
   bookingNumberRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   cardLabel: { ...Typography.caption, color: Colors.text.tertiary, marginBottom: Spacing.xs },
   bookingNumber: { ...Typography.h3, color: Colors.nileBlue, letterSpacing: 1 },
   categoryBadge: {
     width: 44, height: 44, borderRadius: 22,
     backgroundColor: Colors.infoScale[200],
-    justifyContent: 'center', alignItems: 'center',
-  },
+    justifyContent: 'center', alignItems: 'center' },
   pnrRow: { marginTop: 12, paddingTop: 12, borderTopWidth: 1, borderTopColor: Colors.background.secondary },
   pnrValue: { ...Typography.h4, color: Colors.nileBlue, letterSpacing: 2 },
   cardTitle: { ...Typography.bodyLarge, fontWeight: '600', color: Colors.text.primary, marginBottom: Spacing.base },
@@ -421,9 +412,7 @@ const styles = StyleSheet.create({
   secondaryButton: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: Spacing.sm,
     paddingVertical: 14, borderRadius: BorderRadius.md, borderWidth: 1.5, borderColor: Colors.nileBlue,
-    backgroundColor: Colors.background.primary,
-  },
-  secondaryButtonText: { ...Typography.body, fontWeight: '600', color: Colors.nileBlue },
-});
+    backgroundColor: Colors.background.primary },
+  secondaryButtonText: { ...Typography.body, fontWeight: '600', color: Colors.nileBlue } });
 
 export default withErrorBoundary(TravelBookingConfirmationPage, 'TravelBookingConfirmation');

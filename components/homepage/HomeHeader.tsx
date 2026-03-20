@@ -7,14 +7,14 @@
  * @component
  */
 
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
   Pressable,
   Platform,
-  Animated,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring, withSequence, interpolate } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -41,9 +41,9 @@ export interface HomeHeaderProps {
   /** Callback to toggle detailed location display */
   onToggleLocation: () => void;
   /** Animated height value for location expansion */
-  animatedHeight: Animated.Value;
+  animatedHeight: Animated.SharedValue<number>;
   /** Animated opacity value for location expansion */
-  animatedOpacity: Animated.Value;
+  animatedOpacity: Animated.SharedValue<number>;
   /** Callback when search is pressed */
   onSearchPress: () => void;
   /** Callback when profile avatar is pressed */
@@ -87,16 +87,18 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
   textStyles,
 }) => {
   const router = useRouter();
-  const cartBounceAnim = useRef(new Animated.Value(1)).current;
+  const cartBounceAnim = useSharedValue(1);
+
+  const cartBadgeStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: cartBounceAnim.value }],
+  }));
 
   useEffect(() => {
     if (cartItemCount > 0) {
-      const anim = Animated.sequence([
-        Animated.spring(cartBounceAnim, { toValue: 1.3, useNativeDriver: true, tension: 200, friction: 5 }),
-        Animated.spring(cartBounceAnim, { toValue: 1, useNativeDriver: true, tension: 200, friction: 10 }),
-      ]);
-      anim.start();
-      return () => { anim.stop(); };
+      cartBounceAnim.value = withSequence(
+        withSpring(1.3, { stiffness: 200, damping: 5 }),
+        withSpring(1, { stiffness: 200, damping: 10 }),
+      );
     }
   }, [cartItemCount]);
 
@@ -192,7 +194,7 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
             <Ionicons name="cart-outline" size={24} color="white" />
             {cartItemCount > 0 && (
               <Animated.View
-                style={{
+                style={[{
                   position: 'absolute',
                   top: -6,
                   right: -6,
@@ -203,8 +205,7 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
                   justifyContent: 'center',
                   alignItems: 'center',
                   paddingHorizontal: 4,
-                  transform: [{ scale: cartBounceAnim }],
-                }}
+                }, cartBadgeStyle]}
               >
                 <Text
                   style={{
@@ -240,10 +241,7 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
         style={[
           headerStyles.detailedLocationContainer,
           {
-            height: animatedHeight.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, 120],
-            }),
+            height: interpolate(animatedHeight.value, [0, 1], [0, 120]),
             opacity: animatedOpacity,
             overflow: 'hidden',
           },

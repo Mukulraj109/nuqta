@@ -6,9 +6,8 @@ import {
   Pressable,
   StyleSheet,
   Dimensions,
-  Platform,
-  Animated,
-} from 'react-native';
+  Platform} from 'react-native';
+import Animated, { useSharedValue, withSpring } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { Video, ResizeMode } from 'expo-av';
@@ -41,7 +40,7 @@ function DiscoverReelCard({
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [showThumbnail, setShowThumbnail] = useState(true);
   const isMounted = useIsMounted();
-  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const scaleAnim = useSharedValue(1);
 
   // Cleanup video resources on unmount
   useEffect(() => {
@@ -76,18 +75,11 @@ function DiscoverReelCard({
 
   // Press animation
   const handlePressIn = useCallback(() => {
-    Animated.spring(scaleAnim, {
-      toValue: 0.96,
-      useNativeDriver: true,
-    }).start();
+    scaleAnim.value = withSpring(0.96);
   }, [scaleAnim]);
 
   const handlePressOut = useCallback(() => {
-    Animated.spring(scaleAnim, {
-      toValue: 1,
-      friction: 3,
-      useNativeDriver: true,
-    }).start();
+    scaleAnim.value = withSpring(1);
   }, [scaleAnim]);
 
   // Format view count

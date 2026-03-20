@@ -27,9 +27,11 @@ import {
   Platform,
   KeyboardAvoidingView,
   Modal,
-  Keyboard,
-  Animated,
-} from 'react-native';
+  Keyboard} from 'react-native';
+import Animated, {
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import * as ExpoCamera from 'expo-camera';
 // Deferred: ImagePicker only needed when user taps "Choose from Library"
@@ -226,7 +228,7 @@ function BillUploadPage() {
   const [showProgressModal, setShowProgressModal] = useState(false);
 
   // Animation values
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const fadeAnim = useSharedValue(0);
 
   /**
    * Initialize - Request permissions and load saved data
@@ -235,13 +237,8 @@ function BillUploadPage() {
     initializePage();
 
     // Fade in animation with cleanup
-    const anim = Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: true,
-    });
-    anim.start();
-    return () => anim.stop();
+    const anim = withTiming(1, { duration: 300 });
+    // reanimated auto-cleans up
   }, []);
 
   const initializePage = async () => {

@@ -8,16 +8,15 @@
  * Linen (#faf1e0), Light Peach (#ffd7b5), Lavender Mist (#dfebf7)
  */
 
-import React, { memo, useRef, useEffect } from 'react';
+import React, { memo, useEffect} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
   Platform,
-  Animated,
-  Dimensions,
-} from 'react-native';
+  Dimensions} from 'react-native';
+import Animated, { interpolate, useAnimatedStyle, useDerivedValue, useSharedValue, withDelay, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { TravelDeal } from '../../../types/cash-store.types';
@@ -92,61 +91,26 @@ const TravelCard: React.FC<{
   index: number;
   onPress: () => void;
 }> = memo(({ deal, index, onPress }) => {
-  const scaleAnim = useRef(new Animated.Value(0.9)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const pressAnim = useRef(new Animated.Value(1)).current;
-  const iconFloatAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useSharedValue(0.9);
+  const fadeAnim = useSharedValue(0);
+  const pressAnim = useSharedValue(1);
+  const iconFloatAnim = useSharedValue(0);
 
   useEffect(() => {
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 350,
-        delay: index * 80,
-        useNativeDriver: true,
-      }),
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        friction: 8,
-        tension: 40,
-        delay: index * 80,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    fadeAnim.value = withDelay(index * 80, withTiming(1, { duration: 350 }));
+      scaleAnim.value = withDelay(index * 80, withSpring(1));
 
     // Gentle floating icon animation
-    const floatLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(iconFloatAnim, {
-          toValue: -3,
-          duration: 1800,
-          useNativeDriver: true,
-        }),
-        Animated.timing(iconFloatAnim, {
-          toValue: 0,
-          duration: 1800,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    floatLoop.start();
-    return () => floatLoop.stop();
-  }, [index]);
+    iconFloatAnim.value = withRepeat(withSequence(withTiming(-3, { duration: 1800 })), -1);
+    
+    }, [index]);
 
   const handlePressIn = () => {
-    Animated.spring(pressAnim, {
-      toValue: 0.95,
-      friction: 8,
-      useNativeDriver: true,
-    }).start();
+    pressAnim.value = withSpring(0.95);
   };
 
   const handlePressOut = () => {
-    Animated.spring(pressAnim, {
-      toValue: 1,
-      friction: 6,
-      useNativeDriver: true,
-    }).start();
+    pressAnim.value = withSpring(1);
   };
 
   const theme = CATEGORY_THEMES[deal.category] || DEFAULT_THEME;
@@ -158,7 +122,7 @@ const TravelCard: React.FC<{
         styles.cardWrapper,
         {
           opacity: fadeAnim,
-          transform: [{ scale: Animated.multiply(scaleAnim, pressAnim) }],
+          transform: [{ scale: scaleAnim.value * pressAnim.value }],
         },
       ]}
     >
@@ -219,27 +183,12 @@ const TravelCard: React.FC<{
 
 // ─── Skeleton Card ──────────────────────────────────────────
 const SkeletonCard: React.FC<{ index: number }> = memo(({ index }) => {
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
-    const loop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, {
-          toValue: 1,
-          duration: 1000,
-          delay: index * 100,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmerAnim, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    loop.start();
-    return () => loop.stop();
-  }, [index]);
+    shimmerAnim.value = withRepeat(withSequence(withTiming(1, { duration: 1000 })), -1);
+    
+    }, [index]);
 
   return (
     <View style={styles.cardWrapper}>
@@ -247,10 +196,7 @@ const SkeletonCard: React.FC<{ index: number }> = memo(({ index }) => {
         style={[
           styles.skeletonCard,
           {
-            opacity: shimmerAnim.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0.4, 0.8],
-            }),
+            opacity: interpolate(shimmerAnim.value, [0, 1], [0.4, 0.8]),
           },
         ]}
       >
@@ -270,34 +216,16 @@ const TravelBookingDeals: React.FC<TravelBookingDealsProps> = ({
   onViewAllPress,
 }) => {
   const displayDeals = deals.slice(0, 4);
-  const headerFadeAnim = useRef(new Animated.Value(0)).current;
-  const planeAnim = useRef(new Animated.Value(0)).current;
+  const headerFadeAnim = useSharedValue(0);
+  const planeAnim = useSharedValue(0);
 
   useEffect(() => {
-    Animated.timing(headerFadeAnim, {
-      toValue: 1,
-      duration: 400,
-      useNativeDriver: true,
-    }).start();
+    headerFadeAnim.value = withTiming(1, { duration: 400 });
 
     // Bouncing airplane
-    const planeLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(planeAnim, {
-          toValue: 5,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(planeAnim, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    planeLoop.start();
-    return () => planeLoop.stop();
-  }, []);
+    planeAnim.value = withRepeat(withSequence(withTiming(5, { duration: 1000 })), -1);
+    
+    }, []);
 
   // Hide section when no deals and not loading
   if (!isLoading && displayDeals.length === 0) {

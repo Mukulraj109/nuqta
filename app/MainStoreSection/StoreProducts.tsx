@@ -3,7 +3,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Green & Gold color theme following TASK.md
 
 import { colors } from '@/constants/theme';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -11,9 +11,12 @@ import {
   Pressable,
   ActivityIndicator,
   Dimensions,
-  Platform,
-  Animated,
+  Platform
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring } from 'react-native-reanimated';
 import { ProductGridSkeleton } from '@/components/skeletons';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
@@ -43,8 +46,7 @@ const GLASS = {
 
   // Gold Tinted Glass
   tintedGoldBg: 'rgba(255, 200, 87, 0.1)',
-  tintedGoldBorder: 'rgba(255, 200, 87, 0.3)',
-};
+  tintedGoldBorder: 'rgba(255, 200, 87, 0.3)' };
 
 const COLORS = {
   primary: Colors.gold,
@@ -77,8 +79,14 @@ function StoreProducts({ storeId, storeName }: StoreProductsProps) {
   const [error, setError] = useState<string | null>(null);
 
   // Animation refs
-  const cardScale1 = useRef(new Animated.Value(1)).current;
-  const cardScale2 = useRef(new Animated.Value(1)).current;
+  const cardScale1 = useSharedValue(1);
+  const cardScale2 = useSharedValue(1);
+  const cardScale1Style = useAnimatedStyle(() => ({
+    transform: [{ scale: cardScale1.value }],
+  }));
+  const cardScale2Style = useAnimatedStyle(() => ({
+    transform: [{ scale: cardScale2.value }],
+  }));
 
   useEffect(() => {
     fetchProducts();
@@ -138,13 +146,8 @@ function StoreProducts({ storeId, storeName }: StoreProductsProps) {
 
   const formatPrice = (price: number) => price.toLocaleString('en-IN');
 
-  const animateCard = (scale: Animated.Value, toValue: number) => {
-    Animated.spring(scale, {
-      toValue,
-      useNativeDriver: true,
-      friction: 8,
-      tension: 100,
-    }).start();
+  const animateCard = (scale: { value: number }, toValue: number) => {
+    scale.value = withSpring(toValue, { damping: 8, stiffness: 100 });
   };
 
   const renderProduct = ({ item, index }: { item: any; index: number }) => {
@@ -162,15 +165,15 @@ function StoreProducts({ storeId, storeName }: StoreProductsProps) {
       ? item.name.substring(0, 30) + '...'
       : item.name;
 
-    const cardScale = index === 0 ? cardScale1 : cardScale2;
+    const cardScaleStyle = index === 0 ? cardScale1Style : cardScale2Style;
 
     return (
-      <Animated.View style={{ transform: [{ scale: cardScale }] }}>
+      <Animated.View style={cardScaleStyle}>
         <Pressable
           style={styles.productCard}
           onPress={() => handleProductPress(item)}
-          onPressIn={() => animateCard(cardScale, 0.96)}
-          onPressOut={() => animateCard(cardScale, 1)}
+          onPressIn={() => animateCard(index === 0 ? cardScale1 : cardScale2, 0.96)}
+          onPressOut={() => animateCard(index === 0 ? cardScale1 : cardScale2, 1)}
          
         >
           {/* Glass Card Effect */}
@@ -370,37 +373,32 @@ function StoreProducts({ storeId, storeName }: StoreProductsProps) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 16,
-  },
+    paddingVertical: 16 },
 
   // Header Styles
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
 
   headerTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
-  },
+    gap: 10 },
 
   headerIconBg: {
     width: 32,
     height: 32,
     borderRadius: 10,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
 
   title: {
     fontSize: 18,
     fontWeight: '700',
     color: COLORS.textPrimary,
-    letterSpacing: -0.3,
-  },
+    letterSpacing: -0.3 },
 
   viewAllButton: {
     flexDirection: 'row',
@@ -411,21 +409,18 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: GLASS.tintedGreenBorder,
-  },
+    borderColor: GLASS.tintedGreenBorder },
 
   viewAllText: {
     fontSize: 13,
     fontWeight: '600',
-    color: COLORS.primary,
-  },
+    color: COLORS.primary },
 
   // Products Grid
   productsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    gap: 12,
-  },
+    gap: 12 },
 
   // Product Card - Glass Effect
   productCard: {
@@ -437,24 +432,18 @@ const styles = StyleSheet.create({
         shadowColor: COLORS.navy,
         shadowOffset: { width: 0, height: 6 },
         shadowOpacity: 0.12,
-        shadowRadius: 16,
-      },
+        shadowRadius: 16 },
       android: {
-        elevation: 6,
-      },
-    }),
-  },
+        elevation: 6 } }) },
 
   cardBlur: {
     borderRadius: 20,
     borderWidth: 1,
     borderColor: GLASS.lightBorder,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
 
   cardBlurAndroid: {
-    backgroundColor: GLASS.lightBg,
-  },
+    backgroundColor: GLASS.lightBg },
 
   glassHighlight: {
     position: 'absolute',
@@ -463,29 +452,25 @@ const styles = StyleSheet.create({
     right: 0,
     height: 1,
     backgroundColor: GLASS.lightHighlight,
-    zIndex: 1,
-  },
+    zIndex: 1 },
 
   // Image Container
   imageContainer: {
     width: '100%',
     height: CARD_WIDTH * 0.85,
     backgroundColor: COLORS.surface,
-    position: 'relative',
-  },
+    position: 'relative' },
 
   productImage: {
     width: '100%',
-    height: '100%',
-  },
+    height: '100%' },
 
   placeholderImage: {
     width: '100%',
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.surface,
-  },
+    backgroundColor: COLORS.surface },
 
   // Premium Gold Discount Badge
   discountBadge: {
@@ -500,26 +485,20 @@ const styles = StyleSheet.create({
         shadowColor: COLORS.gold,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.4,
-        shadowRadius: 6,
-      },
+        shadowRadius: 6 },
       android: {
-        elevation: 4,
-      },
-    }),
-  },
+        elevation: 4 } }) },
 
   discountText: {
     fontSize: 10,
     fontWeight: '700',
     color: COLORS.navy,
-    letterSpacing: 0.3,
-  },
+    letterSpacing: 0.3 },
 
   // Product Info
   productInfo: {
     padding: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
-  },
+    backgroundColor: 'rgba(255, 255, 255, 0.5)' },
 
   productName: {
     fontSize: 13,
@@ -527,28 +506,24 @@ const styles = StyleSheet.create({
     color: COLORS.textPrimary,
     marginBottom: 8,
     lineHeight: 17,
-    height: 34,
-  },
+    height: 34 },
 
   priceContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'wrap',
-    gap: 6,
-  },
+    gap: 6 },
 
   price: {
     fontSize: 16,
     fontWeight: '800',
-    color: COLORS.primary,
-  },
+    color: COLORS.primary },
 
   comparePrice: {
     fontSize: 12,
     fontWeight: '500',
     color: COLORS.textSecondary,
-    textDecorationLine: 'line-through',
-  },
+    textDecorationLine: 'line-through' },
 
   // Glass Rating Badge
   ratingBadge: {
@@ -561,15 +536,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignSelf: 'flex-start',
     borderWidth: 1,
-    borderColor: GLASS.tintedGoldBorder,
-  },
+    borderColor: GLASS.tintedGoldBorder },
 
   ratingText: {
     fontSize: 11,
     color: COLORS.goldDark,
     marginLeft: 4,
-    fontWeight: '700',
-  },
+    fontWeight: '700' },
 
   // Loading State
   loadingContainer: {
@@ -579,15 +552,13 @@ const styles = StyleSheet.create({
     backgroundColor: GLASS.frostedBg,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: GLASS.frostedBorder,
-  },
+    borderColor: GLASS.frostedBorder },
 
   loadingText: {
     marginTop: 12,
     fontSize: 14,
     color: COLORS.textSecondary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
 
   // Empty State
   emptyContainer: {
@@ -597,8 +568,7 @@ const styles = StyleSheet.create({
     backgroundColor: GLASS.frostedBg,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: GLASS.frostedBorder,
-  },
+    borderColor: GLASS.frostedBorder },
 
   emptyIconBg: {
     width: 72,
@@ -607,15 +577,13 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.surface,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
 
   emptyText: {
     fontSize: 14,
     color: COLORS.textSecondary,
     fontWeight: '500',
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
 
   // Coin Earnings Row
   coinEarningsRow: {
@@ -628,19 +596,15 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignSelf: 'flex-start',
     borderWidth: 1,
-    borderColor: GLASS.tintedGreenBorder,
-  },
+    borderColor: GLASS.tintedGreenBorder },
 
   coinEmoji: {
     fontSize: 12,
-    marginRight: 4,
-  },
+    marginRight: 4 },
 
   coinEarningsText: {
     fontSize: 11,
     color: COLORS.primary,
-    fontWeight: '700',
-  },
-});
+    fontWeight: '700' } });
 
 export default withErrorBoundary(StoreProducts, 'MainStoreSectionStoreProducts');

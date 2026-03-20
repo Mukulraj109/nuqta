@@ -7,10 +7,18 @@ import {
   ListRenderItemInfo,
   ViewToken,
   Platform,
-  Animated,
   ScrollView,
-  Linking,
-} from 'react-native';
+  Linking} from 'react-native';
+import ReAnimated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withTiming,
+  withRepeat,
+  withSequence,
+  interpolateColor,
+  SharedValue,
+} from 'react-native-reanimated';
 import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from "expo-linear-gradient";
@@ -53,6 +61,37 @@ interface ProductDisplayProps {
 
 const DEFAULT_IMAGES: ProductImage[] = [];
 
+// PaginationDot with reanimated for width + backgroundColor
+const ProductPaginationDot: React.FC<{
+  index: number;
+  activeIndex: SharedValue<number>;
+  totalCount: number;
+}> = memo(({ index, activeIndex, totalCount }) => {
+  const dotStyle = useAnimatedStyle(() => {
+    const isActive = activeIndex.value === index ? 1 : 0;
+    return {
+      width: withSpring(isActive ? 24 : 8, { damping: 15, stiffness: 120 }),
+      backgroundColor: interpolateColor(
+        isActive,
+        [0, 1],
+        ['rgba(255,255,255,0.5)', colors.lightMustard],
+      ),
+    };
+  });
+
+  return (
+    <ReAnimated.View
+      style={[productDotBaseStyle, dotStyle]}
+      accessibilityLabel={`Image ${index + 1} of ${totalCount}`}
+    />
+  );
+});
+
+const productDotBaseStyle = {
+  height: 8,
+  borderRadius: 4,
+};
+
 export default memo(function ProductDisplay({
   images: imagesProp = DEFAULT_IMAGES,
   onSharePress,
@@ -89,22 +128,22 @@ export default memo(function ProductDisplay({
     : null;
 
   // Animation refs for micro-interactions
-  const shareScaleAnim = useRef(new Animated.Value(1)).current;
-  const favoriteScaleAnim = useRef(new Animated.Value(1)).current;
-  const imageScaleAnim = useRef(new Animated.Value(1)).current;
+  const shareScaleAnim = useSharedValue(1);
+  const favoriteScaleAnim = useSharedValue(1);
+  const imageScaleAnim = useSharedValue(1);
 
   // Pulse animation for favorited heart
-  const heartPulseAnim = useRef(new Animated.Value(1)).current;
+  const heartPulseAnim = useSharedValue(1);
 
-  // Animated pagination dots
-  const dotAnimations = useRef(images.map(() => new Animated.Value(0))).current;
+  // Animated pagination dots (reanimated)
+  const activeDotIndex = useSharedValue(0);
 
   // CTA button animations
-  const directionsScaleAnim = useRef(new Animated.Value(1)).current;
-  const callScaleAnim = useRef(new Animated.Value(1)).current;
+  const directionsScaleAnim = useSharedValue(1);
+  const callScaleAnim = useSharedValue(1);
 
-  // Category tag entrance animations
-  const tagAnimations = useRef(categoryTags.map(() => new Animated.Value(0))).current;
+  // Category tag entrance animations — use simple state-based opacity
+  const [tagsVisible, setTagsVisible] = useState(false);
 
   // Category icon mapping
   const getCategoryIcon = (tag: string): keyof typeof Ionicons.glyphMap => {
@@ -123,56 +162,30 @@ export default memo(function ProductDisplay({
   // Heart pulse animation effect
   useEffect(() => {
     if (isFavorited) {
-      const pulseAnimation = Animated.loop(
-        Animated.sequence([
-          Animated.timing(heartPulseAnim, {
-            toValue: 1.2,
-            duration: 400,
-            useNativeDriver: true,
-          }),
-          Animated.timing(heartPulseAnim, {
-            toValue: 1,
-            duration: 400,
-            useNativeDriver: true,
-          }),
-        ])
+      heartPulseAnim.value = withRepeat(
+        withSequence(
+          withTiming(1.2, { duration: 400 }),
+          withTiming(1, { duration: 400 }),
+        ),
+        -1,
       );
-      pulseAnimation.start();
-      return () => pulseAnimation.stop();
     } else {
-      heartPulseAnim.setValue(1);
+      heartPulseAnim.value = 1;
     }
-  }, [isFavorited, heartPulseAnim]);
+  }, [isFavorited]);
 
-  // Animate pagination dots on index change
+  // Animate pagination dots on index change (reanimated)
   useEffect(() => {
-    const anims = dotAnimations.map((anim, i) =>
-      Animated.spring(anim, {
-        toValue: i === currentIndex ? 1 : 0,
-        useNativeDriver: false,
-        tension: 50,
-        friction: 7,
-      })
-    );
-    anims.forEach(a => a.start());
-    return () => anims.forEach(a => a.stop());
-  }, [currentIndex, dotAnimations]);
+    activeDotIndex.value = currentIndex;
+  }, [currentIndex]);
 
   // Staggered entrance animation for category tags
   useEffect(() => {
     if (categoryTags.length > 0) {
-      const anims = categoryTags.map((_, index) =>
-        Animated.timing(tagAnimations[index], {
-          toValue: 1,
-          duration: 300,
-          delay: index * 80,
-          useNativeDriver: true,
-        })
-      );
-      anims.forEach(a => a.start());
-      return () => anims.forEach(a => a.stop());
+      const timer = setTimeout(() => setTagsVisible(true), 100);
+      return () => clearTimeout(timer);
     }
-  }, [categoryTags, tagAnimations]);
+  }, [categoryTags]);
 
   // viewability config + callback to track current index reliably
   const viewabilityConfig = useRef({
@@ -191,12 +204,8 @@ export default memo(function ProductDisplay({
   }, []);
 
   // Animation helper
-  const animateScale = useCallback((animValue: Animated.Value, toValue: number) => {
-    Animated.spring(animValue, {
-      toValue,
-      useNativeDriver: true,
-      ...Timing.springBouncy,
-    }).start();
+  const animateScale = useCallback((animValue: SharedValue<number>, toValue: number) => {
+    animValue.value = withSpring(toValue);
   }, []);
 
   // Handlers with haptic feedback
@@ -295,28 +304,14 @@ export default memo(function ProductDisplay({
       {images.length > 1 && (
         <View style={styles.pagination}>
           <View style={styles.paginationInner}>
-            {images.map((_, i) => {
-              return (
-                <Animated.View
-                  key={i}
-                  style={[
-                    styles.dotBase,
-                    {
-                      width: dotAnimations[i]?.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [8, 24],
-                      }) || 8,
-                      backgroundColor: dotAnimations[i]?.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: ['rgba(255,255,255,0.5)', colors.lightMustard],
-                      }) || 'rgba(255,255,255,0.5)',
-                    },
-                  ]}
-                  accessibilityLabel={`Image ${i + 1} of ${images.length}`}
-                  accessibilityState={{ selected: i === currentIndex }}
-                />
-              );
-            })}
+            {images.map((_, i) => (
+              <ProductPaginationDot
+                key={i}
+                index={i}
+                activeIndex={activeDotIndex}
+                totalCount={images.length}
+              />
+            ))}
           </View>
         </View>
       )}

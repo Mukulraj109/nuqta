@@ -1,5 +1,10 @@
-import React, { useEffect, useRef } from 'react';
-import { View, StyleSheet, Animated, Dimensions } from 'react-native';
+import React, { useEffect } from 'react';
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence, withRepeat, interpolate } from 'react-native-reanimated';
 import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -10,23 +15,15 @@ const SkeletonBlock = React.memo(({ width, height, style, borderRadius = 8 }: {
   style?: any;
   borderRadius?: number;
 }) => {
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
-    const animation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, { toValue: 1, duration: 1000, useNativeDriver: true }),
-        Animated.timing(shimmerAnim, { toValue: 0, duration: 1000, useNativeDriver: true }),
-      ])
-    );
-    animation.start();
-    return () => animation.stop();
+    shimmerAnim.value = withRepeat(withSequence(withTiming(1, { duration: 1000 }), withTiming(0, { duration: 1000 })), -1);
   }, [shimmerAnim]);
 
-  const opacity = shimmerAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0.3, 0.7],
-  });
+  const animStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(shimmerAnim.value, [0, 1], [0.3, 0.7]),
+  }));
 
   return (
     <Animated.View
@@ -36,8 +33,8 @@ const SkeletonBlock = React.memo(({ width, height, style, borderRadius = 8 }: {
           height,
           borderRadius,
           backgroundColor: colors.neutral[200],
-          opacity,
         },
+        animStyle,
         style,
       ]}
     />

@@ -1,15 +1,21 @@
 // Upload Progress Component
 // Displays upload progress with animation and statistics
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
-  Animated,
-  Easing,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withRepeat,
+  withSequence,
+  Easing,
+} from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { UploadProgress as UploadProgressType, UploadStatus } from '@/types/ugc-upload.types';
 import { colors } from '@/constants/theme';
@@ -27,49 +33,41 @@ function UploadProgress({
   onCancel,
   showCancel = true,
 }: UploadProgressProps) {
-  const progressAnim = useRef(new Animated.Value(0)).current;
-  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const progressAnim = useSharedValue(0);
+  const pulseAnim = useSharedValue(1);
 
   // Animate progress bar
   useEffect(() => {
     if (progress) {
-      const anim = Animated.timing(progressAnim, {
-        toValue: progress.percentage,
+      progressAnim.value = withTiming(progress.percentage, {
         duration: 300,
         easing: Easing.out(Easing.cubic),
-        useNativeDriver: false,
       });
-      anim.start();
-
-      return () => { anim.stop(); };
     }
   }, [progress?.percentage]);
 
   // Pulse animation for processing state
   useEffect(() => {
     if (status === 'processing') {
-      const pulseLoop = Animated.loop(
-        Animated.sequence([
-          Animated.timing(pulseAnim, {
-            toValue: 1.1,
-            duration: 800,
-            easing: Easing.inOut(Easing.ease),
-            useNativeDriver: true,
-          }),
-          Animated.timing(pulseAnim, {
-            toValue: 1,
-            duration: 800,
-            easing: Easing.inOut(Easing.ease),
-            useNativeDriver: true,
-          }),
-        ])
+      pulseAnim.value = withRepeat(
+        withSequence(
+          withTiming(1.1, { duration: 800, easing: Easing.inOut(Easing.ease) }),
+          withTiming(1, { duration: 800, easing: Easing.inOut(Easing.ease) }),
+        ),
+        -1,
       );
-      pulseLoop.start();
-      return () => pulseLoop.stop();
     } else {
-      pulseAnim.setValue(1);
+      pulseAnim.value = withTiming(1, { duration: 200 });
     }
   }, [status]);
+
+  const iconAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: status === 'processing' ? pulseAnim.value : 1 }],
+  }));
+
+  const progressBarStyle = useAnimatedStyle(() => ({
+    width: `${progressAnim.value}%` as any,
+  }));
 
   const formatBytes = (bytes: number): string => {
     if (bytes === 0) return '0 Bytes';
@@ -142,7 +140,7 @@ function UploadProgress({
       <Animated.View
         style={[
           styles.iconContainer,
-          { transform: [{ scale: status === 'processing' ? pulseAnim : 1 }] },
+          iconAnimatedStyle,
         ]}
       >
         <View style={[styles.iconCircle, { backgroundColor: statusColor }]}>
@@ -164,13 +162,8 @@ function UploadProgress({
             <Animated.View
               style={[
                 styles.progressBarFill,
-                {
-                  width: progressAnim.interpolate({
-                    inputRange: [0, 100],
-                    outputRange: ['0%', '100%'],
-                  }),
-                  backgroundColor: statusColor,
-                },
+                { backgroundColor: statusColor },
+                progressBarStyle,
               ]}
             />
           </View>
@@ -231,7 +224,7 @@ function UploadProgress({
         <Pressable
           style={styles.cancelButton}
           onPress={onCancel}
-         
+
         >
           <Ionicons name="close-circle-outline" size={20} color={colors.error} />
           <Text style={styles.cancelButtonText}>Cancel Upload</Text>

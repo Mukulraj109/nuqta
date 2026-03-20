@@ -7,8 +7,14 @@ import {
   RefreshControl,
   Platform,
   InteractionManager,
-  Animated,
 } from 'react-native';
+import ReAnimated, {
+  useSharedValue,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  withTiming,
+  interpolate,
+} from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
@@ -274,9 +280,17 @@ function HomeScreen() {
     isLoading: isLoyaltySectionLoading
   } = useLoyaltySection({ autoFetch: activeTab === 'near-u' });
 
-  const animatedHeight = React.useRef(new Animated.Value(0)).current;
-  const animatedOpacity = React.useRef(new Animated.Value(0)).current;
-  const scrollY = React.useRef(new Animated.Value(0)).current; // For sticky header
+  const animatedHeight = useSharedValue(0);
+  const animatedOpacity = useSharedValue(0);
+  const locationExpandStyle = useAnimatedStyle(() => ({
+    height: interpolate(animatedHeight.value, [0, 1], [0, 145]),
+    opacity: animatedOpacity.value,
+    overflow: 'hidden' as const,
+  }));
+  const scrollY = useSharedValue(0); // For sticky header (reanimated shared value)
+  const scrollHandler = useAnimatedScrollHandler((event) => {
+    scrollY.value = event.contentOffset.y;
+  });
   const statsLoadedRef = React.useRef(_statsLoadedGlobal); // Sync with module-level flag
   const lastFocusRefreshRef = React.useRef(_lastFocusRefreshTime); // Sync with module-level timestamp
   const scrollViewRef = React.useRef<any>(null); // ScrollView ref for scrollToTop
@@ -542,7 +556,7 @@ function HomeScreen() {
 
   return (
     <View style={viewStyles.mainContainer}>
-      <Animated.ScrollView
+      <ReAnimated.ScrollView
         ref={scrollViewRef}
         style={viewStyles.container}
         contentContainerStyle={viewStyles.scrollContentContainer}
@@ -551,10 +565,7 @@ function HomeScreen() {
         nestedScrollEnabled={true}
         keyboardShouldPersistTaps="handled"
         scrollEnabled={true}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-          { useNativeDriver: true }
-        )}
+        onScroll={scrollHandler}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor={colors.lightMustard} colors={[colors.lightMustard]} />
         }
@@ -574,19 +585,9 @@ function HomeScreen() {
               const newState = !showDetailedLocation;
               setShowDetailedLocation(newState);
 
-              // Smooth animation for expand/collapse
-              Animated.parallel([
-                Animated.timing(animatedHeight, {
-                  toValue: newState ? 1 : 0,
-                  duration: 300,
-                  useNativeDriver: false,
-                }),
-                Animated.timing(animatedOpacity, {
-                  toValue: newState ? 1 : 0,
-                  duration: 300,
-                  useNativeDriver: true,
-                }),
-              ]).start();
+              // Smooth animation for expand/collapse (reanimated)
+              animatedHeight.value = withTiming(newState ? 1 : 0, { duration: 300 });
+              animatedOpacity.value = withTiming(newState ? 1 : 0, { duration: 300 });
             }}
             accessibilityLabel="Current location"
             accessibilityHint={showDetailedLocation ? "Tap to collapse location details" : "Tap to expand location details"}
@@ -693,17 +694,10 @@ function HomeScreen() {
         </View>
 
         {/* Detailed Location Section - Animated */}
-        <Animated.View
+        <ReAnimated.View
           style={[
             viewStyles.detailedLocationContainer,
-            {
-              height: animatedHeight.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0, 145], // Height for address and change button only
-              }),
-              opacity: animatedOpacity,
-              overflow: 'hidden',
-            },
+            locationExpandStyle,
           ]}
         >
           <View style={viewStyles.detailedLocationContent}>
@@ -734,21 +728,11 @@ function HomeScreen() {
               ]}
               onPress={() => {
                 setShowDetailedLocation(false);
-                // Collapse animation then open modal
-                Animated.parallel([
-                  Animated.timing(animatedHeight, {
-                    toValue: 0,
-                    duration: 200,
-                    useNativeDriver: false,
-                  }),
-                  Animated.timing(animatedOpacity, {
-                    toValue: 0,
-                    duration: 200,
-                    useNativeDriver: true,
-                  }),
-                ]).start(() => {
-                  setIsLocationModalVisible(true);
-                });
+                // Collapse animation then open modal (reanimated)
+                animatedHeight.value = withTiming(0, { duration: 200 });
+                animatedOpacity.value = withTiming(0, { duration: 200 });
+                // Open modal after animation delay
+                setTimeout(() => setIsLocationModalVisible(true), 220);
               }}
              
             >
@@ -762,7 +746,7 @@ function HomeScreen() {
               <Ionicons name="chevron-forward" size={14} color={activeTab === 'mall' ? colors.brand.sky : activeTab === 'cash' ? colors.brand.caramel : colors.lightMustard} />
             </Pressable>
           </View>
-        </Animated.View>
+        </ReAnimated.View>
 
         {/* Hero Banner - Dynamic content based on user - Only show when "near-u" tab is active */}
         {activeTab === 'near-u' && <HeroBanner totalSaved={totalSaved} />}
@@ -919,7 +903,7 @@ function HomeScreen() {
           <PushNotificationInitializer />
         </Suspense>
       )}
-      </Animated.ScrollView>
+      </ReAnimated.ScrollView>
 
       {/* Sticky Search Header with Glass Effect - Rendered after ScrollView to avoid blocking touches */}
       {/* showThreshold should be high enough so sticky header only appears after category section scrolls out of view */}

@@ -1,8 +1,16 @@
 // Feature Comparison Table Component
 // Side-by-side comparison of features between subscription tiers
 
-import React, { useEffect, useRef } from 'react';
-import { View, StyleSheet, Animated } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, StyleSheet } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withDelay,
+  interpolate,
+} from 'react-native-reanimated';
+import type { SharedValue } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { SubscriptionTier } from '@/types/subscription.types';
@@ -19,6 +27,14 @@ interface FeatureComparisonTableProps {
   currentTier?: SubscriptionTier;
   newTier?: SubscriptionTier;
   compact?: boolean;
+}
+
+function StaggeredRow({ anim, children }: { anim: SharedValue<number>; children: React.ReactNode }) {
+  const style = useAnimatedStyle(() => ({
+    opacity: anim.value,
+    transform: [{ translateY: interpolate(anim.value, [0, 1], [10, 0]) }],
+  }));
+  return <Animated.View style={style}>{children}</Animated.View>;
 }
 
 const FEATURES: Feature[] = [
@@ -38,21 +54,13 @@ function FeatureComparisonTable({
   newTier,
   compact = false,
 }: FeatureComparisonTableProps) {
-  // Staggered row entrance animation
-  const rowAnims = useRef(FEATURES.map(() => new Animated.Value(0))).current;
+  // Staggered row entrance animation - one shared value per row
+  const rowAnims = FEATURES.map(() => useSharedValue(0));
 
   useEffect(() => {
-    const animations = rowAnims.map((anim) =>
-      Animated.timing(anim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      })
-    );
-    const staggered = Animated.stagger(50, animations);
-    staggered.start();
-
-    return () => { staggered.stop(); };
+    rowAnims.forEach((anim, i) => {
+      anim.value = withDelay(i * 50, withTiming(1, { duration: 300 }));
+    });
   }, []);
 
   const renderCheckIcon = (hasFeature: boolean, tier?: SubscriptionTier) => {
@@ -107,19 +115,13 @@ function FeatureComparisonTable({
         </View>
 
         {/* Cashback Row */}
-        <Animated.View style={{ opacity: rowAnims[0], transform: [{ translateY: rowAnims[0].interpolate({ inputRange: [0, 1], outputRange: [10, 0] }) }] }}>
+        <StaggeredRow anim={rowAnims[0]}>
           {renderCashbackRow()}
-        </Animated.View>
+        </StaggeredRow>
 
         {/* Feature Rows with staggered entrance */}
         {FEATURES.slice(1).map((feature, index) => (
-          <Animated.View
-            key={feature.name}
-            style={{
-              opacity: rowAnims[index + 1],
-              transform: [{ translateY: rowAnims[index + 1].interpolate({ inputRange: [0, 1], outputRange: [10, 0] }) }],
-            }}
-          >
+          <StaggeredRow key={feature.name} anim={rowAnims[index + 1]}>
             <View style={styles.row}>
               <View style={styles.featureCell}>
                 <ThemedText style={styles.featureName}>{feature.name}</ThemedText>
@@ -128,7 +130,7 @@ function FeatureComparisonTable({
               {renderCheckIcon(feature.premium, 'premium')}
               {renderCheckIcon(feature.vip, 'vip')}
             </View>
-          </Animated.View>
+          </StaggeredRow>
         ))}
       </View>
     </View>

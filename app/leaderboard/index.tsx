@@ -10,9 +10,15 @@ import {
   Pressable,
   StatusBar,
   ActivityIndicator,
-  RefreshControl,
-  Animated,
+  RefreshControl
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated';
 import { TransactionListSkeleton } from '@/components/skeletons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -43,8 +49,8 @@ function LeaderboardPage() {
   const [showCelebration, setShowCelebration] = useState(false);
   const [celebrationMessage, setCelebrationMessage] = useState('');
   const scrollViewRef = useRef<ScrollView>(null);
-  const celebrationAnim = useRef(new Animated.Value(0)).current;
-  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const celebrationAnim = useSharedValue(0);
+  const pulseAnim = useSharedValue(1);
 
   // Real-time leaderboard updates
   const {
@@ -71,18 +77,10 @@ function LeaderboardPage() {
       },
       onLeaderboardUpdate: () => {
         // Pulse animation on update
-        Animated.sequence([
-          Animated.timing(pulseAnim, {
-            toValue: 1.05,
-            duration: 200,
-            useNativeDriver: true,
-          }),
-          Animated.timing(pulseAnim, {
-            toValue: 1,
-            duration: 200,
-            useNativeDriver: true,
-          }),
-        ]).start();
+        pulseAnim.value = withSequence(
+          withTiming(1.05, { duration: 200 }),
+          withTiming(1, { duration: 200 }),
+        );
       },
     }
   );
@@ -123,21 +121,13 @@ function LeaderboardPage() {
     setShowCelebration(true);
 
     // Animate celebration
-    Animated.sequence([
-      Animated.timing(celebrationAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-      Animated.delay(2500),
-      Animated.timing(celebrationAnim, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      setShowCelebration(false);
-    });
+    celebrationAnim.value = withSequence(
+      withTiming(1, { duration: 300 }),
+      withTiming(1, { duration: 2500 }),
+      withTiming(0, { duration: 300 })
+    );
+    // Hide celebration after animation completes
+    setTimeout(() => setShowCelebration(false), 3100);
   };
 
   // Scroll to user's position
@@ -152,6 +142,15 @@ function LeaderboardPage() {
       }, 500);
     }
   };
+
+  const celebrationStyle = useAnimatedStyle(() => ({
+    opacity: celebrationAnim.value,
+    transform: [{ scale: interpolate(celebrationAnim.value, [0, 1], [0.5, 1]) }],
+  }));
+
+  const pulseStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: pulseAnim.value }],
+  }));
 
   // Use real-time entries if available, otherwise use static data
   const displayEntries = realtimeEntries.length > 0 ? realtimeEntries : leaderboardData?.entries || [];
@@ -189,7 +188,7 @@ function LeaderboardPage() {
           isCurrentUser && styles.currentUserCard,
           isTopThree && styles.topThreeCard,
           hasRankedUp && styles.rankedUpCard,
-          { transform: [{ scale: isCurrentUser ? pulseAnim : 1 }] },
+          isCurrentUser && pulseStyle,
         ]}
         accessibilityLabel={`Rank ${entry.rank}. ${entry.fullName}${isCurrentUser ? ' - You' : ''}. ${entry.coins.toLocaleString()} coins. ${entry.achievements} achievements${isTopThree ? `. Top ${entry.rank} position` : ''}${hasRankedUp ? '. Ranked up recently' : ''}`}
         accessibilityRole="text"
@@ -367,17 +366,7 @@ function LeaderboardPage() {
         <Animated.View
           style={[
             styles.celebrationOverlay,
-            {
-              opacity: celebrationAnim,
-              transform: [
-                {
-                  scale: celebrationAnim.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [0.5, 1],
-                  }),
-                },
-              ],
-            },
+            celebrationStyle,
           ]}
         >
           <LinearGradient

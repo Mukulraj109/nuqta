@@ -5,11 +5,10 @@ import {
   StyleSheet,
   Modal,
   Pressable,
-  Animated,
   Dimensions,
   StatusBar,
-  Platform,
-} from 'react-native';
+  Platform} from 'react-native';
+import Animated, { interpolate, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useGetCurrencySymbol } from '@/stores/selectors';
@@ -23,6 +22,24 @@ interface CashbackModalProps {
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
+// Separate component for floating coin (needs useAnimatedStyle)
+const FloatingCoin: React.FC<{ animValue: { value: number }; style: object; currencySymbol: string }> = React.memo(({ animValue, style, currencySymbol }) => {
+  const coinStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateY: interpolate(animValue.value, [0, 1], [0, -25]) },
+      { rotate: `${interpolate(animValue.value, [0, 1], [0, 360])}deg` },
+    ],
+  }));
+
+  return (
+    <Animated.View style={[styles.coin, style, coinStyle]}>
+      <LinearGradient colors={['#FFD93D', '#FCA311']} style={styles.coinGradient}>
+        <Text style={styles.coinText}>{currencySymbol}</Text>
+      </LinearGradient>
+    </Animated.View>
+  );
+});
+
 function CashbackModal({
   visible,
   onClose,
@@ -31,115 +48,51 @@ function CashbackModal({
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(screenHeight)).current;
-  const coin1Anim = useRef(new Animated.Value(0)).current;
-  const coin2Anim = useRef(new Animated.Value(0)).current;
-  const coin3Anim = useRef(new Animated.Value(0)).current;
-  const coin4Anim = useRef(new Animated.Value(0)).current;
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(screenHeight);
+  const coin1Anim = useSharedValue(0);
+  const coin2Anim = useSharedValue(0);
+  const coin3Anim = useSharedValue(0);
+  const coin4Anim = useSharedValue(0);
 
-  const coinAnimRef = useRef<Animated.CompositeAnimation | null>(null);
+  const coinAnimRef = useRef<any | null>(null);
 
   useEffect(() => {
     if (visible) {
-      Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        Animated.spring(slideAnim, {
-          toValue: 0,
-          bounciness: 12,
-          speed: 10,
-          useNativeDriver: true,
-        }),
-      ]).start();
+      fadeAnim.value = withTiming(1, { duration: 300 });
+      slideAnim.value = withSpring(0);
       startCoinAnimations();
     } else {
       // Stop coin animations when modal closes
       if (coinAnimRef.current) {
-        coinAnimRef.current.stop();
         coinAnimRef.current = null;
       }
-      Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(slideAnim, {
-          toValue: screenHeight,
-          duration: 250,
-          useNativeDriver: true,
-        }),
-      ]).start();
+      fadeAnim.value = withTiming(0, { duration: 200 });
+      slideAnim.value = withTiming(screenHeight, { duration: 250 });
     }
     return () => {
       if (coinAnimRef.current) {
-        coinAnimRef.current.stop();
         coinAnimRef.current = null;
       }
     };
   }, [visible]);
 
   const startCoinAnimations = () => {
-    const createFloatingAnimation = (animValue: Animated.Value, delay: number) => {
-      return Animated.loop(
-        Animated.sequence([
-          Animated.delay(delay),
-          Animated.timing(animValue, {
-            toValue: 1,
-            duration: 2200,
-            useNativeDriver: true,
-          }),
-          Animated.timing(animValue, {
-            toValue: 0,
-            duration: 2200,
-            useNativeDriver: true,
-          }),
-        ])
-      );
+    const createFloatingAnimation = (animValue: { value: number }, delay: number) => {
+      animValue.value = withRepeat(withSequence(withDelay(delay, withTiming(0, { duration: 0 })), withTiming(1, { duration: 2200 })), -1);
     };
 
-    const anim = Animated.parallel([
-      createFloatingAnimation(coin1Anim, 0),
-      createFloatingAnimation(coin2Anim, 400),
-      createFloatingAnimation(coin3Anim, 800),
-      createFloatingAnimation(coin4Anim, 1200),
-    ]);
-    coinAnimRef.current = anim;
-    anim.start();
+    createFloatingAnimation(coin1Anim, 0);
+    createFloatingAnimation(coin2Anim, 400);
+    createFloatingAnimation(coin3Anim, 800);
+    createFloatingAnimation(coin4Anim, 1200);
+
+    coinAnimRef.current = true;
   };
 
-  const renderFloatingCoin = (animValue: Animated.Value, style: object) => {
-    const translateY = animValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: [0, -25],
-    });
-
-    const rotate = animValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['0deg', '360deg'],
-    });
-
+  const renderFloatingCoin = (animValue: { value: number }, style: object) => {
     return (
-      <Animated.View
-        style={[
-          styles.coin,
-          style,
-          {
-            transform: [{ translateY }, { rotate }],
-          },
-        ]}
-      >
-        <LinearGradient
-          colors={['#FFD93D', '#FCA311']}
-          style={styles.coinGradient}
-        >
-          <Text style={styles.coinText}>{currencySymbol}</Text>
-        </LinearGradient>
-      </Animated.View>
+      <FloatingCoin animValue={animValue} style={style} currencySymbol={currencySymbol} />
     );
   };
 

@@ -7,9 +7,14 @@ import {
   RefreshControl,
   ActivityIndicator,
   Pressable,
-  ScrollView,
-  Animated,
+  ScrollView
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming } from 'react-native-reanimated';
 import { CardGridSkeleton } from '@/components/skeletons';
 import CachedImage from '@/components/ui/CachedImage';
 import { FlashList } from '@shopify/flash-list';
@@ -44,15 +49,18 @@ const ActivityFeedPage = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [showFilterMenu, setShowFilterMenu] = useState(false);
   const [feedFilter, setFeedFilter] = useState<'all' | 'following'>('all');
-  const newPostsBannerAnim = React.useRef(new Animated.Value(0)).current;
+  const newPostsBannerAnim = useSharedValue(0);
+  const newPostsBannerStyle = useAnimatedStyle(() => ({
+    opacity: newPostsBannerAnim.value,
+    transform: [{ translateY: interpolate(newPostsBannerAnim.value, [0, 1], [-50, 0]) }],
+  }));
 
   // Follow system
   const {
     suggestions: followSuggestions,
     loadSuggestions,
     followersCount,
-    followingCount,
-  } = useFollowSystem(user?.id);
+    followingCount } = useFollowSystem(user?.id);
 
   // Real-time feed updates
   const {
@@ -60,15 +68,11 @@ const ActivityFeedPage = () => {
     newPostsCount,
     isConnected,
     loadPendingPosts,
-    clearNewPostsCount,
-  } = useFeedRealtime(activities, user?.id, {
+    clearNewPostsCount } = useFeedRealtime(activities, user?.id, {
     onNewPost: (activity) => {
 
       // Animate new posts banner
-      Animated.spring(newPostsBannerAnim, {
-        toValue: 1,
-        useNativeDriver: true,
-      }).start();
+      newPostsBannerAnim.value = withSpring(1);
     },
     onFollowUpdate: (userId, isFollowing) => {
 
@@ -95,11 +99,7 @@ const ActivityFeedPage = () => {
 
   const handleLoadNewPosts = () => {
     loadPendingPosts();
-    Animated.timing(newPostsBannerAnim, {
-      toValue: 0,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
+    newPostsBannerAnim.value = withTiming(0, { duration: 200 });
   };
 
   const handleLoadMore = () => {
@@ -307,17 +307,7 @@ const ActivityFeedPage = () => {
         <Animated.View
           style={[
             styles.newPostsBanner,
-            {
-              opacity: newPostsBannerAnim,
-              transform: [
-                {
-                  translateY: newPostsBannerAnim.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [-50, 0],
-                  }),
-                },
-              ],
-            },
+            newPostsBannerStyle,
           ]}
         >
           <Pressable
@@ -377,8 +367,7 @@ const styles = StyleSheet.create({
   headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   headerTitle: {
     ...Typography.h2,
     fontWeight: '700',
@@ -388,18 +377,15 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#4CD964',
-  },
+    backgroundColor: '#4CD964' },
   liveDot: {
     width: '100%',
     height: '100%',
     borderRadius: 4,
-    backgroundColor: '#4CD964',
-  },
+    backgroundColor: '#4CD964' },
   headerRight: {
     flexDirection: 'row',
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   headerButton: {
     padding: Spacing.sm
   },
@@ -410,25 +396,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.sm,
     flexDirection: 'row',
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   filterOption: {
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.xl,
-    backgroundColor: Colors.background.secondary,
-  },
+    backgroundColor: Colors.background.secondary },
   filterOptionActive: {
-    backgroundColor: colors.brand.ios,
-  },
+    backgroundColor: colors.brand.ios },
   filterText: {
     ...Typography.body,
     fontWeight: '600',
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
   filterTextActive: {
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse },
   newPostsBanner: {
     position: 'absolute',
     top: 60,
@@ -436,8 +417,7 @@ const styles = StyleSheet.create({
     right: 0,
     zIndex: 100,
     alignItems: 'center',
-    paddingHorizontal: Spacing.base,
-  },
+    paddingHorizontal: Spacing.base },
   newPostsButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -446,18 +426,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.lg,
     paddingVertical: 10,
     borderRadius: BorderRadius['2xl'],
-    ...Shadows.medium,
-  },
+    ...Shadows.medium },
   newPostsText: {
     color: Colors.text.inverse,
     ...Typography.body,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   listContent: {
     padding: Spacing.base,
     flexGrow: 1,
-    paddingBottom: 120,
-  },
+    paddingBottom: 120 },
   suggestedSection: {
     backgroundColor: Colors.background.primary,
     padding: Spacing.base,
@@ -469,13 +446,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
   suggestedTitle: {
     ...Typography.bodyLarge,
     fontWeight: '600',
-    color: colors.text.primary,
-  },
+    color: colors.text.primary },
   suggestedScroll: {
     marginHorizontal: -4
   },
@@ -527,13 +502,11 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.xs,
     borderRadius: BorderRadius.md,
     gap: Spacing.xs,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   mutualText: {
     ...Typography.overline,
     fontWeight: '600',
-    color: colors.brand.ios,
-  },
+    color: colors.brand.ios },
   suggestedFollowButton: {
     minWidth: 80,
     paddingHorizontal: Spacing.md,

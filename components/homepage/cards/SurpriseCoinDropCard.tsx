@@ -1,12 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
   Platform,
-  Animated,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence, withRepeat } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
@@ -33,34 +33,23 @@ const SurpriseCoinDropCard: React.FC<SurpriseCoinDropCardProps> = ({
     ? [colors.lightPeach, colors.brand.sand, colors.brand.caramel]
     : [colors.lavenderMist, '#b8d4ed', '#9cc5e0'];
 
-  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const pulseAnim = useSharedValue(1);
 
   useEffect(() => {
     if (available) {
-      const pulse = Animated.loop(
-        Animated.sequence([
-          Animated.timing(pulseAnim, {
-            toValue: 1.05,
-            duration: 800,
-            useNativeDriver: true,
-          }),
-          Animated.timing(pulseAnim, {
-            toValue: 1,
-            duration: 800,
-            useNativeDriver: true,
-          }),
-        ])
-      );
-      pulse.start();
-      return () => pulse.stop();
+      pulseAnim.value = withRepeat(withSequence(withTiming(1.05, { duration: 800 }), withTiming(1, { duration: 800 })), -1);
     }
   }, [available, pulseAnim]);
+
+  const pulseStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: pulseAnim.value }],
+  }));
 
   return (
     <Animated.View
       style={[
         styles.cardContainer,
-        available && { transform: [{ scale: pulseAnim }] },
+        available && pulseStyle,
       ]}
     >
       <Pressable

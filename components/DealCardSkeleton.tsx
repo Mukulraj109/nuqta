@@ -1,40 +1,27 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect} from 'react';
 import { colors } from '@/constants/theme';
 import {
   View,
   StyleSheet,
-  Animated,
   Dimensions,
-  Platform,
-} from 'react-native';
+  Platform} from 'react-native';
+import Animated, { interpolate, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 
 function DealCardSkeleton() {
   const screenWidth = Dimensions.get('window').width;
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
-    const shimmerAnimation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmerAnim, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ]));
-    shimmerAnimation.start();
-
-    return () => shimmerAnimation.stop();
+    shimmerAnim.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 1000 }),
+        withTiming(0.3, { duration: 1000 })
+      ),
+      -1
+    );
   }, []);
 
-  const shimmerOpacity = shimmerAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0.3, 0.8],
-  });
+  const shimmerOpacity = interpolate(shimmerAnim.value, [0, 1], [0.3, 0.8]);
 
   const styles = createStyles(screenWidth);
 

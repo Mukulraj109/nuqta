@@ -12,18 +12,18 @@
  * NOTE: This is different from Cash Store (affiliate cashback for external websites)
  */
 
-import React, { memo, useCallback, useEffect, useRef } from 'react';
+import React, { memo, useCallback, useEffect } from 'react';
 import { BRAND } from '@/constants/brand';
 import {
   View,
   ScrollView,
   RefreshControl,
   StyleSheet,
-  Animated,
   Text,
   Pressable,
   Platform,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence, withRepeat } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -51,18 +51,11 @@ import { colors } from '@/constants/theme';
 
 // Skeleton shimmer component for loading state
 const SkeletonPulse: React.FC<{ width: number | string; height: number; borderRadius?: number; style?: any }> = ({ width, height, borderRadius = 8, style }) => {
-  const pulseAnim = useRef(new Animated.Value(0.3)).current;
+  const pulseAnim = useSharedValue(0.3);
 
   useEffect(() => {
-    const animation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(pulseAnim, { toValue: 1, duration: 800, useNativeDriver: true }),
-        Animated.timing(pulseAnim, { toValue: 0.3, duration: 800, useNativeDriver: true }),
-      ])
-    );
-    animation.start();
-    return () => animation.stop();
-  }, []);
+    pulseAnim.value = withRepeat(withSequence(withTiming(1, { duration: 800 }), withTiming(0.3, { duration: 800 })), -1);
+      }, []);
 
   return (
     <Animated.View

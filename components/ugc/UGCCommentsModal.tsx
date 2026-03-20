@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Modal,
   Pressable,
-  Animated,
   Dimensions,
   TextInput,
   KeyboardAvoidingView,
@@ -14,6 +13,8 @@ import {
   RefreshControl,
   Keyboard,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring, withSequence, withRepeat, interpolate } from 'react-native-reanimated';
+
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -199,39 +200,23 @@ function CommentItem({
 
 // Skeleton Loader
 function CommentSkeleton() {
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
-    const shimmerLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmerAnim, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    shimmerLoop.start();
-    return () => shimmerLoop.stop();
+    shimmerAnim.value = withRepeat(withSequence(withTiming(1, { duration: 1000 }), withTiming(0, { duration: 1000 })), -1);
   }, []);
 
-  const opacity = shimmerAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0.3, 0.7],
-  });
+  const shimmerStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(shimmerAnim.value, [0, 1], [0.3, 0.7]),
+  }));
 
   return (
     <View style={styles.commentItem}>
-      <Animated.View style={[styles.avatar, styles.skeleton, { opacity }]} />
+      <Animated.View style={[styles.avatar, styles.skeleton, shimmerStyle]} />
       <View style={styles.commentContent}>
-        <Animated.View style={[styles.skeletonLine, { width: 120, opacity }]} />
-        <Animated.View style={[styles.skeletonLine, { width: '90%', marginTop: 8, opacity }]} />
-        <Animated.View style={[styles.skeletonLine, { width: '70%', marginTop: 4, opacity }]} />
+        <Animated.View style={[styles.skeletonLine, { width: 120 }, shimmerStyle]} />
+        <Animated.View style={[styles.skeletonLine, { width: '90%', marginTop: 8 }, shimmerStyle]} />
+        <Animated.View style={[styles.skeletonLine, { width: '70%', marginTop: 4 }, shimmerStyle]} />
       </View>
     </View>
   );
@@ -264,45 +249,20 @@ function UGCCommentsModal({
   const flatListRef = useRef<FlashList<UGCComment>>(null);
   const inputRef = useRef<TextInput>(null);
 
-  const slideAnim = useRef(new Animated.Value(screenHeight)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useSharedValue(screenHeight);
+  const fadeAnim = useSharedValue(0);
+  const isMounted = useIsMounted();
 
   // Animations
   useEffect(() => {
-    let _anim: Animated.CompositeAnimation;
     if (visible) {
-      _anim = Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        Animated.spring(slideAnim, {
-          toValue: 0,
-          bounciness: 8,
-          speed: 12,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      fadeAnim.value = withTiming(1, { duration: 300 });
+      slideAnim.value = withSpring(0);
     } else {
-      _anim = Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(slideAnim, {
-          toValue: screenHeight,
-          duration: 250,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      fadeAnim.value = withTiming(0, { duration: 200 });
+      slideAnim.value = withTiming(screenHeight, { duration: 250 });
     }
-  
-    return () => _anim.stop();
-}, [visible]);
+  }, [visible]);
 
   // Load comments
   const loadComments = useCallback(async (pageNum: number = 0, isRefreshing: boolean = false) => {

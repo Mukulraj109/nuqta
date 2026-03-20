@@ -1,6 +1,11 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { View, Pressable, StyleSheet, Animated, Modal } from 'react-native';
+import React, { useState,  useEffect, useCallback } from 'react';
+import { View, Pressable, StyleSheet, Modal } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming} from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { triggerImpact, triggerNotification } from "@/utils/haptics";
 import { ThemedText } from '@/components/ThemedText';
@@ -16,8 +21,7 @@ import {
   BorderRadius,
   Typography,
   IconSize,
-  Timing,
-} from '@/constants/DesignSystem';
+  Timing } from '@/constants/DesignSystem';
 import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Modal types
@@ -89,48 +93,29 @@ function Section5({ discountData, storeInfo, dynamicData, cardType }: Section5Pr
     type: null,
     title: '',
     message: '',
-    showViewButton: false,
-  });
+    showViewButton: false });
 
   // Animation refs
-  const buttonScaleAnim = useRef(new Animated.Value(1)).current;
-  const modalScaleAnim = useRef(new Animated.Value(0.8)).current;
-  const modalOpacityAnim = useRef(new Animated.Value(0)).current;
+  const buttonScaleAnim = useSharedValue(1);
+  const buttonScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: buttonScaleAnim.value }] }));
+  const modalAnimStyle = useAnimatedStyle(() => ({ opacity: modalOpacityAnim.value, transform: [{ scale: modalScaleAnim.value }] }));
+  const modalScaleAnim = useSharedValue(0.8);
+  const modalOpacityAnim = useSharedValue(0);
 
   // Show modal with animation
   const showModal = (type: ModalType, title: string, message: string, showViewButton = false) => {
     setModal({ visible: true, type, title, message, showViewButton });
-    Animated.parallel([
-      Animated.spring(modalScaleAnim, {
-        toValue: 1,
-        useNativeDriver: true,
-        tension: 100,
-        friction: 8,
-      }),
-      Animated.timing(modalOpacityAnim, {
-        toValue: 1,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    modalScaleAnim.value = withSpring(1, { damping: 8, stiffness: 100 });
+    modalOpacityAnim.value = withTiming(1, { duration: 200 });
   };
 
   // Hide modal with animation
   const hideModal = () => {
-    Animated.parallel([
-      Animated.timing(modalScaleAnim, {
-        toValue: 0.8,
-        duration: 150,
-        useNativeDriver: true,
-      }),
-      Animated.timing(modalOpacityAnim, {
-        toValue: 0,
-        duration: 150,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
+    modalScaleAnim.value = withTiming(0.8, { duration: 150 });
+    modalOpacityAnim.value = withTiming(0, { duration: 150 });
+    setTimeout(() => {
       setModal({ visible: false, type: null, title: '', message: '', showViewButton: false });
-    });
+    }, 150);
   };
 
   // Check saved status function (used by both useEffect and useFocusEffect)
@@ -188,12 +173,8 @@ function Section5({ discountData, storeInfo, dynamicData, cardType }: Section5Pr
   );
 
   // Animation helper
-  const animateScale = (animValue: Animated.Value, toValue: number) => {
-    Animated.spring(animValue, {
-      toValue,
-      useNativeDriver: true,
-      ...Timing.springBouncy,
-    }).start();
+  const animateScale = (animValue: { value: number }, toValue: number) => {
+    animValue.value = withSpring(toValue);
   };
 
   const handleSaveDeal = async () => {
@@ -233,8 +214,7 @@ function Section5({ discountData, storeInfo, dynamicData, cardType }: Section5Pr
           storeId: discountData.storeId || storeInfo?._id || storeInfo?.id,
           storeName: discountData.storeName || storeInfo?.name,
           productId: discountData.productId,
-          productName: discountData.productName,
-        };
+          productName: discountData.productName };
 
         // Check if already saved
         const checkResponse = await wishlistApi.checkWishlistStatus('discount', discountId);
@@ -352,7 +332,7 @@ function Section5({ discountData, storeInfo, dynamicData, cardType }: Section5Pr
       accessibilityRole="summary"
       accessibilityLabel="Save deal action"
     >
-      <Animated.View style={{ transform: [{ scale: buttonScaleAnim }] }}>
+      <Animated.View style={buttonScaleStyle}>
         <Pressable
          
           style={[
@@ -413,13 +393,7 @@ function Section5({ discountData, storeInfo, dynamicData, cardType }: Section5Pr
       >
         <Pressable style={styles.modalOverlay} onPress={hideModal}>
           <Animated.View
-            style={[
-              styles.modalContent,
-              {
-                opacity: modalOpacityAnim,
-                transform: [{ scale: modalScaleAnim }],
-              },
-            ]}
+            style={[styles.modalContent, modalAnimStyle]}
           >
             <Pressable onPress={(e) => e.stopPropagation()}>
               {/* Icon */}
@@ -469,8 +443,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: Spacing['2xl'] - 4,
     paddingVertical: Spacing.base,
-    backgroundColor: Colors.background.primary,
-  },
+    backgroundColor: Colors.background.primary },
 
   // Modern Button with Purple Tint
   button: {
@@ -479,16 +452,13 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.purpleLight,
     borderRadius: BorderRadius.lg,
     padding: Spacing.md,
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle },
   buttonDisabled: {
-    opacity: 0.6,
-  },
+    opacity: 0.6 },
   buttonSaved: {
     backgroundColor: Colors.successScale[50],
     borderWidth: 1,
-    borderColor: Colors.successScale[100],
-  },
+    borderColor: Colors.successScale[100] },
 
   // Modern Icon Container
   iconContainer: {
@@ -498,35 +468,28 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary[50],
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: Spacing.md,
-  },
+    marginRight: Spacing.md },
   iconContainerSaved: {
-    backgroundColor: Colors.successScale[100],
-  },
+    backgroundColor: Colors.successScale[100] },
 
   textContainer: {
-    flex: 1,
-  },
+    flex: 1 },
 
   // Modern Typography
   title: {
     ...Typography.h4,
     fontWeight: '600',
     color: Colors.text.primary,
-    marginBottom: Spacing.xs - 1,
-  },
+    marginBottom: Spacing.xs - 1 },
   titleSaved: {
-    color: Colors.successScale[700],
-  },
+    color: Colors.successScale[700] },
   subtitle: {
     ...Typography.body,
-    color: Colors.gray[600],
-  },
+    color: Colors.gray[600] },
 
   // Saved badge
   savedBadge: {
-    marginLeft: Spacing.sm,
-  },
+    marginLeft: Spacing.sm },
 
   // Modal Styles
   modalOverlay: {
@@ -534,8 +497,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 24,
-  },
+    padding: 24 },
   modalContent: {
     backgroundColor: colors.background.primary,
     borderRadius: 24,
@@ -547,48 +509,41 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.25,
     shadowRadius: 20,
-    elevation: 10,
-  },
+    elevation: 10 },
   modalIconContainer: {
     width: 80,
     height: 80,
     borderRadius: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   modalTitle: {
     fontSize: 20,
     fontWeight: '700',
     color: colors.neutral[800],
     marginBottom: 8,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   modalMessage: {
     fontSize: 15,
     color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 22,
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   modalButtons: {
     flexDirection: 'row',
     gap: 12,
-    width: '100%',
-  },
+    width: '100%' },
   modalButtonPrimary: {
     flex: 1,
     backgroundColor: colors.lightMustard,
     paddingVertical: 14,
     borderRadius: 12,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   modalButtonPrimaryText: {
     color: colors.background.primary,
     fontSize: 16,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   modalButtonSecondary: {
     flex: 1,
     backgroundColor: 'rgba(255, 205, 87, 0.1)',
@@ -597,11 +552,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    gap: 6,
-  },
+    gap: 6 },
   modalButtonSecondaryText: {
     color: colors.lightMustard,
     fontSize: 16,
-    fontWeight: '600',
-  },
-});
+    fontWeight: '600' } });

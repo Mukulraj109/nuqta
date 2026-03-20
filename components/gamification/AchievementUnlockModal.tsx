@@ -7,10 +7,10 @@ import {
   StyleSheet,
   Modal,
   Pressable,
-  Animated,
   Dimensions,
   Share,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring, withSequence, withRepeat, interpolate } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
@@ -38,64 +38,34 @@ function AchievementUnlockModal({
   achievement,
   onClose,
 }: AchievementUnlockModalProps) {
-  const scaleAnim = useRef(new Animated.Value(0)).current;
-  const shineAnim = useRef(new Animated.Value(0)).current;
-  const coinsAnim = useRef(new Animated.Value(0)).current;
-  const animationRef = useRef<Animated.CompositeAnimation | null>(null);
+  const scaleAnim = useSharedValue(0);
+  const shineAnim = useSharedValue(0);
+  const coinsAnim = useSharedValue(0);
+  const animationRef = useRef<any | null>(null);
 
   useEffect(() => {
     if (visible && achievement) {
       // Reset animations
-      scaleAnim.setValue(0);
-      shineAnim.setValue(0);
-      coinsAnim.setValue(0);
+      scaleAnim.value = 0;
+      shineAnim.value = 0;
+      coinsAnim.value = 0;
 
       // Create shine loop animation
-      const shineLoop = Animated.loop(
-        Animated.sequence([
-          Animated.timing(shineAnim, {
-            toValue: 1,
-            duration: 1000,
-            useNativeDriver: true,
-          }),
-          Animated.timing(shineAnim, {
-            toValue: 0,
-            duration: 1000,
-            useNativeDriver: true,
-          }),
-        ])
-      );
+      shineAnim.value = withRepeat(withSequence(withTiming(1, { duration: 1000 }), withTiming(0, { duration: 1000 })), -1);
 
       // Start animations
-      animationRef.current = Animated.sequence([
-        Animated.spring(scaleAnim, {
-          toValue: 1,
-          tension: 50,
-          friction: 7,
-          useNativeDriver: true,
-        }),
-        Animated.parallel([
-          shineLoop,
-          Animated.spring(coinsAnim, {
-            toValue: 1,
-            tension: 40,
-            friction: 8,
-            useNativeDriver: true,
-          }),
-        ]),
-      ]);
-      animationRef.current.start();
+      scaleAnim.value = withSpring(1, { stiffness: 50, damping: 7 });
+      coinsAnim.value = withSpring(1, { stiffness: 40, damping: 8 });
     }
 
     // Cleanup: stop all animations on unmount or when visibility changes
     return () => {
       if (animationRef.current) {
-        animationRef.current.stop();
         animationRef.current = null;
       }
-      scaleAnim.setValue(0);
-      shineAnim.setValue(0);
-      coinsAnim.setValue(0);
+      scaleAnim.value = 0;
+      shineAnim.value = 0;
+      coinsAnim.value = 0;
     };
   }, [visible, achievement]);
 
@@ -143,10 +113,7 @@ function AchievementUnlockModal({
                     ],
                     transform: [
                       {
-                        translateY: shineAnim.interpolate({
-                          inputRange: [0, 1],
-                          outputRange: [0, 300],
-                        }),
+                        translateY: interpolate(shineAnim.value, [0, 1], [0, 300]),
                       },
                     ],
                   },
@@ -168,10 +135,7 @@ function AchievementUnlockModal({
                 {
                   transform: [
                     {
-                      rotate: shineAnim.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: ['0deg', '10deg'],
-                      }),
+                      rotate: interpolate(shineAnim.value, [0, 1], ['0deg', '10deg']),
                     },
                   ],
                 },

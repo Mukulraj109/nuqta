@@ -1,6 +1,10 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { Suspense } from 'react';
-import { View, ScrollView, StyleSheet, RefreshControl, Pressable, Animated, Platform } from 'react-native';
+import { View, ScrollView, StyleSheet, RefreshControl, Pressable, Platform } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring } from 'react-native-reanimated';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -41,8 +45,11 @@ function PlayScreen() {
   const [articlesError, setArticlesError] = React.useState<string>();
 
   // FAB animation
-  const fabScale = React.useRef(new Animated.Value(0)).current;
+  const fabScale = useSharedValue(0);
   const [showFAB, setShowFAB] = React.useState(true);
+  const fabAnimStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: fabScale.value }],
+  }));
 
   // Fetch articles
   const fetchArticles = React.useCallback(async () => {
@@ -78,18 +85,10 @@ function PlayScreen() {
 
   // Animate FAB entrance on mount & fetch articles
   React.useEffect(() => {
-    const anim = Animated.spring(fabScale, {
-      toValue: 1,
-      friction: 5,
-      tension: 40,
-      useNativeDriver: true,
-    });
-    anim.start();
+    fabScale.value = withSpring(1, { damping: 12, stiffness: 40 });
 
     // Fetch articles on mount
     fetchArticles();
-
-    return () => anim.stop();
   }, [fetchArticles]);
 
   const handleRefresh = React.useCallback(async () => {
@@ -387,9 +386,7 @@ function PlayScreen() {
         <Animated.View
           style={[
             styles.fabContainer,
-            {
-              transform: [{ scale: fabScale }],
-            },
+            fabAnimStyle,
           ]}
         >
           <Pressable
@@ -418,8 +415,7 @@ function PlayScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: PLAY_PAGE_COLORS.background,
-  },
+    backgroundColor: PLAY_PAGE_COLORS.background },
   content: {
     flex: 1,
     paddingBottom: Spacing['5xl'] + Spacing['4xl'] + Spacing.sm, // ~120
@@ -428,26 +424,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.md,
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   quickActionButton: {
     flex: 1,
     borderRadius: BorderRadius.md,
     overflow: 'hidden',
-    ...Shadows.md,
-  },
+    ...Shadows.md },
   quickActionGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: Spacing.md + 2,
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   quickActionText: {
     color: Colors.text.inverse,
     fontSize: Typography.body.fontSize + 1,
-    fontWeight: '700',
-  },
+    fontWeight: '700' },
   errorBanner: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -458,22 +450,18 @@ const styles = StyleSheet.create({
     marginHorizontal: Spacing.base,
     marginBottom: Spacing.base,
     borderRadius: BorderRadius.md,
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   errorBannerText: {
     flex: 1,
     color: Colors.errorScale[700],
     fontSize: Typography.body.fontSize,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   sectionLoading: {
     paddingVertical: Spacing['3xl'],
-    paddingHorizontal: Spacing.base,
-  },
+    paddingHorizontal: Spacing.base },
   sectionError: {
     paddingVertical: Spacing.xl,
-    paddingHorizontal: Spacing.base,
-  },
+    paddingHorizontal: Spacing.base },
   sectionErrorButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -483,19 +471,16 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     gap: Spacing.sm,
     borderWidth: 1,
-    borderColor: Colors.errorScale[100],
-  },
+    borderColor: Colors.errorScale[100] },
   sectionErrorText: {
     color: Colors.error,
     fontSize: Typography.body.fontSize,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   fabContainer: {
     position: 'absolute',
     bottom: 100,
     right: Spacing.lg,
-    zIndex: 999,
-  },
+    zIndex: 999 },
   fab: {
     width: 60,
     height: 60,
@@ -505,67 +490,53 @@ const styles = StyleSheet.create({
         shadowColor: Colors.primary[500],
         shadowOffset: {
           width: 0,
-          height: 4,
-        },
+          height: 4 },
         shadowOpacity: 0.4,
-        shadowRadius: 8,
-      },
+        shadowRadius: 8 },
       android: {
-        elevation: 8,
-      },
-    }),
-  },
+        elevation: 8 } }) },
   fabGradient: {
     width: 60,
     height: 60,
     borderRadius: 30,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   emptyContainer: {
     paddingVertical: Spacing['5xl'] + Spacing.base,
     paddingHorizontal: Spacing.lg,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   emptyText: {
     fontSize: Typography.h3.fontSize,
     fontWeight: '700',
     color: PLAY_PAGE_COLORS.text,
     marginTop: Spacing.base,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   emptySubtext: {
     fontSize: Typography.body.fontSize,
     color: PLAY_PAGE_COLORS.textSecondary,
     textAlign: 'center',
     opacity: 0.7,
-    marginBottom: Spacing.xl,
-  },
+    marginBottom: Spacing.xl },
   emptyButton: {
     borderRadius: BorderRadius.md,
     overflow: 'hidden',
     shadowColor: Colors.primary[500],
     shadowOffset: {
       width: 0,
-      height: 4,
-    },
+      height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
-    elevation: 5,
-  },
+    elevation: 5 },
   emptyButtonGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md + 2,
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   emptyButtonText: {
     color: Colors.text.inverse,
     fontSize: Typography.bodyLarge.fontSize,
-    fontWeight: '600',
-  },
-});
+    fontWeight: '600' } });
 
 export default withErrorBoundary(PlayScreen, '(tabs)Play');

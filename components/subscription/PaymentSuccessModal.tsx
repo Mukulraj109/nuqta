@@ -1,15 +1,21 @@
 // Payment Success Modal Component
 // Displays success animation and subscription details after successful payment
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   StyleSheet,
   Pressable,
   Modal,
-  Animated,
   Dimensions,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSpring,
+  withDelay,
+} from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -35,33 +41,26 @@ function PaymentSuccessModal({
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
-  const scaleAnim = useRef(new Animated.Value(0)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useSharedValue(0);
+  const fadeAnim = useSharedValue(0);
 
   useEffect(() => {
     if (visible) {
-      // Animate success icon
-      const anim = Animated.sequence([
-        Animated.spring(scaleAnim, {
-          toValue: 1,
-          tension: 50,
-          friction: 7,
-          useNativeDriver: true,
-        }),
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-      ]);
-      anim.start();
-      return () => { anim.stop(); };
+      scaleAnim.value = withSpring(1, { damping: 7, stiffness: 50 });
+      fadeAnim.value = withDelay(500, withTiming(1, { duration: 300 }));
     } else {
-      // Reset animations
-      scaleAnim.setValue(0);
-      fadeAnim.setValue(0);
+      scaleAnim.value = 0;
+      fadeAnim.value = 0;
     }
   }, [visible]);
+
+  const scaleAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scaleAnim.value }],
+  }));
+
+  const fadeAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+  }));
 
   const handleViewSubscription = () => {
     onClose();
@@ -95,9 +94,7 @@ function PaymentSuccessModal({
             <Animated.View
               style={[
                 styles.successCircle,
-                {
-                  transform: [{ scale: scaleAnim }],
-                },
+                scaleAnimatedStyle,
               ]}
             >
               <LinearGradient
@@ -115,9 +112,7 @@ function PaymentSuccessModal({
           <Animated.View
             style={[
               styles.contentContainer,
-              {
-                opacity: fadeAnim,
-              },
+              fadeAnimatedStyle,
             ]}
           >
             <ThemedText style={styles.successTitle}>Payment Successful!</ThemedText>

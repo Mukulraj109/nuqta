@@ -5,18 +5,18 @@
  * Uses ReZ brand colors: Green gradient background, Golden text/buttons.
  */
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { BRAND } from '@/constants/brand';
 import { catchSilent } from '@/utils/catchAndReport';
 import {
   View,
   Text,
   StyleSheet,
-  Animated,
   Pressable,
   Dimensions,
   Platform,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -45,9 +45,9 @@ interface RewardUnlockedPopupProps {
 }
 
 function RewardUnlockedPopup({ data, onDismiss }: RewardUnlockedPopupProps) {
-  const translateY = useRef(new Animated.Value(150)).current;
-  const opacity = useRef(new Animated.Value(0)).current;
-  const scale = useRef(new Animated.Value(0.9)).current;
+  const translateY = useSharedValue(150);
+  const opacity = useSharedValue(0);
+  const scale = useSharedValue(0.9);
 
   const {
     type,
@@ -68,25 +68,9 @@ function RewardUnlockedPopup({ data, onDismiss }: RewardUnlockedPopupProps) {
     }
 
     // Entrance animation
-    const anim = Animated.parallel([
-      Animated.spring(translateY, {
-        toValue: 0,
-        friction: 8,
-        tension: 50,
-        useNativeDriver: true,
-      }),
-      Animated.timing(opacity, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-      Animated.spring(scale, {
-        toValue: 1,
-        friction: 6,
-        useNativeDriver: true,
-      }),
-    ]);
-    anim.start();
+    translateY.value = withSpring(0);
+    opacity.value = withTiming(1, { duration: 300 });
+    scale.value = withSpring(1, { damping: 6 });
 
     // Auto dismiss after duration (if duration > 0)
     let timer: NodeJS.Timeout | null = null;
@@ -96,30 +80,17 @@ function RewardUnlockedPopup({ data, onDismiss }: RewardUnlockedPopupProps) {
       }, duration);
     }
 
-    return () => { anim.stop(); if (timer) clearTimeout(timer); };
+    return () => { if (timer) clearTimeout(timer); };
   }, []);
 
   const handleDismiss = () => {
-    Animated.parallel([
-      Animated.timing(translateY, {
-        toValue: 150,
-        duration: 250,
-        useNativeDriver: true,
-      }),
-      Animated.timing(opacity, {
-        toValue: 0,
-        duration: 250,
-        useNativeDriver: true,
-      }),
-      Animated.timing(scale, {
-        toValue: 0.9,
-        duration: 250,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
+    translateY.value = withTiming(150, { duration: 250 });
+    opacity.value = withTiming(0, { duration: 250 });
+    scale.value = withTiming(0.9, { duration: 250 });
+    setTimeout(() => {
       data.onDismiss?.();
       onDismiss();
-    });
+    }, 250);
   };
 
   const handleClaim = () => {

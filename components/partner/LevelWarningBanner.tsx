@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
-  Animated,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence, withRepeat, interpolate, runOnJS } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -39,60 +39,38 @@ function LevelWarningBanner({
 }: LevelWarningBannerProps) {
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(true);
-  const slideAnim = useState(new Animated.Value(0))[0];
-  const pulseAnim = useState(new Animated.Value(1))[0];
-  const pulseAnimationRef = useRef<Animated.CompositeAnimation | null>(null);
+  const slideAnim = useSharedValue(0);
+  const pulseAnim = useSharedValue(1);
 
   // Determine severity
   const isCritical = daysRemaining <= 3;
-  const isUrgent = daysRemaining <= 7;
 
   useEffect(() => {
     // Slide in animation
-    Animated.timing(slideAnim, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
+    slideAnim.value = withTiming(1, { duration: 500 });
 
     // Pulse animation for critical warnings
     if (isCritical) {
-      pulseAnimationRef.current = Animated.loop(
-        Animated.sequence([
-          Animated.timing(pulseAnim, {
-            toValue: 1.02,
-            duration: 500,
-            useNativeDriver: true,
-          }),
-          Animated.timing(pulseAnim, {
-            toValue: 1,
-            duration: 500,
-            useNativeDriver: true,
-          }),
-        ])
+      pulseAnim.value = withRepeat(
+        withSequence(
+          withTiming(1.02, { duration: 500 }),
+          withTiming(1, { duration: 500 }),
+        ),
+        -1
       );
-      pulseAnimationRef.current.start();
     }
 
-    // Cleanup: stop animation on unmount or when isCritical changes
     return () => {
-      if (pulseAnimationRef.current) {
-        pulseAnimationRef.current.stop();
-        pulseAnimationRef.current = null;
-      }
-      pulseAnim.setValue(1);
+      pulseAnim.value = 1;
     };
   }, [isCritical]);
 
   const handleDismiss = () => {
-    Animated.timing(slideAnim, {
-      toValue: 0,
-      duration: 300,
-      useNativeDriver: true,
-    }).start(() => {
+    slideAnim.value = withTiming(0, { duration: 300 });
+    setTimeout(() => {
       setIsVisible(false);
       onDismiss?.();
-    });
+    }, 300);
   };
 
   const handleShopNow = () => {
@@ -111,21 +89,20 @@ function LevelWarningBanner({
   const accentColor = isCritical ? COLORS.danger : COLORS.warning;
   const iconName = isCritical ? 'warning' : 'alert-circle';
 
+  const animatedContainerStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateY: interpolate(slideAnim.value, [0, 1], [-100, 0]) },
+      { scale: pulseAnim.value },
+    ],
+    opacity: slideAnim.value,
+  }));
+
   return (
     <Animated.View
       style={[
         styles.container,
         { backgroundColor },
-        {
-          transform: [
-            { translateY: slideAnim.interpolate({
-              inputRange: [0, 1],
-              outputRange: [-100, 0],
-            })},
-            { scale: isCritical ? pulseAnim : 1 },
-          ],
-          opacity: slideAnim,
-        },
+        animatedContainerStyle,
       ]}
     >
       {/* Close Button */}

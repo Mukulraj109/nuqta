@@ -8,9 +8,15 @@ import {
   Pressable,
   ActivityIndicator,
   Dimensions,
-  Platform,
-  Animated,
+  Platform
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { router, Stack, useLocalSearchParams, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -85,7 +91,10 @@ function ChallengeDetailPage() {
   const refreshWallet = useRefreshWallet();
 
   // Pulse animation for Claim Reward button
-  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const pulseAnim = useSharedValue(1);
+  const pulseAnimStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: pulseAnim.value }],
+  }));
 
   useEffect(() => {
     if (isAuthenticated && id) {
@@ -110,22 +119,14 @@ function ChallengeDetailPage() {
   // Start pulse animation when challenge is completed and ready to claim
   useEffect(() => {
     if (data?.userProgress?.completed && !data?.userProgress?.rewardsClaimed) {
-      const pulse = Animated.loop(
-        Animated.sequence([
-          Animated.timing(pulseAnim, {
-            toValue: 1.05,
-            duration: 1000,
-            useNativeDriver: true,
-          }),
-          Animated.timing(pulseAnim, {
-            toValue: 1,
-            duration: 1000,
-            useNativeDriver: true,
-          }),
-        ])
+      pulseAnim.value = withRepeat(
+        withSequence(
+          withTiming(1.05, { duration: 1000 }),
+          withTiming(1, { duration: 1000 })
+        ),
+        -1
       );
-      pulse.start();
-      return () => pulse.stop();
+      return () => { pulseAnim.value = 1; };
     }
   }, [data?.userProgress?.completed, data?.userProgress?.rewardsClaimed]);
 
@@ -563,7 +564,7 @@ function ChallengeDetailPage() {
             <Text style={styles.claimedText}>Rewards Claimed</Text>
           </View>
         ) : canClaim ? (
-          <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
+          <Animated.View style={pulseAnimStyle}>
             <Pressable
               style={styles.claimButton}
               onPress={handleClaimReward}

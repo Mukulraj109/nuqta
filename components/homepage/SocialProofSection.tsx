@@ -1,13 +1,13 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { BRAND } from '@/constants/brand';
 import {
   View,
   Text,
   StyleSheet,
-  Animated,
   Dimensions,
   Platform,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence, withRepeat } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import * as Location from 'expo-location';
@@ -70,29 +70,23 @@ const SocialProofSection: React.FC = () => {
   const [userCity, setUserCity] = useState<string>('');
   const isMounted = useIsMounted();
 
-  const fadeAnim = useRef(new Animated.Value(1)).current;
-  const slideAnim = useRef(new Animated.Value(0)).current;
-  const liveDotAnim = useRef(new Animated.Value(1)).current;
+  const fadeAnim = useSharedValue(1);
+  const slideAnim = useSharedValue(0);
+  const liveDotAnim = useSharedValue(1);
 
   // Animate the live indicator dot
   useEffect(() => {
-    const pulse = Animated.loop(
-      Animated.sequence([
-        Animated.timing(liveDotAnim, {
-          toValue: 0.3,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(liveDotAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    pulse.start();
-    return () => pulse.stop();
+    liveDotAnim.value = withRepeat(withSequence(withTiming(0.3, { duration: 1000 }), withTiming(1, { duration: 1000 })), -1);
   }, [liveDotAnim]);
+
+  const liveDotStyle = useAnimatedStyle(() => ({
+    opacity: liveDotAnim.value,
+  }));
+
+  const activityAnimStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ translateY: slideAnim.value }],
+  }));
 
   const fetchNearbyActivity = useCallback(async () => {
     try {
@@ -156,38 +150,16 @@ const SocialProofSection: React.FC = () => {
 
     const rotateInterval = setInterval(() => {
       // Fade out and slide
-      Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        Animated.timing(slideAnim, {
-          toValue: -20,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-      ]).start(() => {
-        // Update index
+      fadeAnim.value = withTiming(0, { duration: 300 });
+      slideAnim.value = withTiming(-20, { duration: 300 });
+
+      // After fade out, update index and fade back in
+      setTimeout(() => {
         setCurrentIndex((prev) => (prev + 1) % activities.length);
-
-        // Reset position
-        slideAnim.setValue(20);
-
-        // Fade in and slide
-        Animated.parallel([
-          Animated.timing(fadeAnim, {
-            toValue: 1,
-            duration: 300,
-            useNativeDriver: true,
-          }),
-          Animated.timing(slideAnim, {
-            toValue: 0,
-            duration: 300,
-            useNativeDriver: true,
-          }),
-        ]).start();
-      });
+        slideAnim.value = 20;
+        fadeAnim.value = withTiming(1, { duration: 300 });
+        slideAnim.value = withTiming(0, { duration: 300 });
+      }, 350);
     }, 4000);
 
     return () => {
@@ -208,7 +180,7 @@ const SocialProofSection: React.FC = () => {
       {/* Header */}
       <View style={styles.headerContainer}>
         <View style={styles.headerLeft}>
-          <Animated.View style={[styles.liveDot, { opacity: liveDotAnim }]} />
+          <Animated.View style={[styles.liveDot, liveDotStyle]} />
           <Text style={styles.headerTitle}>People near you are earning</Text>
         </View>
       </View>
@@ -255,10 +227,7 @@ const SocialProofSection: React.FC = () => {
           <Animated.View
             style={[
               styles.activityCard,
-              {
-                opacity: fadeAnim,
-                transform: [{ translateY: slideAnim }],
-              },
+              activityAnimStyle,
             ]}
           >
             {/* Avatar */}

@@ -1,14 +1,17 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // StoreActionButtons.tsx - Modernized with Design System & Haptics
-import React, { useState, useCallback, useMemo, useRef } from 'react';
+import React, { useState, useCallback, useMemo} from 'react';
 import {
   View,
   Pressable,
   StyleSheet,
   Dimensions,
-  ActivityIndicator,
-  Animated,
+  ActivityIndicator
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { triggerImpact, triggerNotification } from "@/utils/haptics";
@@ -38,8 +41,7 @@ import {
   BorderRadius,
   Typography,
   IconSize,
-  Timing,
-} from '@/constants/DesignSystem';
+  Timing } from '@/constants/DesignSystem';
 import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ExtendedStoreActionButtonsProps extends StoreActionButtonsProps {
@@ -69,8 +71,7 @@ function StoreActionButtons({
   buttonStyle,
   textStyle,
   dynamicData,
-  buttonGroup = 'all',
-}: ExtendedStoreActionButtonsProps) {
+  buttonGroup = 'all' }: ExtendedStoreActionButtonsProps) {
 
   const isMounted = useIsMounted();
   const { width } = Dimensions.get('window');
@@ -89,8 +90,7 @@ function StoreActionButtons({
     visible: false,
     title: '',
     message: '',
-    icon: 'information-circle',
-  });
+    icon: 'information-circle' });
 
   // Error callback for action buttons
   const handleActionError: ButtonErrorCallback = useCallback((title, message, icon) => {
@@ -98,8 +98,7 @@ function StoreActionButtons({
       visible: true,
       title,
       message,
-      icon: icon || 'alert-circle',
-    });
+      icon: icon || 'alert-circle' });
   }, []);
 
   const closeModal = useCallback(() => {
@@ -110,22 +109,27 @@ function StoreActionButtons({
   const [showContactModal, setShowContactModal] = useState(false);
 
   // Animation refs for each button type (including store action buttons)
-  const buyScaleAnim = useRef(new Animated.Value(1)).current;
-  const lockScaleAnim = useRef(new Animated.Value(1)).current;
-  const bookingScaleAnim = useRef(new Animated.Value(1)).current;
-  const callScaleAnim = useRef(new Animated.Value(1)).current;
-  const productScaleAnim = useRef(new Animated.Value(1)).current;
-  const locationScaleAnim = useRef(new Animated.Value(1)).current;
-  const customScaleAnim = useRef(new Animated.Value(1)).current;
-  const payScaleAnim = useRef(new Animated.Value(1)).current;
+  const buyScaleAnim = useSharedValue(1);
+  const lockScaleAnim = useSharedValue(1);
+  const bookingScaleAnim = useSharedValue(1);
+  const callScaleAnim = useSharedValue(1);
+  const productScaleAnim = useSharedValue(1);
+  const locationScaleAnim = useSharedValue(1);
+  const customScaleAnim = useSharedValue(1);
+  const payScaleAnim = useSharedValue(1);
+
+  const buyScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: buyScaleAnim.value }] }));
+  const lockScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: lockScaleAnim.value }] }));
+  const bookingScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: bookingScaleAnim.value }] }));
+  const callScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: callScaleAnim.value }] }));
+  const productScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: productScaleAnim.value }] }));
+  const locationScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: locationScaleAnim.value }] }));
+  const customScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: customScaleAnim.value }] }));
+  const payScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: payScaleAnim.value }] }));
 
   // Animation helper
-  const animateScale = (animValue: Animated.Value, toValue: number) => {
-    Animated.spring(animValue, {
-      toValue,
-      useNativeDriver: true,
-      ...Timing.springBouncy,
-    }).start();
+  const animateScale = (animValue: { value: number }, toValue: number) => {
+    animValue.value = withSpring(toValue);
   };
 
   // Dynamic button text based on product data
@@ -168,8 +172,7 @@ function StoreActionButtons({
       showBookingButton,
       customBuyText: dynamicBuyText,
       customLockText: dynamicLockText,
-      customBookingText: dynamicBookingText,
-    }),
+      customBookingText: dynamicBookingText }),
     [
       storeType, onBuyPress, onLockPress, onBookingPress,
       isBuyLoading, isLockLoading, isBookingLoading,
@@ -255,6 +258,20 @@ function StoreActionButtons({
     }
   };
 
+  const getAnimStyle = (buttonId: string) => {
+    switch (buttonId) {
+      case 'buy': return buyScaleStyle;
+      case 'lock': return lockScaleStyle;
+      case 'booking': return bookingScaleStyle;
+      case 'call': return callScaleStyle;
+      case 'product': return productScaleStyle;
+      case 'location': return locationScaleStyle;
+      case 'custom': return customScaleStyle;
+      case 'pay': return payScaleStyle;
+      default: return buyScaleStyle;
+    }
+  };
+
   // Render individual button with animation
   const renderButton = useCallback((config: typeof buttonConfigs[0]) => {
     const isCurrentlyLoading = buttonState.loadingStates[config.id];
@@ -262,14 +279,12 @@ function StoreActionButtons({
     const isAnyLoading = stateManager.hasAnyLoading();
     const shouldDisable = !config.isEnabled || isAnyLoading;
     const scaleAnim = getAnimRef(config.id);
+    const scaleStyle = getAnimStyle(config.id);
 
     return (
       <Animated.View
         key={config.id}
-        style={{
-          transform: [{ scale: scaleAnim }],
-          width: layout.buttonWidth,
-        }}
+        style={[scaleStyle, { width: layout.buttonWidth }]}
       >
         <Pressable
           style={[
@@ -345,8 +360,7 @@ function StoreActionButtons({
           backgroundColor,
           paddingHorizontal: layout.containerPadding,
           gap: layout.buttonGap,
-          flexDirection: layout.flexDirection,
-        },
+          flexDirection: layout.flexDirection },
         containerStyle,
       ]}>
         {buttonConfigs.map(renderButton)}
@@ -383,8 +397,7 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 12,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
 
   // Modern Button with Enhanced Shadows
   buttonContainer: {
@@ -395,28 +408,23 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 8,
     elevation: 6,
-    height: 50,
-  },
+    height: 50 },
   buttonDisabled: {
-    opacity: 0.5,
-  },
+    opacity: 0.5 },
   buttonGradient: {
     paddingVertical: 0,
     paddingHorizontal: 16,
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1,
-  },
+    flex: 1 },
   buttonContent: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
-  },
+    gap: 8 },
   buttonIcon: {
-    marginRight: 0,
-  },
+    marginRight: 0 },
 
   // Modern Typography
   buttonText: {
@@ -425,6 +433,4 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
     textAlign: 'center',
     lineHeight: 20,
-    flexShrink: 0,
-  },
-});
+    flexShrink: 0 } });

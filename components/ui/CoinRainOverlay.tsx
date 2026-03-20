@@ -3,7 +3,7 @@
  * Based on ConfettiOverlay pattern but renders branded coin images.
  */
 import React, { useEffect, useRef, useMemo } from 'react';
-import { Animated, Dimensions, StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet, Animated } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { BRAND } from '@/constants/brand';
 
@@ -17,8 +17,8 @@ interface CoinRainOverlayProps {
 }
 
 function CoinRainOverlay({ visible, onComplete }: CoinRainOverlayProps) {
-  const fallAnims = useRef<Animated.Value[]>([]).current;
-  const wobbleAnims = useRef<Animated.Value[]>([]).current;
+  const fallAnims = useRef(Array.from({ length: COIN_COUNT }, () => new Animated.Value(0))).current;
+  const wobbleAnims = useRef(Array.from({ length: COIN_COUNT }, () => new Animated.Value(0))).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
 
   const coins = useMemo(() => {
@@ -31,13 +31,6 @@ function CoinRainOverlay({ visible, onComplete }: CoinRainOverlayProps) {
     }));
   }, [visible]);
 
-  if (fallAnims.length === 0) {
-    for (let i = 0; i < COIN_COUNT; i++) {
-      fallAnims.push(new Animated.Value(0));
-      wobbleAnims.push(new Animated.Value(0));
-    }
-  }
-
   useEffect(() => {
     if (!visible) return;
 
@@ -45,7 +38,7 @@ function CoinRainOverlay({ visible, onComplete }: CoinRainOverlayProps) {
     fallAnims.forEach(a => a.setValue(0));
     wobbleAnims.forEach(a => a.setValue(0));
 
-    const animations = coins.map((coin, i) => {
+    const pieceAnimations = coins.map((coin, i) => {
       const fall = Animated.timing(fallAnims[i], {
         toValue: 1,
         duration: DURATION - coin.delay,
@@ -78,9 +71,10 @@ function CoinRainOverlay({ visible, onComplete }: CoinRainOverlayProps) {
       useNativeDriver: true,
     });
 
-    const master = Animated.parallel([...animations, fadeOut]);
-    master.start(() => onComplete?.());
-    return () => master.stop();
+    const masterAnim = Animated.parallel([...pieceAnimations, fadeOut]);
+    masterAnim.start(() => { onComplete?.(); });
+
+    return () => { masterAnim.stop(); };
   }, [visible]);
 
   if (!visible) return null;

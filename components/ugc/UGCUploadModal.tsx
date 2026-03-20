@@ -14,9 +14,14 @@ import {
   ActivityIndicator,
   Dimensions,
   Platform,
-  KeyboardAvoidingView,
-  Animated,
+  KeyboardAvoidingView
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformAlert';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -87,8 +92,8 @@ function UGCUploadModal({
   const isMounted = useIsMounted();
 
   // Animation values
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const successScaleAnim = useRef(new Animated.Value(0)).current;
+  const fadeAnim = useSharedValue(0);
+  const successScaleAnim = useSharedValue(0);
 
   // Timer refs for cleanup
   const resetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -104,22 +109,17 @@ function UGCUploadModal({
 
   // Reset state when modal closes
   useEffect(() => {
-    let anim: Animated.CompositeAnimation | undefined;
+    let anim: any | undefined;
     if (!visible) {
       if (resetTimeoutRef.current) clearTimeout(resetTimeoutRef.current);
       resetTimeoutRef.current = setTimeout(() => {
         resetState();
       }, 300);
     } else {
-      anim = Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      });
-      anim.start();
+      anim = withTiming(1, { duration: 300 });
     }
     return () => {
-      anim?.stop();
+      // Animation cleanup handled by reanimated
       if (resetTimeoutRef.current) clearTimeout(resetTimeoutRef.current);
     };
   }, [visible]);
@@ -138,8 +138,8 @@ function UGCUploadModal({
     setIsUploading(false);
     setError(null);
     setUploadedContentId(null);
-    fadeAnim.setValue(0);
-    successScaleAnim.setValue(0);
+    fadeAnim.value = 0;
+    successScaleAnim.value = 0;
   };
 
   // Request permissions
@@ -371,12 +371,8 @@ function UGCUploadModal({
         setCurrentStep('success');
 
         // Success animation
-        Animated.spring(successScaleAnim, {
-          toValue: 1,
-          tension: 50,
-          friction: 5,
-          useNativeDriver: true,
-        }).start();
+        successScaleAnim.value = withSpring(1, { tension: 50,
+          friction: 5 });
 
         if (Platform.OS !== 'web') {
           try { Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {}); } catch (e) { catchSilent(e, 'UGCUploadModal/haptics'); }

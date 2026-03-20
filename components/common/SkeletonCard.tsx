@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import { View, StyleSheet, Animated } from 'react-native';
+import React, { useEffect} from 'react';
+import { View, StyleSheet} from 'react-native';
+import Animated, { interpolate, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '@/constants/theme';
 
@@ -24,32 +25,17 @@ function SkeletonCard({
   style,
   variant = 'rectangle',
 }: SkeletonCardProps) {
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
     // Continuous loop animation for shimmer effect
-    const loop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, {
-          toValue: 1,
-          duration: 1200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmerAnim, {
-          toValue: 0,
-          duration: 1200,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    loop.start();
-    return () => loop.stop();
-  }, []);
+    shimmerAnim.value = withRepeat(withSequence(withTiming(1, { duration: 1200 })), -1);
+    
+    }, []);
 
-  const translateX = shimmerAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-300, 300],
-  });
+  const shimmerStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: interpolate(shimmerAnim.value, [0, 1], [-300, 300]) }],
+  }));
 
   // Calculate final dimensions based on variant
   const finalBorderRadius =
@@ -74,10 +60,9 @@ function SkeletonCard({
       importantForAccessibility="no-hide-descendants"
     >
       <Animated.View
-        style={{
+        style={[{
           flex: 1,
-          transform: [{ translateX }],
-        }}
+        }, shimmerStyle]}
       >
         <LinearGradient
           colors={[colors.neutral[200], colors.neutral[50], colors.neutral[200]]}

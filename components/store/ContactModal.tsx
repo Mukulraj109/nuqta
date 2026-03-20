@@ -8,10 +8,16 @@ import {
   Modal,
   Pressable,
   StyleSheet,
-  Animated,
   Platform,
   Linking,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSpring,
+  interpolate,
+} from 'react-native-reanimated';
 import * as Clipboard from 'expo-clipboard';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -39,29 +45,22 @@ function ContactModal({
   const isMounted = useIsMounted();
   const backgroundColor = useThemeColor({}, 'background');
   const textColor = useThemeColor({}, 'text');
-  const fadeAnim = React.useRef(new Animated.Value(0)).current;
+  const fadeAnim = useSharedValue(0);
 
   React.useEffect(() => {
-    let _anim: Animated.CompositeAnimation;
     if (visible) {
-      _anim = Animated.spring(fadeAnim, {
-        toValue: 1,
-        useNativeDriver: true,
-        tension: 50,
-        friction: 7,
-      });
-      _anim.start();
+      fadeAnim.value = withSpring(1, { damping: 7, stiffness: 50 });
     } else {
-      _anim = Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-      });
-      _anim.start();
+      fadeAnim.value = withTiming(0, { duration: 200 });
     }
-  
-    return () => _anim.stop();
-}, [visible]);
+  }, [visible]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [
+      { scale: interpolate(fadeAnim.value, [0, 1], [0.9, 1]) },
+    ],
+  }));
 
   const handleCopy = async (text: string, field: 'phone' | 'email') => {
     try {
@@ -91,7 +90,7 @@ function ContactModal({
         if (!isMounted()) return;
         await Clipboard.setStringAsync(text);
       }
-      
+
       if (!isMounted()) return;
       setCopiedField(field);
       setTimeout(() => {
@@ -104,7 +103,7 @@ function ContactModal({
 
   const handleCall = async () => {
     if (!phone) return;
-    
+
     try {
       const url = `tel:${phone}`;
       const canOpen = await Linking.canOpenURL(url);
@@ -118,7 +117,7 @@ function ContactModal({
 
   const handleEmail = async () => {
     if (!email) return;
-    
+
     try {
       const url = `mailto:${email}`;
       const canOpen = await Linking.canOpenURL(url);
@@ -143,17 +142,7 @@ function ContactModal({
         <Animated.View
           style={[
             styles.modalContainer,
-            {
-              opacity: fadeAnim,
-              transform: [
-                {
-                  scale: fadeAnim.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [0.9, 1],
-                  }),
-                },
-              ],
-            },
+            animatedStyle,
           ]}
         >
           <LinearGradient
@@ -199,7 +188,7 @@ function ContactModal({
                       copiedField === 'phone' && styles.contactValueContainerCopied,
                     ]}
                     onPress={() => handleCopy(phone, 'phone')}
-                   
+
                     accessibilityLabel={`Phone number: ${phone}. Double tap to copy`}
                     accessibilityRole="button"
                   >
@@ -216,7 +205,7 @@ function ContactModal({
                   <Pressable
                     style={styles.actionButton}
                     onPress={handleCall}
-                   
+
                     accessibilityLabel="Call this number"
                     accessibilityRole="button"
                   >
@@ -239,7 +228,7 @@ function ContactModal({
                       copiedField === 'email' && styles.contactValueContainerCopied,
                     ]}
                     onPress={() => handleCopy(email, 'email')}
-                   
+
                     accessibilityLabel={`Email address: ${email}. Double tap to copy`}
                     accessibilityRole="button"
                   >
@@ -256,7 +245,7 @@ function ContactModal({
                   <Pressable
                     style={styles.actionButton}
                     onPress={handleEmail}
-                   
+
                     accessibilityLabel="Send email"
                     accessibilityRole="button"
                   >

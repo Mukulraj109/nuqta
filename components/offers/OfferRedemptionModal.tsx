@@ -5,7 +5,7 @@
  * Shows promo code with copy functionality and redemption instructions
  */
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Modal,
@@ -13,8 +13,8 @@ import {
   Pressable,
   ScrollView,
   Dimensions,
-  Animated,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -72,8 +72,8 @@ export const OfferRedemptionModal: React.FC<OfferRedemptionModalProps> = ({
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(50)).current;
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(50);
 
   useEffect(() => {
     if (visible) {
@@ -87,34 +87,13 @@ export const OfferRedemptionModal: React.FC<OfferRedemptionModalProps> = ({
   }, [visible]);
 
   const animateIn = () => {
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-      Animated.spring(slideAnim, {
-        toValue: 0,
-        tension: 50,
-        friction: 7,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    fadeAnim.value = withTiming(1, { duration: 300 });
+    slideAnim.value = withSpring(0, { stiffness: 50, damping: 7 });
   };
 
   const animateOut = () => {
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: 50,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    fadeAnim.value = withTiming(0, { duration: 200 });
+    slideAnim.value = withTiming(50, { duration: 200 });
   };
 
   const handleCopy = async () => {

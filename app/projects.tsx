@@ -9,9 +9,15 @@ import {
   ActivityIndicator,
   RefreshControl,
   Platform,
-  Animated,
-  Dimensions,
+  Dimensions
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming,
+  type SharedValue} from 'react-native-reanimated';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { useRouter, useNavigation, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -88,8 +94,7 @@ function AllProjectsPage() {
   // Hide the default navigation header
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerShown: false,
-    });
+      headerShown: false});
   }, [navigation]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -103,10 +108,10 @@ function AllProjectsPage() {
   const [error, setError] = useState<string | null>(null);
   const [searchFocused, setSearchFocused] = useState(false);
   
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(30)).current;
-  const searchScaleAnim = useRef(new Animated.Value(1)).current;
-  const cardAnims = useRef<{ [key: string]: Animated.Value }>({}).current;
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(30);
+  const searchScaleAnim = useSharedValue(1);
+  const cardAnims = useRef<{ [key: string]: { value: number } }>({}).current;
   const isMounted = useIsMounted();
 
   const categories = [
@@ -139,8 +144,7 @@ function AllProjectsPage() {
       const params: any = {
         page: pageNum,
         limit: 20,
-        sortBy,
-      };
+        sortBy};
 
       // Handle status filtering based on user submissions
       if (filterStatus === 'in-review' || filterStatus === 'completed') {
@@ -196,8 +200,7 @@ function AllProjectsPage() {
             analytics: sub.project.analytics || {},
             createdAt: sub.project.createdAt || sub.submittedAt,
             submissionStatus: sub.status,
-            submissionId: sub._id,
-          }));
+            submissionId: sub._id}));
 
           response = {
             success: true,
@@ -221,16 +224,11 @@ function AllProjectsPage() {
           if (!isMounted()) return;
           setProjects(newProjects);
           // Animate cards in
-          newProjects.forEach((project, index) => {
+          newProjects.forEach((project) => {
             if (!cardAnims[project._id]) {
-              cardAnims[project._id] = new Animated.Value(0);
+              cardAnims[project._id] = { value: 0 };
             }
-            Animated.timing(cardAnims[project._id], {
-              toValue: 1,
-              duration: 400,
-              delay: index * 50,
-              useNativeDriver: true,
-            }).start();
+            cardAnims[project._id].value = 1;
           });
         } else {
           if (!isMounted()) return;
@@ -244,10 +242,8 @@ function AllProjectsPage() {
 
         // Animate in
         if (reset) {
-          Animated.parallel([
-            Animated.timing(fadeAnim, { toValue: 1, duration: 500, useNativeDriver: true }),
-            Animated.timing(slideAnim, { toValue: 0, duration: 500, useNativeDriver: true }),
-          ]).start();
+          fadeAnim.value = withTiming(1, { duration: 500 });
+          slideAnim.value = withTiming(0, { duration: 500 });
         }
       } else {
         throw new Error('Failed to load projects');
@@ -268,14 +264,7 @@ function AllProjectsPage() {
   }, [selectedCategory, selectedDifficulty, sortBy, filterStatus]);
 
   useEffect(() => {
-    const anim = Animated.spring(searchScaleAnim, {
-      toValue: searchFocused ? 1.02 : 1,
-      useNativeDriver: true,
-      tension: 300,
-      friction: 10,
-    });
-    anim.start();
-    return () => anim.stop();
+    searchScaleAnim.value = withSpring(searchFocused ? 1.02 : 1, { damping: 10, stiffness: 300 });
   }, [searchFocused, searchScaleAnim]);
 
   const handleRefresh = useCallback(() => {
@@ -296,8 +285,7 @@ function AllProjectsPage() {
   const handleProjectPress = useCallback((project: Project) => {
     router.push({
       pathname: '/project-detail',
-      params: { projectId: project._id },
-    } as any);
+      params: { projectId: project._id }} as any);
   }, [router]);
 
   const getDifficultyColor = (difficulty: string) => {
@@ -342,50 +330,35 @@ function AllProjectsPage() {
   // Project Card Component
   const ProjectCard = React.memo(({ project, cardAnim, onPress, getCategoryGradient, getDifficultyColor, getCategoryIcon }: {
     project: Project;
-    cardAnim: Animated.Value;
+    cardAnim: SharedValue<number>;
     onPress: () => void;
     getCategoryGradient: (category: string) => string[];
     getDifficultyColor: (difficulty: string) => string;
     getCategoryIcon: (category: string) => string;
   }) => {
-    const pressAnim = useRef(new Animated.Value(1)).current;
+    const pressAnim = useSharedValue(1);
 
     const handlePressIn = () => {
-      Animated.spring(pressAnim, {
-        toValue: 0.96,
-        useNativeDriver: true,
-        tension: 300,
-        friction: 10,
-      }).start();
+      pressAnim.value = withSpring(0.96, { damping: 10, stiffness: 300 });
     };
 
     const handlePressOut = () => {
-      Animated.spring(pressAnim, {
-        toValue: 1,
-        useNativeDriver: true,
-        tension: 300,
-        friction: 10,
-      }).start();
+      pressAnim.value = withSpring(1, { damping: 10, stiffness: 300 });
     };
+
+    const cardStyle = useAnimatedStyle(() => ({
+      opacity: cardAnim.value,
+      transform: [
+        { translateY: interpolate(cardAnim.value, [0, 1], [30, 0]) },
+        { scale: pressAnim.value },
+      ],
+    }));
 
     const categoryGradient = getCategoryGradient(project.category);
     const difficultyColor = getDifficultyColor(project.difficulty);
 
     return (
-      <Animated.View
-        style={{
-          opacity: cardAnim,
-          transform: [
-            {
-              translateY: cardAnim.interpolate({
-                inputRange: [0, 1],
-                outputRange: [30, 0],
-              }),
-            },
-            { scale: pressAnim },
-          ],
-        }}
-      >
+      <Animated.View style={cardStyle}>
         <Pressable
           style={styles.projectCard}
           onPress={onPress}
@@ -521,8 +494,7 @@ function AllProjectsPage() {
           styles.content,
           {
             opacity: fadeAnim,
-            transform: [{ translateY: slideAnim }],
-          },
+            transform: [{ translateY: slideAnim }]},
         ]}
       >
         {/* Modern Header with Gradient */}
@@ -554,8 +526,7 @@ function AllProjectsPage() {
             style={[
               styles.searchBarWrapper,
               {
-                transform: [{ scale: searchScaleAnim }],
-              },
+                transform: [{ scale: searchScaleAnim }]},
             ]}
           >
             <LinearGradient
@@ -767,7 +738,7 @@ function AllProjectsPage() {
           >
             {projects.map((project) => {
               if (!cardAnims[project._id]) {
-                cardAnims[project._id] = new Animated.Value(1);
+                cardAnims[project._id] = { value: 1 };
               }
               return (
                 <ProjectCard
@@ -798,11 +769,9 @@ function AllProjectsPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background.secondary,
-  },
+    backgroundColor: Colors.background.secondary},
   content: {
-    flex: 1,
-  },
+    flex: 1},
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -810,8 +779,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.lg,
     paddingTop: Platform.OS === 'ios' ? Spacing.xl : Spacing.lg,
-    ...Shadows.strong,
-  },
+    ...Shadows.strong},
   backButton: {
     width: 44,
     height: 44,
@@ -820,40 +788,33 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
-  },
+    borderColor: 'rgba(255, 255, 255, 0.3)'},
   headerCenter: {
     flex: 1,
     alignItems: 'center',
-    marginHorizontal: Spacing.md,
-  },
+    marginHorizontal: Spacing.md},
   headerTitle: {
     ...Typography.h2,
     fontWeight: '800',
     color: Colors.text.inverse,
     letterSpacing: -0.5,
-    marginBottom: 2,
-  },
+    marginBottom: 2},
   headerSubtitle: {
     fontSize: 13,
     fontWeight: '500',
     color: 'rgba(255, 255, 255, 0.9)',
-    letterSpacing: 0.2,
-  },
+    letterSpacing: 0.2},
   headerRight: {
-    width: 44,
-  },
+    width: 44},
   searchContainer: {
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.base,
     backgroundColor: Colors.background.primary,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.border.default,
-  },
+    borderBottomColor: Colors.border.default},
   searchBarWrapper: {
     ...Shadows.medium,
-    borderRadius: BorderRadius.lg,
-  },
+    borderRadius: BorderRadius.lg},
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -861,35 +822,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.lg,
     height: 56,
     borderWidth: 2,
-    borderColor: Colors.border.default,
-  },
+    borderColor: Colors.border.default},
   searchIconContainer: {
-    marginRight: Spacing.md,
-  },
+    marginRight: Spacing.md},
   searchInput: {
     flex: 1,
     ...Typography.bodyLarge,
     fontWeight: '500',
     color: Colors.text.primary,
-    paddingVertical: 0,
-  },
+    paddingVertical: 0},
   clearButton: {
     marginLeft: Spacing.sm,
-    padding: Spacing.xs,
-  },
+    padding: Spacing.xs},
   filtersSection: {
     backgroundColor: Colors.background.primary,
     borderBottomWidth: 1,
     borderBottomColor: Colors.border.default,
-    paddingVertical: Spacing.base,
-  },
+    paddingVertical: Spacing.base},
   filterScrollView: {
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md},
   filterContent: {
     paddingHorizontal: Spacing.lg,
-    gap: 10,
-  },
+    gap: 10},
   filterChip: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -900,8 +854,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     gap: Spacing.sm,
     borderWidth: 1.5,
-    borderColor: 'transparent',
-  },
+    borderColor: 'transparent'},
   filterChipActive: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -910,32 +863,26 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius['2xl'],
     marginRight: 10,
     gap: Spacing.sm,
-    ...Shadows.medium,
-  },
+    ...Shadows.medium},
   filterChipText: {
     ...Typography.body,
     fontWeight: '700',
     color: Colors.text.tertiary,
-    letterSpacing: 0.2,
-  },
+    letterSpacing: 0.2},
   filterChipTextActive: {
     ...Typography.body,
     fontWeight: '700',
     color: Colors.text.inverse,
-    letterSpacing: 0.2,
-  },
+    letterSpacing: 0.2},
   filterRow: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: Spacing.lg,
-    gap: Spacing.md,
-  },
+    gap: Spacing.md},
   difficultyScrollView: {
-    flex: 1,
-  },
+    flex: 1},
   difficultyContent: {
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm},
   difficultyChip: {
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.sm,
@@ -943,65 +890,54 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.secondary,
     marginRight: Spacing.sm,
     borderWidth: 1.5,
-    borderColor: 'transparent',
-  },
+    borderColor: 'transparent'},
   difficultyChipActive: {
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.xl,
     marginRight: Spacing.sm,
-    borderWidth: 1.5,
-  },
+    borderWidth: 1.5},
   difficultyChipText: {
     fontSize: 13,
     fontWeight: '600',
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary},
   difficultyChipTextActive: {
     fontSize: 13,
-    fontWeight: '700',
-  },
+    fontWeight: '700'},
   sortButton: {
     borderRadius: BorderRadius.xl,
     overflow: 'hidden',
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle},
   sortButtonGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: Spacing.base,
     paddingVertical: 10,
     borderRadius: BorderRadius.xl,
-    gap: 6,
-  },
+    gap: 6},
   sortText: {
     fontSize: 13,
     fontWeight: '700',
     color: Colors.nileBlue,
-    letterSpacing: 0.2,
-  },
+    letterSpacing: 0.2},
   projectsList: {
-    flex: 1,
-  },
+    flex: 1},
   projectsListContent: {
     paddingHorizontal: Spacing.lg,
     paddingTop: Spacing.lg,
-    paddingBottom: 100,
-  },
+    paddingBottom: 100},
   projectCard: {
     marginBottom: Spacing.lg,
     borderRadius: BorderRadius['2xl'],
     overflow: 'hidden',
-    ...Shadows.strong,
-  },
+    ...Shadows.strong},
   cardGradient: {
     padding: Spacing.lg,
     borderRadius: BorderRadius['2xl'],
     position: 'relative',
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.05)',
-  },
+    borderColor: 'rgba(0, 0, 0, 0.05)'},
   decorativeCircle1: {
     position: 'absolute',
     width: 120,
@@ -1009,8 +945,7 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     backgroundColor: 'rgba(139, 92, 246, 0.05)',
     top: -40,
-    right: -40,
-  },
+    right: -40},
   decorativeCircle2: {
     position: 'absolute',
     width: 80,
@@ -1018,8 +953,7 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     backgroundColor: 'rgba(139, 92, 246, 0.03)',
     bottom: -20,
-    left: -20,
-  },
+    left: -20},
   featuredBadgeContainer: {
     position: 'absolute',
     top: Spacing.base,
@@ -1027,35 +961,30 @@ const styles = StyleSheet.create({
     zIndex: 10,
     borderRadius: BorderRadius.xl,
     overflow: 'hidden',
-    ...Shadows.medium,
-  },
+    ...Shadows.medium},
   featuredBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: Spacing.md,
     paddingVertical: 6,
     borderRadius: BorderRadius.xl,
-    gap: 6,
-  },
+    gap: 6},
   featuredText: {
     fontSize: 11,
     fontWeight: '800',
     color: Colors.text.inverse,
-    letterSpacing: 0.3,
-  },
+    letterSpacing: 0.3},
   cardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 14,
-    zIndex: 5,
-  },
+    zIndex: 5},
   cardHeaderLeft: {
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
-    marginRight: Spacing.md,
-  },
+    marginRight: Spacing.md},
   categoryIconContainer: {
     width: 48,
     height: 48,
@@ -1063,45 +992,38 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 14,
-    ...Shadows.medium,
-  },
+    ...Shadows.medium},
   cardTitleContainer: {
-    flex: 1,
-  },
+    flex: 1},
   cardTitle: {
     ...Typography.h3,
     fontWeight: '800',
     color: Colors.text.primary,
     letterSpacing: -0.5,
-    lineHeight: 26,
-  },
+    lineHeight: 26},
   difficultyBadge: {
     paddingHorizontal: 14,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.lg,
-    borderWidth: 1.5,
-  },
+    borderWidth: 1.5},
   difficultyText: {
     ...Typography.bodySmall,
     fontWeight: '800',
     textTransform: 'capitalize',
-    letterSpacing: 0.3,
-  },
+    letterSpacing: 0.3},
   cardDescription: {
     fontSize: 15,
     color: Colors.text.tertiary,
     lineHeight: 22,
     marginBottom: Spacing.base,
     zIndex: 5,
-    fontWeight: '500',
-  },
+    fontWeight: '500'},
   cardFooter: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 14,
     zIndex: 5,
-    gap: Spacing.md,
-  },
+    gap: Spacing.md},
   rewardContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1113,14 +1035,12 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
-    elevation: 6,
-  },
+    elevation: 6},
   rewardAmount: {
     fontSize: 17,
     fontWeight: '800',
     color: Colors.text.inverse,
-    letterSpacing: 0.2,
-  },
+    letterSpacing: 0.2},
   timeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1128,13 +1048,11 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: BorderRadius.md,
     backgroundColor: Colors.background.secondary,
-    gap: 6,
-  },
+    gap: 6},
   timeText: {
     fontSize: 13,
     fontWeight: '600',
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary},
   statsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1142,33 +1060,28 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: BorderRadius.md,
     backgroundColor: Colors.background.secondary,
-    gap: 6,
-  },
+    gap: 6},
   statsText: {
     fontSize: 13,
     fontWeight: '600',
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary},
   tagsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginTop: Spacing.xs,
     gap: Spacing.sm,
-    zIndex: 5,
-  },
+    zIndex: 5},
   tag: {
     paddingHorizontal: Spacing.md,
     paddingVertical: 6,
     borderRadius: BorderRadius.lg,
     borderWidth: 1,
-    borderColor: 'rgba(139, 92, 246, 0.2)',
-  },
+    borderColor: 'rgba(139, 92, 246, 0.2)'},
   tagText: {
     fontSize: 11,
     fontWeight: '700',
     color: Colors.nileBlue,
-    letterSpacing: 0.2,
-  },
+    letterSpacing: 0.2},
   arrowContainer: {
     position: 'absolute',
     bottom: Spacing.lg,
@@ -1179,20 +1092,17 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.secondary,
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 5,
-  },
+    zIndex: 5},
   centerContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: Spacing['3xl'],
-  },
+    paddingHorizontal: Spacing['3xl']},
   loadingText: {
     marginTop: Spacing.lg,
     ...Typography.bodyLarge,
     fontWeight: '600',
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary},
   errorIconContainer: {
     width: 96,
     height: 96,
@@ -1200,15 +1110,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: Spacing.lg,
-    ...Shadows.medium,
-  },
+    ...Shadows.medium},
   errorText: {
     marginTop: Spacing.base,
     ...Typography.h4,
     fontWeight: '700',
     color: Colors.error,
-    textAlign: 'center',
-  },
+    textAlign: 'center'},
   retryButton: {
     marginTop: 28,
     borderRadius: BorderRadius.lg,
@@ -1217,19 +1125,16 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
-    elevation: 6,
-  },
+    elevation: 6},
   retryButtonGradient: {
     paddingHorizontal: Spacing['2xl'],
     paddingVertical: 14,
-    borderRadius: BorderRadius.lg,
-  },
+    borderRadius: BorderRadius.lg},
   retryButtonText: {
     ...Typography.bodyLarge,
     fontWeight: '800',
     color: Colors.text.inverse,
-    letterSpacing: 0.3,
-  },
+    letterSpacing: 0.3},
   emptyIconContainer: {
     width: 120,
     height: 120,
@@ -1237,35 +1142,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: Spacing.xl,
-    ...Shadows.strong,
-  },
+    ...Shadows.strong},
   emptyText: {
     marginTop: Spacing.base,
     ...Typography.h2,
     fontWeight: '800',
     color: Colors.text.primary,
-    letterSpacing: -0.5,
-  },
+    letterSpacing: -0.5},
   emptySubtext: {
     marginTop: Spacing.md,
     fontSize: 15,
     fontWeight: '500',
     color: Colors.text.tertiary,
     textAlign: 'center',
-    lineHeight: 22,
-  },
+    lineHeight: 22},
   loadMoreContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: Spacing.xl,
-    gap: Spacing.md,
-  },
+    gap: Spacing.md},
   loadMoreText: {
     ...Typography.body,
     fontWeight: '600',
-    color: Colors.text.tertiary,
-  },
-});
+    color: Colors.text.tertiary}});
 
 export default withErrorBoundary(AllProjectsPage, 'Projects');

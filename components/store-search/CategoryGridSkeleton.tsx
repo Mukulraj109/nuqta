@@ -1,11 +1,18 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { colors } from '@/constants/theme';
 import {
   View,
-  Animated,
   StyleSheet,
   Dimensions,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withRepeat,
+  withSequence,
+  interpolate,
+} from 'react-native-reanimated';
 
 interface CategoryGridSkeletonProps {
   itemCount?: number;
@@ -19,31 +26,21 @@ const CARD_WIDTH = (width - H_PADDING * 2 - CARD_GAP) / 2;
 const CategoryGridSkeleton: React.FC<CategoryGridSkeletonProps> = ({
   itemCount = 6,
 }) => {
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
-    const shimmer = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmerAnim, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
+    shimmerAnim.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 1000 }),
+        withTiming(0, { duration: 1000 })
+      ),
+      -1
     );
-    shimmer.start();
-    return () => shimmer.stop();
-  }, [shimmerAnim]);
+  }, []);
 
-  const shimmerOpacity = shimmerAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0.3, 0.7],
-  });
+  const shimmerStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(shimmerAnim.value, [0, 1], [0.3, 0.7]),
+  }));
 
   const cards = Array.from({ length: itemCount }, (_, i) => i);
 
@@ -60,11 +57,11 @@ const CategoryGridSkeleton: React.FC<CategoryGridSkeletonProps> = ({
           {row.map((_, index) => (
             <View key={index} style={styles.card}>
               {/* Gradient placeholder */}
-              <Animated.View style={[styles.imagePlaceholder, { opacity: shimmerOpacity }]} />
+              <Animated.View style={[styles.imagePlaceholder, shimmerStyle]} />
               {/* Title placeholder */}
-              <Animated.View style={[styles.titlePlaceholder, { opacity: shimmerOpacity }]} />
+              <Animated.View style={[styles.titlePlaceholder, shimmerStyle]} />
               {/* Description placeholder */}
-              <Animated.View style={[styles.descriptionPlaceholder, { opacity: shimmerOpacity }]} />
+              <Animated.View style={[styles.descriptionPlaceholder, shimmerStyle]} />
             </View>
           ))}
         </View>

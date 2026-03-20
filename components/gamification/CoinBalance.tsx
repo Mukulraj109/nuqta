@@ -3,17 +3,17 @@
  * Displays user's coin/points balance with animated updates
  */
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BRAND } from '@/constants/brand';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
-  Animated,
   ViewStyle,
   TextStyle,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring, withSequence } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { useGamification } from '@/contexts/GamificationContext';
 import { useRouter } from 'expo-router';
@@ -43,44 +43,25 @@ function CoinBalance({
   const router = useRouter();
   const { state } = useGamification();
   const [previousBalance, setPreviousBalance] = useState(state.coinBalance.total);
-  const scaleAnim = useRef(new Animated.Value(1)).current;
-  const bounceAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useSharedValue(1);
+  const bounceAnim = useSharedValue(0);
 
   // Animate balance changes
   useEffect(() => {
     if (animateChanges && state.coinBalance.total !== previousBalance) {
       // Bounce animation
-      const anim = Animated.sequence([
-        Animated.parallel([
-          Animated.spring(scaleAnim, {
-            toValue: 1.2,
-            friction: 3,
-            useNativeDriver: true,
-          }),
-          Animated.timing(bounceAnim, {
-            toValue: -10,
-            duration: 150,
-            useNativeDriver: true,
-          }),
-        ]),
-        Animated.parallel([
-          Animated.spring(scaleAnim, {
-            toValue: 1,
-            friction: 3,
-            useNativeDriver: true,
-          }),
-          Animated.timing(bounceAnim, {
-            toValue: 0,
-            duration: 150,
-            useNativeDriver: true,
-          }),
-        ]),
-      ]);
-      anim.start();
+      scaleAnim.value = withSequence(
+        withSpring(1.2, { damping: 3 }),
+        withSpring(1, { damping: 3 })
+      );
+      bounceAnim.value = withSequence(
+        withTiming(-10, { duration: 150 }),
+        withTiming(0, { duration: 150 })
+      );
 
       setPreviousBalance(state.coinBalance.total);
 
-      return () => { anim.stop(); };
+      // cleanup handled by reanimated
     }
   }, [state.coinBalance.total, previousBalance, animateChanges]);
 

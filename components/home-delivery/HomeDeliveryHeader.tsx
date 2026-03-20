@@ -5,8 +5,13 @@ import {
   Pressable,
   StyleSheet,
   Platform,
-  Animated,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  interpolate,
+} from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
@@ -40,24 +45,18 @@ function _HomeDeliveryHeaderInner({
 }: HomeDeliveryHeaderProps) {
   const searchInputRef = useRef<TextInput>(null);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
-  const searchHeightAnim = useRef(new Animated.Value(0)).current;
+  const searchHeightAnim = useSharedValue(0);
 
   const handleSearchIconPress = () => {
     // Toggle the search bar
     const toValue = isSearchVisible ? 0 : 1;
     setIsSearchVisible(!isSearchVisible);
-    
-    Animated.spring(searchHeightAnim, {
-      toValue,
-      useNativeDriver: false,
-      tension: 50,
-      friction: 8,
-    }).start(() => {
-      // Focus the input after animation if showing
-      if (!isSearchVisible) {
-        searchInputRef.current?.focus();
-      }
-    });
+
+    searchHeightAnim.value = withSpring(toValue, { damping: 15, stiffness: 120 });
+    // Focus the input after animation if showing
+    if (!isSearchVisible) {
+      setTimeout(() => searchInputRef.current?.focus(), 300);
+    }
   };
 
   const handleSearch = () => {
@@ -68,24 +67,15 @@ function _HomeDeliveryHeaderInner({
     onSearchChange('');
     // Close search bar when clearing
     setIsSearchVisible(false);
-    Animated.spring(searchHeightAnim, {
-      toValue: 0,
-      useNativeDriver: false,
-      tension: 50,
-      friction: 8,
-    }).start();
+    searchHeightAnim.value = withSpring(0, { damping: 15, stiffness: 120 });
   };
 
   // Animated styles
-  const searchBarHeight = searchHeightAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, 80], // Collapsed to expanded height
-  });
-
-  const searchBarOpacity = searchHeightAnim.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: [0, 0.5, 1],
-  });
+  const searchBarAnimStyle = useAnimatedStyle(() => ({
+    height: interpolate(searchHeightAnim.value, [0, 1], [0, 80]),
+    opacity: interpolate(searchHeightAnim.value, [0, 0.5, 1], [0, 0.5, 1]),
+    overflow: 'hidden' as const,
+  }));
 
   return (
     <View style={styles.container}>
@@ -143,11 +133,7 @@ function _HomeDeliveryHeaderInner({
         <Animated.View
           style={[
             styles.searchBarContainer,
-            {
-              height: searchBarHeight,
-              opacity: searchBarOpacity,
-              overflow: 'hidden',
-            }
+            searchBarAnimStyle,
           ]}
         >
           <View style={styles.searchContainer}>

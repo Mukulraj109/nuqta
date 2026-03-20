@@ -3,8 +3,9 @@
  * Progressive image loading with blur placeholder, caching, and error handling
  */
 
-import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, Animated, ViewStyle, ImageStyle } from 'react-native';
+import React, { useState, useEffect} from 'react';
+import { View, StyleSheet, ViewStyle, ImageStyle } from 'react-native';
+import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
 import { Image, ImageProps } from 'expo-image';
 import { getCachedImageUri } from '@/hooks/useImagePreload';
 import { useIsMounted } from '@/hooks/useIsMounted';
@@ -74,7 +75,7 @@ export const LazyImage: React.FC<LazyImageProps> = ({
   const [useFallback, setUseFallback] = useState(false);
   const isMounted = useIsMounted();
 
-  const opacity = useRef(new Animated.Value(0)).current;
+  const opacity = useSharedValue(0);
 
   // Extract URI from source
   const getSourceUri = (src: string | { uri: string } | number): string | null => {
@@ -139,11 +140,7 @@ export const LazyImage: React.FC<LazyImageProps> = ({
     setLoading(false);
 
     // Fade in animation
-    Animated.timing(opacity, {
-      toValue: 1,
-      duration: fadeInDuration,
-      useNativeDriver: true,
-    }).start();
+    opacity.value = withTiming(1);
 
     if (onLoadEnd) {
       onLoadEnd();

@@ -8,15 +8,15 @@
  * Linen (#faf1e0), Light Peach (#ffd7b5), Lavender Mist (#dfebf7)
  */
 
-import React, { memo, useRef, useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
   Platform,
-  Animated,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -30,26 +30,18 @@ const CashStoreSearchBar: React.FC<CashStoreSearchBarProps> = ({
   onSearchPress,
 }) => {
   const router = useRouter();
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(10)).current;
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(10);
 
   useEffect(() => {
-    const anim = Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 400,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 400,
-        useNativeDriver: true,
-      }),
-    ]);
-    anim.start();
+    fadeAnim.value = withTiming(1, { duration: 400 });
+    slideAnim.value = withTiming(0, { duration: 400 });
+  }, []);
 
-    return () => { anim.stop(); };
-}, []);
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ translateY: slideAnim.value }],
+  }));
 
   const handleDealsPress = () => {
     router.push('/offers' as any);
@@ -67,10 +59,7 @@ const CashStoreSearchBar: React.FC<CashStoreSearchBarProps> = ({
     <Animated.View
       style={[
         styles.container,
-        {
-          opacity: fadeAnim,
-          transform: [{ translateY: slideAnim }],
-        },
+        animatedStyle,
       ]}
     >
       <View style={styles.searchRow}>

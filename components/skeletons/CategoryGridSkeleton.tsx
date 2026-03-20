@@ -1,12 +1,17 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { colors } from '@/constants/theme';
 import {
   View,
   StyleSheet,
-  Animated,
   Dimensions,
-  Platform,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated';
 
 interface CategoryGridSkeletonProps {
   numItems?: number;
@@ -19,33 +24,25 @@ const SkeletonItem: React.FC<{ circleSize: number; delay: number }> = ({
   circleSize,
   delay,
 }) => {
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0.3);
 
   useEffect(() => {
-    const animation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, {
-          toValue: 1,
-          duration: 1000,
-          delay,
-          useNativeDriver: Platform.OS !== 'web',
-        }),
-        Animated.timing(shimmerAnim, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: Platform.OS !== 'web',
-        }),
-      ])
-    );
-    animation.start();
+    const timer = setTimeout(() => {
+      shimmerAnim.value = withRepeat(
+        withSequence(
+          withTiming(0.7, { duration: 1000 }),
+          withTiming(0.3, { duration: 1000 }),
+        ),
+        -1, // infinite
+      );
+    }, delay);
 
-    return () => animation.stop();
-  }, [shimmerAnim, delay]);
+    return () => clearTimeout(timer);
+  }, [delay]);
 
-  const opacity = shimmerAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0.3, 0.7],
-  });
+  const shimmerStyle = useAnimatedStyle(() => ({
+    opacity: shimmerAnim.value,
+  }));
 
   return (
     <View style={styles.skeletonItem}>
@@ -56,14 +53,14 @@ const SkeletonItem: React.FC<{ circleSize: number; delay: number }> = ({
             width: circleSize,
             height: circleSize,
             borderRadius: circleSize / 2,
-            opacity,
           },
+          shimmerStyle,
         ]}
       />
       <Animated.View
         style={[
           styles.skeletonText,
-          { opacity },
+          shimmerStyle,
         ]}
       />
     </View>

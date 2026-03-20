@@ -1,5 +1,6 @@
-import React, { useRef, useEffect } from 'react';
-import { Pressable, View, StyleSheet, Animated, Platform } from 'react-native';
+import React, { useEffect } from 'react';
+import { Pressable, View, StyleSheet, Platform } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ThemedText';
 import { ProjectStatusCardProps } from '@/types/earnPage.types';
@@ -21,70 +22,36 @@ function ProjectStatusCard({
     count: colors.background.primary,
   };
 
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const scaleAnim = useRef(new Animated.Value(0.8)).current;
-  const pressAnim = useRef(new Animated.Value(1)).current;
+  const fadeAnim = useSharedValue(0);
+  const scaleAnim = useSharedValue(0.8);
+  const pressAnim = useSharedValue(1);
 
   useEffect(() => {
-    const anim = Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 500,
-        delay: delay,
-        useNativeDriver: true,
-      }),
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        delay: delay,
-        tension: 50,
-        friction: 7,
-        useNativeDriver: true,
-      }),
-    ]);
-    anim.start();
-
-    return () => { anim.stop(); };
+    fadeAnim.value = withTiming(1, { duration: 500 });
+    scaleAnim.value = withSpring(1);
   }, [delay]);
 
+  const cardAnimStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ scale: scaleAnim.value * pressAnim.value }],
+  }));
+
   const handlePressIn = () => {
-    Animated.spring(pressAnim, {
-      toValue: 0.92,
-      useNativeDriver: true,
-      tension: 300,
-      friction: 10,
-    }).start();
+    pressAnim.value = withSpring(0.92);
   };
 
   const handlePressOut = () => {
-    Animated.spring(pressAnim, {
-      toValue: 1,
-      useNativeDriver: true,
-      tension: 300,
-      friction: 10,
-    }).start();
+    pressAnim.value = withSpring(1);
   };
 
   const defaultColor = statusColors.background || color || colors.brand.purpleLight;
-  const gradientColors = (gradient && Array.isArray(gradient) && gradient.length > 0) 
-    ? gradient 
+  const gradientColors = (gradient && Array.isArray(gradient) && gradient.length > 0)
+    ? gradient
     : [defaultColor, `${defaultColor}AA`];
 
   return (
-    <Animated.View
-      style={[
-        {
-          opacity: fadeAnim,
-          transform: [{ scale: scaleAnim }],
-        },
-      ]}
-    >
-      <Animated.View
-        style={[
-          {
-            transform: [{ scale: pressAnim }],
-          },
-        ]}
-      >
+    <Animated.View style={[cardAnimStyle]}>
+      <View>
         <Pressable
           style={styles.container}
           onPress={onPress}
@@ -115,7 +82,7 @@ function ProjectStatusCard({
             </View>
           </LinearGradient>
         </Pressable>
-      </Animated.View>
+      </View>
     </Animated.View>
   );
 }

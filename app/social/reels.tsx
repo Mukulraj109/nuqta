@@ -12,9 +12,16 @@ import {
   Platform,
   Dimensions,
   ActivityIndicator,
-  Share,
-  Animated,
+  Share
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withTiming,
+  makeMutable,
+  type SharedValue,
+} from 'react-native-reanimated';
 import { FlashList } from '@shopify/flash-list';
 import { CardGridSkeleton } from '@/components/skeletons';
 import CachedImage from '@/components/ui/CachedImage';
@@ -78,8 +85,7 @@ const reelVideoStyles = StyleSheet.create({
   videoPlaceholder: { flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: Spacing['2xl'] },
   placeholderIconCircle: { width: 80, height: 80, borderRadius: 40, backgroundColor: 'rgba(255,255,255,0.08)', justifyContent: 'center', alignItems: 'center', marginBottom: Spacing.base },
   placeholderTitle: { ...Typography.h4, fontWeight: '600', color: 'rgba(255,255,255,0.5)', textAlign: 'center' },
-  placeholderSubtext: { ...Typography.bodySmall, color: 'rgba(255,255,255,0.3)', marginTop: 6 },
-});
+  placeholderSubtext: { ...Typography.bodySmall, color: 'rgba(255,255,255,0.3)', marginTop: 6 }});
 
 function ReelsPage() {
   const router = useRouter();
@@ -94,7 +100,7 @@ function ReelsPage() {
   const [bookmarkedReels, setBookmarkedReels] = useState<Set<string>>(new Set());
   const [screenFocused, setScreenFocused] = useState(true);
   const flatListRef = useRef<FlashList>(null);
-  const likeAnimations = useRef<Map<string, Animated.Value>>(new Map());
+  const likeAnimations = useRef<Map<string, SharedValue<number>>>(new Map());
   const isMounted = useIsMounted();
 
   const MAX_LIKE_ANIMATIONS = 50;
@@ -104,7 +110,7 @@ function ReelsPage() {
         const oldest = likeAnimations.current.keys().next();
         if (!oldest.done) likeAnimations.current.delete(oldest.value);
       }
-      likeAnimations.current.set(reelId, new Animated.Value(1));
+      likeAnimations.current.set(reelId, makeMutable(1));
     }
     return likeAnimations.current.get(reelId)!;
   };
@@ -160,10 +166,10 @@ function ReelsPage() {
 
     // Animate heart
     const anim = getLikeAnimation(reelId);
-    Animated.sequence([
-      Animated.timing(anim, { toValue: 1.4, duration: 120, useNativeDriver: true }),
-      Animated.timing(anim, { toValue: 1, duration: 120, useNativeDriver: true }),
-    ]).start();
+    anim.value = withSequence(
+      withTiming(1.4, { duration: 120 }),
+      withTiming(1, { duration: 120 })
+    );
 
     // Optimistic update
     setLikedReels(prev => {
@@ -226,8 +232,7 @@ function ReelsPage() {
       ));
       await Share.share({
         message: `Check out "${reel.title}" on ${BRAND.APP_NAME}!`,
-        title: reel.title,
-      });
+        title: reel.title});
     } catch (error) {
       // silently handle
     }
@@ -527,8 +532,7 @@ function ReelsPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.text.primary,
-  },
+    backgroundColor: colors.text.primary},
 
   // ===== Header =====
   headerOverlay: {
@@ -540,75 +544,62 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.base,
-    zIndex: 10,
-  },
+    zIndex: 10},
   headerButton: {
     width: 40,
     height: 40,
     borderRadius: BorderRadius.xl,
     backgroundColor: 'rgba(0,0,0,0.3)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   feedTabs: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.xs,
-  },
+    gap: Spacing.xs},
   feedTab: {
     paddingHorizontal: Spacing.md,
     paddingVertical: 6,
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   feedTabText: {
     ...Typography.body,
     fontWeight: '600',
-    color: 'rgba(255,255,255,0.55)',
-  },
+    color: 'rgba(255,255,255,0.55)'},
   feedTabActive: {
     color: Colors.text.inverse,
-    fontWeight: '700',
-  },
+    fontWeight: '700'},
   tabIndicator: {
     width: 20,
     height: 3,
     borderRadius: 1.5,
     backgroundColor: Colors.background.primary,
-    marginTop: Spacing.xs,
-  },
+    marginTop: Spacing.xs},
   tabDivider: {
     width: 1,
     height: 14,
-    backgroundColor: 'rgba(255,255,255,0.3)',
-  },
+    backgroundColor: 'rgba(255,255,255,0.3)'},
 
   // ===== Loading =====
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    gap: Spacing.md,
-  },
+    gap: Spacing.md},
   loadingText: {
     ...Typography.body,
-    color: 'rgba(255,255,255,0.5)',
-  },
+    color: 'rgba(255,255,255,0.5)'},
 
   // ===== Reel Container =====
   reelContainer: {
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
-    position: 'relative',
-  },
+    position: 'relative'},
   videoContainer: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: '#111',
-  },
+    backgroundColor: '#111'},
   video: {
     flex: 1,
     width: '100%',
-    height: '100%',
-  },
+    height: '100%'},
 
   // ===== Gradient Overlays =====
   topGradient: {
@@ -617,24 +608,21 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 140,
-    zIndex: 1,
-  },
+    zIndex: 1},
   bottomGradient: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
     height: 320,
-    zIndex: 1,
-  },
+    zIndex: 1},
 
   // ===== Video Placeholder =====
   videoPlaceholder: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: Spacing['2xl'],
-  },
+    paddingHorizontal: Spacing['2xl']},
   placeholderIconCircle: {
     width: 80,
     height: 80,
@@ -642,19 +630,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.08)',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base},
   placeholderTitle: {
     ...Typography.h4,
     fontWeight: '600',
     color: 'rgba(255,255,255,0.5)',
-    textAlign: 'center',
-  },
+    textAlign: 'center'},
   placeholderSubtext: {
     ...Typography.bodySmall,
     color: 'rgba(255,255,255,0.3)',
-    marginTop: 6,
-  },
+    marginTop: 6},
 
   // ===== Right Side Actions =====
   actionsContainer: {
@@ -663,29 +648,25 @@ const styles = StyleSheet.create({
     bottom: Platform.OS === 'ios' ? 100 : 80,
     alignItems: 'center',
     gap: 18,
-    zIndex: 5,
-  },
+    zIndex: 5},
 
   // Avatar
   avatarButton: {
     position: 'relative',
-    marginBottom: 6,
-  },
+    marginBottom: 6},
   avatarRing: {
     width: 50,
     height: 50,
     borderRadius: 25,
     padding: 2.5,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   avatarImage: {
     width: 45,
     height: 45,
     borderRadius: 22.5,
     borderWidth: 2,
-    borderColor: colors.text.primary,
-  },
+    borderColor: colors.text.primary},
   avatarFallback: {
     width: 45,
     height: 45,
@@ -694,13 +675,11 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: colors.text.primary,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   avatarText: {
     ...Typography.h4,
     color: Colors.text.inverse,
-    fontWeight: '700',
-  },
+    fontWeight: '700'},
   followBadge: {
     position: 'absolute',
     bottom: -4,
@@ -712,22 +691,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1.5,
-    borderColor: colors.text.primary,
-  },
+    borderColor: colors.text.primary},
 
   // Action buttons
   actionButton: {
     alignItems: 'center',
-    gap: 3,
-  },
+    gap: 3},
   actionCount: {
     ...Typography.bodySmall,
     fontWeight: '600',
     color: Colors.text.inverse,
     textShadowColor: 'rgba(0,0,0,0.5)',
     textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
-  },
+    textShadowRadius: 3},
   shopButton: {
     width: 42,
     height: 42,
@@ -736,8 +712,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.2)',
-  },
+    borderColor: 'rgba(255,255,255,0.2)'},
 
   // ===== Bottom Info =====
   bottomContainer: {
@@ -746,25 +721,21 @@ const styles = StyleSheet.create({
     right: 70,
     bottom: Platform.OS === 'ios' ? 36 : 24,
     paddingHorizontal: Spacing.base,
-    zIndex: 5,
-  },
+    zIndex: 5},
   creatorRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm},
   creatorName: {
     ...Typography.body,
     fontWeight: '700',
     color: Colors.text.inverse,
     textShadowColor: 'rgba(0,0,0,0.5)',
     textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
-  },
+    textShadowRadius: 3},
   verifiedBadge: {
-    marginLeft: 2,
-  },
+    marginLeft: 2},
   description: {
     ...Typography.bodySmall,
     lineHeight: 18,
@@ -772,22 +743,19 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
     textShadowColor: 'rgba(0,0,0,0.4)',
     textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 2,
-  },
+    textShadowRadius: 2},
   tagsRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: Spacing.sm,
-    marginBottom: 10,
-  },
+    marginBottom: 10},
   tagText: {
     ...Typography.bodySmall,
     fontWeight: '600',
     color: Colors.text.inverse,
     textShadowColor: 'rgba(0,0,0,0.5)',
     textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
-  },
+    textShadowRadius: 3},
   storePill: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -799,28 +767,23 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginBottom: 10,
     borderWidth: 0.5,
-    borderColor: 'rgba(255,255,255,0.2)',
-  },
+    borderColor: 'rgba(255,255,255,0.2)'},
   storeLogo: {
     width: 18,
     height: 18,
-    borderRadius: 9,
-  },
+    borderRadius: 9},
   storeText: {
     ...Typography.bodySmall,
     fontWeight: '600',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse},
   musicRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-  },
+    gap: 6},
   musicText: {
     ...Typography.bodySmall,
     color: 'rgba(255,255,255,0.7)',
-    flex: 1,
-  },
+    flex: 1},
 
   // ===== Empty State =====
   emptyContainer: {
@@ -828,51 +791,42 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 40,
-  },
+    paddingHorizontal: 40},
   emptyIconCircle: {
     width: 100,
     height: 100,
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg},
   emptyTitle: {
     fontSize: 22,
     fontWeight: '700',
     color: Colors.text.inverse,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm},
   emptySubtext: {
     ...Typography.body,
     color: 'rgba(255,255,255,0.5)',
     textAlign: 'center',
-    lineHeight: 20,
-  },
+    lineHeight: 20},
   createReelButton: {
     marginTop: Spacing.xl,
     borderRadius: BorderRadius['2xl'],
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'},
   createReelGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.sm,
     paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.md,
-  },
+    paddingVertical: Spacing.md},
   createReelText: {
     ...Typography.body,
     fontWeight: '700',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse},
 
   // ===== Footer =====
   footerLoader: {
     padding: Spacing.lg,
-    alignItems: 'center',
-  },
-});
+    alignItems: 'center'}});
 
 export default withErrorBoundary(ReelsPage, 'SocialReels');

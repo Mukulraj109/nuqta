@@ -6,9 +6,14 @@ import {
   View,
   StyleSheet,
   Pressable,
-  Animated,
-  Platform,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  interpolate,
+  runOnJS,
+} from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
@@ -56,8 +61,8 @@ function TrialBanner({
   showBenefit = true,
 }: TrialBannerProps) {
   const [dismissed, setDismissed] = useState(false);
-  const [fadeAnim] = useState(new Animated.Value(1));
-  const [slideAnim] = useState(new Animated.Value(0));
+  const fadeAnim = useSharedValue(1);
+  const slideAnim = useSharedValue(0);
   const isMounted = useIsMounted();
 
   const trialConfig = TRIAL_BENEFITS[tier] || TRIAL_BENEFITS.free;
@@ -65,37 +70,25 @@ function TrialBanner({
   const isExpired = daysRemaining <= 0;
 
   useEffect(() => {
-    // Animate entrance
-    const anim = Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: 1,
-        duration: 400,
-        useNativeDriver: Platform.OS !== 'web',
-      }),
-    ]);
-    anim.start();
+    fadeAnim.value = withTiming(1, { duration: 300 });
+    slideAnim.value = withTiming(1, { duration: 400 });
 
-    // Auto-dismiss after trial expires
     if (isExpired) {
       handleDismiss();
     }
+  }, [daysRemaining]);
 
-    return () => { anim.stop(); };
-}, [daysRemaining]);
+  const containerAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ translateY: interpolate(slideAnim.value, [0, 1], [-100, 0]) }],
+  }));
 
   const handleDismiss = () => {
-    Animated.timing(fadeAnim, {
-      toValue: 0,
-      duration: 300,
-      useNativeDriver: true,
-    }).start(() => {
-      setDismissed(true);
-      onDismiss?.();
+    fadeAnim.value = withTiming(0, { duration: 300 }, (finished) => {
+      if (finished) {
+        runOnJS(setDismissed)(true);
+        if (onDismiss) runOnJS(onDismiss)();
+      }
     });
   };
 
@@ -124,21 +117,13 @@ function TrialBanner({
     return null;
   }
 
-  const slideTranslate = slideAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-100, 0],
-  });
-
   const urgencyColor = isLastDay ? SUBSCRIPTION_COLORS.error : SUBSCRIPTION_COLORS.purple;
 
   return (
     <Animated.View
       style={[
         styles.container,
-        {
-          opacity: fadeAnim,
-          transform: [{ translateY: slideTranslate }],
-        },
+        containerAnimatedStyle,
       ]}
     >
       <LinearGradient

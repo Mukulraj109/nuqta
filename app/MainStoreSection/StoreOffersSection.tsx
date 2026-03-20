@@ -1,13 +1,16 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // StoreOffersSection.tsx - Offers at this store section
-import React, { useRef } from "react";
+import React, {} from "react";
 import {
   View,
   Pressable,
   StyleSheet,
-  ScrollView,
-  Animated,
+  ScrollView
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from "@expo/vector-icons";
 import { triggerImpact } from "@/utils/haptics";
@@ -16,8 +19,7 @@ import {
   Colors,
   Spacing,
   BorderRadius,
-  Shadows,
-} from "@/constants/DesignSystem";
+  Shadows } from "@/constants/DesignSystem";
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
@@ -50,8 +52,7 @@ export interface StoreOffersSectionProps {
 function StoreOffersSection({
   offers = [],
   onViewAll,
-  onApplyOffer,
-}: StoreOffersSectionProps) {
+  onApplyOffer }: StoreOffersSectionProps) {
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
@@ -120,15 +121,13 @@ interface OfferCardProps {
 }
 
 function OfferCard({ offer, badgeText, badgeColor, onApply }: OfferCardProps) {
-  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const scaleAnim = useSharedValue(1);
+  const scaleStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scaleAnim.value }],
+  }));
 
   const animateScale = (toValue: number) => {
-    Animated.spring(scaleAnim, {
-      toValue,
-      useNativeDriver: true,
-      tension: 100,
-      friction: 8,
-    }).start();
+    scaleAnim.value = withSpring(toValue, { damping: 8, stiffness: 100 });
   };
 
   const handleApply = () => {
@@ -162,7 +161,7 @@ function OfferCard({ offer, badgeText, badgeColor, onApply }: OfferCardProps) {
           />
           <ThemedText style={styles.coinsText}>Earn {offer.coinsToEarn} coins</ThemedText>
         </View>
-        <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+        <Animated.View style={scaleStyle}>
           <Pressable
             style={styles.applyButton}
            
@@ -182,98 +181,79 @@ function OfferCard({ offer, badgeText, badgeColor, onApply }: OfferCardProps) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: Spacing.md,
-  },
+    paddingTop: Spacing.md },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: Spacing.base,
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
   title: {
     fontSize: 18,
     fontWeight: "700",
-    color: Colors.text.primary,
-  },
+    color: Colors.text.primary },
   viewAll: {
     fontSize: 14,
     fontWeight: "600",
-    color: colors.lightMustard,
-  },
+    color: colors.lightMustard },
   offersList: {
     paddingHorizontal: Spacing.base,
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   offerCard: {
     backgroundColor: colors.background.primary,
     borderRadius: BorderRadius.lg,
     padding: Spacing.md,
     borderWidth: 1,
     borderColor: Colors.gray[100],
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle },
   offerHeader: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   badge: {
     paddingHorizontal: Spacing.sm,
     paddingVertical: 4,
-    borderRadius: BorderRadius.sm,
-  },
+    borderRadius: BorderRadius.sm },
   badgeText: {
     fontSize: 11,
     fontWeight: "700",
-    color: colors.background.primary,
-  },
+    color: colors.background.primary },
   validity: {
     fontSize: 12,
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
   offerTitle: {
     fontSize: 16,
     fontWeight: "600",
     color: Colors.text.primary,
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   offerDescription: {
     fontSize: 13,
     color: Colors.text.secondary,
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
   offerFooter: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-  },
+    justifyContent: "space-between" },
   coinsEarn: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
-  },
+    gap: 6 },
   coinIcon: {
     width: 20,
-    height: 20,
-  },
+    height: 20 },
   coinsText: {
     fontSize: 13,
     fontWeight: "600",
-    color: "#FF9500",
-  },
+    color: "#FF9500" },
   applyButton: {
     backgroundColor: colors.lightMustard,
     paddingHorizontal: Spacing.md,
     paddingVertical: 10,
-    borderRadius: BorderRadius.md,
-  },
+    borderRadius: BorderRadius.md },
   applyButtonText: {
     fontSize: 14,
     fontWeight: "600",
-    color: colors.background.primary,
-  },
-});
+    color: colors.background.primary } });
 
 export default withErrorBoundary(StoreOffersSection, 'MainStoreSectionStoreOffersSection');

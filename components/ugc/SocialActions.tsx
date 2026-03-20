@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Pressable, StyleSheet, Animated } from 'react-native';
+import { View, Pressable, StyleSheet } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withSequence, withTiming } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { colors } from '@/constants/theme';
@@ -32,9 +33,17 @@ function SocialActions({
 }: SocialActionsProps) {
   const [liking, setLiking] = useState(false);
   const [bookmarking, setBookmarking] = useState(false);
-  const [likeScale] = useState(new Animated.Value(1));
-  const [bookmarkScale] = useState(new Animated.Value(1));
+  const likeScale = useSharedValue(1);
+  const bookmarkScale = useSharedValue(1);
   const isMounted = useIsMounted();
+
+  const likeAnimStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: likeScale.value }],
+  }));
+
+  const bookmarkAnimStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: bookmarkScale.value }],
+  }));
 
   const handleLike = async () => {
     if (liking) return;
@@ -42,18 +51,10 @@ function SocialActions({
     setLiking(true);
 
     // Animate heart
-    Animated.sequence([
-      Animated.timing(likeScale, {
-        toValue: 1.3,
-        duration: 150,
-        useNativeDriver: true,
-      }),
-      Animated.timing(likeScale, {
-        toValue: 1,
-        duration: 150,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    likeScale.value = withSequence(
+      withTiming(1.3, { duration: 150 }),
+      withTiming(1, { duration: 150 })
+    );
 
     try {
       await onLike();
@@ -71,18 +72,10 @@ function SocialActions({
     setBookmarking(true);
 
     // Animate bookmark
-    Animated.sequence([
-      Animated.timing(bookmarkScale, {
-        toValue: 1.2,
-        duration: 150,
-        useNativeDriver: true,
-      }),
-      Animated.timing(bookmarkScale, {
-        toValue: 1,
-        duration: 150,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    bookmarkScale.value = withSequence(
+      withTiming(1.2, { duration: 150 }),
+      withTiming(1, { duration: 150 })
+    );
 
     try {
       await onBookmark();
@@ -113,7 +106,7 @@ function SocialActions({
         disabled={liking}
        
       >
-        <Animated.View style={{ transform: [{ scale: likeScale }] }}>
+        <Animated.View style={likeAnimStyle}>
           <Ionicons
             name={isLiked ? 'heart' : 'heart-outline'}
             size={32}
@@ -140,7 +133,7 @@ function SocialActions({
         disabled={bookmarking}
        
       >
-        <Animated.View style={{ transform: [{ scale: bookmarkScale }] }}>
+        <Animated.View style={bookmarkAnimStyle}>
           <Ionicons
             name={isBookmarked ? 'bookmark' : 'bookmark-outline'}
             size={30}

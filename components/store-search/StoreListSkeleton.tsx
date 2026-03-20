@@ -1,15 +1,22 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
-  Animated,
   StyleSheet,
   Dimensions,
 } from 'react-native';
-import { 
-  COLORS, 
-  SPACING, 
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withRepeat,
+  withSequence,
+  interpolate,
+} from 'react-native-reanimated';
+import {
+  COLORS,
+  SPACING,
   BORDER_RADIUS,
-  SHADOWS 
+  SHADOWS
 } from '@/constants/search-constants';
 
 interface StoreListSkeletonProps {
@@ -19,33 +26,22 @@ interface StoreListSkeletonProps {
 const StoreListSkeleton: React.FC<StoreListSkeletonProps> = ({
   itemCount = 3,
 }) => {
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
   const screenWidth = Dimensions.get('window').width;
 
   useEffect(() => {
-    const shimmer = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmerAnim, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
+    shimmerAnim.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 1000 }),
+        withTiming(0, { duration: 1000 })
+      ),
+      -1
     );
-    shimmer.start();
+  }, []);
 
-    return () => shimmer.stop();
-  }, [shimmerAnim]);
-
-  const shimmerOpacity = shimmerAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0.3, 0.7],
-  });
+  const shimmerStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(shimmerAnim.value, [0, 1], [0.3, 0.7]),
+  }));
 
   const styles = createStyles(screenWidth);
 
@@ -59,16 +55,16 @@ const StoreListSkeleton: React.FC<StoreListSkeletonProps> = ({
       <View style={styles.storeInfoSkeleton}>
         <View style={styles.storeHeaderRow}>
           <View style={styles.storeNameContainer}>
-            <Animated.View 
+            <Animated.View
               style={[
                 styles.storeNameSkeleton,
-                { opacity: shimmerOpacity }
-              ]} 
+                shimmerStyle
+              ]}
             />
-            <Animated.View 
+            <Animated.View
               style={[
                 styles.ratingSkeletonContainer,
-                { opacity: shimmerOpacity }
+                shimmerStyle
               ]}
             >
               <View style={styles.ratingSkeleton} />
@@ -76,37 +72,37 @@ const StoreListSkeleton: React.FC<StoreListSkeletonProps> = ({
             </Animated.View>
           </View>
         </View>
-        
+
         <View style={styles.storeDetailsRow}>
-          <Animated.View 
+          <Animated.View
             style={[
               styles.locationSkeleton,
-              { opacity: shimmerOpacity }
-            ]} 
+              shimmerStyle
+            ]}
           />
-          <Animated.View 
+          <Animated.View
             style={[
               styles.statusBadgeSkeleton,
-              { opacity: shimmerOpacity }
-            ]} 
+              shimmerStyle
+            ]}
           />
         </View>
 
-        <Animated.View 
+        <Animated.View
           style={[
             styles.freeShippingSkeleton,
-            { opacity: shimmerOpacity }
-          ]} 
+            shimmerStyle
+          ]}
         />
       </View>
 
       {/* Products Grid Skeleton */}
       <View style={styles.productsGridSkeleton}>
         <View style={styles.productRowSkeleton}>
-          <Animated.View 
+          <Animated.View
             style={[
               styles.productCardSkeleton,
-              { opacity: shimmerOpacity }
+              shimmerStyle
             ]}
           >
             <View style={styles.productImageSkeleton} />
@@ -116,10 +112,10 @@ const StoreListSkeleton: React.FC<StoreListSkeletonProps> = ({
             </View>
           </Animated.View>
 
-          <Animated.View 
+          <Animated.View
             style={[
               styles.productCardSkeleton,
-              { opacity: shimmerOpacity }
+              shimmerStyle
             ]}
           >
             <View style={styles.productImageSkeleton} />

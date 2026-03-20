@@ -5,10 +5,10 @@ import {
   StyleSheet,
   Modal,
   Pressable,
-  Animated,
   Dimensions,
   Platform,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring, withSequence, withRepeat, interpolate, SharedValue } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
@@ -48,61 +48,38 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 // Confetti particle component
 const ConfettiParticle = ({ delay, color }: { delay: number; color: string }) => {
-  const translateY = useRef(new Animated.Value(-50)).current;
-  const translateX = useRef(new Animated.Value(Math.random() * SCREEN_WIDTH)).current;
-  const rotate = useRef(new Animated.Value(0)).current;
-  const opacity = useRef(new Animated.Value(1)).current;
+  const startX = useRef(Math.random() * SCREEN_WIDTH).current;
+  const endX = useRef(startX + (Math.random() - 0.5) * 100).current;
+  const endRotation = useRef(Math.random() * 720).current;
+  const translateY = useSharedValue(-50);
+  const translateX = useSharedValue(startX);
+  const rotate = useSharedValue(0);
+  const opacity = useSharedValue(1);
 
   useEffect(() => {
-    const anim = Animated.parallel([
-      Animated.timing(translateY, {
-        toValue: 600,
-        duration: 3000,
-        delay,
-        useNativeDriver: true,
-      }),
-      Animated.timing(translateX, {
-        toValue: translateX._value + (Math.random() - 0.5) * 100,
-        duration: 3000,
-        delay,
-        useNativeDriver: true,
-      }),
-      Animated.timing(rotate, {
-        toValue: Math.random() * 720,
-        duration: 3000,
-        delay,
-        useNativeDriver: true,
-      }),
-      Animated.timing(opacity, {
-        toValue: 0,
-        duration: 3000,
-        delay,
-        useNativeDriver: true,
-      }),
-    ]);
-    anim.start();
+    translateY.value = withTiming(600, { duration: 3000 });
+    translateX.value = withTiming(endX, { duration: 3000 });
+    rotate.value = withTiming(endRotation, { duration: 3000 });
+    opacity.value = withTiming(0, { duration: 3000 });
 
-    return () => { anim.stop(); };
+    // cleanup handled by reanimated
   }, []);
+
+  const animStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateY: translateY.value },
+      { translateX: translateX.value },
+      { rotate: `${rotate.value}deg` },
+    ],
+    opacity: opacity.value,
+  }));
 
   return (
     <Animated.View
       style={[
         styles.confetti,
-        {
-          backgroundColor: color,
-          transform: [
-            { translateY },
-            { translateX },
-            {
-              rotate: rotate.interpolate({
-                inputRange: [0, 720],
-                outputRange: ['0deg', '720deg'],
-              }),
-            },
-          ],
-          opacity,
-        },
+        { backgroundColor: color },
+        animStyle,
       ]}
     />
   );
@@ -120,9 +97,9 @@ function LevelUpCelebration({
 }: LevelUpCelebrationProps) {
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
-  const scaleAnim = useRef(new Animated.Value(0)).current;
-  const badgeRotate = useRef(new Animated.Value(0)).current;
-  const glowAnim = useRef(new Animated.Value(0.5)).current;
+  const scaleAnim = useSharedValue(0);
+  const badgeRotate = useSharedValue(0);
+  const glowAnim = useSharedValue(0.5);
   const [showConfetti, setShowConfetti] = useState(false);
 
   const confettiColors = [
@@ -139,58 +116,41 @@ function LevelUpCelebration({
       setShowConfetti(true);
 
       // Entry animation
-      const entryAnimation = Animated.sequence([
-        Animated.spring(scaleAnim, {
-          toValue: 1,
-          tension: 50,
-          friction: 7,
-          useNativeDriver: true,
-        }),
-        Animated.timing(badgeRotate, {
-          toValue: 360,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ]);
-      entryAnimation.start();
+      scaleAnim.value = withSpring(1, { stiffness: 50, damping: 7 });
+      badgeRotate.value = withTiming(360, { duration: 1000 });
 
       // Glow pulse (separate loop so it can be cleaned up)
-      const glowLoop = Animated.loop(
-        Animated.sequence([
-          Animated.timing(glowAnim, {
-            toValue: 1,
-            duration: 800,
-            useNativeDriver: true,
-          }),
-          Animated.timing(glowAnim, {
-            toValue: 0.5,
-            duration: 800,
-            useNativeDriver: true,
-          }),
-        ])
-      );
-      glowLoop.start();
+      glowAnim.value = withRepeat(withSequence(withTiming(1, { duration: 800 }), withTiming(0.5, { duration: 800 })), -1);
 
       // Stop confetti after animation
       const confettiTimer = setTimeout(() => setShowConfetti(false), 3000);
 
       return () => {
-        entryAnimation.stop();
-        glowLoop.stop();
         clearTimeout(confettiTimer);
       };
     } else {
-      scaleAnim.setValue(0);
-      badgeRotate.setValue(0);
+      scaleAnim.value = 0;
+      badgeRotate.value = 0;
     }
   }, [visible]);
 
+  const scaleStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scaleAnim.value }],
+  }));
+
+  const glowStyle = useAnimatedStyle(() => ({
+    opacity: glowAnim.value,
+  }));
+
+  const badgeRotateStyle = useAnimatedStyle(() => ({
+    transform: [
+      { rotateY: `${badgeRotate.value}deg` },
+    ],
+  }));
+
   const handleClose = () => {
-    Animated.timing(scaleAnim, {
-      toValue: 0,
-      duration: 200,
-      useNativeDriver: true,
-    }).start(() => onClose());
+    scaleAnim.value = withTiming(0, { duration: 200 });
+    setTimeout(() => onClose(), 200);
   };
 
   const getLevelIcon = (level: number) => {
@@ -252,18 +212,14 @@ function LevelUpCelebration({
         <Animated.View
           style={[
             styles.container,
-            {
-              transform: [{ scale: scaleAnim }],
-            },
+            scaleStyle,
           ]}
         >
           {/* Glow Effect */}
           <Animated.View
             style={[
               styles.glowContainer,
-              {
-                opacity: glowAnim,
-              },
+              glowStyle,
             ]}
           >
             <LinearGradient
@@ -278,16 +234,7 @@ function LevelUpCelebration({
           <Animated.View
             style={[
               styles.badgeContainer,
-              {
-                transform: [
-                  {
-                    rotateY: badgeRotate.interpolate({
-                      inputRange: [0, 360],
-                      outputRange: ['0deg', '360deg'],
-                    }),
-                  },
-                ],
-              },
+              badgeRotateStyle,
             ]}
           >
             <LinearGradient colors={getLevelColor(newLevel)} style={styles.badge}>

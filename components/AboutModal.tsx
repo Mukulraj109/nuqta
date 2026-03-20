@@ -1,7 +1,7 @@
 // AboutModal.tsx - Premium Glassmorphism Design
 // Green & Gold color theme following TASK.md
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState} from 'react';
 import {
   View,
   Modal,
@@ -9,10 +9,9 @@ import {
   TouchableWithoutFeedback,
   StyleSheet,
   Dimensions,
-  Animated,
   ScrollView,
-  Platform,
-} from 'react-native';
+  Platform} from 'react-native';
+import Animated, { useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -88,14 +87,14 @@ function AboutModal({ visible, onClose, storeData }: AboutModalProps) {
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [screenData, setScreenData] = useState(Dimensions.get('window'));
-  const slideAnim = useRef(new Animated.Value(screenData.height)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const scaleAnim = useRef(new Animated.Value(0.95)).current;
+  const slideAnim = useSharedValue(screenData.height);
+  const fadeAnim = useSharedValue(0);
+  const scaleAnim = useSharedValue(0.95);
 
   useEffect(() => {
     const subscription = Dimensions.addEventListener('change', ({ window }) => {
       setScreenData(window);
-      slideAnim.setValue(window.height);
+      slideAnim.value = window.height;
     });
 
     return () => subscription?.remove();
@@ -129,51 +128,20 @@ function AboutModal({ visible, onClose, storeData }: AboutModalProps) {
   const store = storeData || defaultStoreData;
 
   useEffect(() => {
-    let _anim: Animated.CompositeAnimation;
+    let _anim: any;
     if (visible) {
-      _anim = Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 250,
-          useNativeDriver: true,
-        }),
-        Animated.spring(slideAnim, {
-          toValue: 0,
-          tension: 80,
-          friction: 12,
-          useNativeDriver: true,
-        }),
-        Animated.spring(scaleAnim, {
-          toValue: 1,
-          tension: 80,
-          friction: 12,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      fadeAnim.value = withTiming(1, { duration: 250 });
+      slideAnim.value = withSpring(0);
+      scaleAnim.value = withSpring(1);
+      
     } else {
-      _anim = Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 150,
-          useNativeDriver: true,
-        }),
-        Animated.timing(slideAnim, {
-          toValue: screenData.height,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(scaleAnim, {
-          toValue: 0.95,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      fadeAnim.value = withTiming(0, { duration: 150 });
+      slideAnim.value = withTiming(screenData.height, { duration: 200 });
+      scaleAnim.value = withTiming(0.95, { duration: 200 });
+      
     }
   
-    return () => _anim.stop();
-}, [visible, fadeAnim, slideAnim, scaleAnim]);
+    }, [visible, fadeAnim, slideAnim, scaleAnim]);
 
   const handleBackdropPress = () => {
     onClose();

@@ -5,15 +5,24 @@
  * Features: Animated step progression, interactive elements, animated connectors
  */
 
-import React, { memo, useRef, useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
   Platform,
-  Animated,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSpring,
+  withDelay,
+  withRepeat,
+  withSequence,
+  interpolate,
+} from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
@@ -66,60 +75,35 @@ const StepItem: React.FC<{
   index: number;
   isLast: boolean;
 }> = memo(({ step, index, isLast }) => {
-  const scaleAnim = useRef(new Animated.Value(0)).current;
-  const iconBounceAnim = useRef(new Animated.Value(0)).current;
-  const connectorAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useSharedValue(0);
+  const iconBounceAnim = useSharedValue(0);
+  const connectorAnim = useSharedValue(0);
 
   useEffect(() => {
-    // Staggered step animation
-    Animated.sequence([
-      Animated.delay(index * 200),
-      Animated.parallel([
-        Animated.spring(scaleAnim, {
-          toValue: 1,
-          friction: 8,
-          tension: 40,
-          useNativeDriver: true,
-        }),
-        Animated.timing(connectorAnim, {
-          toValue: 1,
-          duration: 400,
-          useNativeDriver: false,
-        }),
-      ]),
-    ]).start();
-
-    // Icon bounce loop
-    const bounceLoop = Animated.loop(
-      Animated.sequence([
-        Animated.delay(index * 100),
-        Animated.timing(iconBounceAnim, {
-          toValue: -3,
-          duration: 600,
-          useNativeDriver: true,
-        }),
-        Animated.timing(iconBounceAnim, {
-          toValue: 0,
-          duration: 600,
-          useNativeDriver: true,
-        }),
-      ])
+    scaleAnim.value = withDelay(index * 200, withSpring(1, { damping: 12, stiffness: 100 }));
+    connectorAnim.value = withDelay(index * 200, withTiming(1, { duration: 400 }));
+    iconBounceAnim.value = withDelay(
+      index * 100,
+      withRepeat(withSequence(withTiming(-3, { duration: 600 }), withTiming(0, { duration: 600 })), -1)
     );
-    bounceLoop.start();
-    return () => bounceLoop.stop();
   }, [index]);
 
+  const scaleStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scaleAnim.value }],
+  }));
+
+  const bounceStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: iconBounceAnim.value }],
+  }));
+
+  const connectorStyle = useAnimatedStyle(() => ({
+    width: `${interpolate(connectorAnim.value, [0, 1], [0, 100])}%` as any,
+  }));
+
   return (
-    <Animated.View
-      style={[
-        styles.stepItem,
-        {
-          transform: [{ scale: scaleAnim }],
-        },
-      ]}
-    >
+    <Animated.View style={[styles.stepItem, scaleStyle]}>
       {/* Step Icon with Gradient */}
-      <Animated.View style={{ transform: [{ translateY: iconBounceAnim }] }}>
+      <Animated.View style={bounceStyle}>
         <LinearGradient colors={step.gradient} style={styles.stepIconContainer}>
           <Ionicons name={step.icon as any} size={22} color={step.iconColor || colors.background.primary} />
         </LinearGradient>
@@ -137,17 +121,7 @@ const StepItem: React.FC<{
       {/* Animated Connector Line */}
       {!isLast && (
         <View style={styles.connectorContainer}>
-          <Animated.View
-            style={[
-              styles.connector,
-              {
-                width: connectorAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: ['0%', '100%'],
-                }),
-              },
-            ]}
-          />
+          <Animated.View style={[styles.connector, connectorStyle]} />
           <View style={styles.connectorDot} />
         </View>
       )}
@@ -156,37 +130,19 @@ const StepItem: React.FC<{
 });
 
 const HowItWorksPreview: React.FC<HowItWorksPreviewProps> = ({ onLearnMore }) => {
-  const containerFadeAnim = useRef(new Animated.Value(0)).current;
-  const arrowAnim = useRef(new Animated.Value(0)).current;
+  const containerFadeAnim = useSharedValue(0);
+  const arrowAnim = useSharedValue(0);
 
   useEffect(() => {
-    Animated.timing(containerFadeAnim, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-
-    // Arrow animation
-    const arrowLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(arrowAnim, {
-          toValue: 4,
-          duration: 500,
-          useNativeDriver: true,
-        }),
-        Animated.timing(arrowAnim, {
-          toValue: 0,
-          duration: 500,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    arrowLoop.start();
-    return () => arrowLoop.stop();
+    containerFadeAnim.value = withTiming(1, { duration: 500 });
+    arrowAnim.value = withRepeat(withSequence(withTiming(4, { duration: 500 }), withTiming(0, { duration: 500 })), -1);
   }, []);
 
+  const containerStyle = useAnimatedStyle(() => ({ opacity: containerFadeAnim.value }));
+  const arrowStyle = useAnimatedStyle(() => ({ transform: [{ translateX: arrowAnim.value }] }));
+
   return (
-    <Animated.View style={[styles.container, { opacity: containerFadeAnim }]}>
+    <Animated.View style={[styles.container, containerStyle]}>
       <LinearGradient
         colors={[colors.linen, colors.linen, colors.background.primary]}
         start={{ x: 0, y: 0 }}
@@ -243,7 +199,7 @@ const HowItWorksPreview: React.FC<HowItWorksPreviewProps> = ({ onLearnMore }) =>
             style={styles.ctaGradient}
           >
             <Text style={styles.ctaText}>See Detailed Guide</Text>
-            <Animated.View style={{ transform: [{ translateX: arrowAnim }] }}>
+            <Animated.View style={arrowStyle}>
               <Ionicons name="arrow-forward" size={18} color={colors.background.primary} />
             </Animated.View>
           </LinearGradient>

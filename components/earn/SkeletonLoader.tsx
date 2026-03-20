@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import { View, Animated, StyleSheet, ViewStyle } from 'react-native';
+import React, { useEffect} from 'react';
+import { View, StyleSheet, ViewStyle } from 'react-native';
+import Animated, { useSharedValue, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 import { colors } from '@/constants/theme';
 
 interface SkeletonBoxProps {
@@ -19,26 +20,12 @@ export const SkeletonBox: React.FC<SkeletonBoxProps> = ({
   borderRadius = 4,
   style,
 }) => {
-  const opacity = useRef(new Animated.Value(0.3)).current;
+  const opacity = useSharedValue(0.3);
 
   useEffect(() => {
-    const animation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(opacity, {
-          toValue: 0.7,
-          duration: 800,
-          useNativeDriver: true,
-        }),
-        Animated.timing(opacity, {
-          toValue: 0.3,
-          duration: 800,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    animation.start();
-    return () => animation.stop();
-  }, [opacity]);
+    opacity.value = withRepeat(withSequence(withTiming(0.7, { duration: 800 })), -1);
+    
+    }, [opacity]);
 
   return (
     <Animated.View

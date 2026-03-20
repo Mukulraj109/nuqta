@@ -1,13 +1,13 @@
 // AccountSkeleton - Section-aware shimmer loading placeholder
 // Shows section headers + grouped card placeholders matching the redesigned layout
 
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   StyleSheet,
-  Animated,
   Platform,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withTiming, interpolate } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Colors, Spacing, BorderRadius, Shadows } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -25,24 +25,20 @@ function ShimmerBlock({
   borderRadius?: number;
   style?: any;
 }) {
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
-    const loop = Animated.loop(
-      Animated.timing(shimmerAnim, {
-        toValue: 1,
-        duration: SHIMMER_DURATION,
-        useNativeDriver: true,
-      })
+    shimmerAnim.value = withRepeat(
+      withTiming(1, { duration: SHIMMER_DURATION }),
+      -1,
+      false
     );
-    loop.start();
-    return () => loop.stop();
-  }, [shimmerAnim]);
+  }, []);
 
-  const translateX = shimmerAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-200, 200],
-  });
+  const shimmerStyle = useAnimatedStyle(() => ({
+    ...StyleSheet.absoluteFillObject,
+    transform: [{ translateX: interpolate(shimmerAnim.value, [0, 1], [-200, 200]) }],
+  }));
 
   return (
     <View
@@ -57,12 +53,7 @@ function ShimmerBlock({
         style,
       ]}
     >
-      <Animated.View
-        style={{
-          ...StyleSheet.absoluteFillObject,
-          transform: [{ translateX }],
-        }}
-      >
+      <Animated.View style={shimmerStyle}>
         <LinearGradient
           colors={['transparent', 'rgba(255,255,255,0.5)', 'transparent']}
           start={{ x: 0, y: 0.5 }}

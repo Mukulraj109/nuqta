@@ -1,6 +1,6 @@
 // components/voucher/OnlineRedemptionModal.tsx - Online voucher redemption modal
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState,  useEffect } from 'react';
 import {
   View,
   Modal,
@@ -8,8 +8,12 @@ import {
   Pressable,
   ScrollView,
   Dimensions,
-  Animated,
   Platform} from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming } from 'react-native-reanimated';
 import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformAlert';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -64,16 +68,16 @@ export const OnlineRedemptionModal: React.FC<OnlineRedemptionModalProps> = ({
   visible,
   voucher,
   onClose,
-  onMarkAsUsed,
-}) => {
+  onMarkAsUsed }) => {
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [copySuccess, setCopySuccess] = useState(false);
   const [marking, setMarking] = useState(false);
   const isMounted = useIsMounted();
 
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(50)).current;
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(50);
+  const fadeSlideStyle = useAnimatedStyle(() => ({ opacity: fadeAnim.value, transform: [{ translateY: slideAnim.value }] }));
 
   useEffect(() => {
     if (visible) {
@@ -84,34 +88,13 @@ export const OnlineRedemptionModal: React.FC<OnlineRedemptionModalProps> = ({
   }, [visible]);
 
   const animateIn = () => {
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-      Animated.spring(slideAnim, {
-        toValue: 0,
-        tension: 50,
-        friction: 7,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    fadeAnim.value = withTiming(1, { duration: 300 });
+    slideAnim.value = withSpring(0, { tension: 50, friction: 7 });
   };
 
   const animateOut = () => {
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: 50,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    fadeAnim.value = withTiming(0, { duration: 200 });
+    slideAnim.value = withTiming(50, { duration: 200 });
   };
 
   const handleCopy = async () => {
@@ -207,8 +190,7 @@ export const OnlineRedemptionModal: React.FC<OnlineRedemptionModalProps> = ({
             styles.modalContent,
             {
               opacity: fadeAnim,
-              transform: [{ translateY: slideAnim }],
-            },
+              transform: [{ translateY: slideAnim }] },
           ]}
         >
           {/* Header */}
@@ -407,8 +389,7 @@ export const OnlineRedemptionModal: React.FC<OnlineRedemptionModalProps> = ({
 // Helper component for instruction steps
 const InstructionStep: React.FC<{ number: number; text: string }> = ({
   number,
-  text,
-}) => (
+  text }) => (
   <View style={styles.instructionStep}>
     <View style={styles.stepNumber}>
       <ThemedText style={styles.stepNumberText}>{number}</ThemedText>
@@ -422,15 +403,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
+    backgroundColor: 'rgba(0, 0, 0, 0.5)' },
   backdrop: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0,
-  },
+    bottom: 0 },
   modalContent: {
     width: width - 40,
     maxHeight: '90%',
@@ -441,70 +420,56 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.3,
     shadowRadius: 20,
-    elevation: 10,
-  },
+    elevation: 10 },
   header: {
     paddingHorizontal: 20,
-    paddingVertical: 20,
-  },
+    paddingVertical: 20 },
   headerContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-  },
+    gap: 12 },
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: 'white',
-  },
+    color: 'white' },
   closeButton: {
-    padding: 4,
-  },
+    padding: 4 },
   scrollView: {
-    maxHeight: 500,
-  },
+    maxHeight: 500 },
   brandSection: {
     alignItems: 'center',
     padding: 24,
     borderBottomWidth: 1,
-    borderBottomColor: colors.neutral[100],
-  },
+    borderBottomColor: colors.neutral[100] },
   brandLogo: {
     width: 80,
     height: 80,
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   brandLogoText: {
-    fontSize: 40,
-  },
+    fontSize: 40 },
   brandName: {
     fontSize: 20,
     fontWeight: '700',
     color: colors.neutral[900],
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   denominationText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#9333EA',
-  },
+    color: '#9333EA' },
   codeSection: {
-    padding: 20,
-  },
+    padding: 20 },
   sectionLabel: {
     fontSize: 14,
     fontWeight: '600',
     color: colors.neutral[500],
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   codeCard: {
     backgroundColor: colors.neutral[100],
     borderRadius: 16,
@@ -513,62 +478,51 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderWidth: 2,
     borderColor: colors.neutral[200],
-    borderStyle: 'dashed',
-  },
+    borderStyle: 'dashed' },
   codeText: {
     fontSize: 24,
     fontWeight: '700',
     color: colors.neutral[900],
-    letterSpacing: 2,
-  },
+    letterSpacing: 2 },
   copyButton: {
     borderRadius: 12,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   copyButtonGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 14,
-    gap: 8,
-  },
+    gap: 8 },
   copyButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: 'white',
-  },
+    color: 'white' },
   instructionsSection: {
     padding: 20,
-    paddingTop: 0,
-  },
+    paddingTop: 0 },
   instructionsList: {
-    gap: 16,
-  },
+    gap: 16 },
   instructionStep: {
     flexDirection: 'row',
     gap: 12,
-    alignItems: 'flex-start',
-  },
+    alignItems: 'flex-start' },
   stepNumber: {
     width: 28,
     height: 28,
     borderRadius: 14,
     backgroundColor: '#9333EA',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   stepNumberText: {
     fontSize: 14,
     fontWeight: '700',
-    color: 'white',
-  },
+    color: 'white' },
   stepText: {
     flex: 1,
     fontSize: 14,
     color: colors.neutral[700],
     lineHeight: 20,
-    paddingTop: 4,
-  },
+    paddingTop: 4 },
   expiryWarning: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -577,73 +531,59 @@ const styles = StyleSheet.create({
     marginTop: 0,
     padding: 12,
     borderRadius: 12,
-    gap: 8,
-  },
+    gap: 8 },
   expiryText: {
     fontSize: 14,
     fontWeight: '600',
-    color: colors.warningScale[400],
-  },
+    color: colors.warningScale[400] },
   termsSection: {
     backgroundColor: colors.neutral[50],
     margin: 20,
     marginTop: 0,
     padding: 16,
     borderRadius: 12,
-    gap: 8,
-  },
+    gap: 8 },
   termsTitle: {
     fontSize: 14,
     fontWeight: '700',
     color: colors.neutral[900],
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   termsText: {
     fontSize: 13,
     color: colors.neutral[500],
-    lineHeight: 18,
-  },
+    lineHeight: 18 },
   footer: {
     padding: 20,
     gap: 12,
     borderTopWidth: 1,
-    borderTopColor: colors.neutral[100],
-  },
+    borderTopColor: colors.neutral[100] },
   websiteButton: {
     borderRadius: 12,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   websiteButtonGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 14,
-    gap: 8,
-  },
+    gap: 8 },
   websiteButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: 'white',
-  },
+    color: 'white' },
   markUsedButton: {
     borderRadius: 12,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   markUsedButtonGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 14,
-    gap: 8,
-  },
+    gap: 8 },
   markUsedButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: 'white',
-  },
+    color: 'white' },
   buttonDisabled: {
-    opacity: 0.5,
-  },
-});
+    opacity: 0.5 } });
 
 export default React.memo(OnlineRedemptionModal);

@@ -1,51 +1,48 @@
-import React, { useEffect, useRef } from 'react';
-import { View, StyleSheet, Animated, Platform } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, StyleSheet, Platform } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withRepeat,
+  withSequence,
+  interpolate,
+} from 'react-native-reanimated';
 import { colors } from '@/constants/theme';
 
 function StoreProductCardSkeleton() {
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
-    // Create shimmer animation
-    const shimmerLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmerAnim, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
+    shimmerAnim.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 1000 }),
+        withTiming(0, { duration: 1000 })
+      ),
+      -1
     );
-    shimmerLoop.start();
-    return () => shimmerLoop.stop();
-  }, [shimmerAnim]);
+  }, []);
 
-  const shimmerOpacity = shimmerAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0.3, 0.7],
-  });
+  const shimmerStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(shimmerAnim.value, [0, 1], [0.3, 0.7]),
+  }));
 
   return (
     <View style={styles.card}>
       {/* Image Skeleton */}
-      <Animated.View style={[styles.imageSkeleton, { opacity: shimmerOpacity }]} />
+      <Animated.View style={[styles.imageSkeleton, shimmerStyle]} />
 
       {/* Info Skeleton */}
       <View style={styles.infoContainer}>
         {/* Title Skeleton */}
-        <Animated.View style={[styles.titleSkeleton, { opacity: shimmerOpacity }]} />
-        <Animated.View style={[styles.titleSkeletonShort, { opacity: shimmerOpacity }]} />
+        <Animated.View style={[styles.titleSkeleton, shimmerStyle]} />
+        <Animated.View style={[styles.titleSkeletonShort, shimmerStyle]} />
 
         {/* Rating Skeleton */}
-        <Animated.View style={[styles.ratingSkeleton, { opacity: shimmerOpacity }]} />
+        <Animated.View style={[styles.ratingSkeleton, shimmerStyle]} />
 
         {/* Price Skeleton */}
-        <Animated.View style={[styles.priceSkeleton, { opacity: shimmerOpacity }]} />
+        <Animated.View style={[styles.priceSkeleton, shimmerStyle]} />
       </View>
     </View>
   );

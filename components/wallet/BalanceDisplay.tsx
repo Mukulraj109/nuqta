@@ -2,8 +2,9 @@
  * BalanceDisplay - Total balance with hide/reveal toggle + CoinChip row
  * Replaces the old amountCard section of WalletScreen
  */
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { View, StyleSheet, Pressable, Animated, Easing, Platform } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, StyleSheet, Pressable, Platform } from 'react-native';
+import { useSharedValue, useAnimatedReaction, withTiming, Easing, runOnJS } from 'react-native-reanimated';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
@@ -25,7 +26,7 @@ interface BalanceDisplayProps {
 export const BalanceDisplay: React.FC<BalanceDisplayProps> = React.memo(({ walletData, onCoinPress, currencySymbol = '₹' }) => {
   const [isHidden, setIsHidden] = useState(false);
   const isMounted = useIsMounted();
-  const countAnim = useRef(new Animated.Value(0)).current;
+  const countAnim = useSharedValue(0);
 
   // Load persisted hide state
   useEffect(() => {
@@ -38,15 +39,8 @@ export const BalanceDisplay: React.FC<BalanceDisplayProps> = React.memo(({ walle
   // Count-up animation on mount
   useEffect(() => {
     if (!isHidden) {
-      countAnim.setValue(0);
-      const anim = Animated.timing(countAnim, {
-        toValue: 1,
-        duration: 600,
-        easing: Easing.out(Easing.cubic),
-        useNativeDriver: false,
-      });
-      anim.start();
-      return () => { anim.stop(); };
+      countAnim.value = 0;
+      countAnim.value = withTiming(1, { duration: 600, easing: Easing.out(Easing.cubic) });
     }
   }, [isHidden, walletData.totalBalance]);
 
@@ -62,16 +56,14 @@ export const BalanceDisplay: React.FC<BalanceDisplayProps> = React.memo(({ walle
   // Animated ticker state
   const [animatedBalance, setAnimatedBalance] = useState(0);
 
-  useEffect(() => {
-    if (isHidden) return;
-    const listenerId = countAnim.addListener(({ value }) => {
-      const interpolated = value * totalBalance;
-      setAnimatedBalance(Math.round(interpolated));
-    });
-    return () => {
-      countAnim.removeListener(listenerId);
-    };
-  }, [isHidden, totalBalance, countAnim]);
+  useAnimatedReaction(
+    () => countAnim.value,
+    (val) => {
+      const interpolated = val * totalBalance;
+      runOnJS(setAnimatedBalance)(Math.round(interpolated));
+    },
+    [totalBalance, isHidden]
+  );
 
   // Get coin amounts
   const nuqtaCoin = walletData.coins?.find(c => c.type === 'rez' || c.type === 'nuqta');
@@ -89,9 +81,9 @@ export const BalanceDisplay: React.FC<BalanceDisplayProps> = React.memo(({ walle
   return (
     <View style={styles.container}>
       <View style={styles.balanceRow}>
-        <Animated.Text style={styles.balanceText}>
+        <Text style={styles.balanceText}>
           {displayBalance}
-        </Animated.Text>
+        </Text>
         <Pressable
           onPress={toggleHidden}
           style={styles.eyeButton}

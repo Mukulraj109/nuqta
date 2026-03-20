@@ -6,8 +6,8 @@ import {
   Pressable,
   Modal,
   Platform,
-  Animated,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import { useAlertStore, showAlert as showAlertFromStore } from '@/stores/alertStore';
@@ -38,43 +38,27 @@ export const CrossPlatformAlertProvider: React.FC<{ children: React.ReactNode }>
  */
 export function CrossPlatformAlertRenderer() {
   const { visible, alertData, dismiss } = useAlertStore();
-  const fadeAnim = React.useRef(new Animated.Value(0)).current;
-  const scaleAnim = React.useRef(new Animated.Value(0.9)).current;
+  const fadeAnim = useSharedValue(0);
+  const scaleAnim = useSharedValue(0.9);
 
   useEffect(() => {
-    let _anim: Animated.CompositeAnimation;
     if (visible) {
-      _anim = Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.spring(scaleAnim, {
-          toValue: 1,
-          friction: 8,
-          tension: 40,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      fadeAnim.value = withTiming(1, { duration: 200 });
+      scaleAnim.value = withSpring(1);
     } else {
-      _anim = Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 150,
-          useNativeDriver: true,
-        }),
-        Animated.timing(scaleAnim, {
-          toValue: 0.9,
-          duration: 150,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      fadeAnim.value = withTiming(0, { duration: 150 });
+      scaleAnim.value = withTiming(0.9, { duration: 150 });
     }
-    return () => _anim.stop();
-  }, [visible, fadeAnim, scaleAnim]);
+  }, [visible]);
+
+  const overlayStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+  }));
+
+  const containerStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scaleAnim.value }],
+    opacity: fadeAnim.value,
+  }));
 
   if (!alertData) return null;
 
@@ -115,15 +99,12 @@ export function CrossPlatformAlertRenderer() {
       animationType="none"
       onRequestClose={() => dismiss()}
     >
-      <Animated.View style={[styles.overlay, { opacity: fadeAnim }]}>
+      <Animated.View style={[styles.overlay, overlayStyle]}>
         <Pressable style={styles.backdrop} onPress={() => dismiss()} />
         <Animated.View
           style={[
             styles.alertContainer,
-            {
-              transform: [{ scale: scaleAnim }],
-              opacity: fadeAnim,
-            },
+            containerStyle,
           ]}
         >
           <View style={styles.iconContainer}>

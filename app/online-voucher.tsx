@@ -10,9 +10,15 @@ import {
   Dimensions,
   TextInput,
   ActivityIndicator,
-  Animated,
-  ImageBackground,
-} from 'react-native';
+  ImageBackground} from 'react-native';
+import Animated, {
+  useSharedValue,
+  withTiming,
+  withSpring,
+  withSequence,
+  withRepeat,
+  interpolate,
+} from 'react-native-reanimated';
 import { FlashList } from '@shopify/flash-list';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
@@ -77,11 +83,11 @@ function OnlineVoucherPage() {
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [searchInput, setSearchInput] = useState('');
   const searchInputRef = useRef<TextInput>(null);
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(30)).current;
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
-  const pulseAnim = useRef(new Animated.Value(1)).current;
-  const scrollX = useRef(new Animated.Value(0)).current;
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(30);
+  const shimmerAnim = useSharedValue(0);
+  const pulseAnim = useSharedValue(1);
+  const scrollX = useSharedValue(0);
 
   // Debounce search input to avoid excessive API calls
   const debouncedSearchQuery = useDebounce(searchInput, 300);
@@ -89,56 +95,27 @@ function OnlineVoucherPage() {
   useEffect(() => {
     let isMounted = true;
 
-    const animation = Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 800,
-        useNativeDriver: true,
-      }),
-      Animated.spring(slideAnim, {
-        toValue: 0,
-        tension: 50,
-        friction: 7,
-        useNativeDriver: true,
-      }),
-    ]);
+    // Entrance animation
+    fadeAnim.value = withTiming(1, { duration: 800 });
+    slideAnim.value = withSpring(0, { tension: 50, friction: 7 });
 
     // Shimmer animation loop
-    const shimmerLoop = Animated.loop(
-      Animated.timing(shimmerAnim, {
-        toValue: 1,
-        duration: 2000,
-        useNativeDriver: true,
-      })
+    shimmerAnim.value = withRepeat(
+      withTiming(1, { duration: 2000 }),
+      -1
     );
 
     // Pulse animation for coin badge
-    const pulseLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(pulseAnim, {
-          toValue: 1.05,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(pulseAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
+    pulseAnim.value = withRepeat(
+      withSequence(
+        withTiming(1.05, { duration: 1000 }),
+        withTiming(1, { duration: 1000 }),
+      ),
+      -1
     );
-
-    if (isMounted) {
-      animation.start();
-      shimmerLoop.start();
-      pulseLoop.start();
-    }
 
     return () => {
       isMounted = false;
-      animation.stop();
-      shimmerLoop.stop();
-      pulseLoop.stop();
     };
   }, [fadeAnim, slideAnim, shimmerAnim, pulseAnim]);
 
@@ -299,17 +276,8 @@ function OnlineVoucherPage() {
                 (index + 1) * SNAP_INTERVAL,
               ];
 
-              const scale = scrollX.interpolate({
-                inputRange,
-                outputRange: [0.9, 1, 0.9],
-                extrapolate: 'clamp',
-              });
-
-              const opacity = scrollX.interpolate({
-                inputRange,
-                outputRange: [0.6, 1, 0.6],
-                extrapolate: 'clamp',
-              });
+              const scale = interpolate(scrollX.value, inputRange, [0.9, 1, 0.9], 'clamp');
+              const opacity = interpolate(scrollX.value, inputRange, [0.6, 1, 0.6], 'clamp');
 
               return (
                 <Animated.View

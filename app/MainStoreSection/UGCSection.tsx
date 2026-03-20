@@ -16,12 +16,18 @@ import {
   Pressable,
   StyleSheet,
   Dimensions,
-  Animated,
   ActivityIndicator,
   Platform,
   RefreshControl,
-  ScrollView,
+  ScrollView
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
 import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { useFocusEffect } from '@react-navigation/native';
@@ -151,9 +157,12 @@ const UGCCard = memo(function UGCCard({
   const displayDescription = item.shortDescription || getTruncatedDescription(item.description, maxDescriptionLength);
   const showReadMore = needsTruncation(item.description, maxDescriptionLength) && !item.shortDescription;
 
-  const scaleAnim = useRef(new Animated.Value(1)).current;
-  const likeScaleAnim = useRef(new Animated.Value(1)).current;
-  const bookmarkScaleAnim = useRef(new Animated.Value(1)).current;
+  const scaleAnim = useSharedValue(1);
+  const likeScaleAnim = useSharedValue(1);
+  const bookmarkScaleAnim = useSharedValue(1);
+  const cardScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: scaleAnim.value }] }));
+  const likeScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: likeScaleAnim.value }] }));
+  const bookmarkScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: bookmarkScaleAnim.value }] }));
   const videoRef = useRef<Video | null>(null);
 
   const [mediaLoading, setMediaLoading] = useState(true);
@@ -175,25 +184,17 @@ const UGCCard = memo(function UGCCard({
     triggerImpact('Light');
 
     if (Platform.OS === 'ios') {
-      scaleAnim.setValue(0.98);
+      scaleAnim.value = 0.98;
     } else {
-      Animated.spring(scaleAnim, {
-        toValue: 0.98,
-        useNativeDriver: true,
-        ...Timing.springBouncy
-      }).start();
+      scaleAnim.value = withSpring(0.98, { ...Timing.springBouncy });
     }
   };
 
   const handlePressOut = () => {
     if (Platform.OS === 'ios') {
-      scaleAnim.setValue(1);
+      scaleAnim.value = 1;
     } else {
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        useNativeDriver: true,
-        ...Timing.springBouncy
-      }).start();
+      scaleAnim.value = withSpring(1, { ...Timing.springBouncy });
     }
   };
 
@@ -206,18 +207,10 @@ const UGCCard = memo(function UGCCard({
   const handleLikePress = () => {
     triggerImpact('Medium');
 
-    Animated.sequence([
-      Animated.timing(likeScaleAnim, {
-        toValue: 0.8,
-        duration: Timing.fast,
-        useNativeDriver: true
-      }),
-      Animated.spring(likeScaleAnim, {
-        toValue: 1,
-        useNativeDriver: true,
-        ...Timing.springBouncy
-      }),
-    ]).start();
+    likeScaleAnim.value = withSequence(
+      withTiming(0.8, { duration: Timing.fast }),
+      withSpring(1, { ...Timing.springBouncy }),
+    );
     onLikePress?.(item);
   };
 
@@ -225,18 +218,10 @@ const UGCCard = memo(function UGCCard({
   const handleBookmarkPress = () => {
     triggerImpact('Medium');
 
-    Animated.sequence([
-      Animated.timing(bookmarkScaleAnim, {
-        toValue: 0.8,
-        duration: Timing.fast,
-        useNativeDriver: true
-      }),
-      Animated.spring(bookmarkScaleAnim, {
-        toValue: 1,
-        useNativeDriver: true,
-        ...Timing.springBouncy
-      }),
-    ]).start();
+    bookmarkScaleAnim.value = withSequence(
+      withTiming(0.8, { duration: Timing.fast }),
+      withSpring(1, { ...Timing.springBouncy }),
+    );
     onBookmarkPress?.(item);
   };
 
@@ -266,7 +251,7 @@ const UGCCard = memo(function UGCCard({
       accessibilityRole="button"
       accessibilityHint="Tap to view full content details"
     >
-      <Animated.View style={[styles.cardContainer, { width: cardWidth, height: cardHeight, transform: [{ scale: scaleAnim }] }]}>
+      <Animated.View style={[styles.cardContainer, { width: cardWidth, height: cardHeight }, cardScaleStyle]}>
         {shouldLoadMedia ? (
           item.videoUrl ? (
             <>
@@ -365,7 +350,7 @@ const UGCCard = memo(function UGCCard({
             accessibilityRole="button"
             accessibilityHint="Double tap to like or unlike"
           >
-            <Animated.View style={{ transform: [{ scale: likeScaleAnim }] }}>
+            <Animated.View style={likeScaleStyle}>
               <Ionicons
                 name={item.isLiked ? 'heart' : 'heart-outline'}
                 size={22}
@@ -387,7 +372,7 @@ const UGCCard = memo(function UGCCard({
             accessibilityRole="button"
             accessibilityHint="Double tap to bookmark or unbookmark"
           >
-            <Animated.View style={{ transform: [{ scale: bookmarkScaleAnim }] }}>
+            <Animated.View style={bookmarkScaleStyle}>
               <Ionicons
                 name={item.isBookmarked ? 'bookmark' : 'bookmark-outline'}
                 size={22}

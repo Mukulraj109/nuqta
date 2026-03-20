@@ -1,5 +1,5 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback} from 'react';
 import {
   View,
   ScrollView,
@@ -8,10 +8,15 @@ import {
   ActivityIndicator,
   RefreshControl,
   Platform,
-  Animated,
   Dimensions,
-  Share,
+  Share
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import { FlashList } from '@shopify/flash-list';
 import { useRouter, useNavigation, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -92,9 +97,8 @@ function EarningsHistoryPage() {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [exporting, setExporting] = useState(false);
   
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(30)).current;
-  const cardAnims = useRef<{ [key: string]: Animated.Value }>({}).current;
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(30);
 
   const filters = [
     { label: 'All', value: 'all', icon: 'list', gradient: [Colors.brand.purpleLight, Colors.brand.purple] },
@@ -140,18 +144,6 @@ function EarningsHistoryPage() {
         if (reset) {
           if (!isMounted()) return;
           setTransactions(newTransactions);
-          // Animate cards in
-          newTransactions.forEach((transaction, index) => {
-            if (!cardAnims[transaction._id]) {
-              cardAnims[transaction._id] = new Animated.Value(0);
-            }
-            Animated.timing(cardAnims[transaction._id], {
-              toValue: 1,
-              duration: 400,
-              delay: index * 50,
-              useNativeDriver: true,
-            }).start();
-          });
         } else {
           if (!isMounted()) return;
           setTransactions(prev => [...prev, ...newTransactions]);
@@ -169,10 +161,8 @@ function EarningsHistoryPage() {
 
         // Animate in
         if (reset) {
-          Animated.parallel([
-            Animated.timing(fadeAnim, { toValue: 1, duration: 500, useNativeDriver: true }),
-            Animated.timing(slideAnim, { toValue: 0, duration: 500, useNativeDriver: true }),
-          ]).start();
+          fadeAnim.value = withTiming(1, { duration: 500 });
+          slideAnim.value = withTiming(0, { duration: 500 });
         }
       } else {
         throw new Error('Failed to load earnings history');
@@ -186,7 +176,7 @@ function EarningsHistoryPage() {
       if (!isMounted()) return;
       setRefreshing(false);
     }
-  }, [selectedFilter, startDate, endDate, fadeAnim, slideAnim, cardAnims]);
+  }, [selectedFilter, startDate, endDate]);
 
   useEffect(() => {
     loadEarningsHistory(1, true);
@@ -338,7 +328,6 @@ function EarningsHistoryPage() {
   };
 
   const renderTransactionItem = useCallback(({ item: transaction }: { item: EarningsTransaction }) => {
-    const cardAnim = cardAnims[transaction._id] || new Animated.Value(1);
     return (
       <Pressable
         onPress={() => router.push(`/wallet/transaction/${transaction._id}`)}
@@ -348,17 +337,6 @@ function EarningsHistoryPage() {
       <Animated.View
         style={[
           styles.transactionCard,
-          {
-            opacity: cardAnim,
-            transform: [
-              {
-                translateY: cardAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [20, 0],
-                }),
-              },
-            ],
-          },
         ]}
       >
         <LinearGradient
@@ -430,7 +408,12 @@ function EarningsHistoryPage() {
       </Animated.View>
       </Pressable>
     );
-  }, [cardAnims, currencySymbol, router]);
+  }, [currencySymbol, router]);
+
+  const fadeSlideStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ translateY: slideAnim.value }],
+  }));
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -499,10 +482,7 @@ function EarningsHistoryPage() {
         <Animated.View
           style={[
             styles.summaryCard,
-            {
-              opacity: fadeAnim,
-              transform: [{ translateY: slideAnim }],
-            },
+            fadeSlideStyle,
           ]}
           accessibilityLabel={`Earnings summary. Total earned: ${currencySymbol}${summary.totalEarned}. Withdrawn: ${currencySymbol}${summary.totalWithdrawn}. Pending: ${currencySymbol}${summary.pendingAmount}`}
           accessibilityRole="summary"
@@ -539,10 +519,7 @@ function EarningsHistoryPage() {
       <Animated.View
         style={[
           styles.dateFilterContainer,
-          {
-            opacity: fadeAnim,
-            transform: [{ translateY: slideAnim }],
-          },
+          fadeSlideStyle,
         ]}
       >
         <View style={styles.dateFilterRow}>
@@ -603,10 +580,7 @@ function EarningsHistoryPage() {
       <Animated.View
         style={[
           styles.filtersContainer,
-          {
-            opacity: fadeAnim,
-            transform: [{ translateY: slideAnim }],
-          },
+          fadeSlideStyle,
         ]}
       >
         <ScrollView

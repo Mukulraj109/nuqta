@@ -6,20 +6,25 @@
  * - Purple-tinted gradient for brand consistency
  * - Multiple variants (rect, circle, text, card)
  * - Light/dark mode support
- * - Performance optimized with useNativeDriver
+ * - Performance optimized with react-native-reanimated
  * - Accessibility-friendly (hidden from screen readers)
  *
  * @example
  * <ShimmerSkeleton variant="card" width="100%" height={200} />
  */
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect} from 'react';
 import {
   View,
   StyleSheet,
-  Animated,
-  ViewStyle,
-} from 'react-native';
+  ViewStyle} from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+  withRepeat,
+  interpolate,
+} from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   borderRadius as BorderRadius,
@@ -49,33 +54,27 @@ export const ShimmerSkeleton: React.FC<ShimmerSkeletonProps> = ({
   variant = 'rect',
   animated = true,
 }) => {
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
   const { isDark, colors: Colors, gradients: Gradients } = useTheme();
 
   useEffect(() => {
     if (!animated) return;
 
     // Continuous shimmer animation
-    const shimmerLoop = Animated.loop(
-      Animated.timing(shimmerAnim, {
-        toValue: 1,
-        duration: Timing.skeleton,
-        useNativeDriver: true,
-      })
+    shimmerAnim.value = withRepeat(
+      withTiming(1, { duration: Timing.skeleton }),
+      -1
     );
-    shimmerLoop.start();
 
-    // Cleanup: stop animation on unmount to prevent memory leak
     return () => {
-      shimmerLoop.stop();
+      shimmerAnim.value = 0;
     };
   }, [animated, shimmerAnim]);
 
   // Calculate translateX for shimmer effect
-  const translateX = shimmerAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-300, 300],
-  });
+  const shimmerTranslateStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: interpolate(shimmerAnim.value, [0, 1], [-300, 300]) }],
+  }));
 
   // Get border radius based on variant
   const getFinalBorderRadius = (): number => {
@@ -126,9 +125,7 @@ export const ShimmerSkeleton: React.FC<ShimmerSkeletonProps> = ({
         <Animated.View
           style={[
             styles.shimmerContainer,
-            {
-              transform: [{ translateX }],
-            },
+            shimmerTranslateStyle,
           ]}
         >
           <LinearGradient

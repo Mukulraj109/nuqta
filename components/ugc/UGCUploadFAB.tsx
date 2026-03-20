@@ -1,15 +1,21 @@
 // UGC Upload FAB (Floating Action Button)
 // Floating action button for triggering UGC content upload
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect} from 'react';
 import { catchSilent } from '@/utils/catchAndReport';
 import {
   Pressable,
   StyleSheet,
-  Animated,
   Platform,
-  ViewStyle,
+  ViewStyle
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { colors } from '@/constants/theme';
@@ -27,47 +33,20 @@ function UGCUploadFAB({
   visible = true,
   bottom = 80,
   right = 20,
-  style,
-}: UGCUploadFABProps) {
-  const scaleAnim = useRef(new Animated.Value(0)).current;
-  const rotateAnim = useRef(new Animated.Value(0)).current;
+  style }: UGCUploadFABProps) {
+  const scaleAnim = useSharedValue(0);
+  const rotateAnim = useSharedValue(0);
 
   // Fade in animation on mount
   useEffect(() => {
-    let _anim: Animated.CompositeAnimation;
     if (visible) {
-      _anim = Animated.parallel([
-        Animated.spring(scaleAnim, {
-          toValue: 1,
-          tension: 50,
-          friction: 5,
-          useNativeDriver: true,
-        }),
-        Animated.timing(rotateAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      scaleAnim.value = withSpring(1, { tension: 50, friction: 5 });
+      rotateAnim.value = withTiming(1, { duration: 300 });
     } else {
-      _anim = Animated.parallel([
-        Animated.timing(scaleAnim, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(rotateAnim, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      scaleAnim.value = withTiming(0, { duration: 200 });
+      rotateAnim.value = withTiming(0, { duration: 200 });
     }
-  
-    return () => _anim.stop();
-}, [visible]);
+  }, [visible]);
 
   const handlePress = () => {
     // Haptic feedback
@@ -76,39 +55,22 @@ function UGCUploadFAB({
     }
 
     // Scale animation on press
-    Animated.sequence([
-      Animated.timing(scaleAnim, {
-        toValue: 0.9,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        tension: 100,
-        friction: 5,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    scaleAnim.value = withSequence(
+      withTiming(0.9, { duration: 100 }),
+      withSpring(1, { tension: 100, friction: 5 }),
+    );
 
     onPress();
   };
 
-  const rotate = rotateAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'],
-  });
+  const fabAnimStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scaleAnim.value }],
+    opacity: scaleAnim.value,
+  }));
 
   return (
     <Animated.View
-      style={[
-        styles.container,
-        {
-          bottom,
-          right,
-          transform: [{ scale: scaleAnim }, { rotate }],
-        },
-        style,
-      ]}
+      style={[styles.container, { bottom, right }, fabAnimStyle, style]}
     >
       <Pressable
         style={styles.fab}
@@ -127,8 +89,7 @@ function UGCUploadFAB({
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    zIndex: 999,
-  },
+    zIndex: 999 },
   fab: {
     width: 60,
     height: 60,
@@ -140,11 +101,8 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 4,
-    },
+      height: 4 },
     shadowOpacity: 0.3,
-    shadowRadius: 8,
-  },
-});
+    shadowRadius: 8 } });
 
 export default React.memo(UGCUploadFAB);

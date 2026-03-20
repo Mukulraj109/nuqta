@@ -4,14 +4,14 @@
  * Loading skeleton for mall pages
  */
 
-import React, { memo, useEffect, useRef } from 'react';
+import React, { memo, useEffect } from 'react';
 import { colors } from '@/constants/theme';
 import {
   View,
   StyleSheet,
-  Animated,
   Dimensions,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withRepeat } from 'react-native-reanimated';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -21,24 +21,15 @@ interface MallLoadingSkeletonProps {
 }
 
 const SkeletonItem: React.FC<{ type: 'card' | 'list' | 'grid' }> = ({ type }) => {
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
-    const shimmerLoop = Animated.loop(
-      Animated.timing(shimmerAnim, {
-        toValue: 1,
-        duration: 1500,
-        useNativeDriver: true,
-      })
-    );
-    shimmerLoop.start();
-    return () => shimmerLoop.stop();
+    shimmerAnim.value = withRepeat(withTiming(1, { duration: 1500 }), -1);
   }, []);
 
-  const translateX = shimmerAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-SCREEN_WIDTH, SCREEN_WIDTH],
-  });
+  const shimmerStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: shimmerAnim.value * SCREEN_WIDTH * 2 - SCREEN_WIDTH }],
+  }));
 
   if (type === 'list') {
     return (
@@ -47,7 +38,7 @@ const SkeletonItem: React.FC<{ type: 'card' | 'list' | 'grid' }> = ({ type }) =>
           <Animated.View
             style={[
               styles.shimmer,
-              { transform: [{ translateX }] },
+              shimmerStyle,
             ]}
           />
         </View>
@@ -56,7 +47,7 @@ const SkeletonItem: React.FC<{ type: 'card' | 'list' | 'grid' }> = ({ type }) =>
             <Animated.View
               style={[
                 styles.shimmer,
-                { transform: [{ translateX }] },
+                shimmerStyle,
               ]}
             />
           </View>
@@ -64,7 +55,7 @@ const SkeletonItem: React.FC<{ type: 'card' | 'list' | 'grid' }> = ({ type }) =>
             <Animated.View
               style={[
                 styles.shimmer,
-                { transform: [{ translateX }] },
+                shimmerStyle,
               ]}
             />
           </View>
@@ -72,7 +63,7 @@ const SkeletonItem: React.FC<{ type: 'card' | 'list' | 'grid' }> = ({ type }) =>
             <Animated.View
               style={[
                 styles.shimmer,
-                { transform: [{ translateX }] },
+                shimmerStyle,
               ]}
             />
           </View>
@@ -88,7 +79,7 @@ const SkeletonItem: React.FC<{ type: 'card' | 'list' | 'grid' }> = ({ type }) =>
           <Animated.View
             style={[
               styles.shimmer,
-              { transform: [{ translateX }] },
+              shimmerStyle,
             ]}
           />
         </View>
@@ -96,7 +87,7 @@ const SkeletonItem: React.FC<{ type: 'card' | 'list' | 'grid' }> = ({ type }) =>
           <Animated.View
             style={[
               styles.shimmer,
-              { transform: [{ translateX }] },
+              shimmerStyle,
             ]}
           />
         </View>
@@ -111,7 +102,7 @@ const SkeletonItem: React.FC<{ type: 'card' | 'list' | 'grid' }> = ({ type }) =>
         <Animated.View
           style={[
             styles.shimmer,
-            { transform: [{ translateX }] },
+            shimmerStyle,
           ]}
         />
       </View>
@@ -119,7 +110,7 @@ const SkeletonItem: React.FC<{ type: 'card' | 'list' | 'grid' }> = ({ type }) =>
         <Animated.View
           style={[
             styles.shimmer,
-            { transform: [{ translateX }] },
+            shimmerStyle,
           ]}
         />
       </View>
@@ -127,7 +118,7 @@ const SkeletonItem: React.FC<{ type: 'card' | 'list' | 'grid' }> = ({ type }) =>
         <Animated.View
           style={[
             styles.shimmer,
-            { transform: [{ translateX }] },
+            shimmerStyle,
           ]}
         />
       </View>

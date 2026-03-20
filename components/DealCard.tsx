@@ -3,12 +3,11 @@ import {
   View,
   Pressable,
   StyleSheet,
-  Animated,
   LayoutAnimation,
   UIManager,
   Dimensions,
-  Platform,
-} from 'react-native';
+  Platform} from 'react-native';
+import Animated, { interpolate, useAnimatedStyle, useSharedValue, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -34,8 +33,8 @@ function DealCard({
   const [billPreview] = useState<number>(deal.minimumBill);
   
   // Animation refs
-  const scaleAnim = useRef(new Animated.Value(1)).current;
-  const cardAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useSharedValue(1);
+  const cardAnim = useSharedValue(0);
 
   // Calculate screen dimensions for responsive design with state updates
   const [screenWidth, setScreenWidth] = useState(Dimensions.get('window').width);
@@ -66,14 +65,7 @@ function DealCard({
 
   // Initialize card animation
   useEffect(() => {
-    const anim = Animated.spring(cardAnim, {
-      toValue: 1,
-      tension: 100,
-      friction: 8,
-      useNativeDriver: true,
-    });
-    anim.start();
-    return () => anim.stop();
+    cardAnim.value = withSpring(1);
   }, []);
 
   // Update countdown timer
@@ -108,18 +100,7 @@ function DealCard({
 
   // Handle card press with animation
   const handleCardPress = () => {
-    Animated.sequence([
-      Animated.timing(scaleAnim, {
-        toValue: 0.98,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(scaleAnim, {
-        toValue: 1,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    scaleAnim.value = withSequence(withTiming(0.98, { duration: 100 }), withTiming(1, { duration: 100 }));
 
   };
 
@@ -132,18 +113,7 @@ function DealCard({
     }
 
     // Button press animation
-    Animated.sequence([
-      Animated.timing(scaleAnim, {
-        toValue: 0.95,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(scaleAnim, {
-        toValue: 1,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    scaleAnim.value = withSequence(withTiming(0.95, { duration: 100 }), withTiming(1, { duration: 100 }));
   };
 
   // Calculate preview discount
@@ -168,21 +138,20 @@ function DealCard({
     return hoursLeft <= 24 && hoursLeft > 0;
   };
 
+  const cardAnimStyle = useAnimatedStyle(() => ({
+    transform: [
+      { scale: scaleAnim.value },
+      { translateY: interpolate(cardAnim.value, [0, 1], [50, 0]) },
+    ],
+    opacity: cardAnim.value,
+  }));
+
   return (
     <Animated.View
       style={[
         styles.card,
         isAdded && styles.cardSelected,
-        {
-          transform: [
-            { scale: scaleAnim },
-            { translateY: cardAnim.interpolate({
-              inputRange: [0, 1],
-              outputRange: [50, 0],
-            })},
-          ],
-          opacity: cardAnim,
-        },
+        cardAnimStyle,
       ]}
     >
       <Pressable

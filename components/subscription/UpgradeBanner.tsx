@@ -6,8 +6,8 @@ import {
   View,
   StyleSheet,
   Pressable,
-  Animated,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
@@ -51,7 +51,7 @@ function UpgradeBanner({
   onDismiss,
 }: UpgradeBannerProps) {
   const [dismissed, setDismissed] = useState(false);
-  const [fadeAnim] = useState(new Animated.Value(1));
+  const fadeAnim = useSharedValue(1);
 
   if (dismissed || currentTier === 'vip') {
     return null;
@@ -64,14 +64,10 @@ function UpgradeBanner({
       : [colors.warningScale[400], colors.warningScale[700]];
 
   const handleDismiss = () => {
-    Animated.timing(fadeAnim, {
-      toValue: 0,
-      duration: 300,
-      useNativeDriver: true,
-    }).start(() => {
-      setDismissed(true);
+    fadeAnim.value = withTiming(0, { duration: 300 });
+    // Callback after animation:
+    setDismissed(true);
       onDismiss?.();
-    });
   };
 
   return (

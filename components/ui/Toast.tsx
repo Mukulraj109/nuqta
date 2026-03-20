@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Animated, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
+import Animated, {
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { spacing, borderRadius, typography, zIndex , colors } from '@/constants/theme';
 import { useTheme } from '@/hooks/useTheme';
@@ -31,8 +35,8 @@ function Toast({
   actions,
 }: ToastProps) {
   const { colors, shadows } = useTheme();
-  const [fadeAnim] = useState(new Animated.Value(0));
-  const [slideAnim] = useState(new Animated.Value(-100));
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(-100);
 
   const BG_MAP: Record<string, string> = {
     success: colors.success,
@@ -42,47 +46,26 @@ function Toast({
   };
 
   useEffect(() => {
-    const anim = Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-    ]);
-    anim.start();
+    fadeAnim.value = withTiming(1, { duration: 300 });
+    slideAnim.value = withTiming(0, { duration: 300 });
 
     if (!actions && duration > 0) {
       const timer = setTimeout(() => {
         dismiss();
       }, duration);
       return () => {
-        anim.stop();
         clearTimeout(timer);
       };
     }
-    return () => anim.stop();
   }, []);
 
   const dismiss = () => {
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: -100,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
+    fadeAnim.value = withTiming(0, { duration: 200 });
+    slideAnim.value = withTiming(-100, { duration: 200 });
+    // Call onDismiss after animation completes
+    setTimeout(() => {
       onDismiss?.();
-    });
+    }, 200);
   };
 
   return (

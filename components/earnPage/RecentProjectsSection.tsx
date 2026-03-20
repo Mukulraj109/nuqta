@@ -1,5 +1,6 @@
-import React, { useRef, useEffect } from 'react';
-import { View, ScrollView, Pressable, StyleSheet, Animated, Platform } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, ScrollView, Pressable, StyleSheet, Platform } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ThemedText';
@@ -24,25 +25,22 @@ function RecentProjectsSection({
   onSeeAll,
   loading = false
 }: RecentProjectsSectionProps) {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(20)).current;
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(20);
 
   useEffect(() => {
-    const anim = Animated.parallel([
-      Animated.timing(fadeAnim, { toValue: 1, duration: 500, useNativeDriver: true }),
-      Animated.timing(slideAnim, { toValue: 0, duration: 500, useNativeDriver: true }),
-    ]);
-    anim.start();
-
-    return () => { anim.stop(); };
+    fadeAnim.value = withTiming(1, { duration: 500 });
+    slideAnim.value = withTiming(0, { duration: 500 });
   }, []);
 
+  const containerStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ translateY: slideAnim.value }],
+  }));
+
   return (
-    <Animated.View 
-      style={[
-        styles.container,
-        { opacity: fadeAnim, transform: [{ translateY: slideAnim }] },
-      ]}
+    <Animated.View
+      style={[styles.container, containerStyle]}
     >
       <View style={styles.header}>
         <View style={styles.headerLeft}>

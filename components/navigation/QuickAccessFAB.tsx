@@ -2,7 +2,13 @@
 // Expandable floating action button with quick access to key features
 
 import React, { useState } from 'react';
-import { View, Pressable, StyleSheet, Animated, Platform } from 'react-native';
+import {
+  View,
+  Pressable,
+  StyleSheet,
+  Platform,
+} from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring, interpolate, SharedValue } from 'react-native-reanimated';
 import { router } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -22,68 +28,69 @@ const actions: QuickAction[] = [
   { icon: '🎮', label: 'Games', route: '/games', color: '#9C27B0' },
 ];
 
+const FABActionItem: React.FC<{
+  action: QuickAction;
+  index: number;
+  totalActions: number;
+  animation: SharedValue<number>;
+  onPress: (route: string) => void;
+}> = ({ action, index, totalActions, animation, onPress }) => {
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: interpolate(animation.value, [0, 1], [0, -(60 * (totalActions - index))]) }],
+    opacity: interpolate(animation.value, [0, 0.5, 1], [0, 0.5, 1]),
+  }));
+
+  return (
+    <Animated.View style={[styles.actionWrapper, animatedStyle]}>
+      <Pressable
+        style={[styles.actionButton, { backgroundColor: action.color }]}
+        onPress={() => onPress(action.route)}
+        accessibilityLabel={action.label}
+        accessibilityRole="button"
+      >
+        <ThemedText style={styles.actionIcon}>{action.icon}</ThemedText>
+        <ThemedText style={styles.actionLabel}>{action.label}</ThemedText>
+      </Pressable>
+    </Animated.View>
+  );
+};
+
 function QuickAccessFAB() {
   const [expanded, setExpanded] = useState(false);
-  const [animation] = useState(new Animated.Value(0));
+  const animation = useSharedValue(0);
 
   const toggleExpand = () => {
     const toValue = expanded ? 0 : 1;
-    Animated.spring(animation, {
-      toValue,
-      useNativeDriver: true,
-      tension: 50,
-      friction: 7,
-    }).start();
+    animation.value = withSpring(toValue, { stiffness: 50, damping: 7 });
     setExpanded(!expanded);
   };
 
   const handleActionPress = (route: string) => {
     setExpanded(false);
-    Animated.spring(animation, {
-      toValue: 0,
-      useNativeDriver: true,
-    }).start();
+    animation.value = withSpring(0);
     try { router.push(route as any); } catch (_e) { /* silently handle */ }
   };
+
+  const fabRotateStyle = useAnimatedStyle(() => ({
+    transform: [
+      { rotate: `${interpolate(animation.value, [0, 1], [0, 45])}deg` },
+    ],
+  }));
 
   return (
     <View style={styles.container} pointerEvents="box-none">
       {expanded && (
         <View style={styles.actionsContainer}>
-          {actions.map((action, index) => {
-            const translateY = animation.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, -(60 * (actions.length - index))],
-            });
-
-            const opacity = animation.interpolate({
-              inputRange: [0, 0.5, 1],
-              outputRange: [0, 0.5, 1],
-            });
-
-            return (
-              <Animated.View
-                key={index}
-                style={[
-                  styles.actionWrapper,
-                  {
-                    transform: [{ translateY }],
-                    opacity,
-                  },
-                ]}
-              >
-                <Pressable
-                  style={[styles.actionButton, { backgroundColor: action.color }]}
-                  onPress={() => handleActionPress(action.route)}
-                  accessibilityLabel={action.label}
-                  accessibilityRole="button"
-                >
-                  <ThemedText style={styles.actionIcon}>{action.icon}</ThemedText>
-                  <ThemedText style={styles.actionLabel}>{action.label}</ThemedText>
-                </Pressable>
-              </Animated.View>
-            );
-          })}
+          {actions.map((action, index) => (
+            <FABActionItem
+              key={index}
+              action={action}
+              index={index}
+              totalActions={actions.length}
+              animation={animation}
+              onPress={handleActionPress}
+            />
+          ))}
         </View>
       )}
 
@@ -99,18 +106,7 @@ function QuickAccessFAB() {
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
         >
-          <Animated.View
-            style={{
-              transform: [
-                {
-                  rotate: animation.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: ['0deg', '45deg'],
-                  }),
-                },
-              ],
-            }}
-          >
+          <Animated.View style={fabRotateStyle}>
             <ThemedText style={styles.fabIcon}>
               {expanded ? '✕' : '⚡'}
             </ThemedText>

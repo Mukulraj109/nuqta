@@ -1,6 +1,14 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
-import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Animated, Dimensions, Platform } from 'react-native';
+import React, { useEffect} from 'react';
+import { View, Text, StyleSheet, Dimensions, Platform } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withSpring,
+  withTiming } from 'react-native-reanimated';
 import analyticsService from '@/services/analyticsService';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
@@ -20,75 +28,57 @@ const COLORS = {
   gold: Colors.gold,
   goldDark: colors.lightPeach, // Brand-specific peach — keep unique
   textPrimary: Colors.nileBlue,
-  white: Colors.background.primary,
-};
+  white: Colors.background.primary };
 
 function SplashScreen() {
   const router = useRouter();
   useBackButton(() => true); // Block back navigation
 
   // Animations
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const scaleAnim = useRef(new Animated.Value(0.8)).current;
-  const coinRotate = useRef(new Animated.Value(0)).current;
-  const taglineAnim = useRef(new Animated.Value(0)).current;
-  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const fadeAnim = useSharedValue(0);
+  const scaleAnim = useSharedValue(0.8);
+  const coinRotate = useSharedValue(0);
+  const taglineAnim = useSharedValue(0);
+  const pulseAnim = useSharedValue(1);
+
+  const coinEntranceStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ scale: scaleAnim.value }],
+  }));
+  const pulseStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: pulseAnim.value }],
+  }));
+  const coinSpinStyle = useAnimatedStyle(() => ({
+    transform: [{ rotateY: `${interpolate(coinRotate.value, [0, 1], [0, 360])}deg` }],
+  }));
+  const taglineStyle = useAnimatedStyle(() => ({
+    opacity: taglineAnim.value,
+  }));
 
   useEffect(() => {
     analyticsService.track('onboarding_started', { platform: Platform.OS });
   }, []);
 
   useEffect(() => {
-    // Start animations
-    Animated.sequence([
-      // Coin entrance with scale and fade
-      Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 600,
-          useNativeDriver: true,
-        }),
-        Animated.spring(scaleAnim, {
-          toValue: 1,
-          friction: 8,
-          tension: 40,
-          useNativeDriver: true,
-        }),
-      ]),
-      // Tagline fade in
-      Animated.timing(taglineAnim, {
-        toValue: 1,
-        duration: 400,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    // Start animations - entrance + tagline
+    fadeAnim.value = withTiming(1, { duration: 600 });
+    scaleAnim.value = withSpring(1, { damping: 8, stiffness: 40 });
+    taglineAnim.value = withTiming(1, { duration: 400 });
 
     // Coin rotation loop
-    const coinLoop = Animated.loop(
-      Animated.timing(coinRotate, {
-        toValue: 1,
-        duration: 3000,
-        useNativeDriver: true,
-      })
+    coinRotate.value = withRepeat(
+      withTiming(1, { duration: 3000 }),
+      -1
     );
-    coinLoop.start();
 
     // Pulse animation for glow
-    const pulseLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(pulseAnim, {
-          toValue: 1.1,
-          duration: 1500,
-          useNativeDriver: true,
-        }),
-        Animated.timing(pulseAnim, {
-          toValue: 1,
-          duration: 1500,
-          useNativeDriver: true,
-        }),
-      ])
+    pulseAnim.value = withRepeat(
+      withSequence(
+        withTiming(1.1, { duration: 1500 }),
+        withTiming(1, { duration: 1500 })
+      ),
+      -1
     );
-    pulseLoop.start();
 
     // Navigate after delay
     const timer = setTimeout(() => {
@@ -97,15 +87,12 @@ function SplashScreen() {
 
     return () => {
       clearTimeout(timer);
-      coinLoop.stop();
-      pulseLoop.stop();
+      coinRotate.value = 0;
+      pulseAnim.value = 1;
     };
   }, [router]);
 
-  const coinSpin = coinRotate.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'],
-  });
+  // coinSpin handled by coinSpinStyle useAnimatedStyle above
 
   return (
     <View style={styles.container}>
@@ -131,12 +118,7 @@ function SplashScreen() {
         <Animated.View
           style={[
             styles.coinContainer,
-            {
-              opacity: fadeAnim,
-              transform: [
-                { scale: scaleAnim },
-              ],
-            },
+            coinEntranceStyle,
           ]}
           accessible={true}
           accessibilityLabel={`${BRAND.APP_NAME} App Logo`}
@@ -146,7 +128,7 @@ function SplashScreen() {
           <Animated.View
             style={[
               styles.coinGlow,
-              { transform: [{ scale: pulseAnim }] },
+              pulseStyle,
             ]}
           />
 
@@ -154,7 +136,7 @@ function SplashScreen() {
           <Animated.View
             style={[
               styles.coinOuter,
-              { transform: [{ rotateY: coinSpin }] },
+              coinSpinStyle,
             ]}
           >
             <CachedImage
@@ -170,7 +152,7 @@ function SplashScreen() {
         <Animated.View
           style={[
             styles.brandContainer,
-            { opacity: fadeAnim, transform: [{ scale: scaleAnim }] },
+            coinEntranceStyle,
           ]}
         >
           <Text style={styles.brandText}>{BRAND.APP_NAME}</Text>
@@ -188,7 +170,7 @@ function SplashScreen() {
         <Animated.View
           style={[
             styles.taglineContainer,
-            { opacity: taglineAnim },
+            taglineStyle,
           ]}
         >
           <Text style={styles.tagline}>{`Smart people use ${BRAND.APP_NAME} to save money`}</Text>
@@ -205,73 +187,62 @@ function SplashScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   content: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 40,
-  },
+    paddingHorizontal: 40 },
 
   // Decorative Circles
   decorativeCircles: {
     ...StyleSheet.absoluteFillObject,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   circle: {
     position: 'absolute',
-    borderRadius: 999,
-  },
+    borderRadius: 999 },
   circleGoldLarge: {
     width: 350,
     height: 350,
     top: -100,
     right: -120,
-    backgroundColor: 'rgba(255, 200, 87, 0.12)',
-  },
+    backgroundColor: 'rgba(255, 200, 87, 0.12)' },
   circleGreenMedium: {
     width: 250,
     height: 250,
     bottom: 80,
     left: -100,
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-  },
+    backgroundColor: 'rgba(255, 255, 255, 0.08)' },
   circleGoldSmall: {
     width: 120,
     height: 120,
     top: SCREEN_HEIGHT * 0.3,
     left: 30,
-    backgroundColor: 'rgba(255, 200, 87, 0.1)',
-  },
+    backgroundColor: 'rgba(255, 200, 87, 0.1)' },
   circleGreenTiny: {
     width: 80,
     height: 80,
     bottom: SCREEN_HEIGHT * 0.25,
     right: 40,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-  },
+    backgroundColor: 'rgba(255, 255, 255, 0.1)' },
   circleGoldTiny: {
     width: 50,
     height: 50,
     top: 120,
     left: SCREEN_WIDTH * 0.6,
-    backgroundColor: 'rgba(255, 200, 87, 0.15)',
-  },
+    backgroundColor: 'rgba(255, 200, 87, 0.15)' },
 
   // Coin Logo
   coinContainer: {
     marginBottom: 32,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   coinGlow: {
     position: 'absolute',
     width: 160,
     height: 160,
     borderRadius: 80,
-    backgroundColor: 'rgba(255, 200, 87, 0.25)',
-  },
+    backgroundColor: 'rgba(255, 200, 87, 0.25)' },
   coinOuter: {
     width: 120,
     height: 120,
@@ -281,19 +252,16 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 12 },
     shadowOpacity: 0.5,
     shadowRadius: 24,
-    elevation: 15,
-  },
+    elevation: 15 },
   coinImage: {
     width: 120,
     height: 120,
-    borderRadius: 60,
-  },
+    borderRadius: 60 },
 
   // Brand
   brandContainer: {
     alignItems: 'center',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   brandText: {
     fontSize: 56,
     fontWeight: '800',
@@ -301,30 +269,25 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
     textShadowColor: 'rgba(0, 0, 0, 0.2)',
     textShadowOffset: { width: 0, height: 4 },
-    textShadowRadius: 8,
-  },
+    textShadowRadius: 8 },
   brandUnderline: {
     marginTop: 8,
     width: 80,
     height: 4,
     borderRadius: 2,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   underlineGradient: {
-    flex: 1,
-  },
+    flex: 1 },
 
   // Tagline
   taglineContainer: {
-    marginTop: 8,
-  },
+    marginTop: 8 },
   tagline: {
     fontSize: 16,
     fontWeight: '500',
     color: 'rgba(255, 255, 255, 0.9)',
     textAlign: 'center',
-    letterSpacing: 0.3,
-  },
+    letterSpacing: 0.3 },
 
   // Bottom Badge
   bottomBadge: {
@@ -336,14 +299,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
-  },
+    borderColor: 'rgba(255, 255, 255, 0.2)' },
   badgeText: {
     fontSize: 13,
     fontWeight: '600',
     color: 'rgba(255, 255, 255, 0.9)',
-    letterSpacing: 0.5,
-  },
-});
+    letterSpacing: 0.5 } });
 
 export default withErrorBoundary(SplashScreen, 'OnboardingSplash');

@@ -12,9 +12,16 @@ import {
   StyleSheet,
   ScrollView,
   Pressable,
-  Animated,
-  RefreshControl,
-} from 'react-native';
+  RefreshControl} from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedReaction,
+  withTiming,
+  runOnJS,
+  useAnimatedStyle,
+  withSequence,
+  withRepeat,
+  interpolate} from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
@@ -25,8 +32,7 @@ import {
   PILLAR_CONFIG,
   IMPROVEMENT_TIPS,
   resolvePillarId,
-  PillarId,
-} from '@/components/prive/priveTheme';
+  PillarId} from '@/components/prive/priveTheme';
 import { usePriveEligibility } from '@/hooks/usePriveEligibility';
 import priveApi from '@/services/priveApi';
 import { ELIGIBILITY_THRESHOLDS } from '@/types/mode.types';
@@ -35,20 +41,16 @@ import { useIsMounted } from '@/hooks/useIsMounted';
 
 // ─── Shimmer Skeleton ─────────────────────────────────────────────────────────
 const ShimmerCard = ({ index }: { index: number }) => {
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
-    const loop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, { toValue: 1, duration: 1000, delay: index * 100, useNativeDriver: true }),
-        Animated.timing(shimmerAnim, { toValue: 0, duration: 1000, useNativeDriver: true }),
-      ])
-    );
-    loop.start();
-    return () => loop.stop();
+    shimmerAnim.value = withRepeat(withSequence(
+        withTiming(1, { duration: 1000 }),
+        withTiming(0, { duration: 1000 })
+      ), -1);
   }, []);
 
-  const opacity = shimmerAnim.interpolate({ inputRange: [0, 1], outputRange: [0.3, 0.7] });
+  const opacity = interpolate(shimmerAnim.value, [0, 1], [0.3, 0.7]);
 
   return (
     <View style={styles.pillarCard}>
@@ -72,23 +74,13 @@ const ShimmerCard = ({ index }: { index: number }) => {
 
 // ─── Animated Progress Bar ────────────────────────────────────────────────────
 const AnimatedProgressBar = ({ score, color }: { score: number; color: string }) => {
-  const widthAnim = useRef(new Animated.Value(0)).current;
+  const widthAnim = useSharedValue(0);
 
   useEffect(() => {
-    const anim = Animated.timing(widthAnim, {
-      toValue: score,
-      duration: 800,
-      useNativeDriver: false,
-    });
-    anim.start();
-    return () => anim.stop();
+    widthAnim.value = withTiming(score, { duration: 800 });
   }, [score]);
 
-  const width = widthAnim.interpolate({
-    inputRange: [0, 100],
-    outputRange: ['0%', '100%'],
-    extrapolate: 'clamp',
-  });
+  const width = interpolate(widthAnim.value, [0, 100], ['0%', '100%'], 'clamp');
 
   return (
     <View style={styles.pillarProgressTrack}>
@@ -108,32 +100,26 @@ const AnimatedProgressBar = ({ score, color }: { score: number; color: string })
 const HeroScoreSection = ({
   totalScore,
   tier,
-  trustScore,
-}: {
+  trustScore}: {
   totalScore: number;
   tier: string;
   trustScore: number;
 }) => {
-  const countAnim = useRef(new Animated.Value(0)).current;
+  const countAnim = useSharedValue(0);
   const [displayScore, setDisplayScore] = useState(0);
 
   useEffect(() => {
-    countAnim.setValue(0);
-    const anim = Animated.timing(countAnim, {
-      toValue: totalScore,
-      duration: 1200,
-      useNativeDriver: false,
-    });
-    anim.start();
-
-    const listener = countAnim.addListener(({ value }) => {
-      setDisplayScore(Math.round(value * 10) / 10);
-    });
-    return () => {
-      anim.stop();
-      countAnim.removeListener(listener);
-    };
+    countAnim.value = 0;
+    countAnim.value = withTiming(totalScore, { duration: 1200 });
   }, [totalScore]);
+
+  useAnimatedReaction(
+    () => countAnim.value,
+    (val) => {
+      runOnJS(setDisplayScore)(Math.round(val * 10) / 10);
+    },
+    [totalScore]
+  );
 
   const getTierColor = () => {
     switch (tier) {
@@ -237,8 +223,7 @@ function PillarsScreen() {
   const pillarData = eligibility.pillars.map((p) => ({
     id: resolvePillarId(p.id) || p.id,
     score: Math.round(p.score),
-    trend: p.trend || 'stable',
-  }));
+    trend: p.trend || 'stable'}));
 
   const isLoading = hookLoading && pillarData.length === 0;
 
@@ -407,12 +392,10 @@ function PillarsScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1},
   content: {
     flex: 1,
-    paddingHorizontal: PRIVE_SPACING.xl,
-  },
+    paddingHorizontal: PRIVE_SPACING.xl},
 
   // ─── Hero Section ───────────────────────────────────────────
   heroCard: {
@@ -422,74 +405,59 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: PRIVE_COLORS.border.goldMuted,
     marginBottom: PRIVE_SPACING.lg,
-    marginTop: PRIVE_SPACING.sm,
-  },
+    marginTop: PRIVE_SPACING.sm},
   heroContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   heroScoreSection: {
-    gap: PRIVE_SPACING.xs,
-  },
+    gap: PRIVE_SPACING.xs},
   heroScoreLabel: {
     fontSize: 12,
     color: PRIVE_COLORS.text.tertiary,
     letterSpacing: 1,
-    textTransform: 'uppercase',
-  },
+    textTransform: 'uppercase'},
   heroScoreValue: {
     fontSize: 42,
     fontWeight: '200',
-    color: PRIVE_COLORS.gold.primary,
-  },
+    color: PRIVE_COLORS.gold.primary},
   heroTierSection: {
     alignItems: 'flex-end',
-    gap: PRIVE_SPACING.xs,
-  },
+    gap: PRIVE_SPACING.xs},
   heroTierBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: PRIVE_SPACING.xs,
     paddingHorizontal: PRIVE_SPACING.md,
     paddingVertical: PRIVE_SPACING.sm,
-    borderRadius: PRIVE_RADIUS.sm,
-  },
+    borderRadius: PRIVE_RADIUS.sm},
   heroTierIcon: {
     fontSize: 14,
-    color: PRIVE_COLORS.gold.primary,
-  },
+    color: PRIVE_COLORS.gold.primary},
   heroTierText: {
     fontSize: 14,
-    fontWeight: '600',
-  },
+    fontWeight: '600'},
   heroTierProgress: {
     fontSize: 12,
-    color: PRIVE_COLORS.text.tertiary,
-  },
+    color: PRIVE_COLORS.text.tertiary},
   heroProgressSection: {
-    marginTop: PRIVE_SPACING.lg,
-  },
+    marginTop: PRIVE_SPACING.lg},
   heroProgressLabels: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: PRIVE_SPACING.xs,
-  },
+    marginBottom: PRIVE_SPACING.xs},
   heroProgressLabel: {
     fontSize: 10,
-    color: PRIVE_COLORS.text.tertiary,
-  },
+    color: PRIVE_COLORS.text.tertiary},
   heroProgressTrack: {
     height: 8,
     backgroundColor: PRIVE_COLORS.border.primary,
     borderRadius: 4,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'},
   heroProgressFill: {
     height: '100%',
     borderRadius: 4,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'},
 
   // ─── Trust Banner ───────────────────────────────────────────
   trustBannerTop: {
@@ -499,15 +467,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(244, 67, 54, 0.15)',
     borderRadius: PRIVE_RADIUS.md,
     padding: PRIVE_SPACING.md,
-    marginBottom: PRIVE_SPACING.lg,
-  },
+    marginBottom: PRIVE_SPACING.lg},
   trustBannerText: {
     flex: 1,
     fontSize: 12,
     color: Colors.error,
     fontWeight: '500',
-    lineHeight: 18,
-  },
+    lineHeight: 18},
 
   // ─── Intro Card ─────────────────────────────────────────────
   introCard: {
@@ -516,19 +482,16 @@ const styles = StyleSheet.create({
     padding: PRIVE_SPACING.xl,
     borderWidth: 1,
     borderColor: PRIVE_COLORS.border.goldMuted,
-    marginBottom: PRIVE_SPACING.xl,
-  },
+    marginBottom: PRIVE_SPACING.xl},
   introTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: PRIVE_COLORS.gold.primary,
-    marginBottom: PRIVE_SPACING.sm,
-  },
+    marginBottom: PRIVE_SPACING.sm},
   introText: {
     fontSize: 13,
     color: PRIVE_COLORS.text.secondary,
-    lineHeight: 20,
-  },
+    lineHeight: 20},
 
   // ─── Pillar Cards ───────────────────────────────────────────
   pillarCard: {
@@ -537,83 +500,66 @@ const styles = StyleSheet.create({
     padding: PRIVE_SPACING.lg,
     borderWidth: 1,
     borderColor: PRIVE_COLORS.border.primary,
-    marginBottom: PRIVE_SPACING.md,
-  },
+    marginBottom: PRIVE_SPACING.md},
   pillarCardTrustWarning: {
     borderColor: 'rgba(244, 67, 54, 0.38)',
-    borderWidth: 1.5,
-  },
+    borderWidth: 1.5},
   pillarHeader: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   pillarIconBg: {
     width: 44,
     height: 44,
     borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: PRIVE_SPACING.md,
-  },
+    marginRight: PRIVE_SPACING.md},
   pillarIcon: {
-    fontSize: 20,
-  },
+    fontSize: 20},
   pillarInfo: {
-    flex: 1,
-  },
+    flex: 1},
   pillarName: {
     fontSize: 15,
     fontWeight: '600',
-    color: PRIVE_COLORS.text.primary,
-  },
+    color: PRIVE_COLORS.text.primary},
   pillarDescription: {
     fontSize: 12,
-    color: PRIVE_COLORS.text.tertiary,
-  },
+    color: PRIVE_COLORS.text.tertiary},
   pillarScoreContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   pillarScore: {
     fontSize: 24,
     fontWeight: '300',
-    color: PRIVE_COLORS.text.primary,
-  },
+    color: PRIVE_COLORS.text.primary},
   pillarTrend: {
     fontSize: 14,
     fontWeight: 'bold',
-    marginLeft: PRIVE_SPACING.xs,
-  },
+    marginLeft: PRIVE_SPACING.xs},
   pillarDetails: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: PRIVE_SPACING.md,
-    gap: PRIVE_SPACING.md,
-  },
+    gap: PRIVE_SPACING.md},
   pillarWeightBadge: {
     backgroundColor: PRIVE_COLORS.transparent.white10,
     paddingHorizontal: PRIVE_SPACING.md,
     paddingVertical: PRIVE_SPACING.xs,
-    borderRadius: PRIVE_RADIUS.sm,
-  },
+    borderRadius: PRIVE_RADIUS.sm},
   pillarWeight: {
     fontSize: 11,
-    color: PRIVE_COLORS.text.secondary,
-  },
+    color: PRIVE_COLORS.text.secondary},
   pillarProgressContainer: {
-    flex: 1,
-  },
+    flex: 1},
   pillarProgressTrack: {
     height: 6,
     backgroundColor: PRIVE_COLORS.border.primary,
     borderRadius: 3,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'},
   pillarProgressFill: {
     height: '100%',
     borderRadius: 3,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'},
 
   // ─── Improvement Tips ───────────────────────────────────────
   tipContainer: {
@@ -624,27 +570,23 @@ const styles = StyleSheet.create({
     backgroundColor: PRIVE_COLORS.transparent.gold10,
     borderRadius: PRIVE_RADIUS.sm,
     paddingHorizontal: PRIVE_SPACING.md,
-    paddingVertical: PRIVE_SPACING.sm,
-  },
+    paddingVertical: PRIVE_SPACING.sm},
   tipText: {
     flex: 1,
     fontSize: 12,
     color: PRIVE_COLORS.gold.light,
-    lineHeight: 18,
-  },
+    lineHeight: 18},
 
   // ─── Trust Card Warning ─────────────────────────────────────
   trustCardWarning: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: PRIVE_SPACING.sm,
-    marginTop: PRIVE_SPACING.sm,
-  },
+    marginTop: PRIVE_SPACING.sm},
   trustCardWarningText: {
     fontSize: 11,
     color: Colors.error,
-    fontWeight: '500',
-  },
+    fontWeight: '500'},
 
   // ─── Warning Card ──────────────────────────────────────────
   warningCard: {
@@ -654,17 +596,14 @@ const styles = StyleSheet.create({
     borderRadius: PRIVE_RADIUS.lg,
     padding: PRIVE_SPACING.lg,
     marginTop: PRIVE_SPACING.md,
-    gap: PRIVE_SPACING.md,
-  },
+    gap: PRIVE_SPACING.md},
   warningIcon: {
-    fontSize: 20,
-  },
+    fontSize: 20},
   warningText: {
     flex: 1,
     fontSize: 12,
     color: PRIVE_COLORS.text.secondary,
-    lineHeight: 18,
-  },
+    lineHeight: 18},
 
   // ─── Error State ────────────────────────────────────────────
   errorContainer: {
@@ -673,42 +612,34 @@ const styles = StyleSheet.create({
     padding: PRIVE_SPACING.xl,
     marginBottom: PRIVE_SPACING.md,
     alignItems: 'center',
-    gap: PRIVE_SPACING.md,
-  },
+    gap: PRIVE_SPACING.md},
   errorText: {
     color: PRIVE_COLORS.status.error,
     fontSize: 13,
-    textAlign: 'center',
-  },
+    textAlign: 'center'},
   retryButton: {
     backgroundColor: PRIVE_COLORS.gold.primary,
     paddingHorizontal: PRIVE_SPACING.xl,
     paddingVertical: PRIVE_SPACING.sm,
-    borderRadius: PRIVE_RADIUS.md,
-  },
+    borderRadius: PRIVE_RADIUS.md},
   retryButtonText: {
     color: PRIVE_COLORS.text.inverse,
     fontSize: 13,
-    fontWeight: '600',
-  },
+    fontWeight: '600'},
 
   // ─── Shimmer Skeleton ──────────────────────────────────────
   shimmerCircle: {
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: PRIVE_COLORS.border.primary,
-  },
+    backgroundColor: PRIVE_COLORS.border.primary},
   shimmerLine: {
     height: 14,
     borderRadius: 4,
-    backgroundColor: PRIVE_COLORS.border.primary,
-  },
+    backgroundColor: PRIVE_COLORS.border.primary},
   shimmerBar: {
     height: 6,
     borderRadius: 3,
-    backgroundColor: PRIVE_COLORS.border.primary,
-  },
-});
+    backgroundColor: PRIVE_COLORS.border.primary}});
 
 export default withErrorBoundary(PillarsScreen, 'PrivePillars');

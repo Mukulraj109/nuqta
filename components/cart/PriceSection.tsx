@@ -5,8 +5,9 @@
  * Premium Nuqta design palette
  */
 
-import React, { useRef } from 'react';
-import { View, Pressable, StyleSheet, Animated, Dimensions, Platform } from 'react-native';
+import React from 'react';
+import { View, Pressable, StyleSheet, Dimensions, Platform } from 'react-native';
+import Animated, { useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
@@ -22,7 +23,7 @@ function PriceSection({
 }: PriceSectionProps) {
   const { width } = Dimensions.get('window');
   const isSmallScreen = width < 360;
-  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const scaleAnim = useSharedValue(1);
   const getCurrencySymbol = useGetCurrencySymbol();
   const formatPrice = useFormatPrice();
   const getLocale = useGetLocale();
@@ -30,18 +31,7 @@ function PriceSection({
   const locale = getLocale();
 
   const handleBuyNowPress = () => {
-    Animated.sequence([
-      Animated.timing(scaleAnim, {
-        toValue: 0.95,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(scaleAnim, {
-        toValue: 1,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    scaleAnim.value = withSequence(withTiming(0.95, { duration: 100 }), withTiming(1, { duration: 100 }));
 
     onBuyNow();
   };

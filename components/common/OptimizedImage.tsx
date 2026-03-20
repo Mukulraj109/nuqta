@@ -21,10 +21,9 @@ import {
   ActivityIndicator,
   ImageStyle,
   ViewStyle,
-  Animated,
   Platform,
-  Dimensions,
-} from 'react-native';
+  Dimensions} from 'react-native';
+import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import NetInfo from '@react-native-community/netinfo';
 import imagePreloadService, { PreloadPriority } from '@/services/imagePreloadService';
@@ -98,8 +97,8 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   const [networkQuality, setNetworkQuality] = useState<'wifi' | 'cellular' | 'offline'>('wifi');
   const [cachedImageUri, setCachedImageUri] = useState<string | null>(null);
   const [supportsWebP] = useState(detectWebPSupport());
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const thumbnailFadeAnim = useRef(new Animated.Value(1)).current;
+  const fadeAnim = useSharedValue(0);
+  const thumbnailFadeAnim = useSharedValue(1);
   const mountedRef = useRef(true);
   const loadStartTime = useRef<number>(0);
 
@@ -267,25 +266,11 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
 
     // Fade out thumbnail and fade in main image
     if (progressive && thumbnailLoaded) {
-      Animated.parallel([
-        Animated.timing(thumbnailFadeAnim, {
-          toValue: 0,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-      ]).start();
+      thumbnailFadeAnim.value = withTiming(0, { duration: 300 });
+      fadeAnim.value = withTiming(1, { duration: 300 });
     } else {
       // Just fade in main image
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
+      fadeAnim.value = withTiming(1, { duration: 300 });
     }
 
     onLoad?.();

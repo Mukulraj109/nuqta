@@ -1,12 +1,14 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // StoreActionButtons.tsx - Scan & Pay, Upload Bill, View Offers buttons
-import React, { useRef } from "react";
+import React, {} from "react";
 import {
   View,
   Pressable,
-  StyleSheet,
-  Animated,
-} from "react-native";
+  StyleSheet} from "react-native";
+import Animated, {
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { triggerImpact } from "@/utils/haptics";
@@ -16,8 +18,7 @@ import {
   Colors,
   Spacing,
   BorderRadius,
-  Shadows,
-} from "@/constants/DesignSystem";
+  Shadows } from "@/constants/DesignSystem";
 
 export interface StoreActionButtonsProps {
   storeId?: string;
@@ -30,22 +31,16 @@ function StoreActionButtons({
   storeId,
   onScanPay,
   onUploadBill,
-  onViewOffers,
-}: StoreActionButtonsProps) {
+  onViewOffers }: StoreActionButtonsProps) {
   const router = useRouter();
 
   // Animation refs
-  const scanPayScale = useRef(new Animated.Value(1)).current;
-  const uploadBillScale = useRef(new Animated.Value(1)).current;
-  const viewOffersScale = useRef(new Animated.Value(1)).current;
+  const scanPayScale = useSharedValue(1);
+  const uploadBillScale = useSharedValue(1);
+  const viewOffersScale = useSharedValue(1);
 
-  const animateScale = (animValue: Animated.Value, toValue: number) => {
-    Animated.spring(animValue, {
-      toValue,
-      useNativeDriver: true,
-      tension: 100,
-      friction: 8,
-    }).start();
+  const animateScale = (animValue: Animated.SharedValue<number>, toValue: number) => {
+    animValue.value = withSpring(toValue);
   };
 
   const handleScanPay = () => {
@@ -135,8 +130,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.sm,
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   primaryButton: {
     flexDirection: "row",
     alignItems: "center",
@@ -145,20 +139,16 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: BorderRadius.md,
     gap: 8,
-    ...Shadows.medium,
-  },
+    ...Shadows.medium },
   primaryButtonText: {
     fontSize: 16,
     fontWeight: "700",
-    color: colors.background.primary,
-  },
+    color: colors.background.primary },
   secondaryRow: {
     flexDirection: "row",
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   secondaryButtonWrapper: {
-    flex: 1,
-  },
+    flex: 1 },
   secondaryButton: {
     flexDirection: "row",
     alignItems: "center",
@@ -168,13 +158,10 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     borderWidth: 1,
     borderColor: Colors.gray[200],
-    gap: 6,
-  },
+    gap: 6 },
   secondaryButtonText: {
     fontSize: 14,
     fontWeight: "600",
-    color: Colors.text.primary,
-  },
-});
+    color: Colors.text.primary } });
 
 export default withErrorBoundary(StoreActionButtons, 'MainStoreSectionStoreActionButtons');

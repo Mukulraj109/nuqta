@@ -17,10 +17,9 @@ import {
   StyleSheet,
   RefreshControl,
   Pressable,
-  Animated,
   ActivityIndicator,
-  Modal,
-} from 'react-native';
+  Modal} from 'react-native';
+import Animated, { runOnJS, useSharedValue, withTiming } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import logger from '@/utils/logger';
 import { useRouter } from 'expo-router';
@@ -494,7 +493,7 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
   const STORES_PER_PAGE = displayConfig.storesPerPage || 10;
 
   // Animation ref for ticker fade
-  const fadeAnim = useRef(new Animated.Value(1)).current;
+  const fadeAnim = useSharedValue(1);
 
   // ============================================
   // Derived values from config
@@ -645,17 +644,11 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
   useEffect(() => {
     if (recentOrders.length > 1) {
       const timer = setInterval(() => {
-        Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 300,
-          useNativeDriver: true,
-        }).start(() => {
-          setTickerIndex((prev) => (prev + 1) % recentOrders.length);
-          Animated.timing(fadeAnim, {
-            toValue: 1,
-            duration: 300,
-            useNativeDriver: true,
-          }).start();
+        fadeAnim.value = withTiming(0, { duration: 300 }, (finished) => {
+          if (finished) {
+            runOnJS(setTickerIndex)((prev: number) => (prev + 1) % recentOrders.length);
+            fadeAnim.value = withTiming(1, { duration: 300 });
+          }
         });
       }, 4000);
       return () => {

@@ -6,7 +6,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
  * based on the zone slug parameter. Fetches zone info and offers from the API.
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import {
   View,
   ScrollView,
@@ -15,9 +15,15 @@ import {
   StatusBar,
   Platform,
   Dimensions,
-  Animated,
-  ActivityIndicator,
+  ActivityIndicator
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
@@ -87,101 +93,86 @@ const ZONE_THEMES: Record<string, ZoneTheme> = {
     ionicon: 'school',
     emoji: '',
     tagLabel: 'Students Only',
-    placeholderSubtitle: 'Campus deals & student discounts',
-  },
+    placeholderSubtitle: 'Campus deals & student discounts' },
   birthday: {
     gradientColors: [colors.warningScale[400], colors.warningScale[700], colors.brand.amberDeep],
     ionicon: 'gift',
     emoji: '',
     tagLabel: 'Birthday Special',
-    placeholderSubtitle: 'Celebrate with exclusive deals',
-  },
+    placeholderSubtitle: 'Celebrate with exclusive deals' },
   corporate: {
     gradientColors: [colors.brand.purpleSoft, colors.brand.purpleLight, colors.brand.purpleDeep],
     ionicon: 'briefcase',
     emoji: '',
     tagLabel: 'Corporate',
-    placeholderSubtitle: 'Exclusive corporate benefits',
-  },
+    placeholderSubtitle: 'Exclusive corporate benefits' },
   senior: {
     gradientColors: ['#FCD34D', colors.warningScale[400], colors.warningScale[700]],
     ionicon: 'heart',
     emoji: '',
     tagLabel: 'Senior Citizens',
-    placeholderSubtitle: 'Special deals for senior citizens',
-  },
+    placeholderSubtitle: 'Special deals for senior citizens' },
   heroes: {
     gradientColors: [colors.successScale[400], colors.successScale[400], colors.successScale[700]],
     ionicon: 'shield',
     emoji: '',
     tagLabel: 'Heroes',
-    placeholderSubtitle: 'Saluting our heroes with exclusive offers',
-  },
+    placeholderSubtitle: 'Saluting our heroes with exclusive offers' },
   defence: {
     gradientColors: [colors.successScale[400], colors.successScale[400], colors.successScale[700]],
     ionicon: 'shield-checkmark',
     emoji: '',
     tagLabel: 'Defence',
-    placeholderSubtitle: 'Thank you for your service',
-  },
+    placeholderSubtitle: 'Thank you for your service' },
   women: {
     gradientColors: ['#F472B6', colors.brand.pink, colors.deepPink],
     ionicon: 'flower',
     emoji: '',
     tagLabel: 'Women Exclusive',
-    placeholderSubtitle: 'Exclusive offers for women',
-  },
+    placeholderSubtitle: 'Exclusive offers for women' },
   'first-time': {
     gradientColors: [colors.infoScale[400], colors.infoScale[400], colors.brand.blue],
     ionicon: 'sparkles',
     emoji: '',
     tagLabel: 'First-Time User',
-    placeholderSubtitle: 'Welcome! Special first-time offers',
-  },
+    placeholderSubtitle: 'Welcome! Special first-time offers' },
   loyalty: {
     gradientColors: [colors.warningScale[400], colors.warningScale[400], colors.warningScale[700]],
     ionicon: 'star',
     emoji: '',
     tagLabel: 'Loyalty',
-    placeholderSubtitle: 'Rewards for our loyal members',
-  },
+    placeholderSubtitle: 'Rewards for our loyal members' },
   healthcare: {
     gradientColors: ['#F87171', '#DC2626', '#B91C1C'],
     ionicon: 'medkit',
     emoji: '',
     tagLabel: 'Healthcare',
-    placeholderSubtitle: 'Benefits for healthcare professionals',
-  },
+    placeholderSubtitle: 'Benefits for healthcare professionals' },
   teacher: {
     gradientColors: [colors.brand.purpleSoft, '#7C3AED', '#6D28D9'],
     ionicon: 'library',
     emoji: '',
     tagLabel: 'Educators',
-    placeholderSubtitle: 'Exclusive deals for teachers & educators',
-  },
+    placeholderSubtitle: 'Exclusive deals for teachers & educators' },
   government: {
     gradientColors: ['#D97706', '#B45309', '#92400E'],
     ionicon: 'business',
     emoji: '',
     tagLabel: 'Government',
-    placeholderSubtitle: 'Special offers for government employees',
-  },
+    placeholderSubtitle: 'Special offers for government employees' },
   'differently-abled': {
     gradientColors: ['#22D3EE', '#0891B2', '#0E7490'],
     ionicon: 'accessibility',
     emoji: '',
     tagLabel: 'Differently Abled',
-    placeholderSubtitle: 'Inclusive benefits & accessibility offers',
-  },
-};
+    placeholderSubtitle: 'Inclusive benefits & accessibility offers' } };
 
 const DEFAULT_THEME: ZoneTheme = {
   gradientColors: [colors.brand.indigo, '#4F46E5', '#4338CA'],
   ionicon: 'pricetag',
   emoji: '',
   tagLabel: 'Exclusive',
-  placeholderSubtitle: 'Exclusive zone offers',
-};
+  placeholderSubtitle: 'Exclusive zone offers' };
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -234,7 +225,10 @@ function ExclusiveZonePage() {
   const [error, setError] = useState<string | null>(null);
 
   // Animation for skeleton shimmer
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
+  const shimmerOpacityStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(shimmerAnim.value, [0, 1], [0.3, 0.7]),
+  }));
 
   const bottomPadding = 80 + 70 + insets.bottom;
 
@@ -257,22 +251,14 @@ function ExclusiveZonePage() {
     if (slug) {
       fetchZoneData();
     }
-    const shimmerLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmerAnim, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ]),
+    shimmerAnim.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 1000 }),
+        withTiming(0, { duration: 1000 })
+      ),
+      -1
     );
-    shimmerLoop.start();
-    return () => shimmerLoop.stop();
+    return () => { shimmerAnim.value = 0; };
   }, [slug]);
 
   const fetchZoneData = async () => {
@@ -305,8 +291,7 @@ function ExclusiveZonePage() {
             verificationRequired: zone.verificationRequired,
             eligibilityDetails: zone.eligibilityDetails,
             userEligible: zone.userEligible,
-            cashbackBonusPercent: zone.cashbackBonusPercent || 0,
-          });
+            cashbackBonusPercent: zone.cashbackBonusPercent || 0 });
         }
       }
 
@@ -352,8 +337,7 @@ function ExclusiveZonePage() {
   const zoneDescription = zoneInfo?.description || theme.placeholderSubtitle;
   const stats = {
     totalDeals: offers.length,
-    maxDiscount: offers.reduce((max, o) => Math.max(max, o.cashbackPercentage || 0), 0),
-  };
+    maxDiscount: offers.reduce((max, o) => Math.max(max, o.cashbackPercentage || 0), 0) };
 
   // -----------------------------------------------------------------------
   // Renderers
@@ -364,12 +348,7 @@ function ExclusiveZonePage() {
       <Animated.View
         style={[
           styles.skeletonImage,
-          {
-            opacity: shimmerAnim.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0.3, 0.7],
-            }),
-          },
+          shimmerOpacityStyle,
         ]}
       />
       <View style={styles.offerContent}>
@@ -620,189 +599,154 @@ function ExclusiveZonePage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background.secondary,
-  },
+    backgroundColor: Colors.background.secondary },
   centerContent: {
     justifyContent: 'center',
     alignItems: 'center',
-    padding: Spacing.xl,
-  },
+    padding: Spacing.xl },
   errorText: {
     ...Typography.body,
     color: Colors.text.secondary,
     textAlign: 'center',
     marginTop: Spacing.md,
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg },
   retryButton: {
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.md,
-    borderRadius: BorderRadius.md,
-  },
+    borderRadius: BorderRadius.md },
   retryButtonText: {
     ...Typography.button,
-    color: colors.background.primary,
-  },
+    color: colors.background.primary },
 
   // Header
   header: {},
   safeHeader: {
-    paddingBottom: Spacing.base,
-  },
+    paddingBottom: Spacing.base },
   headerContent: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: Spacing.base,
-    paddingVertical: Spacing.md,
-  },
+    paddingVertical: Spacing.md },
   backButton: {
     padding: Spacing.sm,
-    marginRight: Spacing.sm,
-  },
+    marginRight: Spacing.sm },
   headerTitleContainer: {
     flex: 1,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   headerTitle: {
     ...Typography.h3,
     color: colors.background.primary,
-    fontWeight: '700',
-  },
+    fontWeight: '700' },
   headerSubtitle: {
     ...Typography.bodySmall,
     color: 'rgba(255, 255, 255, 0.8)',
-    marginTop: 2,
-  },
+    marginTop: 2 },
   headerIconContainer: {
     width: 40,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
 
   // Scroll
   scrollView: {
-    flex: 1,
-  },
+    flex: 1 },
   scrollContent: {
-    paddingBottom: 150,
-  },
+    paddingBottom: 150 },
 
   // Banner
   bannerContainer: {
     margin: Spacing.base,
     borderRadius: BorderRadius['2xl'],
     overflow: 'hidden',
-    ...Shadows.medium,
-  },
+    ...Shadows.medium },
   bannerGradient: {
     padding: Spacing.lg,
     borderWidth: 1,
-    borderRadius: BorderRadius['2xl'],
-  },
+    borderRadius: BorderRadius['2xl'] },
   bannerContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base },
   bannerIconContainer: {
     width: 64,
     height: 64,
     borderRadius: BorderRadius.lg,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: Spacing.base,
-  },
+    marginRight: Spacing.base },
   bannerTextContainer: {
-    flex: 1,
-  },
+    flex: 1 },
   bannerTitle: {
     ...Typography.h4,
     color: Colors.text.primary,
     fontWeight: '600',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   bannerSubtitle: {
     ...Typography.bodySmall,
-    color: Colors.text.secondary,
-  },
+    color: Colors.text.secondary },
 
   // Verification card
   verificationCard: {
     marginTop: Spacing.base,
     padding: Spacing.md,
     borderRadius: BorderRadius.lg,
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-  },
+    backgroundColor: 'rgba(255, 255, 255, 0.05)' },
   verificationRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   verificationLeft: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.sm,
-    flex: 1,
-  },
+    flex: 1 },
   verificationText: {
     ...Typography.body,
-    color: colors.warningScale[400],
-  },
+    color: colors.warningScale[400] },
   verifyButton: {
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.sm,
-    borderRadius: BorderRadius.md,
-  },
+    borderRadius: BorderRadius.md },
   verifyButtonText: {
     ...Typography.labelSmall,
     color: colors.background.primary,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   activeBadge: {
     paddingHorizontal: Spacing.sm,
     paddingVertical: 4,
-    borderRadius: BorderRadius.sm,
-  },
+    borderRadius: BorderRadius.sm },
   activeBadgeText: {
     ...Typography.caption,
     color: colors.background.primary,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
 
   // Stats
   statsContainer: {
     flexDirection: 'row',
     paddingHorizontal: Spacing.base,
     gap: Spacing.sm,
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg },
   statCard: {
     flex: 1,
     backgroundColor: Colors.background.primary,
     padding: Spacing.base,
     borderRadius: BorderRadius.lg,
     alignItems: 'center',
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle },
   statValue: {
     ...Typography.h2,
     fontWeight: '700',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   statLabel: {
     ...Typography.caption,
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
 
   // Offers section
   offersSection: {
-    paddingHorizontal: Spacing.base,
-  },
+    paddingHorizontal: Spacing.base },
   sectionTitle: {
     ...Typography.h4,
     color: Colors.text.primary,
     fontWeight: '600',
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
 
   // Offer card
   offerCard: {
@@ -811,77 +755,62 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.lg,
     padding: Spacing.base,
     marginBottom: Spacing.md,
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle },
   offerImageContainer: {
     width: 80,
     height: 80,
     borderRadius: BorderRadius.md,
     overflow: 'hidden',
-    marginRight: Spacing.base,
-  },
+    marginRight: Spacing.base },
   offerImage: {
     width: '100%',
-    height: '100%',
-  },
+    height: '100%' },
   offerImagePlaceholder: {
     width: '100%',
     height: '100%',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   offerContent: {
-    flex: 1,
-  },
+    flex: 1 },
   offerHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs },
   offerInfo: {
     flex: 1,
-    marginRight: Spacing.sm,
-  },
+    marginRight: Spacing.sm },
   offerStore: {
     ...Typography.bodySmall,
     color: Colors.text.tertiary,
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   offerTitle: {
     ...Typography.label,
     color: Colors.text.primary,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   discountBadge: {
     paddingHorizontal: Spacing.sm,
     paddingVertical: 4,
-    borderRadius: BorderRadius.sm,
-  },
+    borderRadius: BorderRadius.sm },
   discountText: {
     ...Typography.labelSmall,
-    fontWeight: '700',
-  },
+    fontWeight: '700' },
   offerDescription: {
     ...Typography.bodySmall,
     color: Colors.text.secondary,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   offerTags: {
     flexDirection: 'row',
     gap: Spacing.xs,
-    flexWrap: 'wrap',
-  },
+    flexWrap: 'wrap' },
   tag: {
     backgroundColor: Colors.gray[100],
     paddingHorizontal: Spacing.sm,
     paddingVertical: 2,
-    borderRadius: BorderRadius.sm,
-  },
+    borderRadius: BorderRadius.sm },
   tagText: {
     ...Typography.caption,
-    color: Colors.text.secondary,
-  },
+    color: Colors.text.secondary },
 
   // Skeleton
   skeletonImage: {
@@ -889,31 +818,25 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: BorderRadius.md,
     backgroundColor: Colors.gray[200],
-    marginRight: Spacing.base,
-  },
+    marginRight: Spacing.base },
   skeletonText: {
     height: 12,
     borderRadius: 6,
-    backgroundColor: Colors.gray[200],
-  },
+    backgroundColor: Colors.gray[200] },
 
   // Empty state
   emptyState: {
     alignItems: 'center',
-    padding: Spacing.xl,
-  },
+    padding: Spacing.xl },
   emptyStateTitle: {
     ...Typography.body,
     color: Colors.text.tertiary,
     fontWeight: '600',
-    marginTop: Spacing.md,
-  },
+    marginTop: Spacing.md },
   emptyStateSubtext: {
     ...Typography.bodySmall,
     color: Colors.text.tertiary,
     textAlign: 'center',
-    marginTop: Spacing.xs,
-  },
-});
+    marginTop: Spacing.xs } });
 
 export default withErrorBoundary(ExclusiveZonePage, 'OffersZonesSlugIndex');

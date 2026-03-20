@@ -1,9 +1,14 @@
 // Subscription Plans Page - Premium ReZ Design System
 // Display all subscription tiers with glassmorphism and premium styling
 
-import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect} from 'react';
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
-import { View, StyleSheet, ScrollView, Pressable, StatusBar, ActivityIndicator, TextInput, Platform, Animated, Dimensions } from 'react-native';
+import { View, StyleSheet, ScrollView, Pressable, StatusBar, ActivityIndicator, TextInput, Platform, Dimensions } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useNavigation } from 'expo-router';
@@ -53,8 +58,12 @@ function SubscriptionPlansPage() {
   const [isSubscribing, setIsSubscribing] = useState(false);
 
   // Animations
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(30)).current;
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(30);
+  const contentAnimStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ translateY: slideAnim.value }],
+  }));
 
   // Stripe payment states
   const [showStripeModal, setShowStripeModal] = useState(false);
@@ -70,27 +79,13 @@ function SubscriptionPlansPage() {
   // Hide the default navigation header
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerShown: false,
-    });
+      headerShown: false });
   }, [navigation]);
 
   // Entrance animation
   useEffect(() => {
-    const anim = Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 500,
-        useNativeDriver: true,
-      }),
-      Animated.spring(slideAnim, {
-        toValue: 0,
-        tension: 50,
-        friction: 8,
-        useNativeDriver: true,
-      }),
-    ]);
-    anim.start();
-    return () => anim.stop();
+    fadeAnim.value = withTiming(1, { duration: 500 });
+    slideAnim.value = withSpring(0, { damping: 8, stiffness: 50 });
   }, []);
 
   // Safe navigation function for web compatibility
@@ -171,8 +166,7 @@ function SubscriptionPlansPage() {
               subscriptionId: result.subscription._id,
               amount,
               tier,
-              billingCycle: selectedBilling,
-            });
+              billingCycle: selectedBilling });
             if (!isMounted()) return;
             setShowStripeModal(true);
             if (!isMounted()) return;
@@ -208,8 +202,7 @@ function SubscriptionPlansPage() {
                 subscriptionId: result.subscription._id,
                 amount,
                 tier,
-                billingCycle: selectedBilling,
-              });
+                billingCycle: selectedBilling });
               if (!isMounted()) return;
               setShowStripeModal(true);
               if (!isMounted()) return;
@@ -393,10 +386,7 @@ function SubscriptionPlansPage() {
       <Animated.View
         style={[
           styles.planCardWrapper,
-          {
-            opacity: fadeAnim,
-            transform: [{ translateY: slideAnim }],
-          },
+          contentAnimStyle,
         ]}
       >
         {popular && (
@@ -796,75 +786,61 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background.secondary,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   backgroundGradient: {
-    ...StyleSheet.absoluteFillObject,
-  },
+    ...StyleSheet.absoluteFillObject },
   decorativeOrb: {
     position: 'absolute',
     borderRadius: 200,
-    opacity: 0.3,
-  },
+    opacity: 0.3 },
   orbPrimary: {
     width: 300,
     height: 300,
     backgroundColor: Colors.goldGlow,
     top: -100,
-    right: -100,
-  },
+    right: -100 },
   header: {
     paddingTop: Platform.OS === 'ios' ? 56 : 50,
     paddingBottom: 24,
     paddingHorizontal: Spacing.lg,
     borderBottomLeftRadius: 24,
-    borderBottomRightRadius: 24,
-  },
+    borderBottomRightRadius: 24 },
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   backButton: {
-    padding: Spacing.xs,
-  },
+    padding: Spacing.xs },
   backButtonInner: {
     width: 40,
     height: 40,
     borderRadius: BorderRadius.md,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   headerTitle: {
     color: Colors.text.inverse,
     fontSize: 20,
     fontWeight: '700',
     fontFamily: 'Poppins-Bold',
     flex: 1,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   headerRight: {
-    width: 48,
-  },
+    width: 48 },
   headerSubtitle: {
     color: 'rgba(255, 255, 255, 0.9)',
     fontSize: 14,
     textAlign: 'center',
     marginTop: Spacing.sm,
-    fontFamily: 'Inter-Regular',
-  },
+    fontFamily: 'Inter-Regular' },
   scrollView: {
-    flex: 1,
-  },
+    flex: 1 },
   scrollContent: {
     paddingTop: 20,
-    paddingBottom: 120,
-  },
+    paddingBottom: 120 },
   billingToggleWrapper: {
     paddingHorizontal: Spacing.lg,
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base },
   billingToggleContainer: {
     flexDirection: 'row',
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
@@ -877,24 +853,18 @@ const styles = StyleSheet.create({
         shadowColor: Colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.08,
-        shadowRadius: 12,
-      },
+        shadowRadius: 12 },
       android: {
-        elevation: 4,
-      },
+        elevation: 4 },
       web: {
-        boxShadow: '0 4px 12px rgba(11, 34, 64, 0.08)',
-      },
-    }),
-  },
+        boxShadow: '0 4px 12px rgba(11, 34, 64, 0.08)' } }) },
   billingOption: {
     flex: 1,
     paddingVertical: 14,
     alignItems: 'center',
     borderRadius: BorderRadius.md,
     position: 'relative',
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   billingOptionActive: {
     // Gradient applied via LinearGradient
   },
@@ -902,11 +872,9 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
     color: Colors.text.secondary,
-    fontFamily: 'Inter-SemiBold',
-  },
+    fontFamily: 'Inter-SemiBold' },
   billingOptionTextActive: {
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse },
   saveBadge: {
     position: 'absolute',
     top: 2,
@@ -914,14 +882,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gold,
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: BorderRadius.sm,
-  },
+    borderRadius: BorderRadius.sm },
   saveText: {
     color: Colors.nileBlue,
     fontSize: 10,
     fontWeight: '800',
-    fontFamily: 'Inter-SemiBold',
-  },
+    fontFamily: 'Inter-SemiBold' },
   promoSection: {
     marginHorizontal: Spacing.lg,
     marginBottom: Spacing.lg,
@@ -935,20 +901,14 @@ const styles = StyleSheet.create({
         shadowColor: Colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.08,
-        shadowRadius: 12,
-      },
+        shadowRadius: 12 },
       android: {
-        elevation: 4,
-      },
+        elevation: 4 },
       web: {
-        boxShadow: '0 4px 12px rgba(11, 34, 64, 0.08)',
-      },
-    }),
-  },
+        boxShadow: '0 4px 12px rgba(11, 34, 64, 0.08)' } }) },
   promoToggle: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   promoIconContainer: {
     width: 36,
     height: 36,
@@ -956,20 +916,17 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.goldLight,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 12,
-  },
+    marginRight: 12 },
   promoToggleText: {
     flex: 1,
     fontSize: 14,
     fontWeight: '600',
     color: Colors.gold,
-    fontFamily: 'Inter-SemiBold',
-  },
+    fontFamily: 'Inter-SemiBold' },
   promoInputContainer: {
     flexDirection: 'row',
     gap: Spacing.md,
-    marginTop: Spacing.base,
-  },
+    marginTop: Spacing.base },
   promoInput: {
     flex: 1,
     borderWidth: 1.5,
@@ -980,20 +937,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.nileBlue,
     backgroundColor: Colors.background.primary,
-    fontFamily: 'Inter-Regular',
-  },
+    fontFamily: 'Inter-Regular' },
   promoApplyButton: {
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.md,
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   promoApplyText: {
     color: Colors.text.inverse,
     fontSize: 14,
     fontWeight: '600',
-    fontFamily: 'Inter-SemiBold',
-  },
+    fontFamily: 'Inter-SemiBold' },
   promoApplied: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1003,20 +957,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(16, 185, 129, 0.1)',
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: 'rgba(16, 185, 129, 0.2)',
-  },
+    borderColor: 'rgba(16, 185, 129, 0.2)' },
   promoAppliedText: {
     fontSize: 14,
     fontWeight: '600',
     color: Colors.success,
-    fontFamily: 'Inter-SemiBold',
-  },
+    fontFamily: 'Inter-SemiBold' },
   plansContainer: {
-    paddingHorizontal: Spacing.lg,
-  },
+    paddingHorizontal: Spacing.lg },
   planCardWrapper: {
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg },
   planCard: {
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderRadius: BorderRadius.xl,
@@ -1028,20 +978,14 @@ const styles = StyleSheet.create({
         shadowColor: Colors.nileBlue,
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.12,
-        shadowRadius: 20,
-      },
+        shadowRadius: 20 },
       android: {
-        elevation: 8,
-      },
+        elevation: 8 },
       web: {
-        boxShadow: '0 8px 24px rgba(11, 34, 64, 0.12)',
-      },
-    }),
-  },
+        boxShadow: '0 8px 24px rgba(11, 34, 64, 0.12)' } }) },
   planCardPopular: {
     borderColor: 'rgba(255, 200, 87, 0.5)',
-    borderWidth: 2,
-  },
+    borderWidth: 2 },
   cardShine: {
     position: 'absolute',
     top: 0,
@@ -1050,8 +994,7 @@ const styles = StyleSheet.create({
     height: 100,
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
     transform: [{ skewY: '-5deg' }],
-    opacity: 0.5,
-  },
+    opacity: 0.5 },
   popularBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1059,19 +1002,16 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     gap: 6,
     borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
+    borderTopRightRadius: 20 },
   popularText: {
     color: Colors.nileBlue,
     fontSize: 12,
     fontWeight: '800',
     letterSpacing: 1,
-    fontFamily: 'Inter-SemiBold',
-  },
+    fontFamily: 'Inter-SemiBold' },
   planHeader: {
     padding: Spacing.xl,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   planIconContainer: {
     width: 56,
     height: 56,
@@ -1079,14 +1019,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.25)',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
   planName: {
     color: Colors.text.inverse,
     fontSize: 24,
     fontWeight: '700',
-    fontFamily: 'Poppins-Bold',
-  },
+    fontFamily: 'Poppins-Bold' },
   currentBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1095,42 +1033,35 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     paddingVertical: 6,
     borderRadius: BorderRadius.xl,
-    gap: Spacing.xs,
-  },
+    gap: Spacing.xs },
   currentBadgeText: {
     color: Colors.text.inverse,
     fontSize: 12,
     fontWeight: '600',
-    fontFamily: 'Inter-SemiBold',
-  },
+    fontFamily: 'Inter-SemiBold' },
   planBody: {
-    padding: Spacing.xl,
-  },
+    padding: Spacing.xl },
   priceContainer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'center',
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   currency: {
     fontSize: 24,
     fontWeight: '700',
     color: Colors.nileBlue,
     marginTop: Spacing.sm,
-    fontFamily: 'Poppins-Bold',
-  },
+    fontFamily: 'Poppins-Bold' },
   price: {
     fontSize: 48,
     fontWeight: '800',
     color: Colors.nileBlue,
-    fontFamily: 'Poppins-Bold',
-  },
+    fontFamily: 'Poppins-Bold' },
   period: {
     fontSize: 16,
     color: Colors.text.tertiary,
     marginTop: Spacing.xl,
-    fontFamily: 'Inter-Regular',
-  },
+    fontFamily: 'Inter-Regular' },
   savingsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1141,22 +1072,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     paddingVertical: 6,
     borderRadius: BorderRadius.xl,
-    alignSelf: 'center',
-  },
+    alignSelf: 'center' },
   yearlyNote: {
     fontSize: 13,
     color: Colors.gold,
     fontWeight: '600',
-    fontFamily: 'Inter-SemiBold',
-  },
+    fontFamily: 'Inter-SemiBold' },
   featuresContainer: {
-    marginVertical: Spacing.lg,
-  },
+    marginVertical: Spacing.lg },
   featureRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 14,
-  },
+    marginBottom: 14 },
   featureIcon: {
     width: 24,
     height: 24,
@@ -1164,37 +1091,30 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.text.tertiary,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 12,
-  },
+    marginRight: 12 },
   featureIconActive: {
-    backgroundColor: Colors.gold,
-  },
+    backgroundColor: Colors.gold },
   featureText: {
     fontSize: 14,
     color: Colors.text.secondary,
     flex: 1,
-    fontFamily: 'Inter-Regular',
-  },
+    fontFamily: 'Inter-Regular' },
   featureTextDisabled: {
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
   upgradeButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: Spacing.base,
     borderRadius: 14,
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   upgradeButtonText: {
     color: Colors.text.inverse,
     fontSize: 16,
     fontWeight: '700',
-    fontFamily: 'Inter-SemiBold',
-  },
+    fontFamily: 'Inter-SemiBold' },
   vipButtonText: {
-    color: Colors.nileBlue,
-  },
+    color: Colors.nileBlue },
   activeButton: {
     flexDirection: 'row',
     backgroundColor: Colors.goldLight,
@@ -1204,28 +1124,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: Spacing.sm,
     borderWidth: 1,
-    borderColor: 'rgba(0, 192, 106, 0.2)',
-  },
+    borderColor: 'rgba(0, 192, 106, 0.2)' },
   activeButtonText: {
     color: Colors.gold,
     fontSize: 16,
     fontWeight: '600',
-    fontFamily: 'Inter-SemiBold',
-  },
+    fontFamily: 'Inter-SemiBold' },
   freeButton: {
     backgroundColor: 'rgba(156, 163, 175, 0.1)',
     paddingVertical: Spacing.base,
     borderRadius: 14,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(156, 163, 175, 0.2)',
-  },
+    borderColor: 'rgba(156, 163, 175, 0.2)' },
   freeButtonText: {
     color: Colors.text.tertiary,
     fontSize: 16,
     fontWeight: '600',
-    fontFamily: 'Inter-SemiBold',
-  },
+    fontFamily: 'Inter-SemiBold' },
   comparisonSection: {
     margin: Spacing.lg,
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
@@ -1238,82 +1154,65 @@ const styles = StyleSheet.create({
         shadowColor: Colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.08,
-        shadowRadius: 12,
-      },
+        shadowRadius: 12 },
       android: {
-        elevation: 4,
-      },
+        elevation: 4 },
       web: {
-        boxShadow: '0 4px 12px rgba(11, 34, 64, 0.08)',
-      },
-    }),
-  },
+        boxShadow: '0 4px 12px rgba(11, 34, 64, 0.08)' } }) },
   comparisonHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg },
   comparisonTitle: {
     fontSize: 18,
     fontWeight: '700',
     color: Colors.nileBlue,
-    fontFamily: 'Poppins-Bold',
-  },
+    fontFamily: 'Poppins-Bold' },
   comparisonTable: {
     borderRadius: BorderRadius.md,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   comparisonTableHeader: {
     flexDirection: 'row',
     backgroundColor: Colors.goldLight,
     paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.sm,
-  },
+    paddingHorizontal: Spacing.sm },
   comparisonHeaderText: {
     flex: 1,
     fontSize: 12,
     fontWeight: '700',
     color: Colors.nileBlue,
     textAlign: 'center',
-    fontFamily: 'Inter-SemiBold',
-  },
+    fontFamily: 'Inter-SemiBold' },
   comparisonRow: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 14,
     paddingHorizontal: Spacing.sm,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0, 0, 0, 0.05)',
-  },
+    borderBottomColor: 'rgba(0, 0, 0, 0.05)' },
   comparisonRowAlt: {
-    backgroundColor: 'rgba(0, 0, 0, 0.02)',
-  },
+    backgroundColor: 'rgba(0, 0, 0, 0.02)' },
   comparisonFeature: {
     flex: 1,
     fontSize: 13,
     color: Colors.text.secondary,
-    fontFamily: 'Inter-Regular',
-  },
+    fontFamily: 'Inter-Regular' },
   comparisonCell: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   comparisonValue: {
     fontSize: 14,
     fontWeight: '700',
     color: Colors.nileBlue,
-    fontFamily: 'Inter-SemiBold',
-  },
+    fontFamily: 'Inter-SemiBold' },
   checkIcon: {
     width: 22,
     height: 22,
     borderRadius: 11,
     backgroundColor: Colors.success,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
+    alignItems: 'center' } });
 
 export default withErrorBoundary(SubscriptionPlansPage, 'SubscriptionPlans');

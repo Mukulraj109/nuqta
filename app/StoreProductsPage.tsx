@@ -2,7 +2,7 @@
 // Displays all products for a specific store in an Amazon-style grid layout.
 // Orchestrates SearchHeader, FilterPanel, ActiveFiltersBar, and ProductGrid components.
 
-import React, { useEffect, useCallback, useMemo, useRef } from 'react';
+import React, { useEffect, useCallback, useMemo} from 'react';
 import { Stack } from 'expo-router';
 import {
   View,
@@ -10,10 +10,13 @@ import {
   Dimensions,
   Platform,
   StatusBar,
-  Animated,
   Text,
-  Pressable,
+  Pressable
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter, usePathname } from 'expo-router';
 import { ThemedView } from '@/components/ThemedView';
@@ -60,18 +63,17 @@ function StoreProductsPage() {
 
   // ─── Animation refs ─────────────────────────────────────────────────────
 
-  const backButtonScaleAnim = useRef(new Animated.Value(1)).current;
-  const cartButtonScaleAnim = useRef(new Animated.Value(1)).current;
-  const wishlistButtonScaleAnim = useRef(new Animated.Value(1)).current;
-  const coinButtonScaleAnim = useRef(new Animated.Value(1)).current;
+  const backButtonScaleAnim = useSharedValue(1);
+  const cartButtonScaleAnim = useSharedValue(1);
+  const wishlistButtonScaleAnim = useSharedValue(1);
+  const coinButtonScaleAnim = useSharedValue(1);
+  const backButtonScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: backButtonScaleAnim.value }] }));
+  const cartButtonScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: cartButtonScaleAnim.value }] }));
+  const wishlistButtonScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: wishlistButtonScaleAnim.value }] }));
+  const coinButtonScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: coinButtonScaleAnim.value }] }));
 
-  const animateScale = useCallback((animValue: Animated.Value, toValue: number) => {
-    Animated.spring(animValue, {
-      toValue,
-      useNativeDriver: true,
-      tension: 300,
-      friction: 10,
-    }).start();
+  const animateScale = useCallback((animValue: { value: number }, toValue: number) => {
+    animValue.value = withSpring(toValue, { damping: 10, stiffness: 300 });
   }, []);
 
   // ─── Keyboard shortcuts (web) ──────────────────────────────────────────
@@ -149,8 +151,7 @@ function StoreProductsPage() {
       errorMessage: error.message,
       errorStack: error.stack?.substring(0, 500),
       componentStack: errorInfo.componentStack?.substring(0, 500),
-      timestamp: new Date().toISOString(),
-    });
+      timestamp: new Date().toISOString() });
   }, [storeId]);
 
   // ─── Layout ───────────────────────────────────────────────────────────────
@@ -216,7 +217,7 @@ function StoreProductsPage() {
           >
             <View style={styles.headerInner}>
               {/* Back Button */}
-              <Animated.View style={{ transform: [{ scale: backButtonScaleAnim }] }}>
+              <Animated.View style={backButtonScaleStyle}>
                 <Pressable
                   style={styles.iconButton}
                   onPress={handleBack}
@@ -243,7 +244,7 @@ function StoreProductsPage() {
 
               {/* Action Buttons */}
               <View style={styles.headerActions}>
-                <Animated.View style={{ transform: [{ scale: coinButtonScaleAnim }] }}>
+                <Animated.View style={coinButtonScaleStyle}>
                   <Pressable
                     style={styles.iconButton}
                     onPress={handleCoinPress}
@@ -258,7 +259,7 @@ function StoreProductsPage() {
                   </Pressable>
                 </Animated.View>
 
-                <Animated.View style={{ transform: [{ scale: wishlistButtonScaleAnim }] }}>
+                <Animated.View style={wishlistButtonScaleStyle}>
                   <Pressable
                     style={styles.iconButton}
                     onPress={handleWishlistPress}
@@ -273,7 +274,7 @@ function StoreProductsPage() {
                   </Pressable>
                 </Animated.View>
 
-                <Animated.View style={{ transform: [{ scale: cartButtonScaleAnim }] }}>
+                <Animated.View style={cartButtonScaleStyle}>
                   <Pressable
                     style={styles.iconButton}
                     onPress={handleCartPress}
@@ -388,8 +389,7 @@ function StoreProductsPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background.secondary,
-  },
+    backgroundColor: Colors.background.secondary },
   networkBanner: {
     backgroundColor: Colors.error,
     flexDirection: 'row',
@@ -397,32 +397,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: Spacing.sm,
     paddingHorizontal: Spacing.base,
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   networkBannerText: {
     color: Colors.text.inverse,
     ...Typography.body,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   headerGradient: {
     paddingBottom: Spacing.base,
     borderBottomLeftRadius: BorderRadius['2xl'],
     borderBottomRightRadius: BorderRadius['2xl'],
     overflow: 'hidden',
-    ...Shadows.strong,
-  },
+    ...Shadows.strong },
   headerInner: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: Spacing.base,
-    paddingBottom: Spacing.sm,
-  },
+    paddingBottom: Spacing.sm },
   iconButton: {
     width: 40,
     height: 40,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   iconButtonBackground: {
     width: 40,
     height: 40,
@@ -430,28 +425,23 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'relative',
-  },
+    position: 'relative' },
   headerContent: {
     flex: 1,
-    marginHorizontal: Spacing.md,
-  },
+    marginHorizontal: Spacing.md },
   headerTitle: {
     ...Typography.h3,
     fontWeight: '700',
     color: Colors.text.inverse,
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   headerSubtitle: {
     ...Typography.body,
     color: 'rgba(255, 255, 255, 0.9)',
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   headerActions: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   badge: {
     position: 'absolute',
     top: -4,
@@ -464,14 +454,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: Spacing.xs,
     borderWidth: 2,
-    borderColor: Colors.nileBlue,
-  },
+    borderColor: Colors.nileBlue },
   badgeText: {
     ...Typography.caption,
     fontWeight: '700',
-    color: Colors.text.inverse,
-  },
-});
+    color: Colors.text.inverse } });
 
 const MemoizedStoreProductsPage = React.memo(StoreProductsPage);
 export default withErrorBoundary(MemoizedStoreProductsPage, 'Store Products');

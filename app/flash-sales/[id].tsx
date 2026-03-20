@@ -11,9 +11,14 @@ import {
   Dimensions,
   ActivityIndicator,
   Share,
-  Modal,
-  Animated,
+  Modal
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -78,26 +83,21 @@ function FlashSaleDetailPage() {
   const [timeRemaining, setTimeRemaining] = useState<{ hours: number; minutes: number; seconds: number }>({ hours: 0, minutes: 0, seconds: 0 });
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [copiedCode, setCopiedCode] = useState(false);
-  const pulseAnim = useState(new Animated.Value(1))[0];
+  const pulseAnim = useSharedValue(1);
+  const pulseAnimStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: pulseAnim.value }],
+  }));
 
   // Pulse animation for urgency
   useEffect(() => {
-    const pulse = Animated.loop(
-      Animated.sequence([
-        Animated.timing(pulseAnim, {
-          toValue: 1.05,
-          duration: 800,
-          useNativeDriver: true,
-        }),
-        Animated.timing(pulseAnim, {
-          toValue: 1,
-          duration: 800,
-          useNativeDriver: true,
-        }),
-      ])
+    pulseAnim.value = withRepeat(
+      withSequence(
+        withTiming(1.05, { duration: 800 }),
+        withTiming(1, { duration: 800 })
+      ),
+      -1
     );
-    pulse.start();
-    return () => pulse.stop();
+    return () => { pulseAnim.value = 1; };
   }, []);
 
   useEffect(() => {
@@ -193,8 +193,7 @@ function FlashSaleDetailPage() {
         1,
         {
           successUrl: `${baseUrl}/flash-sale-success?purchaseId={purchaseId}`,
-          cancelUrl: `${baseUrl}/flash-sales/${flashSale._id}?cancelled=true`,
-        }
+          cancelUrl: `${baseUrl}/flash-sales/${flashSale._id}?cancelled=true` }
       );
 
       if (response.success && response.data?.stripeCheckoutUrl) {
@@ -207,8 +206,7 @@ function FlashSaleDetailPage() {
           const result = await WebBrowser.openBrowserAsync(response.data.stripeCheckoutUrl, {
             dismissButtonStyle: 'cancel',
             showTitle: true,
-            enableBarCollapsing: true,
-          });
+            enableBarCollapsing: true });
 
           // If user dismissed or completed, check if we should navigate to success
           if (result.type === 'cancel' || result.type === 'dismiss') {
@@ -238,8 +236,7 @@ function FlashSaleDetailPage() {
     try {
       await Share.share({
         message: `🔥 Flash Deal Alert!\n\n${flashSale.title}\n\n${flashSale.discountPercentage}% OFF - Only ${flashSale.maxQuantity - flashSale.soldQuantity} left!\n\nUse code: ${flashSale.promoCode || 'No code needed'}`,
-        title: flashSale.title,
-      });
+        title: flashSale.title });
     } catch (error) {
       logger.error('Error sharing flash sale:', error);
     }
@@ -452,7 +449,7 @@ function FlashSaleDetailPage() {
 
             {/* Promo Code */}
             {flashSale.promoCode && (
-              <Animated.View style={[styles.promoCodeCard, { transform: [{ scale: pulseAnim }] }]}>
+              <Animated.View style={[styles.promoCodeCard, pulseAnimStyle]}>
                 <LinearGradient
                   colors={['#FEF9C3', '#FEF08A']}
                   style={styles.promoCodeGradient}
@@ -679,85 +676,69 @@ function FlashSaleDetailPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.tint.warmGray,
-  },
+    backgroundColor: colors.tint.warmGray },
   scrollView: {
-    flex: 1,
-  },
+    flex: 1 },
   scrollContent: {
     flexGrow: 1,
-    paddingBottom: 120,
-  },
+    paddingBottom: 120 },
   loadingGradient: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    gap: Spacing.base,
-  },
+    gap: Spacing.base },
   loadingText: {
     ...Typography.bodyLarge,
     color: Colors.text.inverse,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   errorSafeArea: {
     flex: 1,
-    backgroundColor: Colors.background.primary,
-  },
+    backgroundColor: Colors.background.primary },
   errorBackButton: {
-    padding: Spacing.base,
-  },
+    padding: Spacing.base },
   errorContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: Spacing['3xl'],
-    gap: Spacing.base,
-  },
+    gap: Spacing.base },
   errorTitle: {
     ...Typography.h2,
     fontWeight: '700',
-    color: colors.darkGray,
-  },
+    color: colors.darkGray },
   errorText: {
     ...Typography.bodyLarge,
     color: colors.midGray,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   retryButton: {
     backgroundColor: Colors.error,
     paddingHorizontal: Spacing['2xl'],
     paddingVertical: 14,
     borderRadius: BorderRadius.md,
-    marginTop: Spacing.sm,
-  },
+    marginTop: Spacing.sm },
   retryButtonText: {
     color: Colors.text.inverse,
     ...Typography.bodyLarge,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
 
   // Hero Section
   heroSection: {
     height: 320,
-    position: 'relative',
-  },
+    position: 'relative' },
   heroImage: {
     width: '100%',
-    height: '100%',
-  },
+    height: '100%' },
   imagePlaceholder: {
     width: '100%',
     height: '100%',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   heroGradient: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    height: 150,
-  },
+    height: 150 },
   headerOverlay: {
     position: 'absolute',
     top: 0,
@@ -766,39 +747,33 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.base,
-    paddingTop: Spacing.sm,
-  },
+    paddingTop: Spacing.sm },
   headerButton: {
     borderRadius: BorderRadius.xl,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   blurButton: {
     width: 40,
     height: 40,
     borderRadius: BorderRadius.xl,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.8)',
-  },
+    backgroundColor: 'rgba(255,255,255,0.8)' },
   flashBadgeContainer: {
     position: 'absolute',
     top: 100,
-    left: Spacing.base,
-  },
+    left: Spacing.base },
   flashBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: Spacing.md,
     paddingVertical: 6,
     borderRadius: BorderRadius.xl,
-    gap: Spacing.xs,
-  },
+    gap: Spacing.xs },
   flashBadgeText: {
     color: Colors.text.inverse,
     ...Typography.bodySmall,
     fontWeight: '700',
-    letterSpacing: 0.5,
-  },
+    letterSpacing: 0.5 },
   timerOnImage: {
     position: 'absolute',
     bottom: Spacing.lg,
@@ -807,32 +782,27 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   timerBox: {
     backgroundColor: 'rgba(0,0,0,0.7)',
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.md,
     alignItems: 'center',
-    minWidth: 70,
-  },
+    minWidth: 70 },
   timerNumber: {
     color: Colors.text.inverse,
     ...Typography.h2,
-    fontWeight: '700',
-  },
+    fontWeight: '700' },
   timerLabel: {
     color: 'rgba(255,255,255,0.7)',
     ...Typography.caption,
     fontWeight: '600',
-    letterSpacing: 1,
-  },
+    letterSpacing: 1 },
   timerSeparator: {
     color: Colors.text.inverse,
     ...Typography.h2,
-    fontWeight: '700',
-  },
+    fontWeight: '700' },
 
   // Content Card
   contentCard: {
@@ -842,8 +812,7 @@ const styles = StyleSheet.create({
     marginTop: -24,
     padding: Spacing.lg,
     paddingTop: Spacing.xl,
-    gap: Spacing.lg,
-  },
+    gap: Spacing.lg },
   storeBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -852,34 +821,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.xl,
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   storeLogoSmall: {
     width: 24,
     height: 24,
-    borderRadius: BorderRadius.md,
-  },
+    borderRadius: BorderRadius.md },
   storeLogoPlaceholder: {
     backgroundColor: Colors.background.primary,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   storeBadgeText: {
     color: Colors.brand.purple,
     ...Typography.body,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   title: {
     fontSize: 26,
     fontWeight: '700',
     color: Colors.text.primary,
-    lineHeight: 32,
-  },
+    lineHeight: 32 },
   description: {
     fontSize: 15,
     color: Colors.text.tertiary,
-    lineHeight: 22,
-  },
+    lineHeight: 22 },
 
   // Price Card
   priceCard: {
@@ -888,109 +851,87 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: Colors.errorScale[50],
     padding: Spacing.lg,
-    borderRadius: BorderRadius.lg,
-  },
+    borderRadius: BorderRadius.lg },
   priceLeft: {
-    gap: Spacing.xs,
-  },
+    gap: Spacing.xs },
   priceLabel: {
     fontSize: 13,
     color: Colors.text.tertiary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   priceRow: {
     flexDirection: 'row',
     alignItems: 'baseline',
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   discountedPrice: {
     ...Typography.priceLarge,
-    color: Colors.error,
-  },
+    color: Colors.error },
   originalPrice: {
     ...Typography.h4,
     color: Colors.text.tertiary,
-    textDecorationLine: 'line-through',
-  },
+    textDecorationLine: 'line-through' },
   discountCircle: {
     width: 70,
     height: 70,
     borderRadius: 35,
     backgroundColor: Colors.error,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   discountNumber: {
     color: Colors.text.inverse,
     ...Typography.h3,
-    fontWeight: '800',
-  },
+    fontWeight: '800' },
   discountOff: {
     color: 'rgba(255,255,255,0.9)',
     fontSize: 11,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
 
   // Stock Card
   stockCard: {
     backgroundColor: Colors.background.secondary,
     padding: Spacing.base,
     borderRadius: BorderRadius.lg,
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   stockHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   stockLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   stockEmoji: {
-    ...Typography.h4,
-  },
+    ...Typography.h4 },
   stockTitle: {
     ...Typography.bodyLarge,
     fontWeight: '600',
-    color: colors.neutral[700],
-  },
+    color: colors.neutral[700] },
   stockTitleUrgent: {
-    color: Colors.error,
-  },
+    color: Colors.error },
   stockCount: {
     ...Typography.body,
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
   stockCountBold: {
     fontWeight: '700',
-    color: colors.neutral[700],
-  },
+    color: colors.neutral[700] },
   progressBarContainer: {
     height: 10,
     backgroundColor: Colors.border.default,
     borderRadius: 5,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   progressBar: {
     height: '100%',
-    borderRadius: 5,
-  },
+    borderRadius: 5 },
   stockFooter: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   stockFooterText: {
     ...Typography.bodySmall,
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
 
   // Promo Code Card
   promoCodeCard: {
     borderRadius: BorderRadius.lg,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   promoCodeGradient: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -999,31 +940,26 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#FCD34D',
     borderStyle: 'dashed',
-    borderRadius: BorderRadius.lg,
-  },
+    borderRadius: BorderRadius.lg },
   promoCodeLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   promoCodeIcon: {
     width: 44,
     height: 44,
     borderRadius: 22,
     backgroundColor: Colors.background.primary,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   promoCodeLabel: {
     ...Typography.bodySmall,
-    color: colors.brand.amberDark,
-  },
+    color: colors.brand.amberDark },
   promoCode: {
     ...Typography.h3,
     fontWeight: '800',
     color: colors.brand.amberDark,
-    letterSpacing: 1,
-  },
+    letterSpacing: 1 },
   copyButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1031,95 +967,77 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.primary,
     paddingHorizontal: 14,
     paddingVertical: 10,
-    borderRadius: 10,
-  },
+    borderRadius: 10 },
   copyButtonSuccess: {
-    backgroundColor: Colors.success,
-  },
+    backgroundColor: Colors.success },
   copyButtonText: {
     color: '#CA8A04',
     fontWeight: '600',
-    ...Typography.body,
-  },
+    ...Typography.body },
   copyButtonTextSuccess: {
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse },
 
   // How to Use
   howToUseCard: {
     backgroundColor: Colors.background.secondary,
     padding: Spacing.base,
     borderRadius: BorderRadius.lg,
-    gap: Spacing.base,
-  },
+    gap: Spacing.base },
   sectionTitle: {
     ...Typography.bodyLarge,
     fontWeight: '600',
-    color: colors.neutral[700],
-  },
+    color: colors.neutral[700] },
   stepsContainer: {
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   stepItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   stepNumber: {
     width: 24,
     height: 24,
     borderRadius: BorderRadius.md,
     backgroundColor: Colors.error,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   stepNumberText: {
     color: Colors.text.inverse,
     ...Typography.bodySmall,
-    fontWeight: '700',
-  },
+    fontWeight: '700' },
   stepIcon: {
-    width: 24,
-  },
+    width: 24 },
   stepText: {
     flex: 1,
     ...Typography.body,
-    color: Colors.text.secondary,
-  },
+    color: Colors.text.secondary },
 
   // Terms Card
   termsCard: {
     backgroundColor: Colors.background.secondary,
     padding: Spacing.base,
     borderRadius: BorderRadius.lg,
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   termsHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   termsList: {
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   termItem: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: 10,
-  },
+    gap: 10 },
   termBullet: {
     width: 6,
     height: 6,
     borderRadius: 3,
     backgroundColor: Colors.text.tertiary,
-    marginTop: 7,
-  },
+    marginTop: 7 },
   termText: {
     flex: 1,
     ...Typography.body,
     color: Colors.text.tertiary,
-    lineHeight: 20,
-  },
+    lineHeight: 20 },
 
   // Stats Card
   statsCard: {
@@ -1127,12 +1045,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.secondary,
     padding: Spacing.base,
     borderRadius: BorderRadius.lg,
-    justifyContent: 'space-around',
-  },
+    justifyContent: 'space-around' },
   statItem: {
     alignItems: 'center',
-    gap: Spacing.xs,
-  },
+    gap: Spacing.xs },
   statIconContainer: {
     width: 40,
     height: 40,
@@ -1140,25 +1056,20 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs },
   statNumber: {
     ...Typography.h4,
     fontWeight: '700',
-    color: colors.neutral[700],
-  },
+    color: colors.neutral[700] },
   statLabel: {
     ...Typography.bodySmall,
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
   statDivider: {
     width: 1,
-    backgroundColor: Colors.border.default,
-  },
+    backgroundColor: Colors.border.default },
 
   bottomSpacing: {
-    height: 180,
-  },
+    height: 180 },
 
   // Bottom Bar
   bottomBar: {
@@ -1169,49 +1080,40 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.primary,
     borderTopWidth: 1,
     borderTopColor: Colors.border.default,
-    ...Shadows.strong,
-  },
+    ...Shadows.strong },
   bottomSafeArea: {
-    paddingBottom: Spacing.base,
-  },
+    paddingBottom: Spacing.base },
   bottomContent: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
-  },
+    paddingVertical: Spacing.md },
   bottomLeft: {
-    gap: 2,
-  },
+    gap: 2 },
   bottomPriceLabel: {
     ...Typography.bodySmall,
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
   bottomPrice: {
     ...Typography.h2,
     fontWeight: '800',
-    color: Colors.text.primary,
-  },
+    color: Colors.text.primary },
   getOfferButton: {
     flex: 1,
     marginLeft: Spacing.base,
     borderRadius: 14,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   getOfferButtonDisabled: {},
   getOfferButtonGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: Spacing.base,
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   getOfferButtonText: {
     color: Colors.text.inverse,
     fontSize: 17,
-    fontWeight: '700',
-  },
+    fontWeight: '700' },
 
   // Modal
   modalOverlay: {
@@ -1219,46 +1121,39 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: Spacing.xl,
-  },
+    padding: Spacing.xl },
   modalContent: {
     backgroundColor: Colors.background.primary,
     borderRadius: BorderRadius['2xl'],
     padding: 28,
     alignItems: 'center',
     width: '100%',
-    maxWidth: 360,
-  },
+    maxWidth: 360 },
   modalSuccessIcon: {
     width: 80,
     height: 80,
     borderRadius: BorderRadius['3xl'] + 8,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg },
   modalTitle: {
     ...Typography.h2,
     fontWeight: '700',
     color: Colors.text.primary,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   modalMessage: {
     ...Typography.bodyLarge,
     color: Colors.text.tertiary,
     textAlign: 'center',
-    marginBottom: Spacing.xl,
-  },
+    marginBottom: Spacing.xl },
   modalCodeContainer: {
     width: '100%',
     marginBottom: Spacing.xl,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   modalCodeLabel: {
     fontSize: 13,
     color: Colors.text.tertiary,
-    marginBottom: 10,
-  },
+    marginBottom: 10 },
   modalCodeBox: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1269,59 +1164,48 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#FCD34D',
     borderStyle: 'dashed',
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   modalCode: {
     fontSize: 22,
     fontWeight: '800',
     color: colors.brand.amberDark,
-    letterSpacing: 2,
-  },
+    letterSpacing: 2 },
   modalCopyIcon: {
     backgroundColor: Colors.background.primary,
     padding: 6,
-    borderRadius: 6,
-  },
+    borderRadius: 6 },
   modalCopiedText: {
     marginTop: Spacing.sm,
     fontSize: 13,
     color: Colors.success,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   modalButtons: {
     flexDirection: 'row',
     gap: Spacing.md,
-    width: '100%',
-  },
+    width: '100%' },
   modalButtonSecondary: {
     flex: 1,
     paddingVertical: 14,
     borderRadius: BorderRadius.md,
     alignItems: 'center',
-    backgroundColor: Colors.background.secondary,
-  },
+    backgroundColor: Colors.background.secondary },
   modalButtonPrimary: {
     flex: 1,
     borderRadius: BorderRadius.md,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   modalButtonPrimaryGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 14,
-    gap: 6,
-  },
+    gap: 6 },
   modalButtonTextSecondary: {
     color: Colors.text.secondary,
     ...Typography.bodyLarge,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   modalButtonTextPrimary: {
     color: Colors.text.inverse,
     ...Typography.bodyLarge,
-    fontWeight: '600',
-  },
-});
+    fontWeight: '600' } });
 
 export default withErrorBoundary(FlashSaleDetailPage, 'FlashSalesId');

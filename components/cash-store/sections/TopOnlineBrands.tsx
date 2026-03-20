@@ -5,15 +5,14 @@
  * Warm peach palette with frosted glass cards
  */
 
-import React, { memo, useRef, useEffect, useCallback } from 'react';
+import React, { memo, useEffect, useCallback} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
-  Platform,
-  Animated,
-} from 'react-native';
+  Platform} from 'react-native';
+import Animated, { interpolate, useAnimatedStyle, useDerivedValue, useSharedValue, withDelay, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -37,45 +36,22 @@ const BrandCard: React.FC<{
   index: number;
   onPress: () => void;
 }> = memo(({ brand, index, onPress }) => {
-  const scaleAnim = useRef(new Animated.Value(0.9)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const pressAnim = useRef(new Animated.Value(1)).current;
+  const scaleAnim = useSharedValue(0.9);
+  const fadeAnim = useSharedValue(0);
+  const pressAnim = useSharedValue(1);
 
   useEffect(() => {
-    const anim = Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 350,
-        delay: index * 60,
-        useNativeDriver: true,
-      }),
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        friction: 8,
-        tension: 40,
-        delay: index * 60,
-        useNativeDriver: true,
-      }),
-    ]);
-    anim.start();
-
-    return () => { anim.stop(); };
+    fadeAnim.value = withDelay(index * 60, withTiming(1, { duration: 350 }));
+      scaleAnim.value = withDelay(index * 60, withSpring(1));
+    
 }, [index]);
 
   const handlePressIn = () => {
-    Animated.spring(pressAnim, {
-      toValue: 0.94,
-      friction: 8,
-      useNativeDriver: true,
-    }).start();
+    pressAnim.value = withSpring(0.94);
   };
 
   const handlePressOut = () => {
-    Animated.spring(pressAnim, {
-      toValue: 1,
-      friction: 6,
-      useNativeDriver: true,
-    }).start();
+    pressAnim.value = withSpring(1);
   };
 
   const isHot = brand.cashbackRate && brand.cashbackRate >= 10;
@@ -86,7 +62,7 @@ const BrandCard: React.FC<{
         styles.cardWrapper,
         {
           opacity: fadeAnim,
-          transform: [{ scale: Animated.multiply(scaleAnim, pressAnim) }],
+          transform: [{ scale: scaleAnim.value * pressAnim.value }],
         },
       ]}
     >
@@ -158,27 +134,12 @@ const BrandCard: React.FC<{
 
 // ─── Skeleton Card ──────────────────────────────────────────
 const SkeletonCard: React.FC<{ index: number }> = memo(({ index }) => {
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
-    const loop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, {
-          toValue: 1,
-          duration: 1000,
-          delay: index * 100,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmerAnim, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    loop.start();
-    return () => loop.stop();
-  }, [index]);
+    shimmerAnim.value = withRepeat(withSequence(withTiming(1, { duration: 1000 })), -1);
+    
+    }, [index]);
 
   return (
     <View style={styles.cardWrapper}>
@@ -187,10 +148,7 @@ const SkeletonCard: React.FC<{ index: number }> = memo(({ index }) => {
           styles.card,
           styles.skeletonCard,
           {
-            opacity: shimmerAnim.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0.5, 1],
-            }),
+            opacity: interpolate(shimmerAnim.value, [0, 1], [0.5, 1]),
           },
         ]}
       >
@@ -260,22 +218,15 @@ const TopOnlineBrands: React.FC<TopOnlineBrandsProps> = ({
   onResetFilter,
 }) => {
   const displayBrands = brands.slice(0, 12);
-  const headerFadeAnim = useRef(new Animated.Value(0)).current;
+  const headerFadeAnim = useSharedValue(0);
 
   const displayCount = totalBrandsCount
     ? (totalBrandsCount >= 1000 ? '1000+' : `${totalBrandsCount}+`)
     : (brands.length > 0 ? `${brands.length}+` : null);
 
   useEffect(() => {
-    const anim = Animated.timing(headerFadeAnim, {
-      toValue: 1,
-      duration: 400,
-      useNativeDriver: true,
-    });
-    anim.start();
-
-    return () => { anim.stop(); };
-}, []);
+    headerFadeAnim.value = withTiming(1, { duration: 400 });
+  }, []);
 
   const hasActiveFilter = activeFilter && activeFilter !== 'all';
   const hasNoBrands = !isLoading && brands.length === 0;

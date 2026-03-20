@@ -4,13 +4,12 @@
  * Skeleton loaders for Cash Store sections
  */
 
-import React, { memo, useEffect, useRef } from 'react';
+import React, { memo, useEffect} from 'react';
 import {
   View,
   StyleSheet,
-  Animated,
-  Dimensions,
-} from 'react-native';
+  Dimensions} from 'react-native';
+import Animated, { interpolate, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '@/constants/theme';
 
@@ -23,31 +22,16 @@ const ShimmerBlock: React.FC<{
   borderRadius?: number;
   style?: any;
 }> = ({ width: blockWidth, height, borderRadius = 8, style }) => {
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
-    const animation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmerAnim, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    animation.start();
-    return () => animation.stop();
-  }, [shimmerAnim]);
+    shimmerAnim.value = withRepeat(withSequence(withTiming(1, { duration: 1000 })), -1);
+    
+    }, [shimmerAnim]);
 
-  const opacity = shimmerAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0.3, 0.7],
-  });
+  const shimmerStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(shimmerAnim.value, [0, 1], [0.3, 0.7]),
+  }));
 
   return (
     <Animated.View
@@ -57,8 +41,8 @@ const ShimmerBlock: React.FC<{
           height,
           borderRadius,
           backgroundColor: colors.neutral[200],
-          opacity,
         },
+        shimmerStyle,
         style,
       ]}
     />

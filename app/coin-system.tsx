@@ -13,10 +13,15 @@ import {
   Platform,
   UIManager,
   LayoutAnimation,
-  Animated,
   Dimensions,
-  ActivityIndicator,
+  ActivityIndicator
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -208,37 +213,50 @@ const SPENDING_PRIORITY = [
 // COMPONENT
 // ============================================
 
+const FAQItemComponent = ({ faq, index, isExpanded, onToggle }: {
+  faq: FAQItem; index: number; isExpanded: boolean; onToggle: (index: number) => void;
+}) => {
+  const chevronAnim = useSharedValue(0);
+  const chevronStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${interpolate(chevronAnim.value, [0, 1], [0, 180])}deg` }],
+  }));
+
+  React.useEffect(() => {
+    chevronAnim.value = withTiming(isExpanded ? 1 : 0, { duration: 250 });
+  }, [isExpanded]);
+
+  return (
+    <View style={styles.faqItem}>
+      <Pressable
+        style={styles.faqQuestion}
+        onPress={() => onToggle(index)}
+        accessibilityLabel={`FAQ: ${faq.question}`}
+        accessibilityRole="button"
+        accessibilityState={{ expanded: isExpanded }}
+      >
+        <Text style={styles.faqQuestionText}>{faq.question}</Text>
+        <Animated.View style={chevronStyle}>
+          <Ionicons name="chevron-down" size={20} color={Colors.text.tertiary} />
+        </Animated.View>
+      </Pressable>
+      {isExpanded && (
+        <View style={styles.faqAnswer}>
+          <Text style={styles.faqAnswerText}>{faq.answer}</Text>
+        </View>
+      )}
+    </View>
+  );
+};
+
 const CoinSystemPage = () => {
   const router = useRouter();
   const walletBalance = useTotalBalance();
   const loadingWallet = useWalletLoading();
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
-  const faqAnimations = useRef<Animated.Value[]>(
-    FAQ_ITEMS.map(() => new Animated.Value(0))
-  ).current;
 
   const toggleFAQ = (index: number) => {
-    const isExpanding = expandedFAQ !== index;
-
-    // Animate chevron rotation with native driver
-    Animated.timing(faqAnimations[index], {
-      toValue: isExpanding ? 1 : 0,
-      duration: 250,
-      useNativeDriver: true,
-    }).start();
-
-    // Close previously expanded FAQ chevron
-    if (expandedFAQ !== null && expandedFAQ !== index) {
-      Animated.timing(faqAnimations[expandedFAQ], {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-      }).start();
-    }
-
-    // Use LayoutAnimation for the height expand/collapse
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setExpandedFAQ(isExpanding ? index : null);
+    setExpandedFAQ(prev => prev === index ? null : index);
   };
 
   // ============================================
@@ -341,36 +359,15 @@ const CoinSystemPage = () => {
     </View>
   );
 
-  const renderFAQItem = (faq: FAQItem, index: number) => {
-    const isExpanded = expandedFAQ === index;
-    const rotateIcon = faqAnimations[index].interpolate({
-      inputRange: [0, 1],
-      outputRange: ['0deg', '180deg'],
-    });
-
-    return (
-      <View key={index} style={styles.faqItem}>
-        <Pressable
-          style={styles.faqQuestion}
-          onPress={() => toggleFAQ(index)}
-
-          accessibilityLabel={`FAQ: ${faq.question}`}
-          accessibilityRole="button"
-          accessibilityState={{ expanded: isExpanded }}
-        >
-          <Text style={styles.faqQuestionText}>{faq.question}</Text>
-          <Animated.View style={{ transform: [{ rotate: rotateIcon }] }}>
-            <Ionicons name="chevron-down" size={20} color={Colors.text.tertiary} />
-          </Animated.View>
-        </Pressable>
-        {isExpanded && (
-          <View style={styles.faqAnswerContainer}>
-            <Text style={styles.faqAnswerText}>{faq.answer}</Text>
-          </View>
-        )}
-      </View>
-    );
-  };
+  const renderFAQItem = (faq: FAQItem, index: number) => (
+    <FAQItemComponent
+      key={index}
+      faq={faq}
+      index={index}
+      isExpanded={expandedFAQ === index}
+      onToggle={toggleFAQ}
+    />
+  );
 
   return (
     <View style={styles.container}>

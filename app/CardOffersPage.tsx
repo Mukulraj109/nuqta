@@ -12,9 +12,13 @@ import {
   Modal,
   Platform,
   RefreshControl,
-  Dimensions,
-  Animated,
+  Dimensions
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming } from 'react-native-reanimated';
 import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -34,8 +38,7 @@ import {
   Shadows,
   BorderRadius,
   Typography,
-  Gradients,
-} from '@/constants/DesignSystem';
+  Gradients } from '@/constants/DesignSystem';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
@@ -67,7 +70,11 @@ function CardOffersPage() {
   const [applyingOffer, setApplyingOffer] = useState(false);
 
   // Animation values
-  const fadeAnim = useState(new Animated.Value(0))[0];
+  const fadeAnim = useSharedValue(0);
+  const fadeAnimStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ translateY: interpolate(fadeAnim.value, [0, 1], [20, 0]) }],
+  }));
 
   // Calculate cart total
   const cartTotal = useMemo(() => {
@@ -95,8 +102,7 @@ function CardOffersPage() {
         storeId,
         orderValue: currentOrderValue,
         page: 1,
-        limit: 50,
-      });
+        limit: 50 });
 
       if (response.success && response.data) {
         const discounts = Array.isArray(response.data)
@@ -106,11 +112,7 @@ function CardOffersPage() {
         setCardOffers(discounts);
 
         // Animate in
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }).start();
+        fadeAnim.value = withTiming(1, { duration: 300 });
       } else {
         if (!isMounted()) return;
         setCardOffers([]);
@@ -137,8 +139,7 @@ function CardOffersPage() {
       analyticsService.trackPageView('card_offers_page', {
         storeId,
         storeName,
-        orderValue: currentOrderValue,
-      });
+        orderValue: currentOrderValue });
     }
   }, [storeId, storeName, currentOrderValue]);
 
@@ -200,8 +201,7 @@ function CardOffersPage() {
       showToast({
         message: `${offer.name} applied! Save ${discountText} on card payment.`,
         type: 'success',
-        duration: 3000,
-      });
+        duration: 3000 });
 
       analyticsService.track('card_offer_applied', {
         offerId: offer._id,
@@ -209,8 +209,7 @@ function CardOffersPage() {
         discountType: offer.type,
         discountValue: offer.value,
         storeId,
-        orderValue: currentOrderValue,
-      });
+        orderValue: currentOrderValue });
 
       if (!isMounted()) return;
       setShowOfferDetails(false);
@@ -241,10 +240,7 @@ function CardOffersPage() {
         key={offer._id || index}
         style={[
           styles.offerCard,
-          { opacity: fadeAnim, transform: [{ translateY: fadeAnim.interpolate({
-            inputRange: [0, 1],
-            outputRange: [20, 0],
-          })}] }
+          fadeAnimStyle
         ]}
       >
         <Pressable
@@ -689,8 +685,7 @@ function CardOffersPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background.secondary,
-  },
+    backgroundColor: Colors.background.secondary },
 
   // Header
   header: {
@@ -698,41 +693,34 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.sm,
     paddingBottom: Spacing.xl,
     borderBottomLeftRadius: BorderRadius['2xl'],
-    borderBottomRightRadius: BorderRadius['2xl'],
-  },
+    borderBottomRightRadius: BorderRadius['2xl'] },
   headerTop: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg },
   backBtn: {
     width: 40,
     height: 40,
     borderRadius: 20,
     backgroundColor: 'rgba(255,255,255,0.2)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   headerTitleContainer: {
     flex: 1,
-    marginLeft: Spacing.md,
-  },
+    marginLeft: Spacing.md },
   headerTitle: {
     ...Typography.h2,
     color: colors.background.primary,
-    fontWeight: '700',
-  },
+    fontWeight: '700' },
   headerSubtitle: {
     ...Typography.body,
     color: 'rgba(255,255,255,0.8)',
-    marginTop: 2,
-  },
+    marginTop: 2 },
   headerRight: {
     width: 40,
     height: 40,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
 
   // Order Card
   orderCard: {
@@ -740,68 +728,56 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.15)',
     borderRadius: BorderRadius.lg,
     padding: Spacing.base,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   orderCardLeft: {
-    flex: 1,
-  },
+    flex: 1 },
   orderLabel: {
     ...Typography.caption,
-    color: 'rgba(255,255,255,0.7)',
-  },
+    color: 'rgba(255,255,255,0.7)' },
   orderAmount: {
     ...Typography.h2,
     color: colors.background.primary,
     fontWeight: '800',
-    marginTop: 2,
-  },
+    marginTop: 2 },
   orderCardDivider: {
     width: 1,
     height: 40,
     backgroundColor: 'rgba(255,255,255,0.3)',
-    marginHorizontal: Spacing.base,
-  },
+    marginHorizontal: Spacing.base },
   orderCardRight: {
     alignItems: 'center',
-    paddingHorizontal: Spacing.base,
-  },
+    paddingHorizontal: Spacing.base },
   offersCount: {
     ...Typography.h1,
     color: colors.background.primary,
-    fontWeight: '800',
-  },
+    fontWeight: '800' },
   offersLabel: {
     ...Typography.caption,
-    color: 'rgba(255,255,255,0.7)',
-  },
+    color: 'rgba(255,255,255,0.7)' },
 
   // Loading
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: Spacing.xl,
-  },
+    padding: Spacing.xl },
   loadingCard: {
     backgroundColor: colors.background.primary,
     borderRadius: BorderRadius.lg,
     padding: Spacing['2xl'],
     alignItems: 'center',
-    ...Shadows.medium,
-  },
+    ...Shadows.medium },
   loadingText: {
     ...Typography.body,
     color: Colors.gray[600],
-    marginTop: Spacing.base,
-  },
+    marginTop: Spacing.base },
 
   // Error
   errorContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: Spacing.xl,
-  },
+    padding: Spacing.xl },
   errorIconContainer: {
     width: 80,
     height: 80,
@@ -809,20 +785,17 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.error + '15',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg },
   errorTitle: {
     ...Typography.h3,
     color: Colors.gray[900],
     fontWeight: '700',
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   errorText: {
     ...Typography.body,
     color: Colors.gray[600],
     textAlign: 'center',
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg },
   retryBtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -830,20 +803,17 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary[600],
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md,
-    borderRadius: BorderRadius.full,
-  },
+    borderRadius: BorderRadius.full },
   retryBtnText: {
     ...Typography.label,
-    color: colors.background.primary,
-  },
+    color: colors.background.primary },
 
   // Empty
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: Spacing.xl,
-  },
+    padding: Spacing.xl },
   emptyIconContainer: {
     width: 100,
     height: 100,
@@ -851,145 +821,118 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gray[100],
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg },
   emptyTitle: {
     ...Typography.h3,
     color: Colors.gray[900],
     fontWeight: '700',
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   emptyText: {
     ...Typography.body,
     color: Colors.gray[500],
     textAlign: 'center',
-    maxWidth: 280,
-  },
+    maxWidth: 280 },
 
   // Scroll
   scrollView: {
-    flex: 1,
-  },
+    flex: 1 },
   scrollContent: {
     padding: Spacing.lg,
-    paddingBottom: 120,
-  },
+    paddingBottom: 120 },
 
   // Section Header
   sectionHeader: {
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg },
   sectionTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   sectionTitle: {
     ...Typography.h3,
     color: Colors.gray[900],
-    fontWeight: '700',
-  },
+    fontWeight: '700' },
   sectionSubtitle: {
     ...Typography.body,
     color: Colors.gray[500],
     marginTop: 2,
-    marginLeft: 28,
-  },
+    marginLeft: 28 },
 
   // Offer Card
   offerCard: {
     marginBottom: Spacing.base,
     borderRadius: BorderRadius.xl,
     overflow: 'hidden',
-    ...Shadows.medium,
-  },
+    ...Shadows.medium },
   offerCardGradient: {
     position: 'relative',
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   cardPattern: {
     position: 'absolute',
     top: 0,
     right: 0,
     width: 150,
-    height: 150,
-  },
+    height: 150 },
   patternCircle: {
     position: 'absolute',
     borderRadius: 100,
     backgroundColor: Colors.primary[100],
-    opacity: 0.3,
-  },
+    opacity: 0.3 },
   patternCircle1: {
     width: 100,
     height: 100,
     top: -30,
-    right: -30,
-  },
+    right: -30 },
   patternCircle2: {
     width: 60,
     height: 60,
     top: 40,
-    right: 50,
-  },
+    right: 50 },
   cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     padding: Spacing.lg,
-    paddingBottom: Spacing.sm,
-  },
+    paddingBottom: Spacing.sm },
   cardIconContainer: {
     borderRadius: BorderRadius.md,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   cardIconGradient: {
     width: 48,
     height: 48,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   discountBadge: {
-    alignItems: 'flex-end',
-  },
+    alignItems: 'flex-end' },
   discountText: {
     ...Typography.h1,
     color: Colors.primary[700],
-    fontWeight: '800',
-  },
+    fontWeight: '800' },
   discountLabel: {
     ...Typography.caption,
     color: Colors.primary[500],
     fontWeight: '700',
-    marginTop: -4,
-  },
+    marginTop: -4 },
   cardBody: {
     paddingHorizontal: Spacing.lg,
-    paddingBottom: Spacing.base,
-  },
+    paddingBottom: Spacing.base },
   offerName: {
     ...Typography.h4,
     color: Colors.gray[900],
     fontWeight: '700',
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs },
   offerDesc: {
     ...Typography.body,
     color: Colors.gray[600],
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
   metaContainer: {
-    gap: Spacing.xs,
-  },
+    gap: Spacing.xs },
   metaItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   metaText: {
     ...Typography.bodySmall,
-    color: Colors.gray[600],
-  },
+    color: Colors.gray[600] },
   cardTypePill: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -999,62 +942,51 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.xs,
     borderRadius: BorderRadius.full,
     alignSelf: 'flex-start',
-    marginTop: Spacing.md,
-  },
+    marginTop: Spacing.md },
   cardTypeLabel: {
     ...Typography.caption,
     color: Colors.primary[700],
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   dividerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: Spacing.sm,
-  },
+    marginVertical: Spacing.sm },
   dividerCircleLeft: {
     width: 20,
     height: 20,
     borderRadius: 10,
     backgroundColor: Colors.background.secondary,
-    marginLeft: -10,
-  },
+    marginLeft: -10 },
   dividerLine: {
     flex: 1,
     height: 1,
     borderStyle: 'dashed',
     borderWidth: 1,
-    borderColor: Colors.gray[200],
-  },
+    borderColor: Colors.gray[200] },
   dividerCircleRight: {
     width: 20,
     height: 20,
     borderRadius: 10,
     backgroundColor: Colors.background.secondary,
-    marginRight: -10,
-  },
+    marginRight: -10 },
   cardFooter: {
     padding: Spacing.lg,
-    paddingTop: Spacing.sm,
-  },
+    paddingTop: Spacing.sm },
   applyBtn: {
     borderRadius: BorderRadius.md,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   applyBtnGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: Spacing.sm,
-    paddingVertical: Spacing.md,
-  },
+    paddingVertical: Spacing.md },
   applyBtnText: {
     ...Typography.label,
     color: colors.background.primary,
-    fontWeight: '700',
-  },
+    fontWeight: '700' },
   lockedContainer: {
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   lockedBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1062,42 +994,35 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.warning + '15',
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.sm,
-    borderRadius: BorderRadius.full,
-  },
+    borderRadius: BorderRadius.full },
   lockedText: {
     ...Typography.label,
     color: Colors.warning,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   unlockHint: {
     ...Typography.caption,
     color: Colors.gray[500],
-    marginTop: Spacing.xs,
-  },
+    marginTop: Spacing.xs },
 
   // Modal
   modalOverlay: {
     flex: 1,
-    justifyContent: 'flex-end',
-  },
+    justifyContent: 'flex-end' },
   modalBackdrop: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-  },
+    backgroundColor: 'rgba(0,0,0,0.5)' },
   modalContent: {
     backgroundColor: colors.background.primary,
     borderTopLeftRadius: BorderRadius['2xl'],
     borderTopRightRadius: BorderRadius['2xl'],
     maxHeight: '85%',
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   modalHeader: {
     paddingTop: Spacing.lg,
     paddingHorizontal: Spacing.lg,
     paddingBottom: Spacing.xl,
     borderBottomLeftRadius: BorderRadius.xl,
-    borderBottomRightRadius: BorderRadius.xl,
-  },
+    borderBottomRightRadius: BorderRadius.xl },
   modalCloseBtn: {
     alignSelf: 'flex-end',
     width: 36,
@@ -1105,116 +1030,93 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     backgroundColor: 'rgba(255,255,255,0.2)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   modalHeaderContent: {
     alignItems: 'center',
-    marginTop: Spacing.sm,
-  },
+    marginTop: Spacing.sm },
   modalDiscountBadge: {
     flexDirection: 'row',
     alignItems: 'baseline',
-    gap: Spacing.xs,
-  },
+    gap: Spacing.xs },
   modalDiscountText: {
     fontSize: 40,
     fontWeight: '800',
-    color: colors.background.primary,
-  },
+    color: colors.background.primary },
   modalDiscountLabel: {
     ...Typography.h4,
     color: 'rgba(255,255,255,0.8)',
-    fontWeight: '700',
-  },
+    fontWeight: '700' },
   modalOfferName: {
     ...Typography.h3,
     color: colors.background.primary,
     fontWeight: '600',
     textAlign: 'center',
-    marginTop: Spacing.sm,
-  },
+    marginTop: Spacing.sm },
   modalBody: {
-    padding: Spacing.lg,
-  },
+    padding: Spacing.lg },
   modalDescription: {
     ...Typography.body,
     color: Colors.gray[600],
     textAlign: 'center',
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg },
   detailsList: {
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   detailItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   detailIcon: {
     width: 40,
     height: 40,
     borderRadius: 20,
     backgroundColor: Colors.primary[50],
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   detailContent: {
-    flex: 1,
-  },
+    flex: 1 },
   detailLabel: {
     ...Typography.caption,
-    color: Colors.gray[500],
-  },
+    color: Colors.gray[500] },
   detailValue: {
     ...Typography.body,
     color: Colors.gray[900],
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   termsSection: {
     marginTop: Spacing.xl,
     paddingTop: Spacing.lg,
     borderTopWidth: 1,
-    borderTopColor: Colors.gray[100],
-  },
+    borderTopColor: Colors.gray[100] },
   termsTitle: {
     ...Typography.label,
     color: Colors.gray[900],
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
   termItem: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.sm,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   termText: {
     ...Typography.body,
-    color: Colors.gray[600],
-  },
+    color: Colors.gray[600] },
   modalFooter: {
     padding: Spacing.lg,
     borderTopWidth: 1,
     borderTopColor: Colors.gray[100],
-    paddingBottom: Platform.OS === 'ios' ? 34 : Spacing.lg,
-  },
+    paddingBottom: Platform.OS === 'ios' ? 34 : Spacing.lg },
   modalApplyBtn: {
     borderRadius: BorderRadius.md,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   modalApplyBtnGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: Spacing.sm,
-    paddingVertical: Spacing.base,
-  },
+    paddingVertical: Spacing.base },
   modalApplyBtnText: {
     ...Typography.button,
-    color: colors.background.primary,
-  },
+    color: colors.background.primary },
   modalLockedFooter: {
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   modalLockedBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1222,13 +1124,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.warning + '15',
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.md,
-    borderRadius: BorderRadius.full,
-  },
+    borderRadius: BorderRadius.full },
   modalLockedText: {
     ...Typography.label,
     color: Colors.warning,
-    fontWeight: '600',
-  },
-});
+    fontWeight: '600' } });
 
 export default withErrorBoundary(CardOffersPage, 'CardOffersPage');

@@ -3,14 +3,14 @@
  * Habit loop cards for engagement
  */
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
-  Animated,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring, withRepeat, withSequence, interpolate } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { PRIVE_COLORS, PRIVE_SPACING, PRIVE_RADIUS } from './priveTheme';
 import { colors } from '@/constants/theme';
@@ -48,56 +48,51 @@ interface PriveHabitLoopsProps {
 const SkeletonBlock: React.FC<{ width: number | string; height: number; borderRadius?: number; style?: any }> = ({
   width, height, borderRadius = 4, style,
 }) => {
-  const opacity = useRef(new Animated.Value(0.3)).current;
+  const opacity = useSharedValue(0.3);
 
   useEffect(() => {
-    const anim = Animated.loop(
-      Animated.sequence([
-        Animated.timing(opacity, { toValue: 0.7, duration: 800, useNativeDriver: true }),
-        Animated.timing(opacity, { toValue: 0.3, duration: 800, useNativeDriver: true }),
-      ])
+    opacity.value = withRepeat(
+      withSequence(
+        withTiming(0.7, { duration: 800 }),
+        withTiming(0.3, { duration: 800 }),
+      ),
+      -1
     );
-    anim.start();
-    return () => anim.stop();
-  }, [opacity]);
+  }, []);
+
+  const shimmerStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value,
+  }));
 
   return (
     <Animated.View
       style={[
-        { width: width as any, height, borderRadius, backgroundColor: PRIVE_COLORS.border.primary, opacity },
+        { width: width as any, height, borderRadius, backgroundColor: PRIVE_COLORS.border.primary },
+        shimmerStyle,
         style,
       ]}
     />
   );
 };
 
-// Animated progress bar
+// Animated progress bar (uses reanimated for width animation)
 const AnimatedProgressBar: React.FC<{ progress: number; completed: boolean }> = ({ progress, completed }) => {
-  const widthAnim = useRef(new Animated.Value(0)).current;
+  const widthAnim = useSharedValue(0);
 
   useEffect(() => {
-    const anim = Animated.timing(widthAnim, {
-      toValue: progress,
-      duration: 600,
-      useNativeDriver: false,
-    });
-    anim.start();
+    widthAnim.value = withTiming(progress, { duration: 600 });
+  }, [progress]);
 
-    return () => { anim.stop(); };
-  }, [progress, widthAnim]);
-
-  const animatedWidth = widthAnim.interpolate({
-    inputRange: [0, 100],
-    outputRange: ['0%', '100%'],
-    extrapolate: 'clamp',
-  });
+  const progressStyle = useAnimatedStyle(() => ({
+    width: `${Math.min(Math.max(widthAnim.value, 0), 100)}%`,
+  }));
 
   return (
     <View style={styles.loopProgressBar}>
       <Animated.View
         style={[
           styles.loopProgressFill,
-          { width: animatedWidth },
+          progressStyle,
           completed && styles.loopProgressFillCompleted,
         ]}
       />
@@ -107,22 +102,18 @@ const AnimatedProgressBar: React.FC<{ progress: number; completed: boolean }> = 
 
 // Animated checkmark that springs in
 const AnimatedCheckmark: React.FC = () => {
-  const scale = useRef(new Animated.Value(0)).current;
+  const scale = useSharedValue(0);
 
   useEffect(() => {
-    const anim = Animated.spring(scale, {
-      toValue: 1,
-      friction: 4,
-      tension: 100,
-      useNativeDriver: true,
-    });
-    anim.start();
+    scale.value = withSpring(1, { stiffness: 100, damping: 4 });
+  }, []);
 
-    return () => { anim.stop(); };
-  }, [scale]);
+  const checkmarkStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
 
   return (
-    <Animated.View style={[styles.loopCheckmark, { transform: [{ scale }] }]}>
+    <Animated.View style={[styles.loopCheckmark, checkmarkStyle]}>
       <Text style={styles.loopCheckmarkText}>✓</Text>
     </Animated.View>
   );

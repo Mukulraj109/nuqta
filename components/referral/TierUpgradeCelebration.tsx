@@ -1,16 +1,23 @@
 // Tier Upgrade Celebration Component
 // Full-screen celebration animation when user advances to new referral tier
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   StyleSheet,
   Modal,
   Pressable,
-  Animated,
   Dimensions,
   Share,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withTiming,
+  withSequence,
+  interpolate,
+} from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
@@ -37,79 +44,46 @@ function TierUpgradeCelebration({
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
-  const scaleAnim = useRef(new Animated.Value(0)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const confettiAnims = useRef(
+  const scaleAnim = useSharedValue(0);
+  const fadeAnim = useSharedValue(0);
+
+  // Store confetti target values for each particle
+  const confettiProgress = [...Array(30)].map(() => useSharedValue(0));
+  const confettiTargets = React.useRef(
     [...Array(30)].map(() => ({
-      x: new Animated.Value(0),
-      y: new Animated.Value(0),
-      rotation: new Animated.Value(0),
+      x: (Math.random() - 0.5) * width * 1.5,
+      y: height * (1 + Math.random()),
+      rotation: Math.random() * 720,
     }))
   ).current;
 
   useEffect(() => {
-    let _anim: Animated.CompositeAnimation;
     if (visible) {
-      // Reset animations
-      scaleAnim.setValue(0);
-      fadeAnim.setValue(0);
-      confettiAnims.forEach((anim) => {
-        anim.x.setValue(0);
-        anim.y.setValue(0);
-        anim.rotation.setValue(0);
-      });
+      scaleAnim.value = 0;
+      fadeAnim.value = 0;
 
-      // Start celebration animation
-      _anim = Animated.sequence([
-        // Fade in backdrop
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        // Scale in content
-        Animated.spring(scaleAnim, {
-          toValue: 1,
-          tension: 50,
-          friction: 7,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      // Fade in then scale
+      fadeAnim.value = withTiming(1, { duration: 300 });
+      scaleAnim.value = withSpring(1, { damping: 10, stiffness: 50 });
 
       // Animate confetti
-      confettiAnims.forEach((anim, index) => {
+      confettiProgress.forEach((sv, index) => {
+        sv.value = 0;
         const delay = index * 50;
-        const randomX = (Math.random() - 0.5) * width * 1.5;
-        const randomY = height * (1 + Math.random());
-        const randomRotation = Math.random() * 720;
-
-        _anim = Animated.parallel([
-          Animated.timing(anim.x, {
-            toValue: randomX,
-            duration: 3000 + Math.random() * 1000,
-            delay,
-            useNativeDriver: true,
-          }),
-          Animated.timing(anim.y, {
-            toValue: randomY,
-            duration: 3000 + Math.random() * 1000,
-            delay,
-            useNativeDriver: true,
-          }),
-          Animated.timing(anim.rotation, {
-            toValue: randomRotation,
-            duration: 3000,
-            delay,
-            useNativeDriver: true,
-          }),
-        ]);
-        _anim.start();
+        setTimeout(() => {
+          sv.value = withTiming(1, { duration: 3000 + Math.random() * 1000 });
+        }, delay);
       });
     }
-  
-    return () => _anim.stop();
-}, [visible]);
+  }, [visible]);
+
+  const fadeStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+  }));
+
+  const scaleStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scaleAnim.value }],
+  }));
 
   // Handle share achievement
   const handleShare = async () => {
@@ -127,31 +101,29 @@ function TierUpgradeCelebration({
 
   return (
     <Modal visible={visible} transparent animationType="none" onRequestClose={onClose}>
-      <Animated.View style={[styles.overlay, { opacity: fadeAnim }]}>
+      <Animated.View style={[styles.overlay, fadeStyle]}>
         {/* Confetti */}
         <View style={styles.confettiContainer}>
-          {confettiAnims.map((anim, index) => {
+          {confettiProgress.map((sv, index) => {
             const confettiColors = [colors.error, colors.warningScale[400], colors.successScale[400], colors.infoScale[400], colors.brand.purpleLight, colors.brand.pink];
             const color = confettiColors[index % confettiColors.length];
+            const target = confettiTargets[index];
+
+            const confettiItemStyle = useAnimatedStyle(() => ({
+              transform: [
+                { translateX: sv.value * target.x },
+                { translateY: sv.value * target.y },
+                { rotate: `${sv.value * target.rotation}deg` },
+              ],
+            }));
 
             return (
               <Animated.View
                 key={index}
                 style={[
                   styles.confetti,
-                  {
-                    backgroundColor: color,
-                    transform: [
-                      { translateX: anim.x },
-                      { translateY: anim.y },
-                      {
-                        rotate: anim.rotation.interpolate({
-                          inputRange: [0, 360],
-                          outputRange: ['0deg', '360deg'],
-                        }),
-                      },
-                    ],
-                  },
+                  { backgroundColor: color },
+                  confettiItemStyle,
                 ]}
               />
             );
@@ -162,9 +134,7 @@ function TierUpgradeCelebration({
         <Animated.View
           style={[
             styles.contentContainer,
-            {
-              transform: [{ scale: scaleAnim }],
-            },
+            scaleStyle,
           ]}
         >
           <LinearGradient colors={tierGradient} style={styles.gradient}>
@@ -255,9 +225,9 @@ function TierUpgradeCelebration({
 
             {/* Fireworks Effect */}
             <View style={styles.fireworksContainer}>
-              <Animated.View style={[styles.firework, { opacity: fadeAnim }]} />
-              <Animated.View style={[styles.firework, styles.firework2, { opacity: fadeAnim }]} />
-              <Animated.View style={[styles.firework, styles.firework3, { opacity: fadeAnim }]} />
+              <Animated.View style={[styles.firework, fadeStyle]} />
+              <Animated.View style={[styles.firework, styles.firework2, fadeStyle]} />
+              <Animated.View style={[styles.firework, styles.firework3, fadeStyle]} />
             </View>
           </LinearGradient>
         </Animated.View>

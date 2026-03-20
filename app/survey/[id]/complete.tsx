@@ -1,14 +1,19 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
-  Platform,
-  Animated,
-  Easing,
-} from 'react-native';
+  Platform} from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming,
+  withDelay,
+  Easing} from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -25,82 +30,27 @@ function SurveyCompletePage() {
   }>();
 
   // Animation values
-  const scaleAnim = useRef(new Animated.Value(0)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const coinScaleAnim = useRef(new Animated.Value(0)).current;
-  const coinRotateAnim = useRef(new Animated.Value(0)).current;
-  const statsSlideAnim = useRef(new Animated.Value(50)).current;
-  const buttonSlideAnim = useRef(new Animated.Value(100)).current;
+  const scaleAnim = useSharedValue(0);
+  const fadeAnim = useSharedValue(0);
+  const coinScaleAnim = useSharedValue(0);
+  const coinRotateAnim = useSharedValue(0);
+  const statsSlideAnim = useSharedValue(50);
+  const buttonSlideAnim = useSharedValue(100);
 
   useEffect(() => {
-    // Sequence of animations
-    const anim1 = Animated.sequence([
-      // Check mark scale in
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        tension: 50,
-        friction: 7,
-        useNativeDriver: true,
-      }),
-      // Fade in content
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-    ]);
-    anim1.start();
+    // Check mark scale in + fade in content
+    scaleAnim.value = withSpring(1, { damping: 7, stiffness: 50 });
+    fadeAnim.value = withTiming(1, { duration: 300 });
 
-    // Coin animation (parallel)
-    const anim2 = Animated.sequence([
-      Animated.delay(300),
-      Animated.parallel([
-        Animated.spring(coinScaleAnim, {
-          toValue: 1,
-          tension: 50,
-          friction: 5,
-          useNativeDriver: true,
-        }),
-        Animated.timing(coinRotateAnim, {
-          toValue: 1,
-          duration: 800,
-          easing: Easing.out(Easing.back(1.5)),
-          useNativeDriver: true,
-        }),
-      ]),
-    ]);
-    anim2.start();
+    // Coin animation
+    coinScaleAnim.value = withDelay(300, withSpring(1, { damping: 5, stiffness: 50 }));
+    coinRotateAnim.value = withDelay(300, withTiming(1, { duration: 800, easing: Easing.out(Easing.back(1.5)) }));
 
     // Stats slide in
-    const anim3 = Animated.sequence([
-      Animated.delay(500),
-      Animated.spring(statsSlideAnim, {
-        toValue: 0,
-        tension: 50,
-        friction: 8,
-        useNativeDriver: true,
-      }),
-    ]);
-    anim3.start();
+    statsSlideAnim.value = withDelay(500, withSpring(0, { damping: 8, stiffness: 50 }));
 
     // Button slide in
-    const anim4 = Animated.sequence([
-      Animated.delay(700),
-      Animated.spring(buttonSlideAnim, {
-        toValue: 0,
-        tension: 50,
-        friction: 8,
-        useNativeDriver: true,
-      }),
-    ]);
-    anim4.start();
-
-    return () => {
-      anim1.stop();
-      anim2.stop();
-      anim3.stop();
-      anim4.stop();
-    };
+    buttonSlideAnim.value = withDelay(700, withSpring(0, { damping: 8, stiffness: 50 }));
   }, []);
 
   const formatTime = (seconds: number): string => {
@@ -115,10 +65,7 @@ function SurveyCompletePage() {
   const coins = parseInt(coinsEarned || '0', 10);
   const time = parseInt(timeSpent || '0', 10);
 
-  const coinRotation = coinRotateAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'],
-  });
+  const coinRotation = interpolate(coinRotateAnim.value, [0, 1], ['0deg', '360deg']);
 
   return (
     <>
@@ -156,8 +103,7 @@ function SurveyCompletePage() {
                 transform: [
                   { scale: coinScaleAnim },
                   { rotate: coinRotation },
-                ],
-              },
+                ] },
             ]}
           >
             <LinearGradient
@@ -255,17 +201,14 @@ function SurveyCompletePage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background.secondary,
-  },
+    backgroundColor: Colors.background.secondary },
   content: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: Spacing.xl,
-  },
+    paddingHorizontal: Spacing.xl },
   successIconContainer: {
-    marginBottom: Spacing.xl,
-  },
+    marginBottom: Spacing.xl },
   successIconGradient: {
     width: 120,
     height: 120,
@@ -277,29 +220,22 @@ const styles = StyleSheet.create({
         shadowColor: Colors.gold,
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.4,
-        shadowRadius: 16,
-      },
+        shadowRadius: 16 },
       android: {
-        elevation: 12,
-      },
-    }),
-  },
+        elevation: 12 } }) },
   title: {
     fontSize: Typography.h1.fontSize,
     fontWeight: '700',
     color: colors.deepNavy,
     textAlign: 'center',
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   subtitle: {
     fontSize: Typography.bodyLarge.fontSize,
     color: Colors.text.tertiary,
     textAlign: 'center',
-    marginBottom: Spacing['2xl'],
-  },
+    marginBottom: Spacing['2xl'] },
   coinsContainer: {
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base },
   coinsGradient: {
     width: 72,
     height: 72,
@@ -311,32 +247,24 @@ const styles = StyleSheet.create({
         shadowColor: colors.brand.goldBright,
         shadowOffset: { width: 0, height: 6 },
         shadowOpacity: 0.4,
-        shadowRadius: 12,
-      },
+        shadowRadius: 12 },
       android: {
-        elevation: 8,
-      },
-    }),
-  },
+        elevation: 8 } }) },
   coinsTextContainer: {
     alignItems: 'center',
-    marginBottom: Spacing['2xl'],
-  },
+    marginBottom: Spacing['2xl'] },
   coinsLabel: {
     fontSize: Typography.body.fontSize,
     color: Colors.text.tertiary,
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs },
   coinsValue: {
     fontSize: 48,
     fontWeight: '800',
-    color: Colors.gold,
-  },
+    color: Colors.gold },
   coinsUnit: {
     fontSize: Typography.bodyLarge.fontSize,
     fontWeight: '600',
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
   statsContainer: {
     flexDirection: 'row',
     backgroundColor: Colors.background.primary,
@@ -351,35 +279,26 @@ const styles = StyleSheet.create({
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.08,
-        shadowRadius: 12,
-      },
+        shadowRadius: 12 },
       android: {
-        elevation: 4,
-      },
-    }),
-  },
+        elevation: 4 } }) },
   statCard: {
     alignItems: 'center',
-    paddingHorizontal: Spacing.lg,
-  },
+    paddingHorizontal: Spacing.lg },
   statDivider: {
     width: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.08)',
-  },
+    backgroundColor: 'rgba(0, 0, 0, 0.08)' },
   statValue: {
     fontSize: Typography.h3.fontSize,
     fontWeight: '700',
     color: colors.deepNavy,
-    marginTop: Spacing.sm,
-  },
+    marginTop: Spacing.sm },
   statLabel: {
     fontSize: Typography.bodySmall.fontSize,
     color: Colors.text.tertiary,
-    marginTop: Spacing.xs,
-  },
+    marginTop: Spacing.xs },
   messageContainer: {
-    width: '100%',
-  },
+    width: '100%' },
   messageGradient: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -389,43 +308,34 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.lg,
     borderRadius: BorderRadius.lg,
     borderWidth: 1,
-    borderColor: 'rgba(255, 205, 87, 0.2)',
-  },
+    borderColor: 'rgba(255, 205, 87, 0.2)' },
   messageText: {
     fontSize: Typography.body.fontSize,
     fontWeight: '500',
-    color: Colors.gold,
-  },
+    color: Colors.gold },
   bottomContainer: {
     paddingHorizontal: Spacing.xl,
-    paddingBottom: Platform.OS === 'ios' ? 20 : 24,
-  },
+    paddingBottom: Platform.OS === 'ios' ? 20 : 24 },
   primaryButton: {
     borderRadius: BorderRadius.lg,
     overflow: 'hidden',
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
   primaryButtonGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 18,
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   primaryButtonText: {
     fontSize: Typography.bodyLarge.fontSize,
     fontWeight: '700',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse },
   secondaryButton: {
     alignItems: 'center',
-    paddingVertical: Spacing.base,
-  },
+    paddingVertical: Spacing.base },
   secondaryButtonText: {
     fontSize: Typography.bodyLarge.fontSize,
     fontWeight: '600',
-    color: Colors.text.tertiary,
-  },
-});
+    color: Colors.text.tertiary } });
 
 export default withErrorBoundary(SurveyCompletePage, 'SurveyIdComplete');

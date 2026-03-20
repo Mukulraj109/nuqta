@@ -12,9 +12,14 @@ import {
   Share,
   Linking,
   ActivityIndicator,
-  RefreshControl,
-  Animated,
+  RefreshControl
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -90,8 +95,12 @@ function DailyCheckInPage() {
   const [isStreakFrozen, setIsStreakFrozen] = useState(false);
 
   // Check-in success animation values (Gap 28)
-  const rewardScaleAnim = useRef(new Animated.Value(0.3)).current;
-  const rewardOpacityAnim = useRef(new Animated.Value(0)).current;
+  const rewardScaleAnim = useSharedValue(0.3);
+  const rewardOpacityAnim = useSharedValue(0);
+  const rewardAnimStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: rewardScaleAnim.value }],
+    opacity: rewardOpacityAnim.value,
+  }));
 
   // Countdown timer effect — ticks every second when checked in today
   useEffect(() => {
@@ -292,22 +301,11 @@ function DailyCheckInPage() {
 
   // Check-in success animation trigger (Gap 28)
   const triggerRewardAnimation = () => {
-    rewardScaleAnim.setValue(0.3);
-    rewardOpacityAnim.setValue(0);
+    rewardScaleAnim.value = 0.3;
+    rewardOpacityAnim.value = 0;
 
-    Animated.parallel([
-      Animated.spring(rewardScaleAnim, {
-        toValue: 1,
-        friction: 4,
-        tension: 60,
-        useNativeDriver: true,
-      }),
-      Animated.timing(rewardOpacityAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    rewardScaleAnim.value = withSpring(1, { damping: 4, stiffness: 60 });
+    rewardOpacityAnim.value = withTiming(1, { duration: 300 });
   };
 
   const handleCheckIn = async () => {
@@ -1007,7 +1005,7 @@ function DailyCheckInPage() {
         onRequestClose={() => setShowReward(false)}
       >
         <View style={styles.rewardOverlay}>
-          <Animated.View style={{ transform: [{ scale: rewardScaleAnim }], opacity: rewardOpacityAnim }}>
+          <Animated.View style={rewardAnimStyle}>
             <LinearGradient
               colors={[Colors.gold, colors.tealGreen]}
               style={styles.rewardCard}

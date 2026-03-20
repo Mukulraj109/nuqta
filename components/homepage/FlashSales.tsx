@@ -6,8 +6,8 @@ import {
   Pressable,
   ScrollView,
   Platform,
-  Animated,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence, withRepeat, interpolate } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -109,45 +109,28 @@ const calculateTimeLeft = (endTime: Date): { hours: number; minutes: number; sec
 
 // Skeleton card component
 const SkeletonCard: React.FC = () => {
-  const [shimmerAnim] = useState(new Animated.Value(0));
-  const isMounted = useIsMounted();
+  const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
-    const shimmerAnimation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmerAnim, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    shimmerAnimation.start();
-    return () => shimmerAnimation.stop();
+    shimmerAnim.value = withRepeat(withSequence(withTiming(1, { duration: 1000 }), withTiming(0, { duration: 1000 })), -1);
   }, [shimmerAnim]);
 
-  const opacity = shimmerAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0.3, 0.7],
-  });
+  const shimmerStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(shimmerAnim.value, [0, 1], [0.3, 0.7]),
+  }));
 
   return (
     <View style={styles.productCard}>
-      <Animated.View style={[styles.skeletonImage, { opacity }]} />
+      <Animated.View style={[styles.skeletonImage, shimmerStyle]} />
       <View style={styles.productInfo}>
-        <Animated.View style={[styles.skeletonName, { opacity }]} />
+        <Animated.View style={[styles.skeletonName, shimmerStyle]} />
         <View style={styles.priceRow}>
-          <Animated.View style={[styles.skeletonPrice, { opacity }]} />
-          <Animated.View style={[styles.skeletonOriginalPrice, { opacity }]} />
+          <Animated.View style={[styles.skeletonPrice, shimmerStyle]} />
+          <Animated.View style={[styles.skeletonOriginalPrice, shimmerStyle]} />
         </View>
         <View style={styles.footerRow}>
-          <Animated.View style={[styles.skeletonSavings, { opacity }]} />
-          <Animated.View style={[styles.skeletonCoins, { opacity }]} />
+          <Animated.View style={[styles.skeletonSavings, shimmerStyle]} />
+          <Animated.View style={[styles.skeletonCoins, shimmerStyle]} />
         </View>
       </View>
     </View>
@@ -169,6 +152,7 @@ const FlashSales: React.FC<FlashSalesProps> = ({
   const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const earliestEndTime = useRef<Date | null>(null);
+  const isMounted = useIsMounted();
 
   // Fetch flash sales from API
   const fetchFlashSales = useCallback(async () => {

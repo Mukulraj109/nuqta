@@ -5,15 +5,14 @@
  * Features: Timeline design, animated status dots, color-coded indicators, expandable details
  */
 
-import React, { memo, useRef, useEffect } from 'react';
+import React, { memo, useEffect} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
-  Platform,
-  Animated,
-} from 'react-native';
+  Platform} from 'react-native';
+import Animated, { interpolate, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -98,66 +97,31 @@ const ActivityItem: React.FC<{
   isLast: boolean;
   onPress: () => void;
 }> = memo(({ activity, index, isLast, onPress }) => {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(20)).current;
-  const pulseAnim = useRef(new Animated.Value(1)).current;
-  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(20);
+  const pulseAnim = useSharedValue(1);
+  const scaleAnim = useSharedValue(1);
 
   useEffect(() => {
     // Staggered entry animation
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 400,
-        delay: index * 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 400,
-        delay: index * 100,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    fadeAnim.value = withDelay(index * 100, withTiming(1, { duration: 400 }));
+      slideAnim.value = withDelay(index * 100, withTiming(0, { duration: 400 }));
 
     // Pulse animation for pending status
-    let pulseLoop: Animated.CompositeAnimation | null = null;
     if (activity.status === 'pending') {
-      pulseLoop = Animated.loop(
-        Animated.sequence([
-          Animated.timing(pulseAnim, {
-            toValue: 1.2,
-            duration: 800,
-            useNativeDriver: true,
-          }),
-          Animated.timing(pulseAnim, {
-            toValue: 1,
-            duration: 800,
-            useNativeDriver: true,
-          }),
-        ])
-      );
-      pulseLoop.start();
+      pulseAnim.value = withRepeat(withSequence(withTiming(1.2, { duration: 800 }), withTiming(1, { duration: 800 })), -1);
     }
     return () => {
-      if (pulseLoop) pulseLoop.stop();
+      pulseAnim.value = 1;
     };
   }, [index, activity.status]);
 
   const handlePressIn = () => {
-    Animated.spring(scaleAnim, {
-      toValue: 0.98,
-      friction: 8,
-      useNativeDriver: true,
-    }).start();
+    scaleAnim.value = withSpring(0.98);
   };
 
   const handlePressOut = () => {
-    Animated.spring(scaleAnim, {
-      toValue: 1,
-      friction: 8,
-      useNativeDriver: true,
-    }).start();
+    scaleAnim.value = withSpring(1);
   };
 
   const statusColor = getStatusColor(activity.status);
@@ -252,37 +216,19 @@ const ActivityItem: React.FC<{
 });
 
 const SkeletonItem: React.FC<{ index: number }> = memo(({ index }) => {
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
-    const loop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, {
-          toValue: 1,
-          duration: 1000,
-          delay: index * 100,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmerAnim, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    loop.start();
-    return () => loop.stop();
-  }, [index]);
+    shimmerAnim.value = withRepeat(withSequence(withTiming(1, { duration: 1000 })), -1);
+    
+    }, [index]);
 
   return (
     <Animated.View
       style={[
         styles.activityItemWrapper,
         {
-          opacity: shimmerAnim.interpolate({
-            inputRange: [0, 1],
-            outputRange: [0.5, 1],
-          }),
+          opacity: interpolate(shimmerAnim.value, [0, 1], [0.5, 1]),
         },
       ]}
     >
@@ -312,18 +258,11 @@ const CashbackActivitySection: React.FC<CashbackActivitySectionProps> = ({
   onViewAllPress,
   onStartShopping,
 }) => {
-  const headerFadeAnim = useRef(new Animated.Value(0)).current;
+  const headerFadeAnim = useSharedValue(0);
 
   useEffect(() => {
-    const anim = Animated.timing(headerFadeAnim, {
-      toValue: 1,
-      duration: 400,
-      useNativeDriver: true,
-    });
-    anim.start();
-
-    return () => { anim.stop(); };
-}, []);
+    headerFadeAnim.value = withTiming(1, { duration: 400 });
+  }, []);
 
   if (activities.length === 0 && !isLoading) {
     return (

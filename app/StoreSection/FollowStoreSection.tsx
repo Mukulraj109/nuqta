@@ -3,15 +3,22 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Premium Glassmorphism "Follow Store" section
 // Inspired by Apple's Liquid Glass design
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import {
   View,
   Pressable,
   StyleSheet,
-  Animated,
   ActivityIndicator,
-  Platform,
+  Platform
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withSpring,
+  withTiming} from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { triggerImpact, triggerNotification } from "@/utils/haptics";
 import { ThemedText } from '@/components/ThemedText';
@@ -42,8 +49,7 @@ const GLASS = {
 
   // Gold tinted glass for following state
   tintedGoldBg: 'rgba(255, 200, 87, 0.12)',
-  tintedGoldBorder: 'rgba(255, 200, 87, 0.35)',
-};
+  tintedGoldBorder: 'rgba(255, 200, 87, 0.35)' };
 
 
 interface FollowStoreSectionProps {
@@ -65,8 +71,7 @@ interface FollowStoreSectionProps {
 function FollowStoreSection({
   storeData,
   isFollowingProp,
-  onFollowChange,
-}: FollowStoreSectionProps) {
+  onFollowChange }: FollowStoreSectionProps) {
   const isMounted = useIsMounted();
   const router = useRouter();
   const user = useAuthUser();
@@ -86,71 +91,49 @@ function FollowStoreSection({
   }, [isFollowingProp]);
 
   // Animation refs
-  const heartScale = useRef(new Animated.Value(1)).current;
-  const buttonScale = useRef(new Animated.Value(1)).current;
-  const pulseAnim = useRef(new Animated.Value(1)).current;
-  const glowAnim = useRef(new Animated.Value(0.3)).current;
-  const toggleAnim = useRef(new Animated.Value(0)).current;
+  const heartScale = useSharedValue(1);
+  const buttonScale = useSharedValue(1);
+  const pulseAnim = useSharedValue(1);
+  const glowAnim = useSharedValue(0.3);
+  const toggleAnim = useSharedValue(0);
+
+  const glowAnimStyle = useAnimatedStyle(() => ({ opacity: glowAnim.value }));
+  const iconScaleStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: isFollowing ? heartScale.value * pulseAnim.value : heartScale.value }],
+  }));
+  const buttonScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: buttonScale.value }] }));
+  const toggleKnobStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: interpolate(toggleAnim.value, [0, 1], [2, 24]) }],
+  }));
 
   const storeId = storeData?.id || storeData?._id;
   const storeName = storeData?.name || storeData?.title || 'this store';
 
   // Animate toggle position
   useEffect(() => {
-    const anim = Animated.spring(toggleAnim, {
-      toValue: notificationsEnabled ? 1 : 0,
-      useNativeDriver: true,
-      friction: 8,
-      tension: 100,
-    });
-    anim.start();
-    return () => anim.stop();
+    toggleAnim.value = withSpring(notificationsEnabled ? 1 : 0, { damping: 8, stiffness: 100 });
   }, [notificationsEnabled]);
 
   // Pulse animation for following state
   useEffect(() => {
     if (isFollowing) {
-      const pulse = Animated.loop(
-        Animated.sequence([
-          Animated.timing(pulseAnim, {
-            toValue: 1.08,
-            duration: 1200,
-            useNativeDriver: true,
-          }),
-          Animated.timing(pulseAnim, {
-            toValue: 1,
-            duration: 1200,
-            useNativeDriver: true,
-          }),
-        ])
-      );
-      pulse.start();
-      return () => pulse.stop();
+      pulseAnim.value = withRepeat(withSequence(
+          withTiming(1.08, { duration: 1200 }),
+          withTiming(1, { duration: 1200 })
+        ), -1);
     }
   }, [isFollowing]);
 
   // Glow pulse animation — only run when following
   useEffect(() => {
     if (!isFollowing) {
-      glowAnim.setValue(0.3);
+      glowAnim.value = 0.3;
       return;
     }
-    const glow = Animated.loop(
-      Animated.sequence([
-        Animated.timing(glowAnim, {
-          toValue: 0.6,
-          duration: 1500,
-          useNativeDriver: true,
-        }),
-        Animated.timing(glowAnim, {
-          toValue: 0.3,
-          duration: 1500,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    glow.start();
-    return () => glow.stop();
+    glowAnim.value = withRepeat(withSequence(
+        withTiming(0.6, { duration: 1500 }),
+        withTiming(0.3, { duration: 1500 }),
+      ), -1);
   }, [isFollowing]);
 
   // Check follow status on mount
@@ -178,29 +161,15 @@ function FollowStoreSection({
 
   // Heart animation
   const animateHeart = () => {
-    Animated.sequence([
-      Animated.timing(heartScale, {
-        toValue: 1.3,
-        duration: 120,
-        useNativeDriver: true,
-      }),
-      Animated.spring(heartScale, {
-        toValue: 1,
-        useNativeDriver: true,
-        friction: 4,
-        tension: 120,
-      }),
-    ]).start();
+    heartScale.value = withSequence(
+      withTiming(1.3, { duration: 120 }),
+      withSpring(1, { damping: 4, stiffness: 120 }),
+    );
   };
 
   // Button press animation
   const animateButton = (toValue: number) => {
-    Animated.spring(buttonScale, {
-      toValue,
-      useNativeDriver: true,
-      friction: 8,
-      tension: 120,
-    }).start();
+    buttonScale.value = withSpring(toValue, { damping: 8, stiffness: 120 });
   };
 
   const handleFollowToggle = async () => {
@@ -243,8 +212,7 @@ function FollowStoreSection({
           itemType: 'store',
           itemId: storeId,
           notes: `Following ${storeName}`,
-          priority: 'medium',
-        });
+          priority: 'medium' });
 
         if (response.success) {
           triggerNotification('Success');
@@ -316,13 +284,7 @@ function FollowStoreSection({
           {/* Glow effect behind icon */}
           {isFollowing && (
             <Animated.View
-              style={[
-                styles.iconGlow,
-                {
-                  opacity: glowAnim,
-                  backgroundColor: Colors.gold,
-                }
-              ]}
+              style={[styles.iconGlow, glowAnimStyle, { backgroundColor: Colors.gold }]}
             />
           )}
 
@@ -330,11 +292,11 @@ function FollowStoreSection({
             style={[
               styles.iconContainer,
               isFollowing ? styles.iconContainerFollowing : styles.iconContainerDefault,
-              {
+              useAnimatedStyle(() => ({
                 transform: [
-                  { scale: Animated.multiply(heartScale, isFollowing ? pulseAnim : new Animated.Value(1)) }
+                  { scale: heartScale.value * (isFollowing ? pulseAnim.value : 1) }
                 ]
-              }
+              }))
             ]}
           >
             {isLoading ? (
@@ -379,7 +341,7 @@ function FollowStoreSection({
   return (
     <View style={styles.container}>
       {/* Main Follow Card - Glass Effect */}
-      <Animated.View style={[styles.cardWrapper, { transform: [{ scale: buttonScale }] }]}>
+      <Animated.View style={[styles.cardWrapper, buttonScaleStyle]}>
         {Platform.OS === 'ios' ? (
           <BlurView
             intensity={60}
@@ -482,14 +444,7 @@ function FollowStoreSection({
             <Animated.View
               style={[
                 styles.toggleKnob,
-                {
-                  transform: [{
-                    translateX: toggleAnim.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [2, 24],
-                    })
-                  }]
-                },
+                toggleKnobStyle,
                 notificationsEnabled && styles.toggleKnobActive
               ]}
             >
@@ -507,8 +462,7 @@ function FollowStoreSection({
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: Spacing.base,
-    paddingVertical: Spacing.base,
-  },
+    paddingVertical: Spacing.base },
 
   // Card Wrapper with shadow
   cardWrapper: {
@@ -518,36 +472,27 @@ const styles = StyleSheet.create({
         shadowColor: Colors.nileBlue,
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.12,
-        shadowRadius: 24,
-      },
+        shadowRadius: 24 },
       android: {
-        elevation: 8,
-      },
+        elevation: 8 },
       web: {
-        boxShadow: '0 8px 32px rgba(11, 34, 64, 0.12)',
-      },
-    }),
-  },
+        boxShadow: '0 8px 32px rgba(11, 34, 64, 0.12)' } }) },
 
   // Glass Card Base
   glassCard: {
     borderRadius: BorderRadius['2xl'],
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: GLASS.lightBorder,
-  },
+    borderColor: GLASS.lightBorder },
 
   glassCardAndroid: {
-    backgroundColor: GLASS.lightBg,
-  },
+    backgroundColor: GLASS.lightBg },
 
   glassCardDefault: {
-    borderColor: GLASS.tintedGreenBorder,
-  },
+    borderColor: GLASS.tintedGreenBorder },
 
   glassCardFollowing: {
-    borderColor: GLASS.tintedGoldBorder,
-  },
+    borderColor: GLASS.tintedGoldBorder },
 
   glassHighlight: {
     position: 'absolute',
@@ -555,33 +500,28 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 1,
-    backgroundColor: GLASS.lightHighlight,
-  },
+    backgroundColor: GLASS.lightHighlight },
 
   loadingContainer: {
     height: 100,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
 
   loadingText: {
     ...Typography.body,
-    color: Colors.text.secondary,
-  },
+    color: Colors.text.secondary },
 
   cardContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: Spacing.lg,
-  },
+    padding: Spacing.lg },
 
   // Icon Styles
   iconWrapper: {
     position: 'relative',
-    marginRight: Spacing.base,
-  },
+    marginRight: Spacing.base },
 
   iconGlow: {
     position: 'absolute',
@@ -590,8 +530,7 @@ const styles = StyleSheet.create({
     right: -8,
     bottom: -8,
     borderRadius: 36,
-    opacity: 0.3,
-  },
+    opacity: 0.3 },
 
   iconContainer: {
     width: 56,
@@ -599,13 +538,11 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 2,
-  },
+    borderWidth: 2 },
 
   iconContainerDefault: {
     backgroundColor: 'rgba(255, 205, 87, 0.1)',
-    borderColor: 'rgba(255, 205, 87, 0.25)',
-  },
+    borderColor: 'rgba(255, 205, 87, 0.25)' },
 
   iconContainerFollowing: {
     backgroundColor: Colors.gold,
@@ -615,37 +552,29 @@ const styles = StyleSheet.create({
         shadowColor: Colors.gold,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.5,
-        shadowRadius: 12,
-      },
+        shadowRadius: 12 },
       android: {
-        elevation: 6,
-      },
-    }),
-  },
+        elevation: 6 } }) },
 
   // Text Styles
   textContainer: {
     flex: 1,
-    marginRight: Spacing.md,
-  },
+    marginRight: Spacing.md },
 
   title: {
     ...Typography.h4,
     fontWeight: '700',
     color: Colors.text.primary,
     marginBottom: Spacing.xs,
-    letterSpacing: -0.3,
-  },
+    letterSpacing: -0.3 },
 
   titleFollowing: {
-    color: Colors.warning,
-  },
+    color: Colors.warning },
 
   subtitle: {
     ...Typography.bodySmall,
     color: Colors.text.secondary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
 
   // Action Badge
   actionBadge: {
@@ -654,13 +583,11 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 2,
-  },
+    borderWidth: 2 },
 
   actionBadgeDefault: {
     backgroundColor: 'rgba(255, 205, 87, 0.1)',
-    borderColor: 'rgba(255, 205, 87, 0.25)',
-  },
+    borderColor: 'rgba(255, 205, 87, 0.25)' },
 
   actionBadgeFollowing: {
     backgroundColor: Colors.gold,
@@ -670,13 +597,9 @@ const styles = StyleSheet.create({
         shadowColor: Colors.gold,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.4,
-        shadowRadius: 8,
-      },
+        shadowRadius: 8 },
       android: {
-        elevation: 4,
-      },
-    }),
-  },
+        elevation: 4 } }) },
 
   // Notification Card
   notificationWrapper: {
@@ -687,27 +610,20 @@ const styles = StyleSheet.create({
         shadowColor: Colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.08,
-        shadowRadius: 16,
-      },
+        shadowRadius: 16 },
       android: {
-        elevation: 4,
-      },
+        elevation: 4 },
       web: {
-        boxShadow: '0 4px 20px rgba(11, 34, 64, 0.08)',
-      },
-    }),
-  },
+        boxShadow: '0 4px 20px rgba(11, 34, 64, 0.08)' } }) },
 
   notificationCard: {
     borderRadius: BorderRadius.xl,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: GLASS.lightBorder,
-  },
+    borderColor: GLASS.lightBorder },
 
   notificationCardAndroid: {
-    backgroundColor: GLASS.frostedBg,
-  },
+    backgroundColor: GLASS.frostedBg },
 
   notificationHighlight: {
     position: 'absolute',
@@ -715,21 +631,18 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 1,
-    backgroundColor: GLASS.lightHighlight,
-  },
+    backgroundColor: GLASS.lightHighlight },
 
   notificationRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: Spacing.base,
-  },
+    padding: Spacing.base },
 
   notificationLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
-  },
+    flex: 1 },
 
   notificationIconBg: {
     width: 44,
@@ -740,8 +653,7 @@ const styles = StyleSheet.create({
     marginRight: 14,
     backgroundColor: 'rgba(156, 163, 175, 0.15)',
     borderWidth: 1,
-    borderColor: 'rgba(156, 163, 175, 0.2)',
-  },
+    borderColor: 'rgba(156, 163, 175, 0.2)' },
 
   notificationIconBgActive: {
     backgroundColor: Colors.success,
@@ -751,29 +663,22 @@ const styles = StyleSheet.create({
         shadowColor: Colors.success,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
-        shadowRadius: 8,
-      },
+        shadowRadius: 8 },
       android: {
-        elevation: 4,
-      },
-    }),
-  },
+        elevation: 4 } }) },
 
   notificationTextContainer: {
-    flex: 1,
-  },
+    flex: 1 },
 
   notificationTitle: {
     ...Typography.body,
     fontWeight: '600',
     color: Colors.text.primary,
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
 
   notificationSubtitle: {
     ...Typography.bodySmall,
-    color: Colors.text.secondary,
-  },
+    color: Colors.text.secondary },
 
   // Premium Glass Toggle Switch
   toggle: {
@@ -783,13 +688,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(156, 163, 175, 0.2)',
     borderWidth: 1,
     borderColor: 'rgba(156, 163, 175, 0.3)',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
 
   toggleActive: {
     backgroundColor: 'rgba(255, 205, 87, 0.15)',
-    borderColor: 'rgba(255, 205, 87, 0.3)',
-  },
+    borderColor: 'rgba(255, 205, 87, 0.3)' },
 
   toggleKnob: {
     width: 26,
@@ -803,24 +706,18 @@ const styles = StyleSheet.create({
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.15,
-        shadowRadius: 4,
-      },
+        shadowRadius: 4 },
       android: {
-        elevation: 3,
-      },
-    }),
-  },
+        elevation: 3 } }) },
 
   toggleKnobActive: {
     backgroundColor: Colors.background.primary,
     borderWidth: 2,
-    borderColor: Colors.success,
-  },
+    borderColor: Colors.success },
 
   // Benefits Section
   benefitsSection: {
-    marginTop: Spacing.lg,
-  },
+    marginTop: Spacing.lg },
 
   benefitsTitle: {
     ...Typography.bodySmall,
@@ -828,14 +725,12 @@ const styles = StyleSheet.create({
     color: Colors.text.secondary,
     marginBottom: 14,
     textTransform: 'uppercase',
-    letterSpacing: 0.8,
-  },
+    letterSpacing: 0.8 },
 
   benefitsGrid: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    gap: 10,
-  },
+    gap: 10 },
 
   benefitCard: {
     flex: 1,
@@ -850,16 +745,11 @@ const styles = StyleSheet.create({
         shadowColor: Colors.nileBlue,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.06,
-        shadowRadius: 10,
-      },
+        shadowRadius: 10 },
       android: {
-        elevation: 2,
-      },
+        elevation: 2 },
       web: {
-        boxShadow: '0 2px 12px rgba(11, 34, 64, 0.06)',
-      },
-    }),
-  },
+        boxShadow: '0 2px 12px rgba(11, 34, 64, 0.06)' } }) },
 
   benefitIconBg: {
     width: 42,
@@ -867,15 +757,12 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
-  },
+    marginBottom: 10 },
 
   benefitText: {
     ...Typography.caption,
     fontWeight: '600',
     color: Colors.text.primary,
-    textAlign: 'center',
-  },
-});
+    textAlign: 'center' } });
 
 export default withErrorBoundary(FollowStoreSection, 'StoreSectionFollowStoreSection');

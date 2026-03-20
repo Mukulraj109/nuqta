@@ -1,6 +1,11 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { View, Pressable, StyleSheet, Animated, ActivityIndicator, Share, Platform, ScrollView, Dimensions, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
+import { View, Pressable, StyleSheet, ActivityIndicator, Share, Platform, ScrollView, Dimensions, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -75,10 +80,14 @@ function StoreHeader({
   const [isWishlistLoading, setIsWishlistLoading] = useState(false);
 
   // Animation refs
-  const backScaleAnim = useRef(new Animated.Value(1)).current;
-  const shareScaleAnim = useRef(new Animated.Value(1)).current;
-  const cartScaleAnim = useRef(new Animated.Value(1)).current;
-  const heartScaleAnim = useRef(new Animated.Value(1)).current;
+  const backScaleAnim = useSharedValue(1);
+  const shareScaleAnim = useSharedValue(1);
+  const cartScaleAnim = useSharedValue(1);
+  const heartScaleAnim = useSharedValue(1);
+  const backScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: backScaleAnim.value }] }));
+  const shareScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: shareScaleAnim.value }] }));
+  const cartScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: cartScaleAnim.value }] }));
+  const heartScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: heartScaleAnim.value }] }));
 
   // Get product ID
   const productId = dynamicData?.id || dynamicData?._id;
@@ -183,12 +192,8 @@ function StoreHeader({
   }, [isAuthenticated, productId, isSaved, refreshWishlist, router]);
 
   // Animation helper
-  const animateScale = (animValue: Animated.Value, toValue: number) => {
-    Animated.spring(animValue, {
-      toValue,
-      useNativeDriver: true,
-      ...Timing.springBouncy,
-    }).start();
+  const animateScale = (animValue: { value: number }, toValue: number) => {
+    animValue.value = withSpring(toValue);
   };
 
   // Image slider state
@@ -261,7 +266,7 @@ function StoreHeader({
       {showHeaderBar && (
       <View style={styles.headerBar}>
         {/* Left - Back button */}
-        <Animated.View style={{ transform: [{ scale: backScaleAnim }] }}>
+        <Animated.View style={backScaleStyle}>
           <Pressable
             style={styles.iconBtn}
             onPress={handleBackPress}
@@ -290,7 +295,7 @@ function StoreHeader({
         {/* Right - Action buttons */}
         <View style={styles.rightActions}>
           {/* Share Button */}
-          <Animated.View style={{ transform: [{ scale: shareScaleAnim }] }}>
+          <Animated.View style={shareScaleStyle}>
             <Pressable
               style={styles.iconBtn}
               onPress={handleSharePress}
@@ -304,7 +309,7 @@ function StoreHeader({
           </Animated.View>
 
           {/* Cart Button */}
-          <Animated.View style={{ transform: [{ scale: cartScaleAnim }] }}>
+          <Animated.View style={cartScaleStyle}>
             <Pressable
               style={styles.iconBtn}
               onPress={handleCartPress}
@@ -318,7 +323,7 @@ function StoreHeader({
           </Animated.View>
 
           {/* Heart/Wishlist Button */}
-          <Animated.View style={{ transform: [{ scale: heartScaleAnim }] }}>
+          <Animated.View style={heartScaleStyle}>
             <Pressable
               style={[
                 styles.iconBtn,

@@ -1,16 +1,16 @@
 // RewardsBreakdownCard - Unified post-order rewards display
 // Shows earned rewards, progress bar, and checklist of earnable actions
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
-  Animated,
   ActivityIndicator,
   Platform,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { BRAND } from '@/constants/brand';
@@ -38,33 +38,24 @@ function RewardsBreakdownCard({
   onSharePress,
   currencySymbol = '',
 }: RewardsBreakdownCardProps) {
-  const progressAnim = useRef(new Animated.Value(0)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const progressAnim = useSharedValue(0);
+  const fadeAnim = useSharedValue(0);
+  const fadeStyle = useAnimatedStyle(() => ({ opacity: fadeAnim.value }));
 
   useEffect(() => {
-    const anim = Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 400,
-        useNativeDriver: true,
-      }),
-      Animated.timing(progressAnim, {
-        toValue: progressPercent,
-        duration: 800,
-        delay: 300,
-        useNativeDriver: false,
-      }),
-    ]);
-    anim.start();
+    fadeAnim.value = withTiming(1, { duration: 400 });
 
-    return () => { anim.stop(); };
+    // Width uses reanimated
+    const timer = setTimeout(() => {
+      progressAnim.value = withTiming(progressPercent, { duration: 800 });
+    }, 300);
+
+    return () => { clearTimeout(timer); };
   }, [progressPercent]);
 
-  const progressWidth = progressAnim.interpolate({
-    inputRange: [0, 100],
-    outputRange: ['0%', '100%'],
-    extrapolate: 'clamp',
-  });
+  const progressWidthStyle = useAnimatedStyle(() => ({
+    width: `${Math.min(Math.max(progressAnim.value, 0), 100)}%`,
+  }));
 
   const getItemIcon = (item: RewardChecklistItem): keyof typeof Ionicons.glyphMap => {
     switch (item.id) {
@@ -126,7 +117,7 @@ function RewardsBreakdownCard({
   };
 
   return (
-    <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
+    <Animated.View style={[styles.container, fadeStyle]}>
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
@@ -142,7 +133,7 @@ function RewardsBreakdownCard({
       {/* Progress Bar */}
       <View style={styles.progressSection}>
         <View style={styles.progressBarBg}>
-          <Animated.View style={[styles.progressBarFill, { width: progressWidth }]} />
+          <Animated.View style={[styles.progressBarFill, progressWidthStyle]} />
         </View>
         <Text style={styles.progressText}>
           {totalEarned} of {totalPossible} {BRAND.CURRENCY_CODE} earned

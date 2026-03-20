@@ -6,7 +6,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
  * Uses Privé luxury theme with gold accents.
  */
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback} from 'react';
 import { catchSilent } from '@/utils/catchAndReport';
 import {
   View,
@@ -14,9 +14,14 @@ import {
   StyleSheet,
   Pressable,
   ActivityIndicator,
-  RefreshControl,
-  Animated,
+  RefreshControl
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming} from 'react-native-reanimated';
 import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
@@ -31,19 +36,14 @@ import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Shimmer skeleton block for loading state
 const SkeletonBlock: React.FC<{ width: number | string; height: number; borderRadius?: number; style?: any }> = ({
-  width, height, borderRadius = 4, style,
-}) => {
-  const opacity = useRef(new Animated.Value(0.3)).current;
+  width, height, borderRadius = 4, style }) => {
+  const opacity = useSharedValue(0.3);
 
   useEffect(() => {
-    const anim = Animated.loop(
-      Animated.sequence([
-        Animated.timing(opacity, { toValue: 0.7, duration: 800, useNativeDriver: true }),
-        Animated.timing(opacity, { toValue: 0.3, duration: 800, useNativeDriver: true }),
-      ])
-    );
-    anim.start();
-    return () => anim.stop();
+    opacity.value = withRepeat(withSequence(
+        withTiming(0.7, { duration: 800 }),
+        withTiming(0.3, { duration: 800 }),
+      ), -1);
   }, [opacity]);
 
   return (
@@ -117,9 +117,7 @@ function PriveReviewEarnPage() {
         productImage: item.image || '',
         storeId: item.storeId,
         cashbackAmount: item.coins.toString(),
-        fromPrive: 'true',
-      },
-    });
+        fromPrive: 'true' } });
   }, [router]);
 
   const renderMetricCard = (label: string, value: string | number, icon: string) => (
@@ -268,7 +266,6 @@ function PriveReviewEarnPage() {
   return (
     <View style={styles.container}>
       <FlashList
-        contentContainerStyle={{ paddingBottom: 120 }}
         data={filteredItems}
         keyExtractor={(item) => `${item.type}-${item.id}`}
         renderItem={renderItem}
@@ -296,46 +293,38 @@ function PriveReviewEarnPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: PRIVE_COLORS.background.primary,
-  },
+    backgroundColor: PRIVE_COLORS.background.primary },
   listContent: {
-    paddingHorizontal: PRIVE_SPACING.lg,
-  },
+    paddingHorizontal: PRIVE_SPACING.lg },
   loadingContainer: {
-    paddingTop: PRIVE_SPACING.lg,
-  },
+    paddingTop: PRIVE_SPACING.lg },
   errorContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: PRIVE_SPACING.xxl,
-  },
+    paddingHorizontal: PRIVE_SPACING.xxl },
   errorText: {
     marginTop: 12,
     fontSize: 14,
     color: PRIVE_COLORS.status.error,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   retryButton: {
     marginTop: 16,
     paddingHorizontal: 24,
     paddingVertical: 10,
     backgroundColor: PRIVE_COLORS.gold.primary,
-    borderRadius: PRIVE_RADIUS.full,
-  },
+    borderRadius: PRIVE_RADIUS.full },
   retryButtonText: {
     color: PRIVE_COLORS.text.inverse,
     fontSize: 14,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
 
   // Metrics
   metricsRow: {
     flexDirection: 'row',
     gap: PRIVE_SPACING.sm,
     marginBottom: PRIVE_SPACING.lg,
-    marginTop: PRIVE_SPACING.md,
-  },
+    marginTop: PRIVE_SPACING.md },
   metricCard: {
     flex: 1,
     backgroundColor: PRIVE_COLORS.background.card,
@@ -344,22 +333,18 @@ const styles = StyleSheet.create({
     borderColor: PRIVE_COLORS.border.goldMuted,
     paddingVertical: PRIVE_SPACING.md,
     paddingHorizontal: PRIVE_SPACING.sm,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   metricIcon: {
     fontSize: 20,
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   metricValue: {
     fontSize: 20,
     fontWeight: '700',
-    color: PRIVE_COLORS.gold.primary,
-  },
+    color: PRIVE_COLORS.gold.primary },
   metricLabel: {
     fontSize: 11,
     color: PRIVE_COLORS.text.secondary,
-    marginTop: 2,
-  },
+    marginTop: 2 },
 
   // Tip Card
   tipCard: {
@@ -371,57 +356,47 @@ const styles = StyleSheet.create({
     padding: PRIVE_SPACING.lg,
     marginBottom: PRIVE_SPACING.lg,
     gap: PRIVE_SPACING.md,
-    alignItems: 'flex-start',
-  },
+    alignItems: 'flex-start' },
   tipContent: {
-    flex: 1,
-  },
+    flex: 1 },
   tipTitle: {
     fontSize: 14,
     fontWeight: '600',
     color: PRIVE_COLORS.gold.primary,
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   tipText: {
     fontSize: 12,
     color: PRIVE_COLORS.text.secondary,
-    lineHeight: 18,
-  },
+    lineHeight: 18 },
 
   // Filter Tabs
   filterTabs: {
     flexDirection: 'row',
     gap: PRIVE_SPACING.sm,
-    marginBottom: PRIVE_SPACING.lg,
-  },
+    marginBottom: PRIVE_SPACING.lg },
   filterTab: {
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: PRIVE_RADIUS.full,
     backgroundColor: PRIVE_COLORS.background.card,
     borderWidth: 1,
-    borderColor: PRIVE_COLORS.border.primary,
-  },
+    borderColor: PRIVE_COLORS.border.primary },
   filterTabActive: {
     backgroundColor: PRIVE_COLORS.gold.primary,
-    borderColor: PRIVE_COLORS.gold.primary,
-  },
+    borderColor: PRIVE_COLORS.gold.primary },
   filterTabText: {
     fontSize: 13,
     fontWeight: '600',
-    color: PRIVE_COLORS.text.secondary,
-  },
+    color: PRIVE_COLORS.text.secondary },
   filterTabTextActive: {
-    color: PRIVE_COLORS.text.inverse,
-  },
+    color: PRIVE_COLORS.text.inverse },
 
   // Section Title
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: PRIVE_COLORS.text.primary,
-    marginBottom: PRIVE_SPACING.md,
-  },
+    marginBottom: PRIVE_SPACING.md },
 
   // Item Card
   itemCard: {
@@ -432,35 +407,29 @@ const styles = StyleSheet.create({
     borderRadius: PRIVE_RADIUS.lg,
     borderWidth: 1,
     borderColor: PRIVE_COLORS.border.primary,
-    marginBottom: PRIVE_SPACING.md,
-  },
+    marginBottom: PRIVE_SPACING.md },
   itemImage: {
     width: 64,
     height: 64,
     borderRadius: PRIVE_RADIUS.md,
-    marginRight: PRIVE_SPACING.md,
-  },
+    marginRight: PRIVE_SPACING.md },
   itemImagePlaceholder: {
     backgroundColor: PRIVE_COLORS.background.elevated,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   itemContent: {
-    flex: 1,
-  },
+    flex: 1 },
   itemHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   itemName: {
     fontSize: 15,
     fontWeight: '600',
     color: PRIVE_COLORS.text.primary,
     flex: 1,
-    marginRight: 8,
-  },
+    marginRight: 8 },
   coinBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -468,70 +437,57 @@ const styles = StyleSheet.create({
     backgroundColor: PRIVE_COLORS.transparent.gold15,
     paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: PRIVE_RADIUS.full,
-  },
+    borderRadius: PRIVE_RADIUS.full },
   coinIcon: {
     width: 14,
-    height: 14,
-  },
+    height: 14 },
   coinText: {
     fontSize: 12,
     fontWeight: '700',
-    color: PRIVE_COLORS.gold.primary,
-  },
+    color: PRIVE_COLORS.gold.primary },
   itemCategory: {
     fontSize: 12,
     color: PRIVE_COLORS.text.tertiary,
-    marginBottom: 6,
-  },
+    marginBottom: 6 },
   itemFooter: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   itemMeta: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-  },
+    gap: 4 },
   itemMetaText: {
     fontSize: 11,
-    color: PRIVE_COLORS.text.tertiary,
-  },
+    color: PRIVE_COLORS.text.tertiary },
   priveBadge: {
     backgroundColor: PRIVE_COLORS.transparent.gold20,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: PRIVE_RADIUS.sm,
     borderWidth: 1,
-    borderColor: PRIVE_COLORS.border.goldMuted,
-  },
+    borderColor: PRIVE_COLORS.border.goldMuted },
   priveBadgeText: {
     fontSize: 10,
     fontWeight: '700',
-    color: PRIVE_COLORS.gold.primary,
-  },
+    color: PRIVE_COLORS.gold.primary },
 
   // Empty
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 60,
-  },
+    paddingVertical: 60 },
   emptyText: {
     marginTop: 12,
     fontSize: 16,
     fontWeight: '600',
-    color: PRIVE_COLORS.text.secondary,
-  },
+    color: PRIVE_COLORS.text.secondary },
   emptySubtext: {
     marginTop: 4,
     fontSize: 14,
     color: PRIVE_COLORS.text.tertiary,
     textAlign: 'center',
-    paddingHorizontal: 20,
-  },
-});
+    paddingHorizontal: 20 } });
 
 export default withErrorBoundary(PriveReviewEarnPage, 'PriveReviewEarn');

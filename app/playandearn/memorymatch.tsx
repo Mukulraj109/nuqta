@@ -6,10 +6,17 @@ import {
   StyleSheet,
   ScrollView,
   Pressable,
-  Dimensions,
-  Animated,
-  Easing,
-} from 'react-native';
+  Dimensions} from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSpring,
+  withSequence,
+  withRepeat,
+  interpolate,
+  cancelAnimation,
+  Easing} from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -55,8 +62,7 @@ const COLORS = {
   error: Colors.error,
 
   shadow: 'rgba(26, 58, 82, 0.08)',
-  shadowGreen: 'rgba(255, 205, 87, 0.2)',
-};
+  shadowGreen: 'rgba(255, 205, 87, 0.2)'};
 
 interface Card {
   id: number;
@@ -77,61 +83,35 @@ interface AnimatedCardProps {
 const AnimatedCard: React.FC<AnimatedCardProps> = ({
   card, index, isFlipped, isMatched, onPress, cardSize, disabled
 }) => {
-  const flipAnim = useRef(new Animated.Value(0)).current;
-  const scaleAnim = useRef(new Animated.Value(1)).current;
-  const glowAnim = useRef(new Animated.Value(0)).current;
+  const flipAnim = useSharedValue(0);
+  const scaleAnim = useSharedValue(1);
+  const glowAnim = useSharedValue(0);
 
   useEffect(() => {
-    Animated.spring(flipAnim, {
-      toValue: isFlipped || isMatched ? 1 : 0,
-      friction: 8,
-      tension: 10,
-      useNativeDriver: true,
-    }).start();
+    flipAnim.value = withSpring(isFlipped || isMatched ? 1 : 0, { damping: 8, stiffness: 10 });
 
     if (isMatched) {
-      Animated.sequence([
-        Animated.timing(scaleAnim, {
-          toValue: 1.08,
-          duration: 150,
-          useNativeDriver: true,
-        }),
-        Animated.timing(scaleAnim, {
-          toValue: 1,
-          duration: 150,
-          useNativeDriver: true,
-        }),
-      ]).start();
-
-      const glowLoop = Animated.loop(
-        Animated.sequence([
-          Animated.timing(glowAnim, {
-            toValue: 1,
-            duration: 1000,
-            useNativeDriver: true,
-          }),
-          Animated.timing(glowAnim, {
-            toValue: 0.5,
-            duration: 1000,
-            useNativeDriver: true,
-          }),
-        ])
+      scaleAnim.value = withSequence(
+        withTiming(1.08, { duration: 150 }),
+        withTiming(1, { duration: 150 }),
       );
-      glowLoop.start();
-      return () => glowLoop.stop();
+
+      glowAnim.value = withRepeat(
+        withSequence(
+          withTiming(1, { duration: 1000 }),
+          withTiming(0.5, { duration: 1000 }),
+        ),
+        -1
+      );
+
+      return () => cancelAnimation(glowAnim);
     }
   }, [isFlipped, isMatched]);
 
   // Use opacity for web compatibility
-  const backOpacity = flipAnim.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: [1, 0, 0],
-  });
+  const backOpacity = interpolate(flipAnim.value, [0, 0.5, 1], [1, 0, 0]);
 
-  const frontOpacity = flipAnim.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: [0, 0, 1],
-  });
+  const frontOpacity = interpolate(flipAnim.value, [0, 0.5, 1], [0, 0, 1]);
 
   return (
     <Pressable
@@ -168,61 +148,47 @@ const AnimatedCard: React.FC<AnimatedCardProps> = ({
 
 // Confetti particle for celebration
 const ConfettiParticle: React.FC<{ delay: number; color: string }> = ({ delay, color }) => {
-  const translateY = useRef(new Animated.Value(0)).current;
-  const translateX = useRef(new Animated.Value(0)).current;
-  const opacity = useRef(new Animated.Value(0)).current;
-  const rotate = useRef(new Animated.Value(0)).current;
+  const translateY = useSharedValue(0);
+  const translateX = useSharedValue(Math.random() * 200 - 100);
+  const opacity = useSharedValue(0);
+  const rotate = useSharedValue(0);
 
   useEffect(() => {
-    let currentAnim: Animated.CompositeAnimation | undefined;
-    const startAnimation = () => {
-      translateY.setValue(0);
-      translateX.setValue(Math.random() * 200 - 100);
-      opacity.setValue(1);
-      rotate.setValue(0);
+    const timeout = setTimeout(() => {
+      translateX.value = Math.random() * 200 - 100;
+      opacity.value = 1;
 
-      currentAnim = Animated.parallel([
-        Animated.timing(translateY, {
-          toValue: 300,
-          duration: 2500,
-          easing: Easing.out(Easing.quad),
-          useNativeDriver: true,
-        }),
-        Animated.timing(opacity, {
-          toValue: 0,
-          duration: 2500,
-          useNativeDriver: true,
-        }),
-        Animated.timing(rotate, {
-          toValue: 1,
-          duration: 2500,
-          useNativeDriver: true,
-        }),
-      ]);
-      currentAnim.start(() => startAnimation());
-    };
+      translateY.value = withTiming(300, { duration: 2500, easing: Easing.out(Easing.quad) });
+      opacity.value = withSequence(
+        withTiming(1, { duration: 100 }),
+        withTiming(0, { duration: 2400 })
+      );
+      rotate.value = withTiming(1, { duration: 2500 });
+    }, delay);
 
-    const timeout = setTimeout(startAnimation, delay);
     return () => {
       clearTimeout(timeout);
-      currentAnim?.stop();
+      cancelAnimation(translateY);
+      cancelAnimation(opacity);
+      cancelAnimation(rotate);
     };
   }, []);
 
-  const spin = rotate.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'],
-  });
+  const animStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateY: translateY.value },
+      { translateX: translateX.value },
+      { rotate: `${interpolate(rotate.value, [0, 1], [0, 360])}deg` },
+    ],
+    opacity: opacity.value,
+  }));
 
   return (
     <Animated.View
       style={[
         styles.confetti,
-        {
-          backgroundColor: color,
-          transform: [{ translateY }, { translateX }, { rotate: spin }],
-          opacity,
-        },
+        { backgroundColor: color },
+        animStyle,
       ]}
     />
   );
@@ -246,8 +212,10 @@ const MemoryMatch = () => {
   const [error, setError] = useState<string | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
 
-  const progressAnim = useRef(new Animated.Value(1)).current;
+  const progressAnim = useSharedValue(1);
   const cardEmojis = ['🛍️', '💳', '🎁', '⭐', '💰', '🏪', '🎯', '🔥'];
+
+  const isMounted = useIsMounted();
 
   // Fetch daily limits and wallet balance
   const fetchData = async () => {
@@ -258,7 +226,6 @@ const MemoryMatch = () => {
         gameApi.getDailyLimits(),
         refreshWallet(),
       ]);
-      const isMounted = useIsMounted();
 
       if (limitsResponse.data) {
         const memoryLimits = limitsResponse.data.memory_match;
@@ -281,20 +248,13 @@ const MemoryMatch = () => {
   }, []);
 
   useEffect(() => {
-    let progressAnimation: Animated.CompositeAnimation | undefined;
     if (gameState === 'playing' && timeLeft > 0) {
       const timer = setTimeout(() => {
         setTimeLeft(timeLeft - 1);
-        progressAnimation = Animated.timing(progressAnim, {
-          toValue: (timeLeft - 1) / 60,
-          duration: 1000,
-          useNativeDriver: false,
-        });
-        progressAnimation.start();
+        progressAnim.value = withTiming((timeLeft - 1) / 60, { duration: 1000 });
       }, 1000);
       return () => {
         clearTimeout(timer);
-        progressAnimation?.stop();
       };
     } else if (timeLeft === 0 && gameState === 'playing') {
       endGame();
@@ -331,7 +291,7 @@ const MemoryMatch = () => {
     setMoves(0);
     setTimeLeft(60);
     setScore(0);
-    progressAnim.setValue(1);
+    progressAnim.value = 1;
     setGameState('playing');
 
     try {
@@ -402,10 +362,7 @@ const MemoryMatch = () => {
   };
 
   const cardSize = (width - 56) / 4;
-  const progressWidth = progressAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0%', '100%'],
-  });
+  const progressWidth = interpolate(progressAnim.value, [0, 1], ['0%', '100%']);
 
   return (
     <View style={styles.container}>
@@ -751,8 +708,7 @@ const MemoryMatch = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
-  },
+    backgroundColor: COLORS.background},
 
   // Header
   header: {
@@ -764,37 +720,30 @@ const styles = StyleSheet.create({
     gap: 12,
     backgroundColor: COLORS.surface,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
-  },
+    borderBottomColor: COLORS.border},
   backButton: {
     width: 44,
     height: 44,
     borderRadius: 12,
     backgroundColor: COLORS.surfaceSecondary,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   headerCenter: {
-    flex: 1,
-  },
+    flex: 1},
   headerTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-  },
+    gap: 8},
   headerIcon: {
-    fontSize: 24,
-  },
+    fontSize: 24},
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: COLORS.navy,
-  },
+    color: COLORS.navy},
   headerSubtitle: {
     fontSize: 13,
     color: COLORS.textMuted,
-    marginTop: 2,
-  },
+    marginTop: 2},
   timerBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -802,19 +751,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: COLORS.primaryBg,
-  },
+    backgroundColor: COLORS.primaryBg},
   timerBadgeWarning: {
-    backgroundColor: Colors.errorScale[100],
-  },
+    backgroundColor: Colors.errorScale[100]},
   timerText: {
     fontSize: 15,
     fontWeight: '700',
-    color: COLORS.primary,
-  },
+    color: COLORS.primary},
   timerTextWarning: {
-    color: Colors.error,
-  },
+    color: Colors.error},
   coinsBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -822,24 +767,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: COLORS.goldBg,
-  },
+    backgroundColor: COLORS.goldBg},
   coinIcon: {
     width: 20,
-    height: 20,
-  },
+    height: 20},
   coinsText: {
     fontSize: 15,
     fontWeight: '700',
-    color: COLORS.goldDark,
-  },
+    color: COLORS.goldDark},
 
   scrollView: {
-    flex: 1,
-  },
+    flex: 1},
   content: {
-    padding: 16,
-  },
+    padding: 16},
 
   // Hero Card
   heroCard: {
@@ -848,79 +788,64 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
     overflow: 'hidden',
-    position: 'relative',
-  },
+    position: 'relative'},
   heroIconWrapper: {
-    marginBottom: 16,
-  },
+    marginBottom: 16},
   heroIconBg: {
     width: 80,
     height: 80,
     borderRadius: 40,
     backgroundColor: 'rgba(255,255,255,0.2)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   heroIconText: {
-    fontSize: 40,
-  },
+    fontSize: 40},
   heroTitle: {
     fontSize: 28,
     fontWeight: '800',
     color: Colors.text.inverse,
-    marginBottom: 8,
-  },
+    marginBottom: 8},
   heroSubtitle: {
     fontSize: 15,
     color: 'rgba(255,255,255,0.9)',
     textAlign: 'center',
-    marginBottom: 24,
-  },
+    marginBottom: 24},
   heroStatsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 32,
-  },
+    gap: 32},
   heroStatBox: {
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   heroStatIcon: {
     width: 28,
     height: 28,
-    marginBottom: 8,
-  },
+    marginBottom: 8},
   heroStatValue: {
     fontSize: 24,
     fontWeight: '800',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse},
   heroStatLabel: {
     fontSize: 12,
     color: 'rgba(255,255,255,0.8)',
-    marginTop: 4,
-  },
+    marginTop: 4},
   heroStatDivider: {
     width: 1,
     height: 50,
-    backgroundColor: 'rgba(255,255,255,0.3)',
-  },
+    backgroundColor: 'rgba(255,255,255,0.3)'},
   decorCircle: {
     position: 'absolute',
     borderRadius: 100,
-    backgroundColor: 'rgba(255,255,255,0.1)',
-  },
+    backgroundColor: 'rgba(255,255,255,0.1)'},
   decorCircle1: {
     width: 120,
     height: 120,
     top: -40,
-    right: -40,
-  },
+    right: -40},
   decorCircle2: {
     width: 100,
     height: 100,
     bottom: -30,
-    left: -30,
-  },
+    left: -30},
 
   // How to Play
   howToPlayCard: {
@@ -932,77 +857,63 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 1,
     shadowRadius: 12,
-    elevation: 4,
-  },
+    elevation: 4},
   howToPlayHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    marginBottom: 16,
-  },
+    marginBottom: 16},
   howToPlayTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: COLORS.navy,
-  },
+    color: COLORS.navy},
   stepsContainer: {
-    gap: 14,
-  },
+    gap: 14},
   stepRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-  },
+    gap: 12},
   stepBadge: {
     width: 32,
     height: 32,
     borderRadius: 16,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   stepBadgeText: {
     fontSize: 14,
-    fontWeight: '700',
-  },
+    fontWeight: '700'},
   stepTextContainer: {
-    flex: 1,
-  },
+    flex: 1},
   stepTitle: {
     fontSize: 14,
     fontWeight: '600',
     color: COLORS.navy,
-    marginBottom: 2,
-  },
+    marginBottom: 2},
   stepDesc: {
     fontSize: 12,
-    color: COLORS.textMuted,
-  },
+    color: COLORS.textMuted},
   stepIconBg: {
     width: 36,
     height: 36,
     borderRadius: 18,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
 
   // Start Button
   startButtonWrapper: {
     borderRadius: 16,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'},
   startButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
     paddingVertical: 18,
-    borderRadius: 16,
-  },
+    borderRadius: 16},
   startButtonText: {
     fontSize: 17,
     fontWeight: '700',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse},
 
   // Game Stats Bar
   gameStatsBar: {
@@ -1016,43 +927,35 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 1,
     shadowRadius: 8,
-    elevation: 2,
-  },
+    elevation: 2},
   gameStatItem: {
     flex: 1,
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   gameStatLabel: {
     fontSize: 10,
     fontWeight: '600',
     color: COLORS.textLight,
     marginBottom: 4,
-    letterSpacing: 0.5,
-  },
+    letterSpacing: 0.5},
   gameStatValue: {
     fontSize: 20,
     fontWeight: '700',
-    color: COLORS.navy,
-  },
+    color: COLORS.navy},
   gameStatTotal: {
     fontSize: 14,
     fontWeight: '500',
-    color: COLORS.textMuted,
-  },
+    color: COLORS.textMuted},
   gameStatDivider: {
     width: 1,
     height: 32,
-    backgroundColor: COLORS.border,
-  },
+    backgroundColor: COLORS.border},
   scoreRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-  },
+    gap: 4},
   miniCoin: {
     width: 18,
-    height: 18,
-  },
+    height: 18},
 
   // Game Board
   gameBoard: {
@@ -1060,22 +963,17 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 8,
     marginBottom: 20,
-    justifyContent: 'center',
-  },
+    justifyContent: 'center'},
   cardWrapper: {
-    perspective: 1000,
-  },
+    perspective: 1000},
   cardFace: {
     position: 'absolute',
     borderRadius: 14,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'},
   cardBack: {
-    zIndex: 2,
-  },
+    zIndex: 2},
   cardFront: {
-    zIndex: 1,
-  },
+    zIndex: 1},
   cardMatched: {
     // Matched state handled by inner styles
   },
@@ -1086,8 +984,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: COLORS.border,
-  },
+    borderColor: COLORS.border},
   cardFrontInner: {
     flex: 1,
     backgroundColor: COLORS.surface,
@@ -1095,52 +992,41 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: COLORS.border,
-  },
+    borderColor: COLORS.border},
   cardFrontMatched: {
     backgroundColor: COLORS.primaryBg,
-    borderColor: COLORS.primary,
-  },
+    borderColor: COLORS.primary},
   cardQuestion: {
     fontSize: 28,
     fontWeight: '700',
-    color: COLORS.textLight,
-  },
+    color: COLORS.textLight},
   cardEmoji: {
-    fontSize: 32,
-  },
+    fontSize: 32},
 
   // Progress Bar
   progressWrapper: {
-    marginBottom: 8,
-  },
+    marginBottom: 8},
   progressBg: {
     height: 10,
     backgroundColor: COLORS.surfaceSecondary,
     borderRadius: 5,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'},
   progressFill: {
     height: '100%',
     borderRadius: 5,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'},
   progressGradient: {
-    flex: 1,
-  },
+    flex: 1},
   progressLabels: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 8,
-  },
+    marginTop: 8},
   progressLabel: {
     fontSize: 11,
-    color: COLORS.textLight,
-  },
+    color: COLORS.textLight},
   progressLabelCenter: {
     fontWeight: '600',
-    color: COLORS.textMuted,
-  },
+    color: COLORS.textMuted},
 
   // Confetti
   confettiContainer: {
@@ -1150,16 +1036,14 @@ const styles = StyleSheet.create({
     right: 0,
     height: 200,
     pointerEvents: 'none',
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'},
   confetti: {
     position: 'absolute',
     width: 10,
     height: 10,
     borderRadius: 2,
     left: '50%',
-    top: -10,
-  },
+    top: -10},
 
   // Result Card
   resultCard: {
@@ -1170,59 +1054,48 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 1,
     shadowRadius: 20,
-    elevation: 8,
-  },
+    elevation: 8},
   resultGradient: {
     padding: 32,
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   resultIconWrapper: {
     width: 96,
     height: 96,
     borderRadius: 48,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
-  },
+    marginBottom: 20},
   resultTitle: {
     fontSize: 32,
     fontWeight: '800',
-    marginBottom: 8,
-  },
+    marginBottom: 8},
   resultSubtitle: {
     fontSize: 15,
-    marginBottom: 24,
-  },
+    marginBottom: 24},
   earnedBox: {
     paddingHorizontal: 32,
     paddingVertical: 20,
     borderRadius: 16,
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   earnedRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    marginBottom: 6,
-  },
+    marginBottom: 6},
   earnedCoin: {
     width: 36,
-    height: 36,
-  },
+    height: 36},
   earnedValue: {
     fontSize: 44,
-    fontWeight: '800',
-  },
+    fontWeight: '800'},
   earnedLabel: {
-    fontSize: 13,
-  },
+    fontSize: 13},
 
   // Stats Grid
   statsGrid: {
     flexDirection: 'row',
     gap: 12,
-    marginBottom: 20,
-  },
+    marginBottom: 20},
   statCard: {
     flex: 1,
     backgroundColor: COLORS.surface,
@@ -1233,47 +1106,40 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 1,
     shadowRadius: 8,
-    elevation: 2,
-  },
+    elevation: 2},
   statIconBg: {
     width: 44,
     height: 44,
     borderRadius: 22,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
-  },
+    marginBottom: 10},
   statValue: {
     fontSize: 20,
     fontWeight: '700',
     color: COLORS.navy,
-    marginBottom: 4,
-  },
+    marginBottom: 4},
   statLabel: {
     fontSize: 11,
     fontWeight: '600',
     color: COLORS.textMuted,
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
+    letterSpacing: 0.5},
 
   // Actions
   actionsContainer: {
-    gap: 12,
-  },
+    gap: 12},
   primaryAction: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
     paddingVertical: 18,
-    borderRadius: 16,
-  },
+    borderRadius: 16},
   primaryActionText: {
     fontSize: 16,
     fontWeight: '700',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse},
   secondaryAction: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1283,13 +1149,10 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: COLORS.surface,
     borderWidth: 1,
-    borderColor: COLORS.border,
-  },
+    borderColor: COLORS.border},
   secondaryActionText: {
     fontSize: 15,
     fontWeight: '600',
-    color: COLORS.textMuted,
-  },
-});
+    color: COLORS.textMuted}});
 
 export default withErrorBoundary(MemoryMatch, 'PlayandearnMemorymatch');

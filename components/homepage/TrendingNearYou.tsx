@@ -5,9 +5,9 @@ import {
   StyleSheet,
   Pressable,
   Platform,
-  Animated,
   ActivityIndicator,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence, withRepeat, interpolate } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { Video, ResizeMode, AVPlaybackStatus } from 'expo-av';
 import { Ionicons } from '@expo/vector-icons';
@@ -234,41 +234,25 @@ const transformStoreData = (backendStore: any): TrendingStore => {
 
 // Skeleton card component for loading state
 const SkeletonCard: React.FC = () => {
-  const [shimmerAnim] = useState(new Animated.Value(0));
+  const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
-    const shimmerAnimation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmerAnim, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    shimmerAnimation.start();
-    return () => shimmerAnimation.stop();
+    shimmerAnim.value = withRepeat(withSequence(withTiming(1, { duration: 1000 }), withTiming(0, { duration: 1000 })), -1);
   }, [shimmerAnim]);
 
-  const opacity = shimmerAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0.3, 0.7],
-  });
+  const shimmerStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(shimmerAnim.value, [0, 1], [0.3, 0.7]),
+  }));
 
   return (
     <View style={styles.storeCard}>
-      <Animated.View style={[styles.skeletonImage, { opacity }]} />
+      <Animated.View style={[styles.skeletonImage, shimmerStyle]} />
       <View style={styles.storeInfo}>
-        <Animated.View style={[styles.skeletonName, { opacity }]} />
-        <Animated.View style={[styles.skeletonCategory, { opacity }]} />
+        <Animated.View style={[styles.skeletonName, shimmerStyle]} />
+        <Animated.View style={[styles.skeletonCategory, shimmerStyle]} />
         <View style={styles.storeFooter}>
-          <Animated.View style={[styles.skeletonCashback, { opacity }]} />
-          <Animated.View style={[styles.skeletonCoins, { opacity }]} />
+          <Animated.View style={[styles.skeletonCashback, shimmerStyle]} />
+          <Animated.View style={[styles.skeletonCoins, shimmerStyle]} />
         </View>
       </View>
     </View>
@@ -284,6 +268,7 @@ const TrendingNearYou: React.FC<TrendingNearYouProps> = ({
   const [stores, setStores] = useState<TrendingStore[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   // Fetch trending stores from API
   const fetchTrendingStores = useCallback(async () => {

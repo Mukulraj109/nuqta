@@ -1,5 +1,5 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect} from 'react';
 import {
   View,
   ScrollView,
@@ -8,18 +8,23 @@ import {
   Pressable,
   RefreshControl,
   Platform,
-  Animated,
   StatusBar,
-  Dimensions,
+  Dimensions
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
 import gamificationApi, {
-  StreakData,
-} from '../../services/gamificationApi';
+  StreakData } from '../../services/gamificationApi';
 import cashStoreApi from '../../services/cashStoreApi';
 import bonusZoneApi, { BonusZoneCampaign } from '../../services/bonusZoneApi';
 import BonusZoneCard from '../../components/earn/BonusZoneCard';
@@ -110,21 +115,24 @@ const EARN_METHODS = [
 
 // ─── Animated Glow Component ────────────────────────────────
 const GlowRing = React.memo(() => {
-  const pulse = useRef(new Animated.Value(0.4)).current;
+  const pulse = useSharedValue(0.4);
 
   useEffect(() => {
-    const loop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(pulse, { toValue: 0.8, duration: 2000, useNativeDriver: true }),
-        Animated.timing(pulse, { toValue: 0.4, duration: 2000, useNativeDriver: true }),
-      ])
+    pulse.value = withRepeat(
+      withSequence(
+        withTiming(0.8, { duration: 2000 }),
+        withTiming(0.4, { duration: 2000 })
+      ),
+      -1
     );
-    loop.start();
-    return () => loop.stop();
   }, []);
 
+  const glowStyle = useAnimatedStyle(() => ({
+    opacity: pulse.value,
+  }));
+
   return (
-    <Animated.View style={[styles.glowRing, { opacity: pulse }]} />
+    <Animated.View style={[styles.glowRing, glowStyle]} />
   );
 });
 
@@ -135,24 +143,25 @@ const SkeletonBlock = React.memo(({ width: w, height: h, style, index = 0 }: {
   style?: any;
   index?: number;
 }) => {
-  const shimmer = useRef(new Animated.Value(0)).current;
+  const shimmer = useSharedValue(0);
 
   useEffect(() => {
-    const loop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmer, { toValue: 1, duration: 1000, delay: index * 100, useNativeDriver: true }),
-        Animated.timing(shimmer, { toValue: 0, duration: 1000, useNativeDriver: true }),
-      ])
+    shimmer.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 1000 }),
+        withTiming(0, { duration: 1000 })
+      ),
+      -1
     );
-    loop.start();
-    return () => loop.stop();
   }, [index]);
 
-  const opacity = shimmer.interpolate({ inputRange: [0, 1], outputRange: [0.3, 0.7] });
+  const shimmerStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(shimmer.value, [0, 1], [0.3, 0.7]),
+  }));
 
   return (
     <Animated.View
-      style={[{ width: w as any, height: h, borderRadius: BorderRadius.lg, backgroundColor: '#E8E2DB', opacity }, style]}
+      style={[{ width: w as any, height: h, borderRadius: BorderRadius.lg, backgroundColor: '#E8E2DB' }, shimmerStyle, style]}
     />
   );
 });
@@ -670,14 +679,12 @@ function ExtraCoinsPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F5F0',
-  },
+    backgroundColor: '#F8F5F0' },
 
   // ── Hero ──────────────────────────────────────
   heroSection: {
     paddingBottom: Spacing.xl,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   heroDecor1: {
     position: 'absolute',
     width: 200,
@@ -685,8 +692,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     backgroundColor: 'rgba(255,205,87,0.06)',
     top: -60,
-    right: -40,
-  },
+    right: -40 },
   heroDecor2: {
     position: 'absolute',
     width: 140,
@@ -694,8 +700,7 @@ const styles = StyleSheet.create({
     borderRadius: 70,
     backgroundColor: 'rgba(255,205,87,0.04)',
     bottom: 10,
-    left: -40,
-  },
+    left: -40 },
   heroDecor3: {
     position: 'absolute',
     width: 80,
@@ -703,46 +708,40 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     backgroundColor: 'rgba(59,130,246,0.05)',
     top: 60,
-    left: 40,
-  },
+    left: 40 },
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
     paddingHorizontal: Spacing.base,
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs },
   backBtnDark: {
     width: 34,
     height: 34,
     borderRadius: 17,
     backgroundColor: 'rgba(255,255,255,0.12)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   headerTitleLight: {
     flex: 1,
     ...Typography.h4,
     fontSize: 17,
     fontWeight: '700',
     color: Colors.text.inverse,
-    letterSpacing: -0.3,
-  },
+    letterSpacing: -0.3 },
 
   // Balance
   balanceContainer: {
     alignItems: 'center',
     paddingTop: Spacing.lg,
-    paddingBottom: Spacing.sm,
-  },
+    paddingBottom: Spacing.sm },
   coinIconOuter: {
     width: 68,
     height: 68,
     borderRadius: 34,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 14,
-  },
+    marginBottom: 14 },
   glowRing: {
     position: 'absolute',
     width: 68,
@@ -751,31 +750,26 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'rgba(255,205,87,0.4)',
     ...(Platform.OS === 'web' ? {
-      boxShadow: '0 0 20px rgba(255,205,87,0.3)',
-    } : {}),
-  },
+      boxShadow: '0 0 20px rgba(255,205,87,0.3)' } : {}) },
   coinIconInner: {
     width: 52,
     height: 52,
     borderRadius: 26,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   balanceLabel: {
     fontSize: 11,
     fontWeight: '600',
     color: 'rgba(255,255,255,0.5)',
     letterSpacing: 1.5,
     textTransform: 'uppercase',
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs },
   balanceAmount: {
     fontSize: 46,
     fontWeight: '800',
     color: Colors.gold,
     letterSpacing: -2,
-    lineHeight: 52,
-  },
+    lineHeight: 52 },
   balanceChips: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -783,24 +777,20 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.08)',
     borderRadius: BorderRadius.xl,
     paddingHorizontal: 14,
-    paddingVertical: 6,
-  },
+    paddingVertical: 6 },
   balanceChip: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.xs,
-  },
+    gap: Spacing.xs },
   balanceChipText: {
     fontSize: 11,
     color: 'rgba(255,255,255,0.65)',
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
   balanceChipDivider: {
     width: 1,
     height: 12,
     backgroundColor: 'rgba(255,255,255,0.15)',
-    marginHorizontal: 10,
-  },
+    marginHorizontal: 10 },
 
   // Streak row
   streakRow: {
@@ -811,23 +801,19 @@ const styles = StyleSheet.create({
     marginTop: 14,
     backgroundColor: 'rgba(255,255,255,0.08)',
     borderRadius: 14,
-    padding: 10,
-  },
+    padding: 10 },
   streakPill: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    paddingLeft: 4,
-  },
+    paddingLeft: 4 },
   streakPillText: {
     fontSize: 13,
     fontWeight: '700',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse },
   checkInBtn: {
     borderRadius: BorderRadius.xl,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   checkInBtnDone: {},
   checkInBtnGradient: {
     flexDirection: 'row',
@@ -835,48 +821,40 @@ const styles = StyleSheet.create({
     gap: 5,
     paddingHorizontal: 14,
     paddingVertical: Spacing.sm,
-    borderRadius: BorderRadius.xl,
-  },
+    borderRadius: BorderRadius.xl },
   checkInText: {
     ...Typography.bodySmall,
     fontWeight: '700',
-    color: Colors.text.primary,
-  },
+    color: Colors.text.primary },
   checkInTextDone: {
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse },
 
   // ── Content area ──────────────────────────────
   contentArea: {
-    paddingTop: Spacing.sm,
-  },
+    paddingTop: Spacing.sm },
 
   // ── Section shared ────────────────────────────
   section: {
     paddingHorizontal: Spacing.base,
-    marginTop: 22,
-  },
+    marginTop: 22 },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    marginBottom: 14,
-  },
+    marginBottom: 14 },
   sectionIconBg: {
     width: Spacing['2xl'],
     height: Spacing['2xl'],
     borderRadius: 10,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   sectionTitle: {
     flex: 1,
     ...Typography.h4,
     fontSize: 17,
     fontWeight: '700',
     color: Colors.text.primary,
-    letterSpacing: -0.3,
-  },
+    letterSpacing: -0.3 },
   seeAllBtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -884,13 +862,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(26,58,82,0.06)',
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: BorderRadius.sm,
-  },
+    borderRadius: BorderRadius.sm },
   seeAllText: {
     ...Typography.bodySmall,
     fontWeight: '600',
-    color: Colors.nileBlue,
-  },
+    color: Colors.nileBlue },
 
   // ── Boost cards ───────────────────────────────
   boostCard: {
@@ -899,8 +875,7 @@ const styles = StyleSheet.create({
     padding: 18,
     overflow: 'hidden',
     minHeight: 165,
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   boostDecor1: {
     position: 'absolute',
     width: 100,
@@ -908,8 +883,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     backgroundColor: 'rgba(255,255,255,0.06)',
     top: -30,
-    right: -20,
-  },
+    right: -20 },
   boostDecor2: {
     position: 'absolute',
     width: 60,
@@ -917,33 +891,28 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     backgroundColor: 'rgba(255,205,87,0.08)',
     bottom: -10,
-    left: 10,
-  },
+    left: 10 },
   boostTopRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
   boostMultiplier: {
     flexDirection: 'row',
     alignItems: 'baseline',
     backgroundColor: 'rgba(255,205,87,0.2)',
     paddingHorizontal: Spacing.md,
     paddingVertical: 5,
-    borderRadius: 10,
-  },
+    borderRadius: 10 },
   boostMultiplierNum: {
     fontSize: 22,
     fontWeight: '900',
-    color: Colors.gold,
-  },
+    color: Colors.gold },
   boostMultiplierX: {
     fontSize: 13,
     fontWeight: '800',
     color: Colors.gold,
-    marginLeft: 1,
-  },
+    marginLeft: 1 },
   boostTimePill: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -951,33 +920,27 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.15)',
     paddingHorizontal: Spacing.sm,
     paddingVertical: Spacing.xs,
-    borderRadius: BorderRadius.sm,
-  },
+    borderRadius: BorderRadius.sm },
   boostTimePillEnded: {
-    backgroundColor: 'rgba(239,68,68,0.2)',
-  },
+    backgroundColor: 'rgba(239,68,68,0.2)' },
   boostTimeText: {
     fontSize: 10,
     fontWeight: '600',
-    color: 'rgba(255,255,255,0.85)',
-  },
+    color: 'rgba(255,255,255,0.85)' },
   boostTitle: {
     fontSize: 15,
     fontWeight: '700',
     color: Colors.text.inverse,
-    lineHeight: 20,
-  },
+    lineHeight: 20 },
   boostSubtitle: {
     ...Typography.bodySmall,
     color: 'rgba(255,255,255,0.6)',
-    marginTop: 3,
-  },
+    marginTop: 3 },
   boostFooter: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: 14,
-  },
+    marginTop: 14 },
   boostStoreChip: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -985,21 +948,18 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.1)',
     paddingHorizontal: Spacing.sm,
     paddingVertical: 3,
-    borderRadius: 6,
-  },
+    borderRadius: 6 },
   boostStoreText: {
     fontSize: 10,
     fontWeight: '500',
-    color: 'rgba(255,255,255,0.7)',
-  },
+    color: 'rgba(255,255,255,0.7)' },
   boostArrow: {
     width: Spacing.xl,
     height: Spacing.xl,
     borderRadius: Spacing.md,
     backgroundColor: 'rgba(255,255,255,0.1)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
 
   // ── Coin Drop cards ───────────────────────────
   dropCard: {
@@ -1010,22 +970,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#F0EBE4',
-    ...Shadows.medium,
-  },
+    ...Shadows.medium },
   dropHeader: {
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
-  },
+    marginBottom: 10 },
   dropIcon: {
     width: 40,
     height: 40,
     borderRadius: 14,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   dropMultiBadge: {
     position: 'absolute',
     top: -4,
@@ -1033,27 +990,23 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.nileBlue,
     paddingHorizontal: 7,
     paddingVertical: 2,
-    borderRadius: BorderRadius.sm,
-  },
+    borderRadius: BorderRadius.sm },
   dropMultiText: {
     ...Typography.overline,
     fontWeight: '800',
     color: Colors.text.inverse,
     letterSpacing: 0,
-    textTransform: 'none',
-  },
+    textTransform: 'none' },
   dropStoreName: {
     fontSize: 13,
     fontWeight: '700',
     color: Colors.text.primary,
     textAlign: 'center',
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs },
   dropBoosted: {
     ...Typography.body,
     fontWeight: '800',
-    color: Colors.nileBlue,
-  },
+    color: Colors.nileBlue },
   dropNormal: {
     ...Typography.overline,
     fontWeight: '400',
@@ -1061,8 +1014,7 @@ const styles = StyleSheet.create({
     textDecorationLine: 'line-through',
     marginTop: 1,
     letterSpacing: 0,
-    textTransform: 'none',
-  },
+    textTransform: 'none' },
   dropTimePill: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1071,37 +1023,31 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(26,58,82,0.08)',
     paddingHorizontal: Spacing.sm,
     paddingVertical: 3,
-    borderRadius: 6,
-  },
+    borderRadius: 6 },
   dropTimeText: {
     ...Typography.overline,
     fontWeight: '500',
     color: Colors.nileBlue,
     letterSpacing: 0,
-    textTransform: 'none',
-  },
+    textTransform: 'none' },
 
   // ── Opportunity cards ─────────────────────────
   oppList: {
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
 
   // ── Earn Grid ─────────────────────────────────
   earnGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   earnCard: {
     width: (SCREEN_WIDTH - 44) / 2,
     borderRadius: 18,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   earnCardGradient: {
     padding: Spacing.base,
     minHeight: 140,
-    justifyContent: 'flex-end',
-  },
+    justifyContent: 'flex-end' },
   earnIconCircle: {
     width: 42,
     height: 42,
@@ -1109,18 +1055,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.2)',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
   earnTitle: {
     ...Typography.body,
     fontWeight: '700',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse },
   earnDesc: {
     fontSize: 11,
     color: 'rgba(255,255,255,0.7)',
-    marginTop: 2,
-  },
+    marginTop: 2 },
   earnCoinsPill: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1130,13 +1073,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.sm,
     paddingVertical: 3,
     borderRadius: 6,
-    marginTop: Spacing.sm,
-  },
+    marginTop: Spacing.sm },
   earnCoinsText: {
     ...Typography.caption,
     fontWeight: '700',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse },
 
   // ── Timeline ──────────────────────────────────
   timelineCard: {
@@ -1146,74 +1087,62 @@ const styles = StyleSheet.create({
     gap: 0,
     borderWidth: 1,
     borderColor: '#F0EBE4',
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle },
   timelineStep: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 14,
-    paddingBottom: Spacing.lg,
-  },
+    paddingBottom: Spacing.lg },
   timelineLine: {
     position: 'absolute',
     left: 15,
     top: 34,
     width: 2,
     height: 28,
-    backgroundColor: '#E2DDD5',
-  },
+    backgroundColor: '#E2DDD5' },
   timelineNumber: {
     width: Spacing['2xl'],
     height: Spacing['2xl'],
     borderRadius: Spacing.base,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   timelineNumberText: {
     fontSize: 13,
     fontWeight: '800',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse },
   timelineContent: {
     flex: 1,
-    paddingTop: 2,
-  },
+    paddingTop: 2 },
   timelineRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    marginBottom: 3,
-  },
+    marginBottom: 3 },
   timelineTitle: {
     ...Typography.body,
     fontWeight: '700',
-    color: Colors.text.primary,
-  },
+    color: Colors.text.primary },
   timelineText: {
     ...Typography.bodySmall,
     color: Colors.text.tertiary,
-    lineHeight: 17,
-  },
+    lineHeight: 17 },
 
   // ── Bottom CTA ────────────────────────────────
   bottomCta: {
     marginHorizontal: Spacing.base,
     marginTop: 28,
     borderRadius: BorderRadius.lg,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   bottomCtaGradient: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     gap: 10,
-    paddingVertical: Spacing.base,
-  },
+    paddingVertical: Spacing.base },
   bottomCtaText: {
     fontSize: 15,
     fontWeight: '700',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse },
 
   // ── Error states ──────────────────────────────
   errorBanner: {
@@ -1227,31 +1156,26 @@ const styles = StyleSheet.create({
     marginTop: Spacing.md,
     borderRadius: BorderRadius.md,
     borderWidth: 1,
-    borderColor: colors.warningScale[200],
-  },
+    borderColor: colors.warningScale[200] },
   errorBannerText: {
     flex: 1,
     ...Typography.bodySmall,
-    color: colors.brand.amberDeep,
-  },
+    color: colors.brand.amberDeep },
   errorBannerRetry: {
     ...Typography.bodySmall,
     fontWeight: '600',
-    color: Colors.nileBlue,
-  },
+    color: Colors.nileBlue },
   errorFull: {
     alignItems: 'center',
     paddingVertical: 60,
-    paddingHorizontal: Spacing['2xl'],
-  },
+    paddingHorizontal: Spacing['2xl'] },
   errorFullText: {
     fontSize: 15,
     fontWeight: '600',
     color: Colors.text.primary,
     textAlign: 'center',
     marginTop: Spacing.md,
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base },
   errorRetryBtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1259,18 +1183,14 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.nileBlue,
     paddingHorizontal: Spacing.lg,
     paddingVertical: 10,
-    borderRadius: BorderRadius.xl,
-  },
+    borderRadius: BorderRadius.xl },
   errorRetryText: {
     fontSize: 13,
     fontWeight: '600',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse },
 
   // ── Skeleton ──────────────────────────────────
   skeletonHero: {
-    paddingBottom: 30,
-  },
-});
+    paddingBottom: 30 } });
 
 export default withErrorBoundary(ExtraCoinsPage, 'CashStoreExtraCoins');

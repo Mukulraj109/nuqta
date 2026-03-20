@@ -1,13 +1,12 @@
 // SettingsItem - Premium settings list item
 // Rounded-square icon container, scale micro-interaction, themed chips, insight text
 
-import React, { useRef, useCallback } from 'react';
+import React, { useCallback} from 'react';
 import {
   View,
   Pressable,
-  StyleSheet,
-  Animated,
-} from 'react-native';
+  StyleSheet} from 'react-native';
+import Animated, { useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { SettingsItemProps } from '@/types/account.types';
@@ -30,23 +29,14 @@ function getChipStyle(badge: string | number) {
 }
 
 function SettingsItem({ category, onPress, style, isLast }: SettingsItemProps & { isLast?: boolean }) {
-  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const scaleAnim = useSharedValue(1);
 
   const handlePressIn = useCallback(() => {
-    Animated.timing(scaleAnim, {
-      toValue: 0.97,
-      duration: 80,
-      useNativeDriver: true,
-    }).start();
+    scaleAnim.value = withTiming(0.97, { duration: 80 });
   }, [scaleAnim]);
 
   const handlePressOut = useCallback(() => {
-    Animated.spring(scaleAnim, {
-      toValue: 1,
-      damping: 15,
-      stiffness: 200,
-      useNativeDriver: true,
-    }).start();
+    scaleAnim.value = withSpring(1, { damping: 15, stiffness: 200 });
   }, [scaleAnim]);
 
   const handlePress = useCallback(() => {

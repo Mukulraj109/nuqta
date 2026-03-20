@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Animated, Pressable, Platform } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, Pressable, Platform } from 'react-native';
+import Animated, { runOnJS, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 
@@ -34,58 +35,21 @@ function ReportToast({
   message,
   onDismiss,
 }: ReportToastProps) {
-  const [fadeAnim] = useState(new Animated.Value(0));
-  const [slideAnim] = useState(new Animated.Value(-100));
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(-100);
 
   useEffect(() => {
     if (visible) {
       // Slide in and fade in
-      const anim = Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        Animated.timing(slideAnim, {
-          toValue: 0,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-      ]);
-      anim.start();
-
-      // Auto dismiss after 3 seconds
-      const timer = setTimeout(() => {
-        dismiss();
-      }, 3000);
-
-      return () => {
-      anim.stop();
-      clearTimeout(timer);
-    }
-    } else {
-      // Reset animation values when not visible
-      fadeAnim.setValue(0);
-      slideAnim.setValue(-100);
+      fadeAnim.value = withTiming(1, { duration: 300 });
+      slideAnim.value = withTiming(0, { duration: 300 });
+      // After 3 seconds, slide out
+      fadeAnim.value = withDelay(3000, withTiming(0, { duration: 200 }));
+      slideAnim.value = withDelay(3000, withTiming(-100, { duration: 200 }));
+      // Dismiss after animation
+      setTimeout(() => onDismiss?.(), 3200);
     }
   }, [visible]);
-
-  const dismiss = () => {
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: -100,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      onDismiss?.();
-    });
-  };
 
   const getIconName = () => {
     return type === 'success' ? 'checkmark-circle' : 'close-circle';
@@ -135,7 +99,7 @@ function ReportToast({
           {message}
         </Text>
         <Pressable
-          onPress={dismiss}
+          onPress={onDismiss}
           style={styles.closeButton}
           accessibilityLabel="Dismiss notification"
           accessibilityRole="button"

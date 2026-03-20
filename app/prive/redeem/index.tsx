@@ -13,9 +13,17 @@ import {
   Pressable,
   SafeAreaView,
   ActivityIndicator,
-  Animated,
-  RefreshControl,
-} from 'react-native';
+  RefreshControl} from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedReaction,
+  withTiming,
+  runOnJS,
+  useAnimatedStyle,
+  withSpring,
+  withSequence,
+  withRepeat,
+  interpolate} from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -36,32 +44,26 @@ const FALLBACK_CONFIG: RedeemConfig = {
   dailyRedemptionLimit: 5,
   enabledCategories: ['gift_card', 'bill_pay', 'experience', 'charity'],
   expiryDays: { gift_card: 365, bill_pay: 30, experience: 90, charity: 7 },
-  currency: 'INR',
-};
+  currency: 'INR'};
 
 const OPTION_META: Record<string, { title: string; description: string; icon: string; route: string }> = {
   gift_card: { title: 'Gift Cards', description: 'Amazon, Flipkart, Swiggy & more', icon: '🎁', route: '/prive/redeem/gift-cards' },
   bill_pay: { title: 'Bill Pay', description: 'Use coins at checkout', icon: '🧾', route: '/prive/redeem/bill-pay' },
   experience: { title: 'Experiences', description: 'Exclusive Privé experiences', icon: '✨', route: '/prive/redeem/experiences' },
-  charity: { title: 'Charity', description: 'Donate to causes', icon: '💝', route: '/prive/redeem/charity' },
-};
+  charity: { title: 'Charity', description: 'Donate to causes', icon: '💝', route: '/prive/redeem/charity' }};
 
 // Skeleton shimmer placeholder
 const SkeletonBlock = ({ width, height, style }: { width: number | string; height: number; style?: any }) => {
-  const shimmer = useRef(new Animated.Value(0)).current;
+  const shimmer = useSharedValue(0);
 
   useEffect(() => {
-    const shimmerLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmer, { toValue: 1, duration: 1000, useNativeDriver: true }),
-        Animated.timing(shimmer, { toValue: 0, duration: 1000, useNativeDriver: true }),
-      ])
-    );
-    shimmerLoop.start();
-    return () => shimmerLoop.stop();
+    shimmer.value = withRepeat(withSequence(
+        withTiming(1, { duration: 1000 }),
+        withTiming(0, { duration: 1000 })
+      ), -1);
   }, [shimmer]);
 
-  const opacity = shimmer.interpolate({ inputRange: [0, 1], outputRange: [0.3, 0.6] });
+  const opacity = interpolate(shimmer.value, [0, 1], [0.3, 0.6]);
 
   return (
     <Animated.View
@@ -84,12 +86,12 @@ function RedeemScreen() {
   const [error, setError] = useState<string | null>(null);
 
   // Animated balance counter
-  const animatedValue = useRef(new Animated.Value(0)).current;
+  const animatedValue = useSharedValue(0);
   const [displayBalance, setDisplayBalance] = useState(0);
   const prevBalanceRef = useRef(0);
 
   // Unlock animation values per category
-  const unlockAnims = useRef<Record<string, Animated.Value>>({}).current;
+  const unlockAnims = useRef<Record<string, { value: number }>>({}).current;
 
   const availableCoins = userData?.priveCoins || 0;
   const isLoading = priveLoading || configLoading;
@@ -131,45 +133,31 @@ function RedeemScreen() {
     }
 
     // Animate newly unlocked cards
-    const unlockAnimations: Animated.CompositeAnimation[] = [];
     for (const cat of newUnlocked) {
       if (!prevUnlocked.has(cat) && prevBalance > 0) {
         if (!unlockAnims[cat]) {
-          unlockAnims[cat] = new Animated.Value(0);
+          unlockAnims[cat] = { value: 0 };
         }
-        unlockAnims[cat].setValue(0);
-        const a = Animated.spring(unlockAnims[cat], {
-          toValue: 1,
-          friction: 4,
-          tension: 80,
-          useNativeDriver: true,
-        });
-        a.start();
-        unlockAnimations.push(a);
+        unlockAnims[cat].value = 0;
+        unlockAnims[cat].value = 1; // Snap to unlocked state
       }
     }
 
     prevBalanceRef.current = availableCoins;
 
     // Animate the balance number
-    animatedValue.setValue(prevBalance);
-    const listener = animatedValue.addListener(({ value }) => {
-      setDisplayBalance(Math.round(value));
-    });
-
-    const balanceAnim = Animated.timing(animatedValue, {
-      toValue: availableCoins,
-      duration: 800,
-      useNativeDriver: false,
-    });
-    balanceAnim.start();
-
-    return () => {
-      balanceAnim.stop();
-      unlockAnimations.forEach(a => a.stop());
-      animatedValue.removeListener(listener);
-    };
+    animatedValue.value = prevBalance;
+    animatedValue.value = withTiming(availableCoins, { duration: 800 });
   }, [availableCoins, isLoading]);
+
+  // React to animated balance value changes
+  useAnimatedReaction(
+    () => animatedValue.value,
+    (val) => {
+      runOnJS(setDisplayBalance)(Math.round(val));
+    },
+    [availableCoins]
+  );
 
   const handleRefresh = useCallback(async () => {
     setIsRefreshing(true);
@@ -197,8 +185,7 @@ function RedeemScreen() {
     .map((cat) => ({
       id: cat,
       ...OPTION_META[cat],
-      minCoins: config.minCoinsPerCategory[cat] || 100,
-    }));
+      minCoins: config.minCoinsPerCategory[cat] || 100}));
 
   if (combinedError && !isLoading && availableCoins === 0) {
     // Full error state
@@ -326,7 +313,7 @@ function RedeemScreen() {
               const hasEnoughCoins = availableCoins >= option.minCoins;
               const unlockAnim = unlockAnims[option.id];
               const scale = unlockAnim
-                ? unlockAnim.interpolate({ inputRange: [0, 0.5, 1], outputRange: [1, 1.05, 1] })
+                ? interpolate(unlockAnim.value, [0, 0.5, 1], [1, 1.05, 1])
                 : 1;
 
               return (
@@ -381,36 +368,29 @@ function RedeemScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1},
   safeArea: {
-    flex: 1,
-  },
+    flex: 1},
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: PRIVE_SPACING.xl,
-    paddingVertical: PRIVE_SPACING.lg,
-  },
+    paddingVertical: PRIVE_SPACING.lg},
   backButton: {
     width: 40,
     height: 40,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center'},
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: PRIVE_COLORS.text.primary,
-  },
+    color: PRIVE_COLORS.text.primary},
   headerSpacer: {
-    width: 40,
-  },
+    width: 40},
   content: {
     flex: 1,
-    paddingHorizontal: PRIVE_SPACING.xl,
-  },
+    paddingHorizontal: PRIVE_SPACING.xl},
   // Balance Card
   balanceCard: {
     backgroundColor: PRIVE_COLORS.background.card,
@@ -419,30 +399,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: PRIVE_COLORS.border.goldMuted,
-    marginBottom: PRIVE_SPACING.xl,
-  },
+    marginBottom: PRIVE_SPACING.xl},
   balanceLabel: {
     fontSize: 14,
     color: PRIVE_COLORS.text.tertiary,
-    marginBottom: PRIVE_SPACING.sm,
-  },
+    marginBottom: PRIVE_SPACING.sm},
   balanceAmount: {
     fontSize: 48,
     fontWeight: '200',
-    color: PRIVE_COLORS.gold.primary,
-  },
+    color: PRIVE_COLORS.gold.primary},
   balanceSubtext: {
     fontSize: 14,
-    color: PRIVE_COLORS.text.tertiary,
-  },
+    color: PRIVE_COLORS.text.tertiary},
   // Coin split
   coinSplit: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
     gap: PRIVE_SPACING.sm,
-    marginTop: PRIVE_SPACING.lg,
-  },
+    marginTop: PRIVE_SPACING.lg},
   coinChip: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -450,67 +425,56 @@ const styles = StyleSheet.create({
     borderRadius: PRIVE_RADIUS.md,
     paddingHorizontal: PRIVE_SPACING.md,
     paddingVertical: 4,
-    gap: 6,
-  },
+    gap: 6},
   coinDot: {
     width: 8,
     height: 8,
-    borderRadius: 4,
-  },
+    borderRadius: 4},
   coinChipText: {
     fontSize: 11,
     color: PRIVE_COLORS.text.secondary,
-    fontWeight: '500',
-  },
+    fontWeight: '500'},
   brandedNote: {
     fontSize: 10,
     color: PRIVE_COLORS.text.disabled,
     marginTop: 6,
-    fontStyle: 'italic',
-  },
+    fontStyle: 'italic'},
   // Zero balance guidance
   zeroBalanceCard: {
     backgroundColor: PRIVE_COLORS.transparent.gold10,
     borderRadius: PRIVE_RADIUS.xl,
     padding: PRIVE_SPACING.xl,
     alignItems: 'center',
-    marginBottom: PRIVE_SPACING.xl,
-  },
+    marginBottom: PRIVE_SPACING.xl},
   zeroBalanceIcon: {
     fontSize: 36,
-    marginBottom: PRIVE_SPACING.md,
-  },
+    marginBottom: PRIVE_SPACING.md},
   zeroBalanceTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: PRIVE_COLORS.text.primary,
-    marginBottom: PRIVE_SPACING.sm,
-  },
+    marginBottom: PRIVE_SPACING.sm},
   zeroBalanceText: {
     fontSize: 13,
     color: PRIVE_COLORS.text.secondary,
     textAlign: 'center',
     lineHeight: 20,
-    marginBottom: PRIVE_SPACING.lg,
-  },
+    marginBottom: PRIVE_SPACING.lg},
   earnButton: {
     backgroundColor: PRIVE_COLORS.gold.primary,
     paddingHorizontal: PRIVE_SPACING.xl,
     paddingVertical: PRIVE_SPACING.md,
-    borderRadius: PRIVE_RADIUS.lg,
-  },
+    borderRadius: PRIVE_RADIUS.lg},
   earnButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: PRIVE_COLORS.background.primary,
-  },
+    color: PRIVE_COLORS.background.primary},
   // Section
   sectionTitle: {
     fontSize: 14,
     fontWeight: '600',
     color: PRIVE_COLORS.text.primary,
-    marginBottom: PRIVE_SPACING.lg,
-  },
+    marginBottom: PRIVE_SPACING.lg},
   // Option cards
   optionCard: {
     flexDirection: 'row',
@@ -520,12 +484,10 @@ const styles = StyleSheet.create({
     padding: PRIVE_SPACING.lg,
     borderWidth: 1,
     borderColor: PRIVE_COLORS.border.primary,
-    marginBottom: PRIVE_SPACING.md,
-  },
+    marginBottom: PRIVE_SPACING.md},
   optionCardDisabled: {
     opacity: 0.6,
-    borderColor: PRIVE_COLORS.border.secondary,
-  },
+    borderColor: PRIVE_COLORS.border.secondary},
   optionIcon: {
     width: 48,
     height: 48,
@@ -533,38 +495,29 @@ const styles = StyleSheet.create({
     backgroundColor: PRIVE_COLORS.transparent.gold15,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: PRIVE_SPACING.lg,
-  },
+    marginRight: PRIVE_SPACING.lg},
   optionEmoji: {
-    fontSize: 24,
-  },
+    fontSize: 24},
   optionInfo: {
-    flex: 1,
-  },
+    flex: 1},
   optionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: PRIVE_COLORS.text.primary,
-  },
+    color: PRIVE_COLORS.text.primary},
   optionTitleDisabled: {
-    color: PRIVE_COLORS.text.tertiary,
-  },
+    color: PRIVE_COLORS.text.tertiary},
   optionDescription: {
     fontSize: 12,
     color: PRIVE_COLORS.text.tertiary,
-    marginTop: 2,
-  },
+    marginTop: 2},
   optionRight: {
-    alignItems: 'flex-end',
-  },
+    alignItems: 'flex-end'},
   optionMinCoins: {
     fontSize: 11,
     color: PRIVE_COLORS.text.tertiary,
-    marginBottom: 4,
-  },
+    marginBottom: 4},
   optionMinCoinsInsufficient: {
-    color: PRIVE_COLORS.status.warning,
-  },
+    color: PRIVE_COLORS.status.warning},
   // Info card
   infoCard: {
     flexDirection: 'row',
@@ -573,48 +526,39 @@ const styles = StyleSheet.create({
     borderRadius: PRIVE_RADIUS.lg,
     padding: PRIVE_SPACING.lg,
     marginTop: PRIVE_SPACING.lg,
-    gap: PRIVE_SPACING.md,
-  },
+    gap: PRIVE_SPACING.md},
   infoIcon: {
-    fontSize: 20,
-  },
+    fontSize: 20},
   infoText: {
     flex: 1,
     fontSize: 12,
     color: PRIVE_COLORS.text.secondary,
-    lineHeight: 18,
-  },
+    lineHeight: 18},
   // Error state
   errorContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: PRIVE_SPACING.xxl,
-  },
+    paddingHorizontal: PRIVE_SPACING.xxl},
   errorTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: PRIVE_COLORS.text.primary,
     marginTop: PRIVE_SPACING.lg,
-    marginBottom: PRIVE_SPACING.sm,
-  },
+    marginBottom: PRIVE_SPACING.sm},
   errorText: {
     fontSize: 14,
     color: PRIVE_COLORS.text.tertiary,
     textAlign: 'center',
-    marginBottom: PRIVE_SPACING.xl,
-  },
+    marginBottom: PRIVE_SPACING.xl},
   retryButton: {
     backgroundColor: PRIVE_COLORS.gold.primary,
     paddingHorizontal: PRIVE_SPACING.xxl,
     paddingVertical: PRIVE_SPACING.md,
-    borderRadius: PRIVE_RADIUS.lg,
-  },
+    borderRadius: PRIVE_RADIUS.lg},
   retryText: {
     fontSize: 14,
     fontWeight: '600',
-    color: PRIVE_COLORS.background.primary,
-  },
-});
+    color: PRIVE_COLORS.background.primary}});
 
 export default withErrorBoundary(RedeemScreen, 'PriveRedeemIndex');

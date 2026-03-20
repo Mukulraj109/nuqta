@@ -1,5 +1,6 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { View, Pressable, StyleSheet, Animated, Platform } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Pressable, StyleSheet, Platform } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring, interpolate } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
@@ -36,44 +37,51 @@ function EarningsCard({
   onSeeWallet 
 }: EarningsCardProps) {
   const [showChart, setShowChart] = useState(false);
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(30)).current;
-  const scaleAnim = useRef(new Animated.Value(0.95)).current;
-  const chartAnim = useRef(new Animated.Value(0)).current;
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(30);
+  const scaleAnim = useSharedValue(0.95);
+  const chartAnim = useSharedValue(0);
 
   useEffect(() => {
-    const anim = Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 600,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 600,
-        useNativeDriver: true,
-      }),
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        tension: 50,
-        friction: 7,
-        useNativeDriver: true,
-      }),
-    ]);
-    anim.start();
-
-    return () => { anim.stop(); };
+    fadeAnim.value = withTiming(1, { duration: 600 });
+    slideAnim.value = withTiming(0, { duration: 600 });
+    scaleAnim.value = withSpring(1);
   }, []);
+
+  const containerAnimStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [
+      { translateY: slideAnim.value },
+      { scale: scaleAnim.value },
+    ],
+  }));
+
+  const headerAnimStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [
+      { translateY: interpolate(fadeAnim.value, [0, 1], [10, 0]) },
+    ],
+  }));
+
+  const chartAnimStyle = useAnimatedStyle(() => ({
+    opacity: chartAnim.value,
+    transform: [
+      { translateY: interpolate(chartAnim.value, [0, 1], [-20, 0]) },
+      { scale: interpolate(chartAnim.value, [0, 1], [0.95, 1]) },
+    ],
+  }));
+
+  const breakdownAnimStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [
+      { translateY: interpolate(fadeAnim.value, [0, 1], [15, 0]) },
+    ],
+  }));
 
   const toggleChart = () => {
     const toValue = showChart ? 0 : 1;
     setShowChart(!showChart);
-    Animated.spring(chartAnim, {
-      toValue,
-      tension: 50,
-      friction: 7,
-      useNativeDriver: true,
-    }).start();
+    chartAnim.value = withSpring(toValue);
   };
 
   const breakdownItems = [
@@ -84,16 +92,10 @@ function EarningsCard({
   ];
 
   return (
-    <Animated.View 
+    <Animated.View
       style={[
         styles.container,
-        {
-          opacity: fadeAnim,
-          transform: [
-            { translateY: slideAnim },
-            { scale: scaleAnim },
-          ],
-        },
+        containerAnimStyle,
       ]}
     >
       {/* Decorative background elements */}
@@ -101,20 +103,10 @@ function EarningsCard({
       <View style={styles.decorativeCircle2} />
 
       {/* Header */}
-      <Animated.View 
+      <Animated.View
         style={[
           styles.header,
-          {
-            opacity: fadeAnim,
-            transform: [
-              {
-                translateY: fadeAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [10, 0],
-                }),
-              },
-            ],
-          },
+          headerAnimStyle,
         ]}
       >
         <View style={styles.headerLeft}>
@@ -189,23 +181,7 @@ function EarningsCard({
         <Animated.View
           style={[
             styles.chartContainer,
-            {
-              opacity: chartAnim,
-              transform: [
-                {
-                  translateY: chartAnim.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [-20, 0],
-                  }),
-                },
-                {
-                  scale: chartAnim.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [0.95, 1],
-                  }),
-                },
-              ],
-            },
+            chartAnimStyle,
           ]}
         >
           <EarningsChart breakdown={earnings.breakdown} currency={earnings.currency} />
@@ -218,21 +194,9 @@ function EarningsCard({
       {/* Breakdown */}
       <View style={styles.breakdown}>
         {breakdownItems.map((item, idx) => (
-          <Animated.View 
+          <Animated.View
             key={idx}
-            style={[
-              {
-                opacity: fadeAnim,
-                transform: [
-                  {
-                    translateY: fadeAnim.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [15, 0],
-                    }),
-                  },
-                ],
-              },
-            ]}
+            style={[breakdownAnimStyle]}
           >
             <View style={styles.breakdownItem}>
               {/* Icon Container */}

@@ -12,9 +12,12 @@ import {
   Linking,
   ImageBackground,
   SafeAreaView,
-  ActivityIndicator,
-  Animated,
-} from 'react-native';
+  ActivityIndicator} from 'react-native';
+import Animated, {
+  useSharedValue,
+  withTiming,
+  interpolate,
+} from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { showAlert, alertOk, confirmAlert } from "@/utils/alert";
 import { LinearGradient } from "expo-linear-gradient";
@@ -115,9 +118,9 @@ function EventPage({ eventId, initialEvent }: EventPageProps = {}) {
   const scrollDepthRef = useRef<number>(0);
 
   // Animation values for UX improvements
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(30)).current;
-  const imageOpacity = useRef(new Animated.Value(0)).current;
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(30);
+  const imageOpacity = useSharedValue(0);
   const [imageError, setImageError] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
   const MAX_RETRIES = 3;
@@ -224,35 +227,19 @@ function EventPage({ eventId, initialEvent }: EventPageProps = {}) {
   // Animate content on load
   useEffect(() => {
     if (!isLoadingEvent && realEventData) {
-      const anim = Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 400,
-          useNativeDriver: true,
-        }),
-        Animated.timing(slideAnim, {
-          toValue: 0,
-          duration: 400,
-          useNativeDriver: true,
-        }),
-      ]);
-      anim.start();
-      return () => anim.stop();
+      fadeAnim.value = withTiming(1, { duration: 400 });
+      slideAnim.value = withTiming(0, { duration: 400 });
     }
   }, [isLoadingEvent, realEventData, fadeAnim, slideAnim]);
 
   // Animate image on load
   const handleImageLoad = useCallback(() => {
-    Animated.timing(imageOpacity, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
+    imageOpacity.value = withTiming(1, { duration: 300 });
   }, [imageOpacity]);
 
   const handleImageError = useCallback(() => {
     setImageError(true);
-    imageOpacity.setValue(1); // Show placeholder immediately
+    imageOpacity.value = 1; // Show placeholder immediately
   }, [imageOpacity]);
 
   // Cleanup retry timeout and mark unmounted
@@ -637,10 +624,7 @@ function EventPage({ eventId, initialEvent }: EventPageProps = {}) {
             style={[
               styles.loadingSkeleton,
               {
-                opacity: fadeAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0.3, 0.6],
-                }),
+                opacity: interpolate(fadeAnim.value, [0, 1], [0.3, 0.6]),
               },
             ]}
           />
@@ -1201,10 +1185,7 @@ function EventPage({ eventId, initialEvent }: EventPageProps = {}) {
             styles.errorToast,
             {
               opacity: fadeAnim,
-              transform: [{ translateY: slideAnim.interpolate({
-                inputRange: [0, 30],
-                outputRange: [0, -10],
-              })}],
+              transform: [{ translateY: interpolate(slideAnim.value, [0, 30], [0, -10])}],
             },
           ]}
         >

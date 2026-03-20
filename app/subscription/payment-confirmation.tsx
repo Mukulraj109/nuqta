@@ -3,7 +3,14 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Success/failure screen after subscription payment
 
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView, Pressable, StatusBar, Animated } from 'react-native';
+import { View, StyleSheet, ScrollView, Pressable, StatusBar} from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withSpring,
+  withTiming } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -29,8 +36,14 @@ function PaymentConfirmationPage() {
   const billingCycle = (params.billingCycle as 'monthly' | 'yearly') || 'monthly';
   const transactionId = (params.transactionId as string) || `TXN${Date.now()}`;
 
-  const [scaleAnim] = useState(new Animated.Value(0));
-  const [fadeAnim] = useState(new Animated.Value(0));
+  const scaleAnim = useSharedValue(0);
+  const fadeAnim = useSharedValue(0);
+  const scaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: scaleAnim.value }] }));
+  const fadeStyle = useAnimatedStyle(() => ({ opacity: fadeAnim.value }));
+  const benefitSlideStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ translateX: interpolate(fadeAnim.value, [0, 1], [-50, 0]) }],
+  }));
 
   useEffect(() => {
     // Haptic feedback on payment confirmation
@@ -38,21 +51,8 @@ function PaymentConfirmationPage() {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
     }
     // Animate success icon
-    const anim = Animated.sequence([
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        tension: 50,
-        friction: 7,
-        useNativeDriver: true,
-      }),
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 500,
-        useNativeDriver: true,
-      }),
-    ]);
-    anim.start();
-    return () => anim.stop();
+    scaleAnim.value = withSpring(1, { damping: 7, stiffness: 50 });
+    fadeAnim.value = withTiming(1, { duration: 500 });
   }, []);
 
   const getNextBillingDate = () => {
@@ -188,13 +188,13 @@ function PaymentConfirmationPage() {
           accessibilityLabel={`Payment successful! Welcome to ${TIER_NAMES[tier]}. Your subscription has been activated successfully.`}
           accessibilityRole="text"
         >
-          <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+          <Animated.View style={scaleStyle}>
             <View style={styles.successCircle}>
               <Ionicons name="checkmark" size={80} color={Colors.text.inverse} />
             </View>
           </Animated.View>
 
-          <Animated.View style={{ opacity: fadeAnim }}>
+          <Animated.View style={fadeStyle}>
             <ThemedText
               style={styles.successTitle}
               accessibilityRole="header"
@@ -263,17 +263,7 @@ function PaymentConfirmationPage() {
                 key={index}
                 style={[
                   styles.benefitRow,
-                  {
-                    opacity: fadeAnim,
-                    transform: [
-                      {
-                        translateX: fadeAnim.interpolate({
-                          inputRange: [0, 1],
-                          outputRange: [-50, 0],
-                        }),
-                      },
-                    ],
-                  },
+                  benefitSlideStyle,
                 ]}
               >
                 <View style={styles.benefitIcon}>
@@ -317,40 +307,32 @@ function PaymentConfirmationPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background.secondary,
-  },
+    backgroundColor: Colors.background.secondary },
   header: {
     paddingTop: StatusBar.currentHeight || 50,
     paddingBottom: Spacing.lg,
-    paddingHorizontal: Spacing.lg,
-  },
+    paddingHorizontal: Spacing.lg },
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   backButton: {
     width: 40,
-    padding: Spacing.sm,
-  },
+    padding: Spacing.sm },
   headerTitle: {
     color: Colors.text.inverse,
     ...Typography.h3,
     fontWeight: 'bold',
     flex: 1,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   headerRight: {
-    width: 40,
-  },
+    width: 40 },
   scrollView: {
-    flex: 1,
-  },
+    flex: 1 },
   successContainer: {
     alignItems: 'center',
     paddingVertical: Spacing['3xl'],
-    paddingHorizontal: Spacing.lg,
-  },
+    paddingHorizontal: Spacing.lg },
   successCircle: {
     width: 160,
     height: 160,
@@ -359,66 +341,55 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: Spacing.xl,
-    ...Shadows.strong,
-  },
+    ...Shadows.strong },
   successTitle: {
     ...Typography.h1,
     fontWeight: 'bold',
     color: Colors.text.primary,
     textAlign: 'center',
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   successMessage: {
     ...Typography.bodyLarge,
     color: Colors.text.tertiary,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   detailsCard: {
     margin: Spacing.lg,
     backgroundColor: Colors.background.primary,
     borderRadius: BorderRadius.lg,
     padding: Spacing.lg,
-    ...Shadows.medium,
-  },
+    ...Shadows.medium },
   tierBadge: {
     marginBottom: Spacing.lg,
     marginHorizontal: -Spacing.lg,
-    marginTop: -Spacing.lg,
-  },
+    marginTop: -Spacing.lg },
   tierBadgeGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     padding: Spacing.base,
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   tierBadgeText: {
     color: Colors.text.inverse,
     ...Typography.h4,
-    fontWeight: 'bold',
-  },
+    fontWeight: 'bold' },
   detailRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: Spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.border.default,
-  },
+    borderBottomColor: Colors.border.default },
   detailLabel: {
     ...Typography.body,
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
   detailValue: {
     ...Typography.bodyLarge,
     fontWeight: '600',
-    color: Colors.text.primary,
-  },
+    color: Colors.text.primary },
   transactionId: {
     ...Typography.bodySmall,
     fontFamily: 'monospace',
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
   receiptButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -427,36 +398,30 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.sm,
     marginTop: Spacing.base,
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   receiptButtonText: {
     color: Colors.brand.purpleLight,
     ...Typography.body,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   section: {
     marginHorizontal: Spacing.lg,
-    marginBottom: Spacing.xl,
-  },
+    marginBottom: Spacing.xl },
   sectionTitle: {
     ...Typography.h4,
     fontWeight: 'bold',
     color: Colors.text.primary,
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base },
   benefitsContainer: {
     backgroundColor: Colors.background.primary,
     borderRadius: BorderRadius.md,
     padding: Spacing.base,
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle },
   benefitRow: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: Spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.background.secondary,
-  },
+    borderBottomColor: Colors.background.secondary },
   benefitIcon: {
     width: 40,
     height: 40,
@@ -464,18 +429,15 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.brand.purpleLight + '10',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: Spacing.md,
-  },
+    marginRight: Spacing.md },
   benefitText: {
     flex: 1,
     ...Typography.body,
-    color: Colors.text.secondary,
-  },
+    color: Colors.text.secondary },
   actionsContainer: {
     padding: Spacing.lg,
     gap: Spacing.md,
-    paddingBottom: Spacing['3xl'],
-  },
+    paddingBottom: Spacing['3xl'] },
   primaryButton: {
     flexDirection: 'row',
     backgroundColor: Colors.brand.purpleLight,
@@ -483,66 +445,55 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   primaryButtonText: {
     color: Colors.text.inverse,
     ...Typography.bodyLarge,
-    fontWeight: 'bold',
-  },
+    fontWeight: 'bold' },
   secondaryButton: {
     backgroundColor: Colors.background.secondary,
     paddingVertical: Spacing.base,
     borderRadius: BorderRadius.md,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   secondaryButtonText: {
     color: Colors.text.tertiary,
     ...Typography.bodyLarge,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   // Failure styles
   failureContainer: {
     alignItems: 'center',
     padding: Spacing.lg,
-    paddingTop: Spacing['3xl'],
-  },
+    paddingTop: Spacing['3xl'] },
   failureTitle: {
     ...Typography.h1,
     fontWeight: 'bold',
     color: Colors.error,
     marginTop: Spacing.xl,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   failureMessage: {
     ...Typography.bodyLarge,
     color: Colors.text.tertiary,
     textAlign: 'center',
     lineHeight: 24,
-    marginBottom: Spacing['2xl'],
-  },
+    marginBottom: Spacing['2xl'] },
   errorDetails: {
     backgroundColor: Colors.errorScale[50],
     padding: Spacing.lg,
     borderRadius: BorderRadius.md,
     marginBottom: Spacing['2xl'],
-    width: '100%',
-  },
+    width: '100%' },
   errorTitle: {
     ...Typography.bodyLarge,
     fontWeight: 'bold',
     color: '#991B1B',
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   errorText: {
     ...Typography.body,
     color: Colors.errorScale[700],
-    lineHeight: 20,
-  },
+    lineHeight: 20 },
   actions: {
     width: '100%',
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   retryButton: {
     flexDirection: 'row',
     backgroundColor: Colors.error,
@@ -550,33 +501,26 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   retryButtonText: {
     color: Colors.text.inverse,
     ...Typography.bodyLarge,
-    fontWeight: 'bold',
-  },
+    fontWeight: 'bold' },
   supportButton: {
     backgroundColor: Colors.background.secondary,
     paddingVertical: Spacing.base,
     borderRadius: BorderRadius.md,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   supportButtonText: {
     color: Colors.text.tertiary,
     ...Typography.bodyLarge,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   homeButton: {
     paddingVertical: Spacing.base,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   homeButtonText: {
     color: Colors.text.tertiary,
     ...Typography.body,
-    fontWeight: '600',
-  },
-});
+    fontWeight: '600' } });
 
 export default withErrorBoundary(PaymentConfirmationPage, 'SubscriptionPaymentConfirmation');

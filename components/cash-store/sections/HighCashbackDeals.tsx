@@ -5,15 +5,14 @@
  * Features: Large animated numbers, gradient borders, Shop Now with arrow animation
  */
 
-import React, { memo, useRef, useEffect, useCallback } from 'react';
+import React, { memo, useEffect, useCallback} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
-  Platform,
-  Animated,
-} from 'react-native';
+  Platform} from 'react-native';
+import Animated, { interpolate, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -33,69 +32,28 @@ const DealCard: React.FC<{
   index: number;
   onPress: () => void;
 }> = memo(({ deal, index, onPress }) => {
-  const scaleAnim = useRef(new Animated.Value(0.9)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const arrowAnim = useRef(new Animated.Value(0)).current;
-  const percentAnim = useRef(new Animated.Value(0.8)).current;
+  const scaleAnim = useSharedValue(0.9);
+  const fadeAnim = useSharedValue(0);
+  const arrowAnim = useSharedValue(0);
+  const percentAnim = useSharedValue(0.8);
 
   useEffect(() => {
     // Staggered entry animation
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 400,
-        delay: index * 80,
-        useNativeDriver: true,
-      }),
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        friction: 8,
-        tension: 40,
-        delay: index * 80,
-        useNativeDriver: true,
-      }),
-      Animated.spring(percentAnim, {
-        toValue: 1,
-        friction: 6,
-        tension: 50,
-        delay: index * 80 + 200,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    fadeAnim.value = withDelay(index * 80, withTiming(1, { duration: 400 }));
+      scaleAnim.value = withDelay(index * 80, withSpring(1));
+      percentAnim.value = withDelay(index * 80 + 200, withSpring(1));
 
     // Arrow animation
-    const arrowLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(arrowAnim, {
-          toValue: 4,
-          duration: 500,
-          useNativeDriver: true,
-        }),
-        Animated.timing(arrowAnim, {
-          toValue: 0,
-          duration: 500,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    arrowLoop.start();
-    return () => arrowLoop.stop();
-  }, [index]);
+    arrowAnim.value = withRepeat(withSequence(withTiming(4, { duration: 500 })), -1);
+    
+    }, [index]);
 
   const handlePressIn = () => {
-    Animated.spring(scaleAnim, {
-      toValue: 0.95,
-      friction: 8,
-      useNativeDriver: true,
-    }).start();
+    scaleAnim.value = withSpring(0.95);
   };
 
   const handlePressOut = () => {
-    Animated.spring(scaleAnim, {
-      toValue: 1,
-      friction: 8,
-      useNativeDriver: true,
-    }).start();
+    scaleAnim.value = withSpring(1);
   };
 
   const isLimitedStock = deal.badge === 'hot' || deal.badge === 'best-deal';
@@ -218,37 +176,19 @@ const DealCard: React.FC<{
 });
 
 const SkeletonCard: React.FC<{ index: number }> = memo(({ index }) => {
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
-    const loop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, {
-          toValue: 1,
-          duration: 1000,
-          delay: index * 100,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmerAnim, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    loop.start();
-    return () => loop.stop();
-  }, [index]);
+    shimmerAnim.value = withRepeat(withSequence(withTiming(1, { duration: 1000 })), -1);
+    
+    }, [index]);
 
   return (
     <Animated.View
       style={[
         styles.cardWrapper,
         {
-          opacity: shimmerAnim.interpolate({
-            inputRange: [0, 1],
-            outputRange: [0.5, 1],
-          }),
+          opacity: interpolate(shimmerAnim.value, [0, 1], [0.5, 1]),
         },
       ]}
     >
@@ -273,34 +213,16 @@ const HighCashbackDeals: React.FC<HighCashbackDealsProps> = ({
   onDealPress,
   onViewAllPress,
 }) => {
-  const headerFadeAnim = useRef(new Animated.Value(0)).current;
-  const rocketAnim = useRef(new Animated.Value(0)).current;
+  const headerFadeAnim = useSharedValue(0);
+  const rocketAnim = useSharedValue(0);
 
   useEffect(() => {
-    Animated.timing(headerFadeAnim, {
-      toValue: 1,
-      duration: 400,
-      useNativeDriver: true,
-    }).start();
+    headerFadeAnim.value = withTiming(1, { duration: 400 });
 
     // Rocket bounce animation
-    const rocketLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(rocketAnim, {
-          toValue: -4,
-          duration: 400,
-          useNativeDriver: true,
-        }),
-        Animated.timing(rocketAnim, {
-          toValue: 0,
-          duration: 400,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    rocketLoop.start();
-    return () => rocketLoop.stop();
-  }, []);
+    rocketAnim.value = withRepeat(withSequence(withTiming(-4, { duration: 400 })), -1);
+    
+    }, []);
 
   const renderDealItem = useCallback(({ item, index }: { item: unknown; index: number }) =>
     isLoading ? (

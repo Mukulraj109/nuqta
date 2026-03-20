@@ -30,7 +30,7 @@ const ActionBtn: React.FC<ActionBtnProps> = ({
     icon,
 }) => {
     const isPrimary = variant === 'primary';
-    const colors: [string, string, string] = isPrimary
+    const gradientColors: [string, string, string] = isPrimary
         ? [colors.successScale[700], colors.successScale[400], colors.successScale[700]]
         : [colors.neutral[100], colors.background.primary, colors.neutral[100]];
     const textColor = isPrimary ? colors.background.primary : colors.neutral[700];
@@ -92,7 +92,7 @@ const ActionBtn: React.FC<ActionBtnProps> = ({
             ]}
         >
             <LinearGradient
-                colors={colors}
+                colors={gradientColors}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.gradient}

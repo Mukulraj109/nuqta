@@ -6,9 +6,13 @@ import {
   View,
   StyleSheet,
   Pressable,
-  Animated,
   Dimensions,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import {
@@ -35,7 +39,7 @@ function ROICalculator({
   const getCurrencySymbol = useGetCurrencySymbol();
   const effectiveCurrency = currency ?? getCurrencySymbol();
   const [expanded, setExpanded] = useState(false);
-  const [animatedHeight] = useState(new Animated.Value(expanded ? 200 : 0));
+  const animatedHeight = useSharedValue(0);
 
   const netSavings = totalSavings - subscriptionCost;
   const roiPercentage =
@@ -44,13 +48,15 @@ function ROICalculator({
     subscriptionCost > 0 ? Math.ceil(subscriptionCost / (totalSavings / 12)) : 0;
 
   const toggleExpanded = () => {
-    setExpanded(!expanded);
-    Animated.timing(animatedHeight, {
-      toValue: !expanded ? 200 : 0,
-      duration: 300,
-      useNativeDriver: false,
-    }).start();
+    const newExpanded = !expanded;
+    setExpanded(newExpanded);
+    animatedHeight.value = withTiming(newExpanded ? 200 : 0, { duration: 300 });
   };
+
+  const heightAnimStyle = useAnimatedStyle(() => ({
+    height: animatedHeight.value,
+    overflow: 'hidden' as const,
+  }));
 
   const containerWidth = Dimensions.get('window').width - SUBSCRIPTION_SPACING.xl * 2;
   const progressPercentage = Math.min((totalSavings / (subscriptionCost * 2)) * 100, 100);
@@ -150,8 +156,8 @@ function ROICalculator({
         </View>
 
         {/* Expandable Details */}
-        {expanded && showDetails && (
-          <View style={styles.detailsSection}>
+        {showDetails && (
+          <Animated.View style={[styles.detailsSection, heightAnimStyle]}>
             <View style={styles.detailRow}>
               <View style={styles.detailIconContainer}>
                 <Ionicons
@@ -199,7 +205,7 @@ function ROICalculator({
                 </ThemedText>
               </View>
             </View>
-          </View>
+          </Animated.View>
         )}
       </View>
     </View>

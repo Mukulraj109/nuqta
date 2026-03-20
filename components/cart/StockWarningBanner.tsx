@@ -1,14 +1,13 @@
 // components/cart/StockWarningBanner.tsx
 // Banner component for displaying stock warnings and validation issues
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
   Pressable,
-  Animated,
-  Dimensions,
-} from 'react-native';
+  Dimensions} from 'react-native';
+import Animated, { interpolate, runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import {
@@ -29,59 +28,28 @@ function StockWarningBanner({
   autoHideDuration = 5000,
 }: StockWarningBannerProps) {
   const [visible, setVisible] = useState(true);
-  const slideAnim = useRef(new Animated.Value(-100)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useSharedValue(-100);
+  const fadeAnim = useSharedValue(0);
+  const progressBarStyle = useAnimatedStyle(() => ({
+    width: `${interpolate(fadeAnim.value, [0, 1], [0, 100])}%` as any,
+  }));
+
+  const handleDismiss = () => {
+    slideAnim.value = withTiming(-100, { duration: 200 });
+    fadeAnim.value = withTiming(0, { duration: 200 });
+    setTimeout(() => {
+      setVisible(false);
+      onDismiss?.();
+    }, 200);
+  };
 
   useEffect(() => {
     if (issues.length > 0 && visible) {
       // Slide in and fade in
-      const anim = Animated.parallel([
-        Animated.timing(slideAnim, {
-          toValue: 0,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-      ]);
-      anim.start();
-
-      // Auto-hide after duration
-      if (autoHide) {
-        const timer = setTimeout(() => {
-          handleDismiss();
-        }, autoHideDuration);
-
-        return () => {
-          anim.stop();
-          clearTimeout(timer);
-        };
-      }
-
-      return () => { anim.stop(); };
+      slideAnim.value = withTiming(0, { duration: 300 });
+      fadeAnim.value = withTiming(1, { duration: 300 });
     }
-  }, [issues, visible, autoHide, autoHideDuration]);
-
-  const handleDismiss = () => {
-    Animated.parallel([
-      Animated.timing(slideAnim, {
-        toValue: -100,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      setVisible(false);
-      onDismiss?.();
-    });
-  };
+  }, [issues.length, visible]);
 
   if (issues.length === 0 || !visible) {
     return null;
@@ -194,11 +162,8 @@ function StockWarningBanner({
               styles.progressBar,
               {
                 backgroundColor: bannerStyles.color,
-                width: fadeAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: ['0%', '100%'],
-                }),
               },
+              progressBarStyle,
             ]}
           />
         </View>

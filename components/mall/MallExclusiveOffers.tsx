@@ -5,7 +5,7 @@
  * Upgraded with warm gradient container, pulsing LIVE indicator, and premium styling
  */
 
-import React, { memo, useCallback, useEffect, useRef } from 'react';
+import React, { memo, useCallback, useEffect } from 'react';
 import {
   View,
   Text,
@@ -13,8 +13,8 @@ import {
   Pressable,
   ActivityIndicator,
   Platform,
-  Animated,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence, withRepeat } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallOffer } from '../../types/mall.types';
@@ -35,26 +35,11 @@ const MallExclusiveOffers: React.FC<MallExclusiveOffersProps> = ({
   onOfferPress,
   onViewAllPress,
 }) => {
-  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const pulseAnim = useSharedValue(1);
 
   useEffect(() => {
-    const pulse = Animated.loop(
-      Animated.sequence([
-        Animated.timing(pulseAnim, {
-          toValue: 0.3,
-          duration: 800,
-          useNativeDriver: true,
-        }),
-        Animated.timing(pulseAnim, {
-          toValue: 1,
-          duration: 800,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    pulse.start();
-    return () => pulse.stop();
-  }, [pulseAnim]);
+    pulseAnim.value = withRepeat(withSequence(withTiming(0.3, { duration: 800 }), withTiming(1, { duration: 800 })), -1);
+      }, [pulseAnim]);
 
   const renderOffer = useCallback(
     ({ item }: { item: MallOffer }) => (

@@ -15,9 +15,13 @@ import {
   Dimensions,
   ActivityIndicator,
   RefreshControl,
-  Animated,
-  Platform,
+  Platform
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -116,25 +120,20 @@ const MissionCard: React.FC<{
   isClaiming: boolean;
   currencySymbol: string;
 }> = ({ mission, onPress, onClaim, isClaiming, currencySymbol }) => {
-  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const scaleAnim = useSharedValue(1);
+  const scaleStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scaleAnim.value }],
+  }));
   const diffStyle = getDifficultyStyle(mission.difficulty);
   const progressPercent = Math.round((mission.progress / mission.target) * 100);
   const isClaimable = mission.completed && !mission.claimed;
 
   const handlePressIn = () => {
-    Animated.spring(scaleAnim, {
-      toValue: 0.98,
-      useNativeDriver: true,
-    }).start();
+    scaleAnim.value = withSpring(0.98);
   };
 
   const handlePressOut = () => {
-    Animated.spring(scaleAnim, {
-      toValue: 1,
-      friction: 3,
-      tension: 40,
-      useNativeDriver: true,
-    }).start();
+    scaleAnim.value = withSpring(1, { damping: 3, stiffness: 40 });
   };
 
   return (
@@ -149,7 +148,7 @@ const MissionCard: React.FC<{
           styles.missionCard,
           mission.completed && styles.missionCardCompleted,
           mission.special && styles.missionCardSpecial,
-          { transform: [{ scale: scaleAnim }] },
+          scaleStyle,
         ]}
       >
         <View style={styles.missionRow}>

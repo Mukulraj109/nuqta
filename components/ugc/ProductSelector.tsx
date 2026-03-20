@@ -1,7 +1,7 @@
 // Product Selector Component
 // Modal component for searching and selecting products for UGC video tagging
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -13,16 +13,19 @@ import {
   Platform,
   SafeAreaView,
   KeyboardAvoidingView,
-  Animated,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  interpolate,
+} from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { useProductSearch } from '@/hooks/useProductSearch';
 import { ProductSelectorProps, ProductSelectorProduct } from '@/types/product-selector.types';
 import ProductCard from './ProductCard';
 import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
-
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 function ProductSelector({
   visible,
@@ -40,7 +43,7 @@ function ProductSelector({
   initialSearchQuery = '',
 }: ProductSelectorProps) {
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
-  const slideAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useSharedValue(0);
 
   // Use product search hook
   const {
@@ -70,19 +73,15 @@ function ProductSelector({
   // Animate modal entrance
   React.useEffect(() => {
     if (visible) {
-      const anim = Animated.spring(slideAnim, {
-        toValue: 1,
-        tension: 50,
-        friction: 8,
-        useNativeDriver: true,
-      });
-      anim.start();
-
-      return () => { anim.stop(); };
+      slideAnim.value = withSpring(1, { damping: 8, stiffness: 50 });
     } else {
-      slideAnim.setValue(0);
+      slideAnim.value = 0;
     }
   }, [visible]);
+
+  const modalAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: interpolate(slideAnim.value, [0, 1], [600, 0]) }],
+  }));
 
   // Handle search input change
   const handleSearchChange = useCallback(
@@ -282,16 +281,7 @@ function ProductSelector({
         <Animated.View
           style={[
             styles.modalContainer,
-            {
-              transform: [
-                {
-                  translateY: slideAnim.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [600, 0],
-                  }),
-                },
-              ],
-            },
+            modalAnimatedStyle,
           ]}
         >
           <SafeAreaView style={styles.safeArea}>

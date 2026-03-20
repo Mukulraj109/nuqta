@@ -6,8 +6,8 @@ import {
   Pressable,
   StyleSheet,
   Dimensions,
-  Animated,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -41,30 +41,20 @@ function AddedToCartModal({
 }: AddedToCartModalProps) {
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
-  const slideAnim = React.useRef(new Animated.Value(300)).current;
+  const slideAnim = useSharedValue(300);
+
+  const slideAnimStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: slideAnim.value }],
+  }));
 
   React.useEffect(() => {
-    let _anim: Animated.CompositeAnimation;
     if (visible) {
       triggerImpact('Light');
-      _anim = Animated.spring(slideAnim, {
-        toValue: 0,
-        useNativeDriver: true,
-        tension: 65,
-        friction: 11,
-      });
-      _anim.start();
+      slideAnim.value = withSpring(0, { damping: 11, stiffness: 65 });
     } else {
-      _anim = Animated.timing(slideAnim, {
-        toValue: 300,
-        duration: 250,
-        useNativeDriver: true,
-      });
-      _anim.start();
+      slideAnim.value = withTiming(300, { duration: 250 });
     }
-  
-    return () => _anim.stop();
-}, [visible]);
+  }, [visible]);
 
   const safePrice = typeof product.price === 'number' ? product.price : 0;
   const safeQuantity = typeof product.quantity === 'number' ? product.quantity : 1;
@@ -92,9 +82,7 @@ function AddedToCartModal({
         <Animated.View
           style={[
             styles.modalContainer,
-            {
-              transform: [{ translateY: slideAnim }],
-            },
+            slideAnimStyle,
           ]}
           onStartShouldSetResponder={() => true}
         >

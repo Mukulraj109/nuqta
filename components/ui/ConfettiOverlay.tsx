@@ -1,11 +1,21 @@
 /**
  * ConfettiOverlay - Lightweight confetti celebration effect
- * Uses React Native Animated API (no extra dependencies)
+ * Uses react-native-reanimated for performant animations.
  *
  * Renders ~20 falling colored shapes that auto-dismiss after 3 seconds.
  */
-import React, { useEffect, useRef, useMemo } from 'react';
-import { View, Animated, Dimensions, StyleSheet } from 'react-native';
+import React, { useEffect, useMemo } from 'react';
+import { View, Dimensions, StyleSheet } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withRepeat,
+  withSequence,
+  withDelay,
+  Easing,
+  runOnJS,
+} from 'react-native-reanimated';
 import { colors } from '@/constants/theme';
 
 const CONFETTI_COLORS = [colors.brand.purple, colors.warningScale[400], colors.successScale[400], colors.brand.pink, colors.infoScale[400], colors.error];
@@ -29,17 +39,65 @@ interface ConfettiOverlayProps {
   onComplete?: () => void;
 }
 
-function ConfettiOverlay({ visible, onComplete }: ConfettiOverlayProps) {
-  const fallAnims = useRef<Animated.Value[]>([]).current;
-  const wobbleAnims = useRef<Animated.Value[]>([]).current;
-  const opacityAnim = useRef(new Animated.Value(0)).current;
+// Individual confetti piece component with its own shared values
+const ConfettiPieceView = React.memo(({ piece, visible }: { piece: ConfettiPiece; visible: boolean }) => {
+  const fall = useSharedValue(0);
+  const wobble = useSharedValue(0);
 
-  // Generate piece configs once (stable across re-renders while visible)
+  useEffect(() => {
+    if (!visible) {
+      fall.value = 0;
+      wobble.value = 0;
+      return;
+    }
+
+    fall.value = withDelay(
+      piece.delay,
+      withTiming(1, { duration: DURATION - piece.delay, easing: Easing.linear })
+    );
+
+    wobble.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 300 + Math.random() * 200 }),
+        withTiming(-1, { duration: 300 + Math.random() * 200 }),
+      ),
+      -1,
+    );
+  }, [visible]);
+
+  const animStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateY: -20 + fall.value * (SCREEN_HEIGHT + 40) },
+      { translateX: wobble.value * piece.wobbleAmplitude },
+      { rotate: `${piece.rotation + fall.value * 360}deg` },
+    ],
+  }));
+
+  return (
+    <Animated.View
+      style={[
+        styles.piece,
+        {
+          left: piece.x,
+          width: piece.width,
+          height: piece.height,
+          backgroundColor: piece.color,
+          borderRadius: piece.width < 9 ? 2 : 3,
+        },
+        animStyle,
+      ]}
+    />
+  );
+});
+
+function ConfettiOverlay({ visible, onComplete }: ConfettiOverlayProps) {
+  const opacityAnim = useSharedValue(0);
+
   const pieces = useMemo<ConfettiPiece[]>(() => {
     return Array.from({ length: PIECE_COUNT }, () => ({
       x: Math.random() * SCREEN_WIDTH,
-      width: 6 + Math.random() * 6,   // 6-12
-      height: 6 + Math.random() * 8,   // 6-14
+      width: 6 + Math.random() * 6,
+      height: 6 + Math.random() * 8,
       color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
       delay: Math.random() * 400,
       wobbleAmplitude: 20 + Math.random() * 40,
@@ -47,108 +105,36 @@ function ConfettiOverlay({ visible, onComplete }: ConfettiOverlayProps) {
     }));
   }, [visible]);
 
-  // Ensure we have enough Animated.Values
-  if (fallAnims.length === 0) {
-    for (let i = 0; i < PIECE_COUNT; i++) {
-      fallAnims.push(new Animated.Value(0));
-      wobbleAnims.push(new Animated.Value(0));
-    }
-  }
-
   useEffect(() => {
     if (!visible) return;
 
-    // Reset all values
-    opacityAnim.setValue(1);
-    fallAnims.forEach(a => a.setValue(0));
-    wobbleAnims.forEach(a => a.setValue(0));
-
-    // Start fall + wobble animations per piece
-    const animations = pieces.map((piece, i) => {
-      const fall = Animated.timing(fallAnims[i], {
-        toValue: 1,
-        duration: DURATION - piece.delay,
-        delay: piece.delay,
-        useNativeDriver: true,
-      });
-
-      const wobble = Animated.loop(
-        Animated.sequence([
-          Animated.timing(wobbleAnims[i], {
-            toValue: 1,
-            duration: 300 + Math.random() * 200,
-            useNativeDriver: true,
-          }),
-          Animated.timing(wobbleAnims[i], {
-            toValue: -1,
-            duration: 300 + Math.random() * 200,
-            useNativeDriver: true,
-          }),
-        ])
-      );
-
-      return Animated.parallel([fall, wobble]);
-    });
+    opacityAnim.value = 1;
 
     // Fade out at the end
-    const fadeOut = Animated.timing(opacityAnim, {
-      toValue: 0,
-      duration: 500,
-      delay: DURATION - 500,
-      useNativeDriver: true,
-    });
-
-    const masterAnim = Animated.parallel([...animations, fadeOut]);
-    masterAnim.start(() => {
-      onComplete?.();
-    });
-    return () => masterAnim.stop();
+    opacityAnim.value = withDelay(
+      DURATION - 500,
+      withTiming(0, { duration: 500 }, (finished) => {
+        if (finished && onComplete) {
+          runOnJS(onComplete)();
+        }
+      })
+    );
   }, [visible]);
+
+  const overlayStyle = useAnimatedStyle(() => ({
+    opacity: opacityAnim.value,
+  }));
 
   if (!visible) return null;
 
   return (
     <Animated.View
       pointerEvents="none"
-      style={[styles.overlay, { opacity: opacityAnim }]}
+      style={[styles.overlay, overlayStyle]}
     >
-      {pieces.map((piece, i) => {
-        const translateY = fallAnims[i].interpolate({
-          inputRange: [0, 1],
-          outputRange: [-20, SCREEN_HEIGHT + 20],
-        });
-
-        const translateX = wobbleAnims[i].interpolate({
-          inputRange: [-1, 1],
-          outputRange: [-piece.wobbleAmplitude, piece.wobbleAmplitude],
-        });
-
-        const rotate = fallAnims[i].interpolate({
-          inputRange: [0, 1],
-          outputRange: [`${piece.rotation}deg`, `${piece.rotation + 360}deg`],
-        });
-
-        return (
-          <Animated.View
-            key={i}
-            style={[
-              styles.piece,
-              {
-                left: piece.x,
-                width: piece.width,
-                height: piece.height,
-                backgroundColor: piece.color,
-                borderRadius: piece.width < 9 ? 2 : 3,
-                transform: [
-                  { translateY },
-                  { translateX },
-                  { rotate },
-                ],
-              },
-            ]}
-          />
-        );
-      })}
+      {pieces.map((piece, i) => (
+        <ConfettiPieceView key={i} piece={piece} visible={visible} />
+      ))}
     </Animated.View>
   );
 }

@@ -1,13 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
   Pressable,
-  Animated,
-  Easing,
   Dimensions,
   ActivityIndicator,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { platformAlert } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
@@ -45,7 +44,7 @@ function SpinWheelGame({
   const [eligibilityLoading, setEligibilityLoading] = useState(true);
   const [nextSpinTime, setNextSpinTime] = useState<string | null>(null);
   const isMounted = useIsMounted();
-  const spinValue = useRef(new Animated.Value(0)).current;
+  const spinValue = useSharedValue(0);
   const [currentRotation, setCurrentRotation] = useState(0);
   const { actions: gamificationActions } = useGamification();
 
@@ -111,13 +110,12 @@ function SpinWheelGame({
 
         // Animate the spin
         if (!isMounted()) return;
-        spinValue.setValue(0);
-        Animated.timing(spinValue, {
-          toValue: 1,
-          duration: 4000,
-          easing: Easing.bezier(0.17, 0.67, 0.12, 0.99),
-          useNativeDriver: true,
-        }).start(async () => {
+        spinValue.value = 0;
+        spinValue.value = withTiming(1, { duration: 4000, easing: Easing.bezier(0.17, 0.67, 0.83, 0.67) });
+
+        // After animation completes, update state
+        setTimeout(async () => {
+          if (!isMounted()) return;
           setCurrentRotation(totalRotation % 360);
           setIsSpinning(false);
 
@@ -134,7 +132,7 @@ function SpinWheelGame({
           await checkSpinEligibility();
 
           // Note: Removed Alert - parent component will show beautiful celebration modal instead
-        });
+        }, 4100);
       } else {
         throw new Error('Failed to spin wheel');
       }
@@ -150,9 +148,11 @@ function SpinWheelGame({
     }
   };
 
-  const rotation = spinValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [`${currentRotation}deg`, `${currentRotation + 360 * 5 + 180}deg`],
+  const wheelAnimStyle = useAnimatedStyle(() => {
+    const deg = currentRotation + spinValue.value * (360 * 5 + 180);
+    return {
+      transform: [{ rotate: `${deg}deg` }],
+    };
   });
 
   const renderWheel = () => {
@@ -174,9 +174,7 @@ function SpinWheelGame({
         <Animated.View
           style={[
             styles.wheel,
-            {
-              transform: [{ rotate: rotation }],
-            },
+            wheelAnimStyle,
           ]}
         >
           {segments.map((segment, index) => {

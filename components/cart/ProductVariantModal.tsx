@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import {
   Modal,
   View,
@@ -7,9 +7,8 @@ import {
   StyleSheet,
   ScrollView,
   Dimensions,
-  Animated,
-  ActivityIndicator,
-} from 'react-native';
+  ActivityIndicator} from 'react-native';
+import Animated, { useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -64,8 +63,8 @@ function ProductVariantModal({
   const [selectedColor, setSelectedColor] = useState<string | undefined>();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
 
-  const slideAnim = useRef(new Animated.Value(300)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useSharedValue(300);
+  const fadeAnim = useSharedValue(0);
 
   // Extract unique sizes and colors from variants
   const availableSizes = Array.from(
@@ -166,40 +165,18 @@ function ProductVariantModal({
 
   // Animation
   useEffect(() => {
-    let _anim: Animated.CompositeAnimation;
+    let _anim: any;
     if (visible) {
-      _anim = Animated.parallel([
-        Animated.spring(slideAnim, {
-          toValue: 0,
-          useNativeDriver: true,
-          tension: 65,
-          friction: 11,
-        }),
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 250,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      slideAnim.value = withSpring(0);
+      fadeAnim.value = withTiming(1, { duration: 250 });
+      
     } else {
-      _anim = Animated.parallel([
-        Animated.timing(slideAnim, {
-          toValue: 300,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      slideAnim.value = withTiming(300, { duration: 200 });
+      fadeAnim.value = withTiming(0, { duration: 200 });
+      
     }
   
-    return () => _anim.stop();
-}, [visible]);
+    }, [visible]);
 
   // Reset selections when modal opens
   useEffect(() => {

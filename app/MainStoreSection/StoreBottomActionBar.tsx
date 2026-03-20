@@ -1,13 +1,15 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // StoreBottomActionBar.tsx - Sticky bottom action bar
-import React, { useRef } from "react";
+import React, {} from "react";
 import {
   View,
   Pressable,
   StyleSheet,
-  Platform,
-  Animated,
-} from "react-native";
+  Platform} from "react-native";
+import Animated, {
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -18,8 +20,7 @@ import {
   Colors,
   Spacing,
   BorderRadius,
-  Shadows,
-} from "@/constants/DesignSystem";
+  Shadows } from "@/constants/DesignSystem";
 
 export interface StoreBottomActionBarProps {
   storeId?: string;
@@ -32,23 +33,17 @@ function StoreBottomActionBar({
   storeId,
   onScanPayEarn,
   onWallet,
-  onOffers,
-}: StoreBottomActionBarProps) {
+  onOffers }: StoreBottomActionBarProps) {
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
   // Animation refs
-  const scanPayScale = useRef(new Animated.Value(1)).current;
-  const walletScale = useRef(new Animated.Value(1)).current;
-  const offersScale = useRef(new Animated.Value(1)).current;
+  const scanPayScale = useSharedValue(1);
+  const walletScale = useSharedValue(1);
+  const offersScale = useSharedValue(1);
 
-  const animateScale = (animValue: Animated.Value, toValue: number) => {
-    Animated.spring(animValue, {
-      toValue,
-      useNativeDriver: true,
-      tension: 100,
-      friction: 8,
-    }).start();
+  const animateScale = (animValue: Animated.SharedValue<number>, toValue: number) => {
+    animValue.value = withSpring(toValue);
   };
 
   const handleScanPayEarn = () => {
@@ -148,23 +143,17 @@ const styles = StyleSheet.create({
         shadowColor: '#000',
         shadowOffset: { width: 0, height: -3 },
         shadowOpacity: 0.1,
-        shadowRadius: 8,
-      },
+        shadowRadius: 8 },
       android: {
-        elevation: 10,
-      },
-    }),
-  },
+        elevation: 10 } }) },
   inner: {
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: Spacing.base,
     paddingTop: Spacing.sm,
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   mainButtonWrapper: {
-    flex: 1,
-  },
+    flex: 1 },
   mainButton: {
     flexDirection: "row",
     alignItems: "center",
@@ -173,13 +162,11 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: BorderRadius.md,
     gap: 8,
-    ...Shadows.medium,
-  },
+    ...Shadows.medium },
   mainButtonText: {
     fontSize: 15,
     fontWeight: "700",
-    color: colors.background.primary,
-  },
+    color: colors.background.primary },
   iconButton: {
     width: 50,
     height: 50,
@@ -188,8 +175,6 @@ const styles = StyleSheet.create({
     borderColor: Colors.gray[200],
     backgroundColor: colors.background.primary,
     justifyContent: "center",
-    alignItems: "center",
-  },
-});
+    alignItems: "center" } });
 
 export default withErrorBoundary(StoreBottomActionBar, 'MainStoreSectionStoreBottomActionBar');

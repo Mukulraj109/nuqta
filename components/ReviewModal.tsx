@@ -1,7 +1,7 @@
 // ReviewModal.tsx - Premium Glassmorphism Design
 // Reviews & Ratings Modal - Green & Gold Theme
 
-import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import {
   View,
   Modal,
@@ -9,11 +9,16 @@ import {
   TouchableWithoutFeedback,
   StyleSheet,
   Dimensions,
-  Animated,
   ScrollView,
   ActivityIndicator,
   Platform,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -77,16 +82,16 @@ function ReviewModal({
     }
   }, [visible, storeName, storeId, averageRating, totalReviews, ratingBreakdown, reviews, ugcContent, ugcLoading]);
 
-  const slideAnim = useRef(new Animated.Value(screenData.height)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const resizeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const slideAnim = useSharedValue(screenData.height);
+  const fadeAnim = useSharedValue(0);
+  const resizeTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const subscription = Dimensions.addEventListener('change', ({ window }) => {
       if (resizeTimeoutRef.current) clearTimeout(resizeTimeoutRef.current);
       resizeTimeoutRef.current = setTimeout(() => {
         setScreenData(window);
-        if (!visible) slideAnim.setValue(window.height);
+        if (!visible) slideAnim.value = window.height;
       }, 100);
     });
 
@@ -100,40 +105,22 @@ function ReviewModal({
 
   // Animate in/out
   useEffect(() => {
-    let _anim: Animated.CompositeAnimation;
     if (visible) {
-      _anim = Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        Animated.spring(slideAnim, {
-          toValue: 0,
-          tension: 100,
-          friction: 8,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      fadeAnim.value = withTiming(1, { duration: 300 });
+      slideAnim.value = withSpring(0, { damping: 12, stiffness: 100 });
     } else {
-      _anim = Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(slideAnim, {
-          toValue: screenData.height,
-          duration: 250,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      fadeAnim.value = withTiming(0, { duration: 200 });
+      slideAnim.value = withTiming(screenData.height, { duration: 250 });
     }
-  
-    return () => _anim.stop();
-}, [visible, fadeAnim, slideAnim, screenData.height]);
+  }, [visible, screenData.height]);
+
+  const blurContainerStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+  }));
+
+  const modalSlideStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: slideAnim.value }],
+  }));
 
   const handleTabChange = useCallback((tab: TabType) => setActiveTab(tab), []);
 
@@ -149,7 +136,7 @@ function ReviewModal({
     >
       <TouchableWithoutFeedback onPress={onClose}>
         <View style={styles.overlay}>
-          <Animated.View style={[styles.blurContainer, { opacity: fadeAnim }]}>
+          <Animated.View style={[styles.blurContainer, blurContainerStyle]}>
             {Platform.OS === 'ios' ? (
               <BlurView intensity={60} tint="dark" style={styles.blur} />
             ) : (
@@ -161,7 +148,7 @@ function ReviewModal({
             <Animated.View
               style={[
                 styles.modalContainer,
-                { transform: [{ translateY: slideAnim }] },
+                modalSlideStyle,
               ]}
             >
               {Platform.OS === 'ios' ? (

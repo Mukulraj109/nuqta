@@ -14,9 +14,14 @@ import {
   StyleSheet,
   Pressable,
   Dimensions,
-  Animated,
-  Platform,
+  Platform
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withSpring,
+  withTiming } from 'react-native-reanimated';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -61,8 +66,14 @@ function DealSuccessPage() {
   const [copiedCode, setCopiedCode] = useState(false);
 
   // Animation
-  const scaleAnim = useState(new Animated.Value(0))[0];
-  const fadeAnim = useState(new Animated.Value(0))[0];
+  const scaleAnim = useSharedValue(0);
+  const fadeAnim = useSharedValue(0);
+  const scaleAnimStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scaleAnim.value }],
+  }));
+  const fadeAnimStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+  }));
 
   useEffect(() => {
     if (sessionId) {
@@ -101,8 +112,7 @@ function DealSuccessPage() {
         message: string;
       }>('/campaigns/deals/verify-payment', {
         sessionId,
-        redemptionId,
-      });
+        redemptionId });
 
       if (response.success && response.data?.redemption) {
         const redemption = response.data.redemption;
@@ -118,19 +128,8 @@ function DealSuccessPage() {
         setDealStore(redemption.dealSnapshot?.store || redemption.campaignSnapshot?.title || 'Deal');
 
         // Animate success
-        Animated.sequence([
-          Animated.spring(scaleAnim, {
-            toValue: 1,
-            tension: 50,
-            friction: 7,
-            useNativeDriver: true,
-          }),
-          Animated.timing(fadeAnim, {
-            toValue: 1,
-            duration: 300,
-            useNativeDriver: true,
-          }),
-        ]).start();
+        scaleAnim.value = withSpring(1, { damping: 7, stiffness: 50 });
+        fadeAnim.value = withTiming(1, { duration: 300 });
       } else if (retryCount < maxRetries) {
         // Payment might still be processing, retry
         await new Promise(resolve => setTimeout(resolve, baseDelay * Math.pow(2, retryCount)));
@@ -166,8 +165,7 @@ function DealSuccessPage() {
     return date.toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
-      year: 'numeric',
-    });
+      year: 'numeric' });
   };
 
   if (isLoading) {
@@ -217,7 +215,7 @@ function DealSuccessPage() {
 
       {/* Success Animation */}
       <View style={styles.content}>
-        <Animated.View style={[styles.successIcon, { transform: [{ scale: scaleAnim }] }]}>
+        <Animated.View style={[styles.successIcon, scaleAnimStyle]}>
           <LinearGradient
             colors={[Colors.success, colors.brand.greenDark]}
             style={styles.successGradient}
@@ -226,7 +224,7 @@ function DealSuccessPage() {
           </LinearGradient>
         </Animated.View>
 
-        <Animated.View style={[styles.textContainer, { opacity: fadeAnim }]}>
+        <Animated.View style={[styles.textContainer, fadeAnimStyle]}>
           <ThemedText style={styles.successTitle}>Purchase Successful!</ThemedText>
           <ThemedText style={styles.successSubtitle}>
             {dealStore} deal purchased for {getCurrencySymbol(purchaseCurrency)}{purchaseAmount}
@@ -234,7 +232,7 @@ function DealSuccessPage() {
         </Animated.View>
 
         {/* Redemption Code Card */}
-        <Animated.View style={[styles.codeCard, { opacity: fadeAnim }]}>
+        <Animated.View style={[styles.codeCard, fadeAnimStyle]}>
           <ThemedText style={styles.codeLabel}>Your Redemption Code</ThemedText>
           <View style={styles.codeContainer}>
             <ThemedText style={styles.codeText}>{redemptionCode}</ThemedText>
@@ -260,7 +258,7 @@ function DealSuccessPage() {
         </Animated.View>
 
         {/* Info Box */}
-        <Animated.View style={[styles.infoBox, { opacity: fadeAnim }]}>
+        <Animated.View style={[styles.infoBox, fadeAnimStyle]}>
           <Ionicons name="information-circle" size={20} color={colors.warningScale[700]} />
           <ThemedText style={styles.infoText}>
             Show this code at the store to redeem your deal. You can also find it in "My Deals".
@@ -296,114 +294,92 @@ function DealSuccessPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background.secondary,
-  },
+    backgroundColor: Colors.background.secondary },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     gap: Spacing.md,
-    padding: Spacing.xl,
-  },
+    padding: Spacing.xl },
   loadingText: {
     fontSize: 16,
     fontWeight: '600',
     color: Colors.nileBlue,
-    marginTop: Spacing.sm,
-  },
+    marginTop: Spacing.sm },
   loadingSubtext: {
     fontSize: 14,
-    color: Colors.neutral[500],
-  },
+    color: Colors.neutral[500] },
   errorContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: Spacing.xl,
-  },
+    padding: Spacing.xl },
   errorIcon: {
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base },
   errorTitle: {
     fontSize: 20,
     fontWeight: '700',
     color: Colors.nileBlue,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   errorMessage: {
     fontSize: 14,
     color: Colors.neutral[500],
     textAlign: 'center',
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   errorHint: {
     fontSize: 13,
     color: Colors.neutral[400],
     textAlign: 'center',
-    marginBottom: Spacing.xl,
-  },
+    marginBottom: Spacing.xl },
   primaryBtn: {
     width: '100%',
     borderRadius: BorderRadius.md,
     overflow: 'hidden',
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
   primaryBtnGradient: {
     paddingVertical: 14,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   primaryBtnText: {
     color: Colors.text.inverse,
     fontWeight: '600',
-    fontSize: 16,
-  },
+    fontSize: 16 },
   secondaryBtn: {
     paddingVertical: Spacing.md,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   secondaryBtnText: {
     color: colors.warningScale[700],
     fontWeight: '600',
-    fontSize: 14,
-  },
+    fontSize: 14 },
   backLink: {
-    paddingVertical: Spacing.md,
-  },
+    paddingVertical: Spacing.md },
   backLinkText: {
     color: Colors.neutral[500],
-    fontSize: 14,
-  },
+    fontSize: 14 },
   content: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: Spacing.xl,
-  },
+    padding: Spacing.xl },
   successIcon: {
-    marginBottom: Spacing.xl,
-  },
+    marginBottom: Spacing.xl },
   successGradient: {
     width: 96,
     height: 96,
     borderRadius: 48,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   textContainer: {
     alignItems: 'center',
-    marginBottom: Spacing['2xl'],
-  },
+    marginBottom: Spacing['2xl'] },
   successTitle: {
     fontSize: 24,
     fontWeight: '700',
     color: Colors.nileBlue,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   successSubtitle: {
     fontSize: 14,
     color: Colors.neutral[500],
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   codeCard: {
     backgroundColor: Colors.background.primary,
     borderRadius: BorderRadius.lg,
@@ -415,47 +391,39 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 8,
     elevation: 2,
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base },
   codeLabel: {
     fontSize: 12,
     color: Colors.neutral[500],
     marginBottom: Spacing.md,
     textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
+    letterSpacing: 1 },
   codeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.md,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   codeText: {
     fontSize: 28,
     fontWeight: '800',
     color: Colors.nileBlue,
-    letterSpacing: 2,
-  },
+    letterSpacing: 2 },
   copyButton: {
     padding: Spacing.sm,
     backgroundColor: Colors.neutral[100],
-    borderRadius: BorderRadius.sm,
-  },
+    borderRadius: BorderRadius.sm },
   copiedText: {
     fontSize: 12,
     color: Colors.success,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   expiryRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    marginTop: Spacing.sm,
-  },
+    marginTop: Spacing.sm },
   expiryText: {
     fontSize: 13,
-    color: Colors.neutral[500],
-  },
+    color: Colors.neutral[500] },
   infoBox: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -463,40 +431,31 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.warning + '15',
     borderRadius: BorderRadius.md,
     padding: Spacing.base,
-    width: '100%',
-  },
+    width: '100%' },
   infoText: {
     flex: 1,
     fontSize: 13,
     color: Colors.neutral[500],
-    lineHeight: 18,
-  },
+    lineHeight: 18 },
   bottomButtons: {
     padding: Spacing.xl,
-    paddingBottom: Platform.OS === 'ios' ? 40 : 24,
-  },
+    paddingBottom: Platform.OS === 'ios' ? 40 : 24 },
   primaryButton: {
     borderRadius: BorderRadius.md,
     overflow: 'hidden',
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
   primaryButtonGradient: {
     paddingVertical: Spacing.base,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   primaryButtonText: {
     color: Colors.text.inverse,
     fontSize: 16,
-    fontWeight: '700',
-  },
+    fontWeight: '700' },
   secondaryButton: {
     paddingVertical: Spacing.md,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   secondaryButtonText: {
     color: Colors.neutral[500],
-    fontSize: 14,
-  },
-});
+    fontSize: 14 } });
 
 export default withErrorBoundary(DealSuccessPage, 'DealSuccess');

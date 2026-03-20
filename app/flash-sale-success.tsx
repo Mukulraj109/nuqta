@@ -7,9 +7,14 @@ import {
   View,
   StyleSheet,
   Pressable,
-  Dimensions,
-  Animated,
+  Dimensions
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withSpring,
+  withTiming } from 'react-native-reanimated';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -45,8 +50,14 @@ function FlashSaleSuccessPage() {
   const [copiedCode, setCopiedCode] = useState(false);
 
   // Animation
-  const scaleAnim = useState(new Animated.Value(0))[0];
-  const fadeAnim = useState(new Animated.Value(0))[0];
+  const scaleAnim = useSharedValue(0);
+  const fadeAnim = useSharedValue(0);
+  const scaleAnimStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scaleAnim.value }],
+  }));
+  const fadeAnimStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+  }));
 
   useEffect(() => {
     if (purchaseId && session_id) {
@@ -64,8 +75,7 @@ function FlashSaleSuccessPage() {
 
       const response = await realOffersApi.verifyFlashSalePayment({
         purchaseId: purchaseId!,
-        stripeSessionId: session_id!,
-      });
+        stripeSessionId: session_id! });
 
       if (response.success && response.data) {
         if (!isMounted()) return;
@@ -78,19 +88,8 @@ function FlashSaleSuccessPage() {
         setAmount(response.data.amount);
 
         // Animate success
-        Animated.sequence([
-          Animated.spring(scaleAnim, {
-            toValue: 1,
-            tension: 50,
-            friction: 7,
-            useNativeDriver: true,
-          }),
-          Animated.timing(fadeAnim, {
-            toValue: 1,
-            duration: 300,
-            useNativeDriver: true,
-          }),
-        ]).start();
+        scaleAnim.value = withSpring(1, { damping: 7, stiffness: 50 });
+        fadeAnim.value = withTiming(1, { duration: 300 });
       } else {
         if (!isMounted()) return;
         setError(response.message || 'Payment verification failed');
@@ -118,8 +117,7 @@ function FlashSaleSuccessPage() {
     return date.toLocaleDateString('en-IN', {
       year: 'numeric',
       month: 'long',
-      day: 'numeric',
-    });
+      day: 'numeric' });
   };
 
   if (isLoading) {
@@ -164,7 +162,7 @@ function FlashSaleSuccessPage() {
           <Animated.View
             style={[
               styles.successIconContainer,
-              { transform: [{ scale: scaleAnim }] },
+              scaleAnimStyle,
             ]}
           >
             <View style={styles.successIcon}>
@@ -173,7 +171,7 @@ function FlashSaleSuccessPage() {
           </Animated.View>
 
           {/* Success Message */}
-          <Animated.View style={[styles.contentContainer, { opacity: fadeAnim }]}>
+          <Animated.View style={[styles.contentContainer, fadeAnimStyle]}>
             <ThemedText style={styles.successTitle}>Payment Successful!</ThemedText>
             <ThemedText style={styles.successSubtitle}>
               Your deal has been claimed
@@ -296,64 +294,52 @@ function FlashSaleSuccessPage() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1 },
   loadingGradient: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   loadingText: {
     color: Colors.text.inverse,
     ...Typography.h4,
-    marginTop: Spacing.base,
-  },
+    marginTop: Spacing.base },
   errorContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: Spacing.xl,
-    backgroundColor: Colors.background.secondary,
-  },
+    backgroundColor: Colors.background.secondary },
   errorIcon: {
-    marginBottom: Spacing.xl,
-  },
+    marginBottom: Spacing.xl },
   errorTitle: {
     ...Typography.h2,
     fontWeight: 'bold',
     color: Colors.text.primary,
     marginBottom: Spacing.md,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   errorMessage: {
     ...Typography.bodyLarge,
     color: Colors.text.tertiary,
     textAlign: 'center',
-    marginBottom: Spacing['2xl'],
-  },
+    marginBottom: Spacing['2xl'] },
   retryButton: {
     backgroundColor: Colors.brand.purple,
     paddingHorizontal: Spacing['2xl'],
     paddingVertical: 14,
-    borderRadius: BorderRadius.md,
-  },
+    borderRadius: BorderRadius.md },
   retryButtonText: {
     color: Colors.text.inverse,
     ...Typography.bodyLarge,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   successGradient: {
-    flex: 1,
-  },
+    flex: 1 },
   safeArea: {
     flex: 1,
-    padding: Spacing.xl,
-  },
+    padding: Spacing.xl },
   successIconContainer: {
     alignItems: 'center',
     marginTop: Spacing.lg,
-    marginBottom: Spacing.xl,
-  },
+    marginBottom: Spacing.xl },
   successIcon: {
     width: 100,
     height: 100,
@@ -365,41 +351,34 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
-    elevation: 8,
-  },
+    elevation: 8 },
   contentContainer: {
-    flex: 1,
-  },
+    flex: 1 },
   successTitle: {
     ...Typography.h1,
     fontWeight: 'bold',
     color: Colors.text.inverse,
     textAlign: 'center',
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   successSubtitle: {
     ...Typography.bodyLarge,
     color: 'rgba(255, 255, 255, 0.9)',
     textAlign: 'center',
-    marginBottom: Spacing.xl,
-  },
+    marginBottom: Spacing.xl },
   amountCard: {
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     borderRadius: BorderRadius.md,
     padding: Spacing.base,
     alignItems: 'center',
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg },
   amountLabel: {
     ...Typography.body,
     color: 'rgba(255, 255, 255, 0.8)',
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs },
   amountValue: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse },
   voucherCard: {
     backgroundColor: Colors.background.primary,
     borderRadius: BorderRadius.lg,
@@ -409,18 +388,15 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 12,
-    elevation: 8,
-  },
+    elevation: 8 },
   voucherHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base },
   voucherLabel: {
     ...Typography.body,
     color: Colors.text.tertiary,
-    marginLeft: Spacing.sm,
-  },
+    marginLeft: Spacing.sm },
   voucherCodeBox: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -430,77 +406,64 @@ const styles = StyleSheet.create({
     padding: Spacing.base,
     borderWidth: 2,
     borderColor: colors.warningScale[400],
-    borderStyle: 'dashed',
-  },
+    borderStyle: 'dashed' },
   voucherCode: {
     ...Typography.h2,
     fontWeight: 'bold',
     color: colors.brand.amberDark,
-    letterSpacing: 2,
-  },
+    letterSpacing: 2 },
   copyIcon: {
     backgroundColor: Colors.background.primary,
     padding: Spacing.sm,
-    borderRadius: BorderRadius.sm,
-  },
+    borderRadius: BorderRadius.sm },
   copiedText: {
     ...Typography.bodySmall,
     color: Colors.success,
     textAlign: 'center',
-    marginTop: Spacing.sm,
-  },
+    marginTop: Spacing.sm },
   promoCodeSection: {
     marginTop: Spacing.base,
     paddingTop: Spacing.base,
     borderTopWidth: 1,
-    borderTopColor: Colors.border.default,
-  },
+    borderTopColor: Colors.border.default },
   promoLabel: {
     ...Typography.bodySmall,
     color: Colors.text.tertiary,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   promoCodeBox: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: Colors.background.secondary,
     borderRadius: BorderRadius.sm,
-    padding: Spacing.md,
-  },
+    padding: Spacing.md },
   promoCode: {
     ...Typography.bodyLarge,
     fontWeight: '600',
-    color: Colors.text.secondary,
-  },
+    color: Colors.text.secondary },
   expirySection: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: Spacing.base,
-  },
+    marginTop: Spacing.base },
   expiryText: {
     ...Typography.body,
     color: Colors.text.tertiary,
-    marginLeft: Spacing.sm,
-  },
+    marginLeft: Spacing.sm },
   instructionsCard: {
     backgroundColor: 'rgba(255, 255, 255, 0.15)',
     borderRadius: BorderRadius.md,
     padding: Spacing.base,
-    marginBottom: Spacing.xl,
-  },
+    marginBottom: Spacing.xl },
   instructionsTitle: {
     ...Typography.bodyLarge,
     fontWeight: '600',
     color: Colors.text.inverse,
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
   instructionItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
   instructionNumber: {
     width: 24,
     height: 24,
@@ -508,46 +471,36 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: Spacing.md,
-  },
+    marginRight: Spacing.md },
   instructionNumberText: {
     ...Typography.bodySmall,
     fontWeight: 'bold',
-    color: Colors.success,
-  },
+    color: Colors.success },
   instructionText: {
     flex: 1,
     ...Typography.body,
-    color: 'rgba(255, 255, 255, 0.9)',
-  },
+    color: 'rgba(255, 255, 255, 0.9)' },
   buttonContainer: {
-    marginTop: 'auto',
-  },
+    marginTop: 'auto' },
   primaryButton: {
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
   primaryButtonGradient: {
     borderRadius: BorderRadius.md,
     padding: Spacing.base,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   primaryButtonText: {
     color: Colors.text.inverse,
     ...Typography.bodyLarge,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   secondaryButton: {
     borderWidth: 2,
     borderColor: 'white',
     borderRadius: BorderRadius.md,
     padding: 14,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   secondaryButtonText: {
     color: Colors.text.inverse,
     ...Typography.bodyLarge,
-    fontWeight: '600',
-  },
-});
+    fontWeight: '600' } });
 
 export default withErrorBoundary(FlashSaleSuccessPage, 'FlashSaleSuccess');

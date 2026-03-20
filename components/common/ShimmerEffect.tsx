@@ -1,6 +1,7 @@
 // Shimmer loading effect component
-import React, { useEffect, useRef } from 'react';
-import { View, Animated, StyleSheet, ViewStyle } from 'react-native';
+import React, { useEffect} from 'react';
+import { View, StyleSheet, ViewStyle } from 'react-native';
+import Animated, { interpolate, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import { colors } from '@/constants/theme';
 
 interface ShimmerEffectProps {
@@ -18,28 +19,19 @@ function ShimmerEffect({
   shimmerColors = [colors.gray[200], colors.gray[100], colors.gray[200]],
   duration = 1500,
 }: ShimmerEffectProps) {
-  const animatedValue = useRef(new Animated.Value(0)).current;
+  const animatedValue = useSharedValue(0);
 
   useEffect(() => {
-    const animation = Animated.loop(
-      Animated.timing(animatedValue, {
-        toValue: 1,
-        duration,
-        useNativeDriver: true,
-      })
-    );
-    animation.start();
+    animatedValue.value = withRepeat(withTiming(1, { duration }), -1, true);
 
     return () => {
-      animation.stop();
-      animatedValue.setValue(0);
+      animatedValue.value = 0;
     };
   }, [animatedValue, duration]);
 
-  const translateX = animatedValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-350, 350],
-  });
+  const shimmerStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: interpolate(animatedValue.value, [0, 1], [-350, 350]) }],
+  }));
 
   return (
     <View
@@ -51,9 +43,7 @@ function ShimmerEffect({
         <Animated.View
           style={[
             styles.shimmer,
-            {
-              transform: [{ translateX }],
-            },
+            shimmerStyle,
           ]}
         />
       </View>

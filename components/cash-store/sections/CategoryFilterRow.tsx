@@ -6,17 +6,16 @@
  * Falls back to hardcoded defaults if no categories are passed.
  */
 
-import React, { memo, useRef, useEffect } from 'react';
+import React, { memo, useEffect} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   Pressable,
-  Animated,
   Platform,
-  Dimensions,
-} from 'react-native';
+  Dimensions} from 'react-native';
+import Animated, { interpolate, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import {
@@ -159,44 +158,21 @@ interface CategoryItemProps {
 
 const CategoryItem: React.FC<CategoryItemProps> = memo(
   ({ filter, isSelected, onPress, index }) => {
-    const scaleAnim = useRef(new Animated.Value(0.8)).current;
-    const fadeAnim = useRef(new Animated.Value(0)).current;
+    const scaleAnim = useSharedValue(0.8);
+    const fadeAnim = useSharedValue(0);
 
     useEffect(() => {
-      const anim = Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 300,
-          delay: index * 40,
-          useNativeDriver: true,
-        }),
-        Animated.spring(scaleAnim, {
-          toValue: 1,
-          friction: 8,
-          tension: 40,
-          delay: index * 40,
-          useNativeDriver: true,
-        }),
-      ]);
-      anim.start();
-
-      return () => { anim.stop(); };
+      fadeAnim.value = withDelay(index * 40, withTiming(1, { duration: 300 }));
+      scaleAnim.value = withDelay(index * 40, withSpring(1));
+      
 }, [index]);
 
     const handlePressIn = () => {
-      Animated.spring(scaleAnim, {
-        toValue: 0.9,
-        friction: 8,
-        useNativeDriver: true,
-      }).start();
+      scaleAnim.value = withSpring(0.9);
     };
 
     const handlePressOut = () => {
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        friction: 8,
-        useNativeDriver: true,
-      }).start();
+      scaleAnim.value = withSpring(1);
     };
 
     // Use color for icon, backgroundColor for circle background
@@ -253,27 +229,12 @@ const CategoryItem: React.FC<CategoryItemProps> = memo(
 );
 
 const SkeletonItem: React.FC<{ index: number }> = memo(({ index }) => {
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
-    const loop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, {
-          toValue: 1,
-          duration: 1000,
-          delay: index * 80,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmerAnim, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    loop.start();
-    return () => loop.stop();
-  }, [index]);
+    shimmerAnim.value = withRepeat(withSequence(withTiming(1, { duration: 1000 })), -1);
+    
+    }, [index]);
 
   return (
     <View style={styles.itemContainer}>
@@ -282,10 +243,7 @@ const SkeletonItem: React.FC<{ index: number }> = memo(({ index }) => {
           styles.iconCircle,
           styles.skeletonCircle,
           {
-            opacity: shimmerAnim.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0.4, 0.8],
-            }),
+            opacity: interpolate(shimmerAnim.value, [0, 1], [0.4, 0.8]),
           },
         ]}
       />
@@ -300,18 +258,11 @@ const CategoryFilterRow: React.FC<CategoryFilterRowProps> = ({
   isLoading = false,
   categories,
 }) => {
-  const headerFadeAnim = useRef(new Animated.Value(0)).current;
+  const headerFadeAnim = useSharedValue(0);
 
   useEffect(() => {
-    const anim = Animated.timing(headerFadeAnim, {
-      toValue: 1,
-      duration: 400,
-      useNativeDriver: true,
-    });
-    anim.start();
-
-    return () => { anim.stop(); };
-}, []);
+    headerFadeAnim.value = withTiming(1, { duration: 400 });
+  }, []);
 
   // Use passed categories, or fallback to defaults
   const displayCategories = (categories && categories.length > 0) ? categories : FALLBACK_CATEGORIES;

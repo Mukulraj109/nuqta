@@ -9,9 +9,15 @@ import {
   Dimensions,
   ActivityIndicator,
   RefreshControl,
-  StatusBar,
-  Animated,
+  StatusBar
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withTiming,
+  withDelay} from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -47,8 +53,7 @@ const COLORS = {
   gold: colors.brand.goldBright,
   silver: '#C0C0C0',
   bronze: '#CD7F32',
-  blue500: Colors.info,
-};
+  blue500: Colors.info};
 
 type Period = 'daily' | 'weekly' | 'monthly' | 'all-time';
 
@@ -81,8 +86,8 @@ const Leaderboard = () => {
   const [loadingMore, setLoadingMore] = useState(false);
 
   const scrollViewRef = useRef<ScrollView>(null);
-  const celebrationAnim = useRef(new Animated.Value(0)).current;
-  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const celebrationAnim = useSharedValue(0);
+  const pulseAnim = useSharedValue(1);
   const isMounted = useIsMounted();
 
   // Convert entries for real-time hook
@@ -95,8 +100,7 @@ const Leaderboard = () => {
     level: 1,
     tier: (e.tier || 'free') as 'free' | 'plus' | 'premium' | 'elite',
     achievements: 0,
-    isCurrentUser: e.isCurrentUser || false,
-  }));
+    isCurrentUser: e.isCurrentUser || false}));
 
   // Real-time leaderboard updates
   const {
@@ -104,8 +108,7 @@ const Leaderboard = () => {
     userRank: realtimeUserRank,
     isConnected,
     isUpdating,
-    hasRecentRankUp,
-  } = useLeaderboardRealtime(
+    hasRecentRankUp} = useLeaderboardRealtime(
     realtimeInitialEntries,
     user?.id,
     {
@@ -116,20 +119,11 @@ const Leaderboard = () => {
       },
       onLeaderboardUpdate: () => {
         // Pulse animation on update
-        Animated.sequence([
-          Animated.timing(pulseAnim, {
-            toValue: 1.05,
-            duration: 200,
-            useNativeDriver: true,
-          }),
-          Animated.timing(pulseAnim, {
-            toValue: 1,
-            duration: 200,
-            useNativeDriver: true,
-          }),
-        ]).start();
-      },
-    }
+        pulseAnim.value = withSequence(
+          withTiming(1.05, { duration: 200 }),
+          withTiming(1, { duration: 200 }),
+        );
+      }}
   );
 
   const fetchLeaderboard = useCallback(async (isRefresh = false) => {
@@ -147,8 +141,7 @@ const Leaderboard = () => {
         type: 'spending',
         period: selectedPeriod,
         limit: 50,
-        page: 1,
-      });
+        page: 1});
 
       if (leaderboardResponse.success && leaderboardResponse.data) {
         const responseData = leaderboardResponse.data;
@@ -159,8 +152,7 @@ const Leaderboard = () => {
           coins: entry.value,
           avatar: entry.user.avatar,
           tier: 'free',
-          isCurrentUser: entry.user._id === user?.id,
-        }));
+          isCurrentUser: entry.user._id === user?.id}));
         if (!isMounted()) return;
         setEntries(displayEntries);
 
@@ -182,8 +174,7 @@ const Leaderboard = () => {
             name: user?.name || 'You',
             coins: responseData.myRank.value,
             tier: 'free',
-            isCurrentUser: true,
-          });
+            isCurrentUser: true});
         } else {
           if (!isMounted()) return;
           setMyRank(null);
@@ -222,8 +213,7 @@ const Leaderboard = () => {
         type: 'spending',
         period: selectedPeriod,
         limit: 50,
-        page: nextPage,
-      });
+        page: nextPage});
       if (response.success && response.data?.entries) {
         const newEntries = response.data.entries.map((entry: any, index: number) => ({
           rank: entry.rank || ((nextPage - 1) * 50) + index + 1,
@@ -232,8 +222,7 @@ const Leaderboard = () => {
           coins: entry.value,
           avatar: entry.user.avatar,
           tier: 'free',
-          isCurrentUser: entry.user._id === user?.id,
-        }));
+          isCurrentUser: entry.user._id === user?.id}));
         if (newEntries.length > 0) {
           if (!isMounted()) return;
           setEntries(prev => [...prev, ...newEntries]);
@@ -272,21 +261,12 @@ const Leaderboard = () => {
     setCelebrationMessage(message);
     setShowCelebration(true);
 
-    Animated.sequence([
-      Animated.timing(celebrationAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-      Animated.delay(2500),
-      Animated.timing(celebrationAnim, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      setShowCelebration(false);
-    });
+    celebrationAnim.value = withSequence(
+      withTiming(1, { duration: 300 }),
+      withTiming(1, { duration: 2500 }),
+      withTiming(0, { duration: 300 })
+    );
+    setTimeout(() => setShowCelebration(false), 3100);
   };
 
   // Get medal color for top 3
@@ -309,6 +289,15 @@ const Leaderboard = () => {
       </View>
     );
   };
+
+  const celebrationStyle = useAnimatedStyle(() => ({
+    opacity: celebrationAnim.value,
+    transform: [{ scale: interpolate(celebrationAnim.value, [0, 1], [0.5, 1]) }],
+  }));
+
+  const pulseStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: pulseAnim.value }],
+  }));
 
   // Render period filter button
   const renderPeriodButton = (period: Period, label: string) => (
@@ -343,7 +332,7 @@ const Leaderboard = () => {
           entry.isCurrentUser && styles.currentUserCard,
           isTopThree && styles.topThreeCard,
           hasRankedUp && styles.rankedUpCard,
-          { transform: [{ scale: entry.isCurrentUser ? pulseAnim : 1 }] },
+          entry.isCurrentUser && pulseStyle,
         ]}
         accessibilityLabel={`Rank ${entry.rank}. ${entry.name}${entry.isCurrentUser ? ' - You' : ''}. ${entry.coins.toLocaleString()} rupees spent`}
         accessibilityRole="text"
@@ -802,17 +791,7 @@ const Leaderboard = () => {
           <Animated.View
             style={[
               styles.celebrationOverlay,
-              {
-                opacity: celebrationAnim,
-                transform: [
-                  {
-                    scale: celebrationAnim.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [0.5, 1],
-                    }),
-                  },
-                ],
-              },
+              celebrationStyle,
             ]}
           >
             <LinearGradient
@@ -832,35 +811,29 @@ const Leaderboard = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
-  },
+    backgroundColor: COLORS.background},
   header: {
-    paddingBottom: Spacing.base,
-  },
+    paddingBottom: Spacing.base},
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.base,
-    paddingVertical: Spacing.md,
-  },
+    paddingVertical: Spacing.md},
   backButton: {
     padding: Spacing.sm,
     borderRadius: BorderRadius.xl,
-    backgroundColor: 'rgba(255,255,255,0.15)',
-  },
+    backgroundColor: 'rgba(255,255,255,0.15)'},
   headerTitleContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm},
   headerTitle: {
     ...Typography.h3,
     fontWeight: '700',
-    color: COLORS.white,
-  },
+    color: COLORS.white},
   liveIndicator: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -868,224 +841,181 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.sm,
     paddingVertical: Spacing.xs,
     borderRadius: BorderRadius.md,
-    gap: Spacing.xs,
-  },
+    gap: Spacing.xs},
   liveDot: {
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: COLORS.green500,
-  },
+    backgroundColor: COLORS.green500},
   liveText: {
     color: COLORS.white,
     ...Typography.overline,
-    fontWeight: 'bold',
-  },
+    fontWeight: 'bold'},
   headerRight: {
     width: 40,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center'},
   filterScroll: {
-    marginTop: Spacing.sm,
-  },
+    marginTop: Spacing.sm},
   filterContent: {
     paddingHorizontal: Spacing.base,
     gap: Spacing.sm,
-    flexDirection: 'row',
-  },
+    flexDirection: 'row'},
   periodButton: {
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.xl,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-  },
+    backgroundColor: 'rgba(255, 255, 255, 0.2)'},
   periodButtonActive: {
-    backgroundColor: COLORS.white,
-  },
+    backgroundColor: COLORS.white},
   periodButtonText: {
     color: COLORS.white,
     ...Typography.body,
-    fontWeight: '600',
-  },
+    fontWeight: '600'},
   periodButtonTextActive: {
-    color: COLORS.primary,
-  },
+    color: COLORS.primary},
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 100,
-  },
+    paddingBottom: 100},
   loadingText: {
     marginTop: Spacing.base,
     ...Typography.body,
-    color: COLORS.gray500,
-  },
+    color: COLORS.gray500},
   errorContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: Spacing['2xl'],
-    paddingBottom: 100,
-  },
+    paddingBottom: 100},
   errorTitle: {
     ...Typography.h4,
     fontWeight: '600',
     color: COLORS.navy,
     marginTop: Spacing.base,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm},
   errorText: {
     ...Typography.body,
     color: COLORS.gray500,
     textAlign: 'center',
-    marginBottom: Spacing.xl,
-  },
+    marginBottom: Spacing.xl},
   retryButton: {
     borderRadius: BorderRadius.md,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'},
   retryButtonGradient: {
     paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.md,
-  },
+    paddingVertical: Spacing.md},
   retryButtonText: {
     ...Typography.body,
     fontWeight: '600',
-    color: COLORS.white,
-  },
+    color: COLORS.white},
   scrollView: {
-    flex: 1,
-  },
+    flex: 1},
   scrollContent: {
-    paddingBottom: 120,
-  },
+    paddingBottom: 120},
   section: {
     paddingHorizontal: Spacing.base,
-    paddingVertical: Spacing.base,
-  },
+    paddingVertical: Spacing.base},
   sectionTitle: {
     ...Typography.h4,
     fontWeight: '700',
     color: COLORS.navy,
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md},
   sectionSubtitle: {
     ...Typography.body,
     color: COLORS.gray500,
     marginBottom: Spacing.base,
-    marginTop: -8,
-  },
+    marginTop: -8},
   prizeBanner: {
     padding: Spacing.xl,
     borderRadius: BorderRadius.lg,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(139,92,246,0.3)',
-  },
+    borderColor: 'rgba(139,92,246,0.3)'},
   prizeTitle: {
     ...Typography.h4,
     fontWeight: 'bold',
     color: COLORS.navy,
     marginTop: Spacing.md,
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base},
   prizeGrid: {
     flexDirection: 'row',
-    gap: Spacing['2xl'],
-  },
+    gap: Spacing['2xl']},
   prizeItem: {
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   prizeLabel: {
     ...Typography.bodySmall,
     color: COLORS.gray500,
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs},
   prizeValue: {
     ...Typography.h4,
-    fontWeight: 'bold',
-  },
+    fontWeight: 'bold'},
   myRankCard: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: Spacing.base,
     borderRadius: BorderRadius.lg,
-    gap: Spacing.md,
-  },
+    gap: Spacing.md},
   myRankPosition: {
     width: 48,
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   myRankNumber: {
     ...Typography.h4,
     fontWeight: 'bold',
-    color: COLORS.white,
-  },
+    color: COLORS.white},
   myRankAvatar: {
     width: 48,
     height: 48,
     borderRadius: BorderRadius['2xl'],
     backgroundColor: 'rgba(255,255,255,0.3)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   myRankAvatarText: {
     ...Typography.h3,
     fontWeight: 'bold',
-    color: COLORS.white,
-  },
+    color: COLORS.white},
   myRankInfo: {
-    flex: 1,
-  },
+    flex: 1},
   myRankName: {
     ...Typography.bodyLarge,
     fontWeight: '600',
-    color: COLORS.white,
-  },
+    color: COLORS.white},
   myRankCoins: {
     ...Typography.body,
-    color: 'rgba(255,255,255,0.8)',
-  },
+    color: 'rgba(255,255,255,0.8)'},
   motivationText: {
     ...Typography.body,
     color: COLORS.gray500,
     textAlign: 'center',
-    marginTop: Spacing.md,
-  },
+    marginTop: Spacing.md},
   noRankCard: {
     alignItems: 'center',
     padding: Spacing.xl,
     backgroundColor: COLORS.white,
     borderRadius: BorderRadius.lg,
     borderWidth: 1,
-    borderColor: COLORS.gray200,
-  },
+    borderColor: COLORS.gray200},
   noRankTitle: {
     ...Typography.bodyLarge,
     fontWeight: '600',
     color: COLORS.navy,
     marginTop: Spacing.md,
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs},
   noRankText: {
     ...Typography.body,
     color: COLORS.gray500,
-    textAlign: 'center',
-  },
+    textAlign: 'center'},
   podiumContainer: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'center',
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.base,
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm},
   podiumItem: {
     flex: 1,
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   podiumAvatar: {
     width: 64,
     height: 64,
@@ -1093,70 +1023,58 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: Spacing.sm,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'},
   podiumFirst: {
     width: 80,
     height: 80,
     borderRadius: 40,
     backgroundColor: `${COLORS.gold}30`,
     borderWidth: 4,
-    borderColor: COLORS.gold,
-  },
+    borderColor: COLORS.gold},
   podiumSecond: {
     backgroundColor: `${COLORS.silver}30`,
     borderWidth: 2,
-    borderColor: COLORS.silver,
-  },
+    borderColor: COLORS.silver},
   podiumThird: {
     backgroundColor: `${COLORS.bronze}30`,
     borderWidth: 2,
-    borderColor: COLORS.bronze,
-  },
+    borderColor: COLORS.bronze},
   podiumAvatarImage: {
     width: '100%',
     height: '100%',
-    borderRadius: 32,
-  },
+    borderRadius: 32},
   podiumAvatarImageLarge: {
     width: '100%',
     height: '100%',
-    borderRadius: 40,
-  },
+    borderRadius: 40},
   podiumAvatarText: {
     ...Typography.h2,
     fontWeight: '700',
-    color: COLORS.navy,
-  },
+    color: COLORS.navy},
   podiumAvatarTextLarge: {
     fontSize: 32,
     fontWeight: '700',
-    color: COLORS.navy,
-  },
+    color: COLORS.navy},
   podiumName: {
     ...Typography.bodySmall,
     fontWeight: '600',
     color: COLORS.navy,
-    marginBottom: 2,
-  },
+    marginBottom: 2},
   podiumCoins: {
     ...Typography.bodySmall,
     color: COLORS.gray500,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm},
   podiumBar: {
     width: '100%',
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
-    gap: Spacing.xs,
-  },
+    gap: Spacing.xs},
   podiumRank: {
     ...Typography.bodyLarge,
     fontWeight: '700',
-    color: COLORS.navy,
-  },
+    color: COLORS.navy},
   entryCard: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1164,114 +1082,93 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     backgroundColor: COLORS.white,
     marginBottom: Spacing.sm,
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle},
   currentUserCard: {
     borderWidth: 2,
     borderColor: COLORS.primary,
-    backgroundColor: colors.tint.purpleLight,
-  },
+    backgroundColor: colors.tint.purpleLight},
   topThreeCard: {
     backgroundColor: colors.tint.amber,
     borderWidth: 1,
-    borderColor: '#FCD34D',
-  },
+    borderColor: '#FCD34D'},
   rankedUpCard: {
     borderWidth: 2,
     borderColor: COLORS.green500,
-    backgroundColor: '#F0FFF4',
-  },
+    backgroundColor: '#F0FFF4'},
   rankContainer: {
     width: 40,
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   rankText: {
     ...Typography.body,
     fontWeight: '700',
-    color: COLORS.gray500,
-  },
+    color: COLORS.gray500},
   medalContainer: {
     width: 36,
     height: 36,
     borderRadius: 18,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center'},
   avatar: {
     width: 48,
     height: 48,
     borderRadius: BorderRadius['2xl'],
     marginHorizontal: Spacing.md,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'},
   topThreeAvatar: {
     borderWidth: 2,
-    borderColor: COLORS.gold,
-  },
+    borderColor: COLORS.gold},
   avatarImage: {
     width: '100%',
-    height: '100%',
-  },
+    height: '100%'},
   avatarPlaceholder: {
     width: '100%',
     height: '100%',
     backgroundColor: COLORS.gray200,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center'},
   avatarText: {
     ...Typography.h4,
     fontWeight: '700',
-    color: COLORS.gray600,
-  },
+    color: COLORS.gray600},
   userInfo: {
-    flex: 1,
-  },
+    flex: 1},
   userName: {
     ...Typography.body,
     fontWeight: '600',
     color: COLORS.navy,
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs},
   userStats: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.xs,
-  },
+    gap: Spacing.xs},
   coinsText: {
     ...Typography.bodySmall,
     color: COLORS.gray500,
-    fontWeight: '500',
-  },
+    fontWeight: '500'},
   rupeeSymbol: {
     ...Typography.body,
     fontWeight: '700',
-    color: COLORS.green500,
-  },
+    color: COLORS.green500},
   rankUpBadge: {
     position: 'absolute',
     top: 8,
     right: 8,
     backgroundColor: COLORS.green500,
     padding: Spacing.xs,
-    borderRadius: 10,
-  },
+    borderRadius: 10},
   emptyState: {
     alignItems: 'center',
-    paddingVertical: 48,
-  },
+    paddingVertical: 48},
   emptyText: {
     ...Typography.bodyLarge,
     fontWeight: '600',
     color: COLORS.gray500,
-    marginTop: Spacing.base,
-  },
+    marginTop: Spacing.base},
   emptySubtext: {
     ...Typography.body,
     color: COLORS.gray400,
     marginTop: Spacing.sm,
-    textAlign: 'center',
-  },
+    textAlign: 'center'},
   loadMoreButton: {
     alignSelf: 'center',
     paddingVertical: Spacing.md,
@@ -1279,26 +1176,22 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius['2xl'],
     backgroundColor: `${COLORS.primary}15`,
     marginTop: Spacing.base,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm},
   loadMoreText: {
     ...Typography.body,
     fontWeight: '600',
-    color: COLORS.primary,
-  },
+    color: COLORS.primary},
   infoCard: {
     flexDirection: 'row',
     backgroundColor: colors.indigoMist,
     borderRadius: BorderRadius.md,
     padding: Spacing.base,
-    gap: Spacing.md,
-  },
+    gap: Spacing.md},
   infoText: {
     flex: 1,
     ...Typography.bodySmall,
     color: '#4F46E5',
-    lineHeight: 18,
-  },
+    lineHeight: 18},
   ctaCard: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1307,38 +1200,31 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
     gap: Spacing.md,
     borderWidth: 1,
-    borderColor: COLORS.gray200,
-  },
+    borderColor: COLORS.gray200},
   ctaIcon: {
     width: 44,
     height: 44,
     borderRadius: BorderRadius.md,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   ctaContent: {
-    flex: 1,
-  },
+    flex: 1},
   ctaTitle: {
     ...Typography.body,
     fontWeight: 'bold',
     color: COLORS.navy,
-    marginBottom: 2,
-  },
+    marginBottom: 2},
   ctaDesc: {
     ...Typography.bodySmall,
-    color: COLORS.gray500,
-  },
+    color: COLORS.gray500},
   ctaBadge: {
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.xs,
-    borderRadius: BorderRadius.lg,
-  },
+    borderRadius: BorderRadius.lg},
   ctaBadgeText: {
     ...Typography.bodySmall,
     fontWeight: 'bold',
-    color: COLORS.white,
-  },
+    color: COLORS.white},
   celebrationOverlay: {
     position: 'absolute',
     top: 0,
@@ -1348,8 +1234,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 1000,
-  },
+    zIndex: 1000},
   celebrationCard: {
     borderRadius: BorderRadius.xl,
     padding: Spacing['2xl'],
@@ -1361,14 +1246,11 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
-    elevation: 10,
-  },
+    elevation: 10},
   celebrationText: {
     ...Typography.h4,
     fontWeight: 'bold',
     color: COLORS.white,
-    textAlign: 'center',
-  },
-});
+    textAlign: 'center'}});
 
 export default withErrorBoundary(Leaderboard, 'PlayandearnLeaderboard');

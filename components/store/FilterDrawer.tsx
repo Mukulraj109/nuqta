@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,9 +9,14 @@ import {
   StyleSheet,
   Platform,
   Dimensions,
-  Animated,
   TextInput,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSpring,
+} from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
@@ -67,45 +72,27 @@ function FilterDrawer({
     rating: true,
   });
 
-  const slideAnim = useRef(new Animated.Value(height)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useSharedValue(height);
+  const fadeAnim = useSharedValue(0);
 
   useEffect(() => {
-    let _anim: Animated.CompositeAnimation;
     if (visible) {
       setFilters(currentFilters);
-      _anim = Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 250,
-          useNativeDriver: true,
-        }),
-        Animated.spring(slideAnim, {
-          toValue: 0,
-          tension: 65,
-          friction: 11,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      fadeAnim.value = withTiming(1, { duration: 250 });
+      slideAnim.value = withSpring(0, { damping: 11, stiffness: 65 });
     } else {
-      _anim = Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(slideAnim, {
-          toValue: height,
-          duration: 250,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      fadeAnim.value = withTiming(0, { duration: 200 });
+      slideAnim.value = withTiming(height, { duration: 250 });
     }
-  
-    return () => _anim.stop();
-}, [visible]);
+  }, [visible]);
+
+  const overlayAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+  }));
+
+  const drawerAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: slideAnim.value }],
+  }));
 
   const handleApply = () => {
     onApplyFilters(filters);
@@ -187,7 +174,7 @@ function FilterDrawer({
           <Animated.View
             style={[
               styles.overlayBackground,
-              { opacity: fadeAnim },
+              overlayAnimatedStyle,
             ]}
           />
         </View>
@@ -196,9 +183,7 @@ function FilterDrawer({
       <Animated.View
         style={[
           styles.drawerContainer,
-          {
-            transform: [{ translateY: slideAnim }],
-          },
+          drawerAnimatedStyle,
         ]}
       >
         <TouchableWithoutFeedback>

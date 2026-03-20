@@ -13,8 +13,14 @@ import {
   Pressable,
   ScrollView,
   Platform,
-  Animated,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -403,31 +409,21 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
   }, [activeTab, offersTabItems, cashbackTabItems, exclusiveTabItems, sectionLoading, trackImpressions]);
 
   // Skeleton animation with cleanup
-  const shimmerAnim = useState(new Animated.Value(0))[0];
+  const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
-    const animation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmerAnim, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
+    shimmerAnim.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 1000 }),
+        withTiming(0, { duration: 1000 })
+      ),
+      -1
     );
-    animation.start();
+  }, []);
 
-    // Cleanup on unmount
-    return () => {
-      animation.stop();
-      shimmerAnim.setValue(0);
-    };
-  }, [shimmerAnim]);
+  const shimmerStyle = useAnimatedStyle(() => ({
+    opacity: 0.3 + shimmerAnim.value * 0.4,
+  }));
 
   // Check user verification status for exclusive zones
   const checkUserVerification = useCallback((eligibilityType: string): boolean => {
@@ -855,20 +851,20 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
           <Animated.View
             style={[
               styles.skeletonIcon,
-              { opacity: shimmerAnim.interpolate({ inputRange: [0, 1], outputRange: [0.3, 0.7] }) }
+              shimmerStyle
             ]}
           />
           <View style={styles.skeletonTextContainer}>
             <Animated.View
               style={[
                 styles.skeletonTitle,
-                { opacity: shimmerAnim.interpolate({ inputRange: [0, 1], outputRange: [0.3, 0.7] }) }
+                shimmerStyle
               ]}
             />
             <Animated.View
               style={[
                 styles.skeletonSubtitle,
-                { opacity: shimmerAnim.interpolate({ inputRange: [0, 1], outputRange: [0.3, 0.7] }) }
+                shimmerStyle
               ]}
             />
           </View>

@@ -5,8 +5,13 @@ import {
   Pressable,
   StyleSheet,
   Platform,
-  Animated,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  interpolateColor,
+} from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -38,7 +43,7 @@ function EventSearchBar({
 }: EventSearchBarProps) {
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<TextInput>(null);
-  const animatedValue = useRef(new Animated.Value(0)).current;
+  const animatedValue = useSharedValue(0);
 
   const backgroundColor = useThemeColor({}, 'background');
   const textColor = useThemeColor({}, 'text');
@@ -47,14 +52,7 @@ function EventSearchBar({
   const placeholderColor = useThemeColor({ light: colors.neutral[400], dark: colors.neutral[500] }, 'text');
 
   useEffect(() => {
-    const anim = Animated.timing(animatedValue, {
-      toValue: isFocused ? 1 : 0,
-      duration: 200,
-      useNativeDriver: false,
-    });
-    anim.start();
-
-    return () => { anim.stop(); };
+    animatedValue.value = withTiming(isFocused ? 1 : 0, { duration: 200 });
   }, [isFocused]);
 
   const handleFocus = () => {
@@ -81,10 +79,9 @@ function EventSearchBar({
     inputRef.current?.blur();
   };
 
-  const borderColorAnimated = animatedValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [borderColor, tintColor],
-  });
+  const borderAnimStyle = useAnimatedStyle(() => ({
+    borderColor: interpolateColor(animatedValue.value, [0, 1], [borderColor, tintColor]),
+  }));
 
   return (
     <ThemedView style={styles.container}>
@@ -93,8 +90,8 @@ function EventSearchBar({
           styles.searchContainer,
           {
             backgroundColor,
-            borderColor: borderColorAnimated,
           },
+          borderAnimStyle,
         ]}
       >
         <View style={styles.searchInputContainer}>

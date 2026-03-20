@@ -1,27 +1,30 @@
-import React, { useEffect, useRef } from 'react';
-import { View, StyleSheet, Animated, Dimensions } from 'react-native';
+import React, { useEffect } from 'react';
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence, withRepeat } from 'react-native-reanimated';
 import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
 function ShimmerBar({ width: w, height, borderRadius = 8, style }: { width: number | string; height: number; borderRadius?: number; style?: any }) {
-  const opacity = useRef(new Animated.Value(0.3)).current;
+  const opacityAnim = useSharedValue(0.3);
 
   useEffect(() => {
-    const animation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(opacity, { toValue: 0.7, duration: 800, useNativeDriver: true }),
-        Animated.timing(opacity, { toValue: 0.3, duration: 800, useNativeDriver: true }),
-      ])
-    );
-    animation.start();
-    return () => animation.stop();
-  }, [opacity]);
+    opacityAnim.value = withRepeat(withSequence(withTiming(0.7, { duration: 800 }), withTiming(0.3, { duration: 800 })), -1);
+  }, [opacityAnim]);
+
+  const animatedOpacityStyle = useAnimatedStyle(() => ({
+    opacity: opacityAnim.value,
+  }));
 
   return (
     <Animated.View
       style={[
-        { width: w as any, height, borderRadius, backgroundColor: colors.neutral[200], opacity },
+        { width: w as any, height, borderRadius, backgroundColor: colors.neutral[200] },
+        animatedOpacityStyle,
         style,
       ]}
     />

@@ -9,11 +9,16 @@ import {
   TouchableWithoutFeedback,
   StyleSheet,
   Dimensions,
-  Animated,
   Text,
   ScrollView,
-  Platform,
+  Platform
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -69,8 +74,10 @@ function WalkInDealsModal({ visible, onClose, deals = [], storeId }: DealModalPr
   const [filterType, setFilterType] = useState<'all' | 'walk_in' | 'online' | 'combo' | 'cashback' | 'flash_sale'>('all');
   const [sortBy, setSortBy] = useState<'priority' | 'discount' | 'expiry' | 'newest'>('priority');
 
-  const slideAnim = useRef(new Animated.Value(screenData.height)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useSharedValue(screenData.height);
+  const fadeAnim = useSharedValue(0);
+  const fadeAnimStyle = useAnimatedStyle(() => ({ opacity: fadeAnim.value }));
+  const slideAnimStyle = useAnimatedStyle(() => ({ transform: [{ translateY: slideAnim.value }] }));
   const resizeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -79,7 +86,7 @@ function WalkInDealsModal({ visible, onClose, deals = [], storeId }: DealModalPr
       resizeTimeoutRef.current = setTimeout(() => {
         setScreenData(window);
         if (!visible) {
-          slideAnim.setValue(window.height);
+          slideAnim.value = window.height;
         }
       }, 100);
     });
@@ -251,23 +258,14 @@ function WalkInDealsModal({ visible, onClose, deals = [], storeId }: DealModalPr
   const styles = useMemo(() => createStyles(screenData), [screenData]);
 
   useEffect(() => {
-    let _anim: Animated.CompositeAnimation;
     if (visible) {
-      _anim = Animated.parallel([
-        Animated.timing(fadeAnim, { toValue: 1, duration: 200, useNativeDriver: true }),
-        Animated.spring(slideAnim, { toValue: 0, tension: 100, friction: 8, useNativeDriver: true }),
-      ]);
-      _anim.start();
+      fadeAnim.value = withTiming(1, { duration: 200 });
+      slideAnim.value = withSpring(0, { tension: 100, friction: 8 });
     } else {
-      _anim = Animated.parallel([
-        Animated.timing(fadeAnim, { toValue: 0, duration: 150, useNativeDriver: true }),
-        Animated.timing(slideAnim, { toValue: screenData.height, duration: 200, useNativeDriver: true }),
-      ]);
-      _anim.start();
+      fadeAnim.value = withTiming(0, { duration: 150 });
+      slideAnim.value = withTiming(screenData.height, { duration: 200 });
     }
-  
-    return () => _anim.stop();
-}, [visible, fadeAnim, slideAnim]);
+  }, [visible, fadeAnim, slideAnim]);
 
   const handleBackdropPress = () => onClose();
   const handleModalPress = (event: any) => event.stopPropagation();
@@ -314,7 +312,7 @@ function WalkInDealsModal({ visible, onClose, deals = [], storeId }: DealModalPr
     >
       <TouchableWithoutFeedback onPress={handleBackdropPress}>
         <View style={styles.overlay}>
-          <Animated.View style={[styles.blurContainer, { opacity: fadeAnim }]}>
+          <Animated.View style={[styles.blurContainer, fadeAnimStyle]}>
             {Platform.OS === 'ios' ? (
               <BlurView intensity={60} tint="dark" style={styles.blur} />
             ) : (
@@ -323,7 +321,7 @@ function WalkInDealsModal({ visible, onClose, deals = [], storeId }: DealModalPr
           </Animated.View>
 
           <TouchableWithoutFeedback onPress={handleModalPress}>
-            <Animated.View style={[styles.modalContainer, { transform: [{ translateY: slideAnim }] }]}>
+            <Animated.View style={[styles.modalContainer, slideAnimStyle]}>
               {Platform.OS === 'ios' ? (
                 <BlurView intensity={80} tint="light" style={styles.modal}>
                   {renderModalContent()}

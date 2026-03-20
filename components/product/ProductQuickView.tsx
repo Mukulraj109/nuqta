@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Modal,
   View,
@@ -7,11 +7,16 @@ import {
   StyleSheet,
   ScrollView,
   Dimensions,
-  Animated,
   ActivityIndicator,
   Share,
   Platform,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  runOnJS,
+} from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
@@ -70,34 +75,29 @@ function ProductQuickView({
   const [addingToCart, setAddingToCart] = useState(false);
   const isMounted = useIsMounted();
 
-  const slideAnim = useRef(new Animated.Value(SCREEN_WIDTH)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const scrollViewRef = useRef<ScrollView>(null);
+  const slideAnim = useSharedValue(SCREEN_WIDTH);
+  const fadeAnim = useSharedValue(0);
+  const scrollViewRef = React.useRef<ScrollView>(null);
 
   const cartActions = useCartActions();
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const { showSuccess, showError } = useToast();
+
+  const slideAnimStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: slideAnim.value }],
+  }));
+
+  const fadeAnimStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+  }));
 
   // Load product details
   useEffect(() => {
     if (visible && productId) {
       loadProductDetails();
       // Animate in
-      const anim = Animated.parallel([
-        Animated.timing(slideAnim, {
-          toValue: 0,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-      ]);
-      anim.start();
-
-      return () => { anim.stop(); };
+      slideAnim.value = withTiming(0, { duration: 300 });
+      fadeAnim.value = withTiming(1, { duration: 300 });
     } else {
       // Reset state when modal closes
       setProduct(null);
@@ -132,19 +132,9 @@ function ProductQuickView({
   };
 
   const handleClose = () => {
-    Animated.parallel([
-      Animated.timing(slideAnim, {
-        toValue: SCREEN_WIDTH,
-        duration: 250,
-        useNativeDriver: true,
-      }),
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 250,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      onClose();
+    slideAnim.value = withTiming(SCREEN_WIDTH, { duration: 250 });
+    fadeAnim.value = withTiming(0, { duration: 250 }, (finished) => {
+      if (finished) runOnJS(onClose)();
     });
   };
 
@@ -612,7 +602,7 @@ function ProductQuickView({
         <Animated.View
           style={[
             styles.backdrop,
-            { opacity: fadeAnim },
+            fadeAnimStyle,
           ]}
         >
           <BlurView intensity={20} style={StyleSheet.absoluteFill} tint="dark">
@@ -628,9 +618,7 @@ function ProductQuickView({
         <Animated.View
           style={[
             styles.contentContainer,
-            {
-              transform: [{ translateX: slideAnim }],
-            },
+            slideAnimStyle,
           ]}
         >
           {/* Header */}

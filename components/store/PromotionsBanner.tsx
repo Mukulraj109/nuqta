@@ -5,10 +5,17 @@ import {
   StyleSheet,
   Pressable,
   Dimensions,
-  Animated,
   ScrollView,
   ImageBackground,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSpring,
+  withRepeat,
+  withSequence,
+} from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import DealCountdownTimer from './DealCountdownTimer';
@@ -50,7 +57,7 @@ function PromotionsBanner({
 }: PromotionBannerProps) {
   const [activeBannerIndex, setActiveBannerIndex] = useState(0);
   const [dismissedBanners, setDismissedBanners] = useState<Set<string>>(new Set());
-  const slideAnim = useRef(new Animated.Value(-100)).current;
+  const slideAnim = useSharedValue(-100);
   const rotationTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Filter active and non-dismissed banners
@@ -64,17 +71,9 @@ function PromotionsBanner({
   // Slide in animation on mount
   useEffect(() => {
     if (sortedBanners.length > 0) {
-      const anim = Animated.spring(slideAnim, {
-        toValue: 0,
-        tension: 50,
-        friction: 8,
-        useNativeDriver: true,
-      });
-      anim.start();
-
-      return () => { anim.stop(); };
+      slideAnim.value = withSpring(0, { damping: 8, stiffness: 50 });
     }
-  }, [sortedBanners.length, slideAnim]);
+  }, [sortedBanners.length]);
 
   // Auto-rotation logic
   useEffect(() => {
@@ -93,6 +92,10 @@ function PromotionsBanner({
     };
   }, [autoRotate, sortedBanners.length, rotationInterval]);
 
+  const slideAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: slideAnim.value }],
+  }));
+
   const handleDismiss = useCallback((bannerId: string) => {
     setDismissedBanners(prev => new Set(prev).add(bannerId));
     if (onDismiss) {
@@ -101,13 +104,9 @@ function PromotionsBanner({
 
     // If all banners dismissed, animate out
     if (dismissedBanners.size + 1 >= banners.length) {
-      Animated.timing(slideAnim, {
-        toValue: -100,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
+      slideAnim.value = withTiming(-100, { duration: 300 });
     }
-  }, [onDismiss, dismissedBanners.size, banners.length, slideAnim]);
+  }, [onDismiss, dismissedBanners.size, banners.length]);
 
   const handleBannerPress = useCallback((banner: PromotionBanner) => {
     if (onBannerPress) {
@@ -128,7 +127,7 @@ function PromotionsBanner({
     <Animated.View
       style={[
         styles.container,
-        { transform: [{ translateY: slideAnim }] },
+        slideAnimatedStyle,
         containerStyle,
       ]}
     >
@@ -197,7 +196,7 @@ function PromotionBannerItem({
   isActive,
 }: PromotionBannerItemProps) {
   const screenWidth = Dimensions.get('window').width;
-  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const pulseAnim = useSharedValue(1);
 
   // Pulsing animation for critical urgency
   useEffect(() => {
@@ -209,25 +208,19 @@ function PromotionBannerItem({
 
     // Pulse if < 5 minutes remaining
     if (timeRemaining <= 300000 && timeRemaining > 0) {
-      const pulse = Animated.loop(
-        Animated.sequence([
-          Animated.timing(pulseAnim, {
-            toValue: 1.05,
-            duration: 500,
-            useNativeDriver: true,
-          }),
-          Animated.timing(pulseAnim, {
-            toValue: 1,
-            duration: 500,
-            useNativeDriver: true,
-          }),
-        ])
+      pulseAnim.value = withRepeat(
+        withSequence(
+          withTiming(1.05, { duration: 500 }),
+          withTiming(1, { duration: 500 })
+        ),
+        -1
       );
-      pulse.start();
-
-      return () => pulse.stop();
     }
-  }, [banner.expiryDate, isActive, pulseAnim]);
+  }, [banner.expiryDate, isActive]);
+
+  const pulseAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: pulseAnim.value }],
+  }));
 
   const gradientColors = banner.backgroundColor || [colors.brand.purple, colors.brand.pink];
   const textColor = banner.textColor || colors.text.white;
@@ -236,7 +229,8 @@ function PromotionBannerItem({
     <Animated.View
       style={[
         styles.bannerContainer,
-        { width: screenWidth - 32, transform: [{ scale: pulseAnim }] },
+        { width: screenWidth - 32 },
+        pulseAnimatedStyle,
       ]}
     >
       <Pressable

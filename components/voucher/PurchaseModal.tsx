@@ -1,6 +1,6 @@
 // components/voucher/PurchaseModal.tsx - Voucher purchase modal
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import {
   View,
   Modal,
@@ -8,9 +8,13 @@ import {
   Pressable,
   ScrollView,
   Dimensions,
-  Animated,
-  ActivityIndicator,
+  ActivityIndicator
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -61,8 +65,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
   brand,
   denominations,
   onClose,
-  onSuccess,
-}) => {
+  onSuccess }) => {
   const router = useRouter();
   const { purchaseVoucher, purchasing } = useVoucherPurchase();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -78,8 +81,9 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
   const [purchasedAmount, setPurchasedAmount] = useState<number>(0);
   const isMounted = useIsMounted();
 
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(50)).current;
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(50);
+  const fadeSlideStyle = useAnimatedStyle(() => ({ opacity: fadeAnim.value, transform: [{ translateY: slideAnim.value }] }));
 
   // Animate and refresh wallet when modal opens
   useEffect(() => {
@@ -92,34 +96,13 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
   }, [visible, brand]);
 
   const animateIn = () => {
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-      Animated.spring(slideAnim, {
-        toValue: 0,
-        tension: 50,
-        friction: 7,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    fadeAnim.value = withTiming(1, { duration: 300 });
+    slideAnim.value = withSpring(0, { tension: 50, friction: 7 });
   };
 
   const animateOut = () => {
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: 50,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    fadeAnim.value = withTiming(0, { duration: 200 });
+    slideAnim.value = withTiming(50, { duration: 200 });
   };
 
   const handlePurchase = async () => {
@@ -224,8 +207,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
             styles.modalContent,
             {
               opacity: fadeAnim,
-              transform: [{ translateY: slideAnim }],
-            },
+              transform: [{ translateY: slideAnim }] },
           ]}
         >
           {/* Header */}
@@ -497,15 +479,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
+    backgroundColor: 'rgba(0, 0, 0, 0.5)' },
   backdrop: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0,
-  },
+    bottom: 0 },
   modalContent: {
     width: width - 40,
     maxHeight: '85%',
@@ -516,8 +496,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.3,
     shadowRadius: 20,
-    elevation: 10,
-  },
+    elevation: 10 },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -525,49 +504,39 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: colors.neutral[100],
-  },
+    borderBottomColor: colors.neutral[100] },
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: colors.neutral[900],
-  },
+    color: colors.neutral[900] },
   closeButton: {
-    padding: 4,
-  },
+    padding: 4 },
   scrollView: {
-    maxHeight: 500,
-  },
+    maxHeight: 500 },
   brandSection: {
     flexDirection: 'row',
     padding: 20,
     gap: 16,
     borderBottomWidth: 1,
-    borderBottomColor: colors.neutral[100],
-  },
+    borderBottomColor: colors.neutral[100] },
   brandLogo: {
     width: 64,
     height: 64,
     borderRadius: 16,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   brandLogoText: {
-    fontSize: 32,
-  },
+    fontSize: 32 },
   brandInfo: {
     flex: 1,
-    gap: 6,
-  },
+    gap: 6 },
   brandName: {
     fontSize: 18,
     fontWeight: '700',
-    color: colors.neutral[900],
-  },
+    color: colors.neutral[900] },
   brandDescription: {
     fontSize: 14,
-    color: colors.neutral[500],
-  },
+    color: colors.neutral[500] },
   cashbackBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -576,51 +545,41 @@ const styles = StyleSheet.create({
     backgroundColor: colors.linen,
     paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 8,
-  },
+    borderRadius: 8 },
   cashbackText: {
     fontSize: 12,
     fontWeight: '600',
-    color: colors.nileBlue,
-  },
+    color: colors.nileBlue },
   walletSection: {
     padding: 20,
-    backgroundColor: colors.neutral[50],
-  },
+    backgroundColor: colors.neutral[50] },
   walletRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   walletLabelRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-  },
+    gap: 8 },
   walletLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: colors.neutral[500],
-  },
+    color: colors.neutral[500] },
   walletBalance: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#9333EA',
-  },
+    color: '#9333EA' },
   denominationSection: {
-    padding: 20,
-  },
+    padding: 20 },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '700',
     color: colors.neutral[900],
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   denominationGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
-  },
+    gap: 12 },
   denominationCard: {
     width: (width - 64) / 2,
     backgroundColor: 'white',
@@ -629,106 +588,86 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     alignItems: 'center',
-    position: 'relative',
-  },
+    position: 'relative' },
   denominationCardSelected: {
     borderColor: colors.nileBlue,
-    backgroundColor: colors.linen,
-  },
+    backgroundColor: colors.linen },
   denominationCardDisabled: {
     borderColor: colors.neutral[100],
     backgroundColor: colors.neutral[50],
-    opacity: 0.6,
-  },
+    opacity: 0.6 },
   selectedIndicator: {
     position: 'absolute',
     top: 8,
-    right: 8,
-  },
+    right: 8 },
   denominationAmount: {
     fontSize: 24,
     fontWeight: '700',
     color: colors.neutral[900],
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   denominationAmountSelected: {
-    color: colors.nileBlue,
-  },
+    color: colors.nileBlue },
   denominationAmountDisabled: {
-    color: colors.neutral[400],
-  },
+    color: colors.neutral[400] },
   insufficientLabel: {
     fontSize: 11,
     color: colors.error,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   summarySection: {
     backgroundColor: colors.neutral[50],
     margin: 20,
     marginTop: 0,
     padding: 16,
     borderRadius: 16,
-    gap: 12,
-  },
+    gap: 12 },
   summaryRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   summaryLabel: {
     fontSize: 14,
-    color: colors.neutral[500],
-  },
+    color: colors.neutral[500] },
   summaryValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: colors.neutral[900],
-  },
+    color: colors.neutral[900] },
   summaryValueHighlight: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#9333EA',
-  },
+    color: '#9333EA' },
   footer: {
     flexDirection: 'row',
     padding: 20,
     gap: 12,
     borderTopWidth: 1,
-    borderTopColor: colors.neutral[100],
-  },
+    borderTopColor: colors.neutral[100] },
   cancelButton: {
     flex: 1,
     paddingVertical: 14,
     borderRadius: 12,
     borderWidth: 2,
     borderColor: colors.neutral[200],
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: colors.neutral[500],
-  },
+    color: colors.neutral[500] },
   purchaseButton: {
     flex: 1,
     borderRadius: 12,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   purchaseButtonGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 14,
-    gap: 8,
-  },
+    gap: 8 },
   purchaseButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: 'white',
-  },
+    color: 'white' },
   buttonDisabled: {
-    opacity: 0.5,
-  },
+    opacity: 0.5 },
   // Confirmation modal styles
   confirmOverlay: {
     position: 'absolute',
@@ -739,8 +678,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 1000,
-  },
+    zIndex: 1000 },
   confirmModal: {
     backgroundColor: 'white',
     borderRadius: 20,
@@ -752,50 +690,41 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.3,
     shadowRadius: 20,
-    elevation: 15,
-  },
+    elevation: 15 },
   confirmTitle: {
     fontSize: 22,
     fontWeight: '700',
     color: colors.neutral[800],
     marginTop: 16,
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   confirmMessage: {
     fontSize: 16,
     color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 24,
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
   confirmButtons: {
     flexDirection: 'row',
     gap: 12,
-    width: '100%',
-  },
+    width: '100%' },
   confirmButton: {
     flex: 1,
     paddingVertical: 14,
     borderRadius: 12,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   confirmCancelButton: {
-    backgroundColor: colors.neutral[100],
-  },
+    backgroundColor: colors.neutral[100] },
   confirmPurchaseButton: {
-    backgroundColor: '#9333EA',
-  },
+    backgroundColor: '#9333EA' },
   confirmCancelText: {
     fontSize: 16,
     fontWeight: '600',
-    color: colors.neutral[500],
-  },
+    color: colors.neutral[500] },
   confirmPurchaseText: {
     fontSize: 16,
     fontWeight: '600',
-    color: 'white',
-  },
+    color: 'white' },
   // Success modal styles
   successModal: {
     backgroundColor: 'white',
@@ -808,67 +737,54 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.3,
     shadowRadius: 20,
-    elevation: 15,
-  },
+    elevation: 15 },
   successIconContainer: {
-    marginBottom: 20,
-  },
+    marginBottom: 20 },
   successTitle: {
     fontSize: 24,
     fontWeight: '700',
     color: colors.neutral[900],
     marginBottom: 12,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   successMessage: {
     fontSize: 16,
     color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 24,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   successSubMessage: {
     fontSize: 14,
     color: colors.neutral[400],
     textAlign: 'center',
     lineHeight: 20,
-    marginBottom: 28,
-  },
+    marginBottom: 28 },
   successButtons: {
     width: '100%',
-    gap: 12,
-  },
+    gap: 12 },
   successButton: {
     width: '100%',
     borderRadius: 12,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   successViewButton: {
-    elevation: 3,
-  },
+    elevation: 3 },
   successButtonGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 16,
-    gap: 8,
-  },
+    gap: 8 },
   successButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: 'white',
-  },
+    color: 'white' },
   successCloseButton: {
     backgroundColor: colors.neutral[100],
     paddingVertical: 14,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   successCloseText: {
     fontSize: 16,
     fontWeight: '600',
-    color: colors.neutral[500],
-  },
-});
+    color: colors.neutral[500] } });
 
 export default React.memo(PurchaseModal);

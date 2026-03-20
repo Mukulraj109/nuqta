@@ -1,5 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { View, Pressable, StyleSheet, Dimensions, Animated, Platform } from 'react-native';
+import { View, Pressable, StyleSheet, Dimensions, Platform } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSequence,
+} from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { Video, ResizeMode, AVPlaybackStatus } from 'expo-av';
@@ -48,8 +54,8 @@ function VideoCard({
   const isMounted = useIsMounted();
   
   // Animation values
-  const scaleAnim = useRef(new Animated.Value(1)).current;
-  const opacityAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useSharedValue(1);
+  const opacityAnim = useSharedValue(0);
   
   // Get iOS-optimized video props
   const videoProps = getIOSVideoProps(item.videoUrl, item.thumbnailUrl);
@@ -120,11 +126,7 @@ function VideoCard({
       setLoaded(true); // Notify video manager that video is loaded
 
       // Fade in animation
-      Animated.timing(opacityAnim, {
-        toValue: 1,
-        duration: 500,
-        useNativeDriver: true,
-      }).start();
+      opacityAnim.value = withTiming(1, { duration: 500 });
     }
     
     // Track loading progress
@@ -151,18 +153,10 @@ function VideoCard({
     }
 
     // Scale animation on press
-    Animated.sequence([
-      Animated.timing(scaleAnim, {
-        toValue: 0.95,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(scaleAnim, {
-        toValue: 1,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    scaleAnim.value = withSequence(
+      withTiming(0.95, { duration: 100 }),
+      withTiming(1, { duration: 100 })
+    );
   };
 
   const handleDoubleTap = () => {
@@ -193,18 +187,10 @@ function VideoCard({
     setLikeCount(prev => newLikedState ? prev + 1 : Math.max(0, prev - 1));
 
     // Animate heart
-    Animated.sequence([
-      Animated.timing(scaleAnim, {
-        toValue: 1.2,
-        duration: 150,
-        useNativeDriver: true,
-      }),
-      Animated.timing(scaleAnim, {
-        toValue: 1,
-        duration: 150,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    scaleAnim.value = withSequence(
+      withTiming(1.2, { duration: 150 }),
+      withTiming(1, { duration: 150 })
+    );
 
     // TODO: Call API to update like status
     logger.debug(`❤️ [VideoCard] ${newLikedState ? 'Liked' : 'Unliked'} video ${item.id}`);
@@ -274,14 +260,18 @@ function VideoCard({
     onPress(item);
   };
 
+  const cardAnimStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scaleAnim.value }],
+    opacity: opacityAnim.value,
+  }));
+
+  const heartAnimStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scaleAnim.value }],
+  }));
+
   return (
     <Animated.View
-      style={[
-        {
-          transform: [{ scale: scaleAnim }],
-          opacity: opacityAnim,
-        },
-      ]}
+      style={[cardAnimStyle]}
     >
       <Pressable
         style={[
@@ -460,7 +450,7 @@ function VideoCard({
               accessibilityHint={`Double tap to ${isLiked ? 'remove like from' : 'like'} this video`}
               accessibilityState={{ selected: isLiked }}
             >
-              <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+              <Animated.View style={heartAnimStyle}>
                 <Ionicons
                   name={isLiked ? "heart" : "heart-outline"}
                   size={28}

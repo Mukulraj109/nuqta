@@ -10,14 +10,17 @@ import {
   Dimensions,
   Pressable,
   ScrollView,
-  Animated,
-  PanResponder,
   StatusBar,
   Platform,
   Share,
   ActivityIndicator,
   AccessibilityInfo,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -56,7 +59,7 @@ function GalleryViewerModal({
   const [viewCounts, setViewCounts] = useState<Record<string, number>>({});
   const [viewedItems, setViewedItems] = useState<Set<string>>(new Set());
   const scrollViewRef = useRef<ScrollView>(null);
-  const fadeAnim = useRef(new Animated.Value(1)).current;
+  const fadeAnim = useSharedValue(1);
   
   // Preload images for better performance
   useGalleryImagePreloader(items, currentIndex, 2);
@@ -198,14 +201,14 @@ function GalleryViewerModal({
     }
   }, [currentIndex]);
 
+  const fadeAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+  }));
+
   const toggleInfo = useCallback(() => {
-    Animated.timing(fadeAnim, {
-      toValue: showInfo ? 0 : 1,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
+    fadeAnim.value = withTiming(showInfo ? 0 : 1, { duration: 300 });
     setShowInfo(!showInfo);
-  }, [showInfo, fadeAnim]);
+  }, [showInfo]);
 
   // Keyboard shortcuts for web
   useEffect(() => {
@@ -324,9 +327,7 @@ function GalleryViewerModal({
         <Animated.View
           style={[
             styles.header,
-            {
-              opacity: fadeAnim,
-            },
+            fadeAnimatedStyle,
           ]}
         >
           <LinearGradient
@@ -526,9 +527,7 @@ function GalleryViewerModal({
           <Animated.View
             style={[
               styles.infoPanel,
-              {
-                opacity: fadeAnim,
-              },
+              fadeAnimatedStyle,
             ]}
           >
             <LinearGradient

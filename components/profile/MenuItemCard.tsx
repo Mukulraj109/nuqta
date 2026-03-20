@@ -6,8 +6,12 @@ import {
   View,
   Pressable,
   StyleSheet,
-  Animated,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+} from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { MenuItemCardProps } from '@/types/profile.types';
@@ -18,20 +22,18 @@ function MenuItemCard({
   onPress,
   style,
 }: MenuItemCardProps) {
-  const scaleValue = React.useRef(new Animated.Value(1)).current;
+  const scaleValue = useSharedValue(1);
+
+  const scaleStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scaleValue.value }],
+  }));
 
   const handlePressIn = () => {
-    Animated.spring(scaleValue, {
-      toValue: 0.98,
-      useNativeDriver: true,
-    }).start();
+    scaleValue.value = withSpring(0.98);
   };
 
   const handlePressOut = () => {
-    Animated.spring(scaleValue, {
-      toValue: 1,
-      useNativeDriver: true,
-    }).start();
+    scaleValue.value = withSpring(1);
   };
 
   const handlePress = () => {
@@ -60,7 +62,7 @@ function MenuItemCard({
     <>
       <Animated.View
         style={[
-          { transform: [{ scale: scaleValue }] },
+          scaleStyle,
           style,
         ]}
       >

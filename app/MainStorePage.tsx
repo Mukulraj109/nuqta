@@ -3,7 +3,6 @@
 // All section rendering is delegated to extracted components.
 import React, { useMemo, useRef, useState, useEffect } from "react";
 import {
-  Animated,
   Platform,
   RefreshControl,
   StatusBar,
@@ -11,8 +10,13 @@ import {
   Pressable,
   View,
   NativeSyntheticEvent,
-  NativeScrollEvent,
-} from "react-native";
+  NativeScrollEvent} from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  interpolate,
+} from 'react-native-reanimated';
 import { useRouter } from "expo-router";
 import { ThemedView } from "@/components/ThemedView";
 import {
@@ -67,21 +71,15 @@ function MainStorePage({ productId, initialProduct }: MainStorePageProps = {}) {
   const MAX_CONTENT_WIDTH = isDesktop ? 1200 : undefined;
 
   // Sticky tab navigation state
-  const scrollY = useRef(new Animated.Value(0)).current;
+  const scrollY = useSharedValue(0);
   const [showStickyTabs, setShowStickyTabs] = useState(false);
-  const stickyHeaderAnim = useRef(new Animated.Value(0)).current;
+  const stickyHeaderAnim = useSharedValue(0);
   const tabsContainerRef = useRef<View>(null);
   const tabsPositionY = useRef(0);
   const tabsPositionMeasured = useRef(false);
 
   useEffect(() => {
-    const anim = Animated.timing(stickyHeaderAnim, {
-      toValue: showStickyTabs ? 1 : 0,
-      duration: 200,
-      useNativeDriver: true,
-    });
-    anim.start();
-    return () => anim.stop();
+    stickyHeaderAnim.value = withTiming(showStickyTabs ? 1 : 0, { duration: 200 });
   }, [showStickyTabs, stickyHeaderAnim]);
 
   // Measure tabs position after page loads
@@ -120,6 +118,12 @@ function MainStorePage({ productId, initialProduct }: MainStorePageProps = {}) {
     [d.storeData, d.fetchedStoreData, d.productData, d.isDynamic]
   );
 
+  // Sticky header animated style
+  const stickyHeaderAnimStyle = useAnimatedStyle(() => ({
+    opacity: stickyHeaderAnim.value,
+    transform: [{ translateY: interpolate(stickyHeaderAnim.value, [0, 1], [-20, 0]) }],
+  }));
+
   // Shared tab navigation props
   const tabNavProps = {
     activeTab: d.activeTab,
@@ -150,16 +154,11 @@ function MainStorePage({ productId, initialProduct }: MainStorePageProps = {}) {
       <Animated.ScrollView
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-          {
-            useNativeDriver: true,
-            listener: (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-              const y = event.nativeEvent.contentOffset.y;
-              setShowStickyTabs(tabsPositionMeasured.current && y > tabsPositionY.current);
-            },
-          }
-        )}
+        onScroll={(event: NativeSyntheticEvent<NativeScrollEvent>) => {
+          const y = event.nativeEvent.contentOffset.y;
+          scrollY.value = y;
+          setShowStickyTabs(tabsPositionMeasured.current && y > tabsPositionY.current);
+        }}
         contentContainerStyle={[styles.scrollContent, isWeb && styles.webScrollContent]}
         refreshControl={
           <RefreshControl
@@ -382,9 +381,8 @@ function MainStorePage({ productId, initialProduct }: MainStorePageProps = {}) {
       <Animated.View
         style={[
           styles.stickyTabsContainer,
+          stickyHeaderAnimStyle,
           {
-            opacity: stickyHeaderAnim,
-            transform: [{ translateY: stickyHeaderAnim.interpolate({ inputRange: [0, 1], outputRange: [-20, 0] }) }],
             pointerEvents: showStickyTabs ? "auto" : "none",
           },
         ]}

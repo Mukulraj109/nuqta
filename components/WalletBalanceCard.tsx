@@ -4,9 +4,14 @@ import {
   StyleSheet,
   Text,
   Pressable,
-  Animated,
-  Dimensions,
-} from 'react-native';
+  Dimensions} from 'react-native';
+import Animated, {
+  useSharedValue,
+  withTiming,
+  withSpring,
+  withRepeat,
+  interpolate,
+} from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { WalletBalanceCardProps } from '@/types/wallet';
@@ -57,38 +62,29 @@ const WalletBalanceCardComponent: React.FC<WalletBalanceCardProps> = ({
   showChevron = true,
   testID,
 }) => {
-  const [scaleAnim] = useState(new Animated.Value(1));
-  const [spinAnim] = useState(new Animated.Value(0));
+  const scaleAnim = useSharedValue(1);
+  const spinAnim = useSharedValue(0);
   const [imageError, setImageError] = useState(false);
   const screenWidth = Dimensions.get('window').width;
 
   // Loading animation
   React.useEffect(() => {
     if (isLoading) {
-      const spin = Animated.loop(
-        Animated.timing(spinAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        })
+      spinAnim.value = withRepeat(
+        withTiming(1, { duration: 1000 }),
+        -1
       );
-      spin.start();
-      return () => spin.stop();
+    } else {
+      spinAnim.value = 0;
     }
   }, [isLoading, spinAnim]);
 
   const handlePressIn = () => {
-    Animated.spring(scaleAnim, {
-      toValue: 0.97,
-      useNativeDriver: true,
-    }).start();
+    scaleAnim.value = withSpring(0.97);
   };
 
   const handlePressOut = () => {
-    Animated.spring(scaleAnim, {
-      toValue: 1,
-      useNativeDriver: true,
-    }).start();
+    scaleAnim.value = withSpring(1);
   };
 
   const handlePress = useCallback(() => {
@@ -216,10 +212,7 @@ const WalletBalanceCardComponent: React.FC<WalletBalanceCardProps> = ({
               {
                 transform: [
                   {
-                    rotate: spinAnim.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: ['0deg', '360deg'],
-                    }),
+                    rotate: interpolate(spinAnim.value, [0, 1], ['0deg', '360deg']),
                   },
                 ],
               },

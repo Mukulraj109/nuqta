@@ -6,7 +6,7 @@
  * Urgent red/orange gradient container for visual urgency.
  */
 
-import React, { memo, useCallback, useState, useEffect, useRef } from 'react';
+import React, { memo, useCallback, useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -14,8 +14,8 @@ import {
   Pressable,
   ActivityIndicator,
   Platform,
-  Animated,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence, withRepeat } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -49,7 +49,7 @@ const MallDealsOfDay: React.FC<MallDealsOfDayProps> = ({
   onViewAllPress,
 }) => {
   const [countdown, setCountdown] = useState(getTimeUntilMidnight);
-  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const pulseAnim = useSharedValue(1);
 
   // Countdown timer
   useEffect(() => {
@@ -61,23 +61,8 @@ const MallDealsOfDay: React.FC<MallDealsOfDayProps> = ({
 
   // Pulse animation for urgency dot
   useEffect(() => {
-    const pulse = Animated.loop(
-      Animated.sequence([
-        Animated.timing(pulseAnim, {
-          toValue: 0.3,
-          duration: 800,
-          useNativeDriver: true,
-        }),
-        Animated.timing(pulseAnim, {
-          toValue: 1,
-          duration: 800,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    pulse.start();
-    return () => pulse.stop();
-  }, [pulseAnim]);
+    pulseAnim.value = withRepeat(withSequence(withTiming(0.3, { duration: 800 }), withTiming(1, { duration: 800 })), -1);
+      }, [pulseAnim]);
 
   const pad = (n: number) => n.toString().padStart(2, '0');
 

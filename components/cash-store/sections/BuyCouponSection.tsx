@@ -5,15 +5,14 @@
  * Features: Animated cards, brand-colored headers, savings preview, ratings
  */
 
-import React, { memo, useRef, useEffect, useCallback } from 'react';
+import React, { memo, useEffect, useCallback} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
-  Platform,
-  Animated,
-} from 'react-native';
+  Platform} from 'react-native';
+import Animated, { interpolate, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -37,61 +36,26 @@ const GiftCardCard: React.FC<{
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
-  const scaleAnim = useRef(new Animated.Value(0.9)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useSharedValue(0.9);
+  const fadeAnim = useSharedValue(0);
+  const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
     // Staggered entry animation
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 400,
-        delay: index * 80,
-        useNativeDriver: true,
-      }),
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        friction: 8,
-        tension: 40,
-        delay: index * 80,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    fadeAnim.value = withDelay(index * 80, withTiming(1, { duration: 400 }));
+      scaleAnim.value = withDelay(index * 80, withSpring(1));
 
     // Subtle shimmer on header
-    const shimmerLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, {
-          toValue: 1,
-          duration: 2000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmerAnim, {
-          toValue: 0,
-          duration: 0,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    shimmerLoop.start();
-    return () => shimmerLoop.stop();
-  }, [index]);
+    shimmerAnim.value = withRepeat(withSequence(withTiming(1, { duration: 2000 })), -1);
+    
+    }, [index]);
 
   const handlePressIn = () => {
-    Animated.spring(scaleAnim, {
-      toValue: 0.95,
-      friction: 8,
-      useNativeDriver: true,
-    }).start();
+    scaleAnim.value = withSpring(0.95);
   };
 
   const handlePressOut = () => {
-    Animated.spring(scaleAnim, {
-      toValue: 1,
-      friction: 8,
-      useNativeDriver: true,
-    }).start();
+    scaleAnim.value = withSpring(1);
   };
 
   const isBestValue = brand.cashbackRate && brand.cashbackRate >= 8;
@@ -245,37 +209,19 @@ function adjustColor(color: string, percent: number): string {
 }
 
 const SkeletonCard: React.FC<{ index: number }> = memo(({ index }) => {
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
-    const loop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, {
-          toValue: 1,
-          duration: 1000,
-          delay: index * 100,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmerAnim, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    loop.start();
-    return () => loop.stop();
-  }, [index]);
+    shimmerAnim.value = withRepeat(withSequence(withTiming(1, { duration: 1000 })), -1);
+    
+    }, [index]);
 
   return (
     <Animated.View
       style={[
         styles.cardWrapper,
         {
-          opacity: shimmerAnim.interpolate({
-            inputRange: [0, 1],
-            outputRange: [0.5, 1],
-          }),
+          opacity: interpolate(shimmerAnim.value, [0, 1], [0.5, 1]),
         },
       ]}
     >
@@ -298,34 +244,16 @@ const BuyCouponSection: React.FC<BuyCouponSectionProps> = ({
   onBrandPress,
   onViewAllPress,
 }) => {
-  const headerFadeAnim = useRef(new Animated.Value(0)).current;
-  const giftBounceAnim = useRef(new Animated.Value(0)).current;
+  const headerFadeAnim = useSharedValue(0);
+  const giftBounceAnim = useSharedValue(0);
 
   useEffect(() => {
-    Animated.timing(headerFadeAnim, {
-      toValue: 1,
-      duration: 400,
-      useNativeDriver: true,
-    }).start();
+    headerFadeAnim.value = withTiming(1, { duration: 400 });
 
     // Gift icon bounce animation
-    const giftLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(giftBounceAnim, {
-          toValue: -4,
-          duration: 400,
-          useNativeDriver: true,
-        }),
-        Animated.timing(giftBounceAnim, {
-          toValue: 0,
-          duration: 400,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    giftLoop.start();
-    return () => giftLoop.stop();
-  }, []);
+    giftBounceAnim.value = withRepeat(withSequence(withTiming(-4, { duration: 400 })), -1);
+    
+    }, []);
 
   const renderGiftCardItem = useCallback(({ item, index }: { item: unknown; index: number }) =>
     isLoading ? (

@@ -3,7 +3,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Compact header, sticky segmented control, sectioned cards, dynamic insights,
 // micro-interactions, skeleton loading, and production-ready design tokens.
 
-import React, { useState, useRef, useCallback, useMemo } from 'react';
+import React, { useState,  useCallback, useMemo } from 'react';
 import {
   View,
   ScrollView,
@@ -11,9 +11,13 @@ import {
   Pressable,
   StatusBar,
   Platform,
-  RefreshControl,
-  Animated,
+  RefreshControl
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+  runOnJS } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -27,14 +31,12 @@ import { useRezBalance } from '@/stores';
 import {
   AccountTabType,
   AccountSettingsCategory,
-  AccountSection,
-} from '@/types/account.types';
+  AccountSection } from '@/types/account.types';
 import { accountTabs } from '@/data/accountData';
 import {
   Colors,
   Spacing,
-  BorderRadius,
-} from '@/constants/DesignSystem';
+  BorderRadius } from '@/constants/DesignSystem';
 import analyticsService from '@/services/analyticsService';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
@@ -45,8 +47,7 @@ import { colors } from '@/constants/theme';
 
 const SectionCard = React.memo(function SectionCard({
   section,
-  onItemPress,
-}: {
+  onItemPress }: {
   section: AccountSection;
   onItemPress: (cat: AccountSettingsCategory) => void;
 }) {
@@ -75,7 +76,10 @@ function AccountPage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState<AccountTabType>('SETTINGS');
-  const fadeAnim = useRef(new Animated.Value(1)).current;
+  const fadeAnim = useSharedValue(1);
+  const fadeAnimStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+  }));
 
   const { sections, loading, error, refreshing, refresh } =
     useAccountData(activeTab);
@@ -92,12 +96,10 @@ function AccountPage() {
         if (item.id === 'wallet' && rezBalance > 0) {
           return {
             ...item,
-            insight: `${BRAND.CURRENCY_CODE} ${rezBalance.toLocaleString()} available`,
-          };
+            insight: `${BRAND.CURRENCY_CODE} ${rezBalance.toLocaleString()} available` };
         }
         return item;
-      }),
-    }));
+      }) }));
   }, [sections, rezBalance]);
 
   // ---------- Handlers ----------
@@ -112,17 +114,11 @@ function AccountPage() {
       analyticsService.track('account_tab_changed', { tab });
 
       // Fade out → switch → fade in
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 80,
-        useNativeDriver: true,
-      }).start(() => {
-        setActiveTab(tab);
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 180,
-          useNativeDriver: true,
-        }).start();
+      fadeAnim.value = withTiming(0, { duration: 80 }, (finished) => {
+        if (finished) {
+          runOnJS(setActiveTab)(tab);
+          fadeAnim.value = withTiming(1, { duration: 180 });
+        }
       });
     },
     [activeTab, fadeAnim]
@@ -132,8 +128,7 @@ function AccountPage() {
     (category: AccountSettingsCategory) => {
       analyticsService.track('account_category_pressed', {
         categoryId: category.id,
-        tab: activeTab,
-      });
+        tab: activeTab });
 
       switch (category.id) {
         case 'subscription':
@@ -225,8 +220,7 @@ function AccountPage() {
         <AccountTabs
           tabs={accountTabs.map((tab) => ({
             ...tab,
-            isActive: tab.id === activeTab,
-          }))}
+            isActive: tab.id === activeTab }))}
           activeTab={activeTab}
           onTabPress={handleTabChange}
         />
@@ -249,7 +243,7 @@ function AccountPage() {
           />
         }
       >
-        <Animated.View style={{ opacity: fadeAnim }}>
+        <Animated.View style={fadeAnimStyle}>
           {/* Loading State */}
           {loading && <AccountSkeleton />}
 
@@ -309,63 +303,53 @@ function AccountPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background.secondary,
-  },
+    backgroundColor: Colors.background.secondary },
 
   // Header
   header: {
     paddingBottom: 14,
-    paddingHorizontal: Spacing.base,
-  },
+    paddingHorizontal: Spacing.base },
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   backButton: {
     width: 38,
     height: 38,
     borderRadius: 19,
     backgroundColor: 'rgba(255,255,255,0.12)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
     color: colors.background.primary,
-    letterSpacing: -0.2,
-  },
+    letterSpacing: -0.2 },
   headerAction: {
     width: 38,
     height: 38,
     borderRadius: 19,
     backgroundColor: 'rgba(255,255,255,0.12)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
 
   // Tabs
   tabsWrapper: {
     backgroundColor: Colors.background.secondary,
     paddingHorizontal: Spacing.base,
     paddingTop: Spacing.md,
-    paddingBottom: Spacing.sm,
-  },
+    paddingBottom: Spacing.sm },
 
   // Content
   content: {
-    flex: 1,
-  },
+    flex: 1 },
   scrollContent: {
-    paddingTop: 4,
-  },
+    paddingTop: 4 },
 
   // Section
   sectionContainer: {
     marginBottom: Spacing.lg,
-    paddingHorizontal: Spacing.base,
-  },
+    paddingHorizontal: Spacing.base },
   sectionTitle: {
     fontSize: 12,
     fontWeight: '700',
@@ -373,8 +357,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.6,
     textTransform: 'uppercase',
     marginBottom: Spacing.sm,
-    marginLeft: 4,
-  },
+    marginLeft: 4 },
   sectionCard: {
     backgroundColor: colors.background.primary,
     borderRadius: BorderRadius.lg,
@@ -386,20 +369,16 @@ const styles = StyleSheet.create({
         shadowColor: Colors.midnightNavy,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.06,
-        shadowRadius: 8,
-      },
+        shadowRadius: 8 },
       android: { elevation: 2 },
-      web: { boxShadow: '0 2px 8px rgba(0,0,0,0.06)' } as any,
-    }),
-  },
+      web: { boxShadow: '0 2px 8px rgba(0,0,0,0.06)' } as any }) },
 
   // Error state
   errorContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 60,
-    paddingHorizontal: Spacing.xl,
-  },
+    paddingHorizontal: Spacing.xl },
   errorIconBg: {
     width: 64,
     height: 64,
@@ -407,44 +386,36 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0EDE6',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base },
   errorTitle: {
     fontSize: 17,
     fontWeight: '600',
     color: Colors.text.primary,
-    marginBottom: 6,
-  },
+    marginBottom: 6 },
   errorMessage: {
     fontSize: 14,
     color: Colors.gray[600],
     textAlign: 'center',
     marginBottom: Spacing.lg,
-    lineHeight: 20,
-  },
+    lineHeight: 20 },
   retryButton: {
     backgroundColor: Colors.primary[500],
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md,
-    borderRadius: BorderRadius.md,
-  },
+    borderRadius: BorderRadius.md },
   retryText: {
     fontSize: 14,
     fontWeight: '600',
-    color: Colors.secondary[600],
-  },
+    color: Colors.secondary[600] },
 
   // Empty state
   emptyContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 60,
-  },
+    paddingVertical: 60 },
   emptyText: {
     fontSize: 15,
     color: Colors.gray[600],
-    marginTop: Spacing.md,
-  },
-});
+    marginTop: Spacing.md } });
 
 export default withErrorBoundary(AccountPage, 'AccountIndex');

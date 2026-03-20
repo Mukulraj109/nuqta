@@ -8,9 +8,8 @@ import {
   StyleSheet,
   Modal,
   Pressable,
-  Animated,
-  Dimensions,
-} from 'react-native';
+  Dimensions} from 'react-native';
+import Animated, { interpolate, runOnJS, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 
@@ -66,6 +65,41 @@ const generateParticles = (): ParticleConfig[] => {
 };
 
 // ============================================
+// PARTICLE COMPONENT
+// ============================================
+
+const ParticleView: React.FC<{
+  particle: ReturnType<typeof generateParticles>[0];
+  progress: { value: number };
+  opacity: { value: number };
+}> = React.memo(({ particle, progress, opacity }) => {
+  const rotationDeg = useRef(Math.random() * 720).current;
+  const particleStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value,
+    transform: [
+      { translateX: interpolate(progress.value, [0, 1], [particle.startX, particle.endX]) },
+      { translateY: interpolate(progress.value, [0, 0.4, 1], [particle.startY, particle.endY - 80, particle.endY + 100]) },
+      { rotate: `${interpolate(progress.value, [0, 1], [0, rotationDeg])}deg` },
+    ],
+  }));
+
+  return (
+    <Animated.View
+      style={[
+        styles.particle,
+        {
+          width: particle.size,
+          height: particle.size,
+          borderRadius: particle.size / 2,
+          backgroundColor: particle.color,
+        },
+        particleStyle,
+      ]}
+    />
+  );
+});
+
+// ============================================
 // COMPONENT
 // ============================================
 
@@ -76,176 +110,81 @@ const AchievementUnlockModal: React.FC<AchievementUnlockModalProps> = ({
   onClaim,
 }) => {
   // Animation values
-  const overlayOpacity = useRef(new Animated.Value(0)).current;
-  const cardScale = useRef(new Animated.Value(0.3)).current;
-  const cardOpacity = useRef(new Animated.Value(0)).current;
-  const iconScale = useRef(new Animated.Value(0)).current;
-  const titleOpacity = useRef(new Animated.Value(0)).current;
-  const rewardScale = useRef(new Animated.Value(0)).current;
-  const buttonOpacity = useRef(new Animated.Value(0)).current;
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const overlayOpacity = useSharedValue(0);
+  const cardScale = useSharedValue(0.3);
+  const cardOpacity = useSharedValue(0);
+  const iconScale = useSharedValue(0);
+  const titleOpacity = useSharedValue(0);
+  const rewardScale = useSharedValue(0);
+  const buttonOpacity = useSharedValue(0);
+  const shimmerAnim = useSharedValue(0);
 
-  // Particle animation values
+  // Particle animation values - use shared values for each particle
+  const particleProgress = useSharedValue(0);
+  const particleOpacity = useSharedValue(0);
   const particleAnims = useRef(
     Array.from({ length: PARTICLE_COUNT }, () => ({
-      progress: new Animated.Value(0),
-      opacity: new Animated.Value(0),
+      progress: particleProgress,
+      opacity: particleOpacity,
     }))
   ).current;
 
   const particles = useRef(generateParticles()).current;
   const autoDismissTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const handleClose = useCallback(() => {
+    overlayOpacity.value = withTiming(0, { duration: 250 });
+    cardScale.value = withTiming(0.8, { duration: 250 });
+    cardOpacity.value = withTiming(0, { duration: 200 });
+    // Delay onClose to let exit animation play
+    setTimeout(() => onClose(), 300);
+  }, [onClose, overlayOpacity, cardScale, cardOpacity]);
+
   // Start entrance animations
   useEffect(() => {
     if (visible && achievement) {
       // Reset all animations
-      overlayOpacity.setValue(0);
-      cardScale.setValue(0.3);
-      cardOpacity.setValue(0);
-      iconScale.setValue(0);
-      titleOpacity.setValue(0);
-      rewardScale.setValue(0);
-      buttonOpacity.setValue(0);
-      shimmerAnim.setValue(0);
+      overlayOpacity.value = 0;
+      cardScale.value = 0.3;
+      cardOpacity.value = 0;
+      iconScale.value = 0;
+      titleOpacity.value = 0;
+      rewardScale.value = 0;
+      buttonOpacity.value = 0;
+      shimmerAnim.value = 0;
       particleAnims.forEach((p) => {
-        p.progress.setValue(0);
-        p.opacity.setValue(0);
+        p.progress.value = 0;
+        p.opacity.value = 0;
       });
 
       // Staggered entrance sequence
-      Animated.sequence([
-        // 1. Overlay fade in
-        Animated.timing(overlayOpacity, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        // 2. Card scale + fade in
-        Animated.parallel([
-          Animated.spring(cardScale, {
-            toValue: 1,
-            tension: 50,
-            friction: 7,
-            useNativeDriver: true,
-          }),
-          Animated.timing(cardOpacity, {
-            toValue: 1,
-            duration: 200,
-            useNativeDriver: true,
-          }),
-        ]),
-        // 3. Icon spring in
-        Animated.spring(iconScale, {
-          toValue: 1,
-          tension: 60,
-          friction: 5,
-          useNativeDriver: true,
-        }),
-        // 4. Title + reward + button fade in
-        Animated.parallel([
-          Animated.timing(titleOpacity, {
-            toValue: 1,
-            duration: 250,
-            useNativeDriver: true,
-          }),
-          Animated.spring(rewardScale, {
-            toValue: 1,
-            tension: 50,
-            friction: 6,
-            useNativeDriver: true,
-          }),
-          Animated.timing(buttonOpacity, {
-            toValue: 1,
-            duration: 300,
-            useNativeDriver: true,
-          }),
-        ]),
-      ]).start();
-
-      // Start particle animations (confetti effect)
-      particleAnims.forEach((particleAnim, index) => {
-        const delay = particles[index].delay;
-        setTimeout(() => {
-          Animated.parallel([
-            Animated.timing(particleAnim.progress, {
-              toValue: 1,
-              duration: 1200,
-              useNativeDriver: true,
-            }),
-            Animated.sequence([
-              Animated.timing(particleAnim.opacity, {
-                toValue: 1,
-                duration: 200,
-                useNativeDriver: true,
-              }),
-              Animated.timing(particleAnim.opacity, {
-                toValue: 0,
-                duration: 800,
-                delay: 200,
-                useNativeDriver: true,
-              }),
-            ]),
-          ]).start();
-        }, delay + 500); // Delayed start after card shows
+      // 1. Overlay fade in
+      overlayOpacity.value = withTiming(1, { duration: 300 });
+      // 2. Card scale + fade in (staggered)
+      cardScale.value = withDelay(300, withSpring(1));
+      cardOpacity.value = withDelay(300, withTiming(1, { duration: 200 }));
+      iconScale.value = withDelay(500, withSpring(1));
+      titleOpacity.value = withDelay(700, withTiming(1, { duration: 250 }));
+      rewardScale.value = withDelay(950, withSpring(1));
+      buttonOpacity.value = withDelay(1150, withTiming(1, { duration: 300 }));
+      // Particles
+      particleAnims.forEach((particleAnim) => {
+        particleAnim.progress.value = withDelay(500, withTiming(1, { duration: 1200 }));
+        particleAnim.opacity.value = withDelay(500, withTiming(1, { duration: 200 }));
       });
-
-      // Shimmer loop on the icon
-      const shimmerLoop = Animated.loop(
-        Animated.sequence([
-          Animated.timing(shimmerAnim, {
-            toValue: 1,
-            duration: 1500,
-            useNativeDriver: true,
-          }),
-          Animated.timing(shimmerAnim, {
-            toValue: 0,
-            duration: 1500,
-            useNativeDriver: true,
-          }),
-        ])
-      );
-      shimmerLoop.start();
 
       // Auto-dismiss after 5 seconds
       autoDismissTimer.current = setTimeout(() => {
         handleClose();
       }, 5000);
-
-      return () => {
-        shimmerLoop.stop();
-        if (autoDismissTimer.current) {
-          clearTimeout(autoDismissTimer.current);
-        }
-      };
-    }
-  }, [visible, achievement]);
-
-  const handleClose = useCallback(() => {
-    if (autoDismissTimer.current) {
-      clearTimeout(autoDismissTimer.current);
     }
 
-    Animated.parallel([
-      Animated.timing(overlayOpacity, {
-        toValue: 0,
-        duration: 250,
-        useNativeDriver: true,
-      }),
-      Animated.timing(cardScale, {
-        toValue: 0.8,
-        duration: 250,
-        useNativeDriver: true,
-      }),
-      Animated.timing(cardOpacity, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      onClose();
-    });
-  }, [onClose, overlayOpacity, cardScale, cardOpacity]);
+    return () => {
+      if (autoDismissTimer.current) {
+        clearTimeout(autoDismissTimer.current);
+      }
+    };
+  }, [visible, achievement, handleClose]);
 
   const handleClaim = useCallback(() => {
     if (autoDismissTimer.current) {
@@ -276,15 +215,13 @@ const AchievementUnlockModal: React.FC<AchievementUnlockModalProps> = ({
     return iconMap[icon] || 'trophy';
   };
 
-  const iconScaleValue = iconScale.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: [0, 1.2, 1],
-  });
+  const iconAnimStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: interpolate(iconScale.value, [0, 0.5, 1], [0, 1.2, 1]) }],
+  }));
 
-  const shimmerOpacity = shimmerAnim.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: [0.3, 0.8, 0.3],
-  });
+  const shimmerAnimStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(shimmerAnim.value, [0, 0.5, 1], [0.3, 0.8, 0.3]),
+  }));
 
   return (
     <Modal
@@ -301,42 +238,14 @@ const AchievementUnlockModal: React.FC<AchievementUnlockModalProps> = ({
           onPress={handleClose}
         >
           {/* Confetti Particles */}
-          {particleAnims.map((particleAnim, index) => {
-            const particle = particles[index];
-            const translateX = particleAnim.progress.interpolate({
-              inputRange: [0, 1],
-              outputRange: [particle.startX, particle.endX],
-            });
-            const translateY = particleAnim.progress.interpolate({
-              inputRange: [0, 0.4, 1],
-              outputRange: [particle.startY, particle.endY - 80, particle.endY + 100],
-            });
-            const rotate = particleAnim.progress.interpolate({
-              inputRange: [0, 1],
-              outputRange: ['0deg', `${Math.random() * 720}deg`],
-            });
-
-            return (
-              <Animated.View
-                key={index}
-                style={[
-                  styles.particle,
-                  {
-                    width: particle.size,
-                    height: particle.size,
-                    borderRadius: particle.size / 2,
-                    backgroundColor: particle.color,
-                    opacity: particleAnim.opacity,
-                    transform: [
-                      { translateX },
-                      { translateY },
-                      { rotate },
-                    ],
-                  },
-                ]}
-              />
-            );
-          })}
+          {particles.map((particle, index) => (
+            <ParticleView
+              key={index}
+              particle={particle}
+              progress={particleProgress}
+              opacity={particleOpacity}
+            />
+          ))}
 
           {/* Card */}
           <Animated.View
@@ -354,13 +263,13 @@ const AchievementUnlockModal: React.FC<AchievementUnlockModalProps> = ({
                 <Animated.View
                   style={[
                     styles.iconGlow,
-                    { opacity: shimmerOpacity },
+                    shimmerAnimStyle,
                   ]}
                 />
                 <Animated.View
                   style={[
                     styles.iconCircle,
-                    { transform: [{ scale: iconScaleValue }] },
+                    iconAnimStyle,
                   ]}
                 >
                   <Ionicons

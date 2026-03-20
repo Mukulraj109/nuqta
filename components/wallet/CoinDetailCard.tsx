@@ -2,8 +2,12 @@
  * CoinDetailCard - Compact coin card (replaces WalletBalanceCard's large format)
  * Shows coin amount, icon, expiry/usage info, chevron for detail navigation
  */
-import React, { useRef } from 'react';
-import { View, StyleSheet, Pressable, Animated } from 'react-native';
+import React from 'react';
+import { View, StyleSheet, Pressable} from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
@@ -20,25 +24,18 @@ interface CoinDetailCardProps {
 }
 
 export const CoinDetailCard: React.FC<CoinDetailCardProps> = React.memo(({ coin, onPress }) => {
-  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const scaleAnim = useSharedValue(1);
+  const scaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: scaleAnim.value }] }));
   const coinInfo = COIN_TYPES[coin.type] || COIN_TYPES.rez;
 
   const handlePressIn = () => {
-    Animated.spring(scaleAnim, {
-      toValue: 0.97,
-      useNativeDriver: true,
-      speed: 50,
-      bounciness: 4,
-    }).start();
+    scaleAnim.value = withSpring(0.97, { speed: 50,
+      bounciness: 4 });
   };
 
   const handlePressOut = () => {
-    Animated.spring(scaleAnim, {
-      toValue: 1,
-      useNativeDriver: true,
-      speed: 50,
-      bounciness: 4,
-    }).start();
+    scaleAnim.value = withSpring(1, { speed: 50,
+      bounciness: 4 });
   };
 
   // Determine info line
@@ -68,7 +65,7 @@ export const CoinDetailCard: React.FC<CoinDetailCardProps> = React.memo(({ coin,
     Math.ceil((expiryMs - Date.now()) / 86400000) <= 7;
 
   return (
-    <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+    <Animated.View style={scaleStyle}>
       <Pressable
         style={[styles.card, { borderColor: coinInfo.color + '20' }]}
         onPress={() => onPress?.(coin)}
@@ -117,49 +114,39 @@ const styles = StyleSheet.create({
     padding: 12,
     marginBottom: 8,
     borderWidth: 1,
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle },
   iconContainer: {
     width: 42,
     height: 42,
     borderRadius: BorderRadius.md,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
-  },
+    marginRight: 12 },
   coinImage: {
     width: 24,
-    height: 24,
-  },
+    height: 24 },
   content: {
-    flex: 1,
-  },
+    flex: 1 },
   name: {
     fontSize: 13,
     fontWeight: '700',
     color: Colors.text.primary,
-    marginBottom: 1,
-  },
+    marginBottom: 1 },
   amountRow: {
     flexDirection: 'row',
     alignItems: 'baseline',
-    gap: 4,
-  },
+    gap: 4 },
   amount: {
     fontSize: 17,
     fontWeight: '800',
-    letterSpacing: 0.2,
-  },
+    letterSpacing: 0.2 },
   info: {
     fontSize: 11,
     color: Colors.text.tertiary,
     fontWeight: '500',
-    marginTop: 1,
-  },
+    marginTop: 1 },
   infoWarning: {
     color: colors.warningScale[700],
-    fontWeight: '600',
-  },
-});
+    fontWeight: '600' } });
 
 export default CoinDetailCard;

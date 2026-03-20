@@ -2,8 +2,13 @@
 // Instant Discount / Deals Section - Green & Gold Theme
 
 import { colors } from '@/constants/theme';
-import React, { useState, useEffect, memo, useRef } from 'react';
-import { View, Pressable, StyleSheet, ActivityIndicator, Modal, ScrollView, Platform, Animated } from 'react-native';
+import React, { useState, useEffect, memo} from 'react';
+import { View, Pressable, StyleSheet, ActivityIndicator, Modal, ScrollView, Platform} from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming} from 'react-native-reanimated';
 import { CardGridSkeleton } from '@/components/skeletons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -27,8 +32,7 @@ const GLASS = {
   tintedGreenBg: 'rgba(255, 205, 87, 0.08)',
   tintedGreenBorder: 'rgba(255, 205, 87, 0.2)',
   tintedGoldBg: 'rgba(255, 200, 87, 0.12)',
-  tintedGoldBorder: 'rgba(255, 200, 87, 0.35)',
-};
+  tintedGoldBorder: 'rgba(255, 200, 87, 0.35)' };
 
 const COLORS = {
   primary: Colors.gold,
@@ -69,8 +73,7 @@ export default memo(function CombinedSection78({
   disabled = false,
   testID,
   dynamicData,
-  cardType,
-}: CombinedSection78Props) {
+  cardType }: CombinedSection78Props) {
   const isMounted = useIsMounted();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -84,10 +87,14 @@ export default memo(function CombinedSection78({
   const [showDetailsModal, setShowDetailsModal] = useState(false);
 
   // Animations
-  const cardScale = useRef(new Animated.Value(1)).current;
-  const buttonScale = useRef(new Animated.Value(1)).current;
-  const modalScale = useRef(new Animated.Value(0.9)).current;
-  const modalOpacity = useRef(new Animated.Value(0)).current;
+  const cardScale = useSharedValue(1);
+  const buttonScale = useSharedValue(1);
+  const modalScale = useSharedValue(0.9);
+  const modalOpacity = useSharedValue(0);
+
+  const cardScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: cardScale.value }] }));
+  const buttonScaleStyle = useAnimatedStyle(() => ({ transform: [{ scale: buttonScale.value }] }));
+  const modalAnimStyle = useAnimatedStyle(() => ({ opacity: modalOpacity.value, transform: [{ scale: modalScale.value }] }));
 
   const storeId = dynamicData?.store?.id || dynamicData?.store?._id;
   const storeName = dynamicData?.store?.name;
@@ -100,13 +107,8 @@ export default memo(function CombinedSection78({
     }
   }, [storeId]);
 
-  const animatePress = (anim: Animated.Value, toValue: number) => {
-    Animated.spring(anim, {
-      toValue,
-      useNativeDriver: true,
-      friction: 8,
-      tension: 100,
-    }).start();
+  const animatePress = (anim: { value: number }, toValue: number) => {
+    anim.value = withSpring(toValue, { damping: 8, stiffness: 100 });
   };
 
   const fetchVoucher = async () => {
@@ -117,8 +119,7 @@ export default memo(function CombinedSection78({
 
       const vouchersResponse = await storeVouchersApi.getStoreVouchers(storeId, {
         page: 1,
-        limit: 1,
-      });
+        limit: 1 });
 
       if (vouchersResponse.success && vouchersResponse.data?.vouchers?.length > 0) {
         if (!isMounted()) return;
@@ -182,19 +183,16 @@ export default memo(function CombinedSection78({
       return;
     }
 
-    Animated.parallel([
-      Animated.spring(modalScale, { toValue: 1, useNativeDriver: true, friction: 8 }),
-      Animated.timing(modalOpacity, { toValue: 1, duration: 200, useNativeDriver: true }),
-    ]).start();
+    modalScale.value = withSpring(1, { damping: 8 });
+    modalOpacity.value = withTiming(1, { duration: 200 });
 
     setShowDetailsModal(true);
   };
 
   const handleHideDetails = () => {
-    Animated.parallel([
-      Animated.timing(modalScale, { toValue: 0.9, duration: 150, useNativeDriver: true }),
-      Animated.timing(modalOpacity, { toValue: 0, duration: 150, useNativeDriver: true }),
-    ]).start(() => setShowDetailsModal(false));
+    modalScale.value = withTiming(0.9, { duration: 150 });
+    modalOpacity.value = withTiming(0, { duration: 150 });
+    setTimeout(() => setShowDetailsModal(false), 150);
   };
 
   const voucherType = voucher?.discountType || voucher?.type;
@@ -219,7 +217,7 @@ export default memo(function CombinedSection78({
 
   return (
     <View style={styles.container} testID={testID}>
-      <Animated.View style={{ transform: [{ scale: cardScale }] }}>
+      <Animated.View style={cardScaleStyle}>
         <Pressable
          
           onPressIn={() => animatePress(cardScale, 0.98)}
@@ -253,13 +251,7 @@ export default memo(function CombinedSection78({
           onPress={handleHideDetails}
         >
           <Animated.View
-            style={[
-              styles.modalContent,
-              {
-                opacity: modalOpacity,
-                transform: [{ scale: modalScale }],
-              },
-            ]}
+            style={[styles.modalContent, modalAnimStyle]}
           >
             <View onStartShouldSetResponder={() => true} onTouchEnd={(e) => e.stopPropagation()}>
               {/* Modal Header */}
@@ -425,7 +417,7 @@ export default memo(function CombinedSection78({
         </View>
 
         {/* Add Button */}
-        <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
+        <Animated.View style={buttonScaleStyle}>
           <Pressable
            
             onPressIn={() => animatePress(buttonScale, 0.96)}
@@ -459,8 +451,7 @@ export default memo(function CombinedSection78({
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
-    paddingVertical: 12,
-  },
+    paddingVertical: 12 },
 
   cardWrapper: {
     borderRadius: 24,
@@ -470,25 +461,19 @@ const styles = StyleSheet.create({
         shadowColor: COLORS.navy,
         shadowOffset: { width: 0, height: 6 },
         shadowOpacity: 0.12,
-        shadowRadius: 20,
-      },
+        shadowRadius: 20 },
       android: {
-        elevation: 8,
-      },
-    }),
-  },
+        elevation: 8 } }) },
 
   card: {
     borderRadius: 24,
     padding: 20,
     borderWidth: 1,
     borderColor: GLASS.lightBorder,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
 
   cardAndroid: {
-    backgroundColor: GLASS.lightBg,
-  },
+    backgroundColor: GLASS.lightBg },
 
   glassHighlight: {
     position: 'absolute',
@@ -496,38 +481,33 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 1,
-    backgroundColor: GLASS.lightHighlight,
-  },
+    backgroundColor: GLASS.lightHighlight },
 
   // Header
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 10,
-  },
+    marginBottom: 10 },
 
   headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
-    gap: 12,
-  },
+    gap: 12 },
 
   headerIcon: {
     width: 40,
     height: 40,
     borderRadius: 14,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
 
   title: {
     fontSize: 16,
     fontWeight: '700',
     color: COLORS.textPrimary,
-    flex: 1,
-  },
+    flex: 1 },
 
   saveBadge: {
     paddingHorizontal: 14,
@@ -538,46 +518,37 @@ const styles = StyleSheet.create({
         shadowColor: COLORS.gold,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.4,
-        shadowRadius: 6,
-      },
+        shadowRadius: 6 },
       android: {
-        elevation: 4,
-      },
-    }),
-  },
+        elevation: 4 } }) },
 
   saveBadgeText: {
     fontSize: 12,
     fontWeight: '700',
     color: COLORS.navy,
-    letterSpacing: 0.2,
-  },
+    letterSpacing: 0.2 },
 
   minBill: {
     fontSize: 13,
     color: COLORS.textSecondary,
     marginBottom: 16,
-    marginLeft: 52,
-  },
+    marginLeft: 52 },
 
   divider: {
     borderTopWidth: 1,
     borderStyle: 'dashed',
     borderColor: 'rgba(0, 0, 0, 0.1)',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
 
   // Details Section
   detailsSection: {
     gap: 14,
-    marginBottom: 20,
-  },
+    marginBottom: 20 },
 
   detailRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: 12,
-  },
+    gap: 12 },
 
   detailIcon: {
     width: 36,
@@ -587,57 +558,48 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: GLASS.tintedGreenBorder,
-  },
+    borderColor: GLASS.tintedGreenBorder },
 
   detailTextContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    flexWrap: 'wrap',
-  },
+    flexWrap: 'wrap' },
 
   detailText: {
     fontSize: 14,
     color: COLORS.textPrimary,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
 
   moreDetailsLink: {
     fontSize: 14,
     color: COLORS.primary,
     fontWeight: '600',
-    marginLeft: 4,
-  },
+    marginLeft: 4 },
 
   subText: {
     fontSize: 12,
     color: COLORS.textSecondary,
-    marginTop: 2,
-  },
+    marginTop: 2 },
 
   // Add Button
   addButtonWrapper: {
     borderRadius: 24,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
 
   addButton: {
     height: 50,
     borderRadius: 24,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
 
   addButtonDisabled: {
-    opacity: 0.5,
-  },
+    opacity: 0.5 },
 
   addButtonText: {
     color: COLORS.white,
     fontSize: 16,
-    fontWeight: '700',
-  },
+    fontWeight: '700' },
 
   // Loading State
   loadingCard: {
@@ -647,14 +609,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: GLASS.lightBorder,
-  },
+    borderColor: GLASS.lightBorder },
 
   loadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: COLORS.textSecondary,
-  },
+    color: COLORS.textSecondary },
 
   // Modal Styles
   modalOverlay: {
@@ -662,8 +622,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
-  },
+    padding: 20 },
 
   modalContent: {
     backgroundColor: COLORS.white,
@@ -677,13 +636,9 @@ const styles = StyleSheet.create({
         shadowColor: COLORS.navy,
         shadowOffset: { width: 0, height: 12 },
         shadowOpacity: 0.2,
-        shadowRadius: 24,
-      },
+        shadowRadius: 24 },
       android: {
-        elevation: 16,
-      },
-    }),
-  },
+        elevation: 16 } }) },
 
   modalHeader: {
     flexDirection: 'row',
@@ -691,23 +646,20 @@ const styles = StyleSheet.create({
     padding: 20,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(0, 0, 0, 0.06)',
-    gap: 12,
-  },
+    gap: 12 },
 
   modalHeaderIcon: {
     width: 44,
     height: 44,
     borderRadius: 14,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
 
   modalTitle: {
     flex: 1,
     fontSize: 20,
     fontWeight: '700',
-    color: COLORS.textPrimary,
-  },
+    color: COLORS.textPrimary },
 
   modalCloseBtn: {
     width: 36,
@@ -715,16 +667,13 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     backgroundColor: GLASS.lightBg,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
 
   modalBody: {
-    padding: 20,
-  },
+    padding: 20 },
 
   modalSection: {
-    marginBottom: 24,
-  },
+    marginBottom: 24 },
 
   modalLabel: {
     fontSize: 12,
@@ -732,40 +681,33 @@ const styles = StyleSheet.create({
     color: COLORS.textSecondary,
     textTransform: 'uppercase',
     letterSpacing: 0.6,
-    marginBottom: 10,
-  },
+    marginBottom: 10 },
 
   modalValue: {
     fontSize: 17,
     fontWeight: '600',
-    color: COLORS.textPrimary,
-  },
+    color: COLORS.textPrimary },
 
   discountValueRow: {
-    flexDirection: 'row',
-  },
+    flexDirection: 'row' },
 
   discountBadgeLarge: {
     paddingHorizontal: 20,
     paddingVertical: 12,
-    borderRadius: 16,
-  },
+    borderRadius: 16 },
 
   discountBadgeText: {
     fontSize: 24,
     fontWeight: '800',
-    color: COLORS.navy,
-  },
+    color: COLORS.navy },
 
   restrictionsList: {
-    gap: 14,
-  },
+    gap: 14 },
 
   restrictionItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-  },
+    gap: 12 },
 
   restrictionIcon: {
     width: 36,
@@ -775,31 +717,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: GLASS.tintedGreenBorder,
-  },
+    borderColor: GLASS.tintedGreenBorder },
 
   restrictionText: {
     fontSize: 14,
     color: COLORS.textPrimary,
     flex: 1,
-    fontWeight: '500',
-  },
+    fontWeight: '500' },
 
   modalButton: {
     padding: 20,
-    paddingTop: 0,
-  },
+    paddingTop: 0 },
 
   modalButtonGradient: {
     height: 52,
     borderRadius: 26,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
 
   modalButtonText: {
     color: COLORS.white,
     fontSize: 16,
-    fontWeight: '700',
-  },
-});
+    fontWeight: '700' } });

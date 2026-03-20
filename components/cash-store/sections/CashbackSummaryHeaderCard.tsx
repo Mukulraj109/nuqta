@@ -8,15 +8,15 @@
  * Uses Nuqta Palette: Nile Blue, Light Mustard (#ffcd57), Light Peach, Linen
  */
 
-import React, { memo, useEffect, useRef } from 'react';
+import React, { memo, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
   Platform,
-  Animated,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring, withRepeat, withSequence, interpolate } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -44,49 +44,38 @@ const CashbackSummaryHeaderCard: React.FC<CashbackSummaryHeaderCardProps> = ({
   const currencySymbol = getCurrencySymbol();
   const locale = getLocale();
 
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const scaleAnim = useRef(new Animated.Value(0.95)).current;
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const fadeAnim = useSharedValue(0);
+  const scaleAnim = useSharedValue(0.95);
+  const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
     // Entry animation
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 400,
-        useNativeDriver: true,
-      }),
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        friction: 8,
-        tension: 40,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    fadeAnim.value = withTiming(1, { duration: 400 });
+    scaleAnim.value = withSpring(1);
 
     // Shimmer animation for loading
-    let shimmerLoop: Animated.CompositeAnimation | null = null;
     if (isLoading) {
-      shimmerLoop = Animated.loop(
-        Animated.sequence([
-          Animated.timing(shimmerAnim, {
-            toValue: 1,
-            duration: 1000,
-            useNativeDriver: true,
-          }),
-          Animated.timing(shimmerAnim, {
-            toValue: 0,
-            duration: 1000,
-            useNativeDriver: true,
-          }),
-        ])
+      shimmerAnim.value = withRepeat(
+        withSequence(
+          withTiming(1, { duration: 1000 }),
+          withTiming(0, { duration: 1000 })
+        ),
+        -1,
+        false
       );
-      shimmerLoop.start();
+    } else {
+      shimmerAnim.value = 0;
     }
-    return () => {
-      if (shimmerLoop) shimmerLoop.stop();
-    };
   }, [isLoading]);
+
+  const cardAnimStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ scale: scaleAnim.value }],
+  }));
+
+  const shimmerStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(shimmerAnim.value, [0, 1], [0.6, 1]),
+  }));
 
   const handlePress = () => {
     router.push('/account/cashback' as any);
@@ -102,12 +91,7 @@ const CashbackSummaryHeaderCard: React.FC<CashbackSummaryHeaderCardProps> = ({
         <Animated.View
           style={[
             styles.cardWrapper,
-            {
-              opacity: shimmerAnim.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0.6, 1],
-              }),
-            },
+            shimmerStyle,
           ]}
         >
           <LinearGradient
@@ -136,10 +120,7 @@ const CashbackSummaryHeaderCard: React.FC<CashbackSummaryHeaderCardProps> = ({
       <Animated.View
         style={[
           styles.cardWrapper,
-          {
-            opacity: fadeAnim,
-            transform: [{ scale: scaleAnim }],
-          },
+          cardAnimStyle,
         ]}
       >
         <Pressable onPress={handlePress}>

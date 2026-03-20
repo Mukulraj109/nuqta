@@ -1,13 +1,17 @@
 import { colors } from '@/constants/theme';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect,  useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  Animated,
   Dimensions,
-  ActivityIndicator,
+  ActivityIndicator
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring } from 'react-native-reanimated';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Ionicons } from '@expo/vector-icons';
 import exploreApi, { ExploreStats } from '@/services/exploreApi';
@@ -45,9 +49,28 @@ const formatNumber = (num: number): string => {
   return num.toLocaleString('en-IN');
 };
 
+const ProofItemView = ({ item, index, scrollX, isCurrent }: { item: ProofItem; index: number; scrollX: Animated.SharedValue<number>; isCurrent: boolean }) => {
+  const animStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(scrollX.value, [index - 1, index, index + 1], [0, 1, 0], 'clamp'),
+    transform: [{ translateY: interpolate(scrollX.value, [index - 1, index, index + 1], [20, 0, -20], 'clamp') }],
+    position: isCurrent ? 'relative' as const : 'absolute' as const,
+  }));
+
+  return (
+    <Animated.View
+      style={[styles.proofItem, animStyle]}
+    >
+      <View style={[styles.iconBadge, { backgroundColor: item.color + '20' }]}>
+        <Ionicons name={item.icon as any} size={14} color={item.color} />
+      </View>
+      <Text style={styles.proofText}>{item.text}</Text>
+    </Animated.View>
+  );
+};
+
 const SocialProofStrip = () => {
   const isMounted = useIsMounted();
-  const scrollX = useRef(new Animated.Value(0)).current;
+  const scrollX = useSharedValue(0);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [proofItems, setProofItems] = useState<ProofItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -80,8 +103,7 @@ const SocialProofStrip = () => {
             id: 1,
             icon: 'people',
             text: `${formatNumber(stats.peopleEarnedToday || stats.peopleNearby)} people earning near you`,
-            color: Colors.info,
-          });
+            color: Colors.info });
         }
 
         if (stats.earnedToday > 0) {
@@ -89,8 +111,7 @@ const SocialProofStrip = () => {
             id: 2,
             icon: 'trending-up',
             text: `${formatCurrency(stats.earnedToday, currencySymbol)} saved today in ${locationName}`,
-            color: Colors.gold,
-          });
+            color: Colors.gold });
         }
 
         if (stats.dealsLive > 0) {
@@ -98,8 +119,7 @@ const SocialProofStrip = () => {
             id: 3,
             icon: 'flame',
             text: `${stats.dealsLive} deals live right now`,
-            color: colors.brand.orange,
-          });
+            color: colors.brand.orange });
         }
 
         if (stats.activeUsers > 0) {
@@ -107,8 +127,7 @@ const SocialProofStrip = () => {
             id: 4,
             icon: 'flash',
             text: `${formatNumber(stats.activeUsers)} users active now`,
-            color: colors.brand.purpleMedium,
-          });
+            color: colors.brand.purpleMedium });
         }
 
         // Only set items if we have some data
@@ -137,15 +156,7 @@ const SocialProofStrip = () => {
 
   useEffect(() => {
     if (proofItems.length === 0) return;
-
-    const anim = Animated.spring(scrollX, {
-      toValue: currentIndex,
-      useNativeDriver: true,
-      tension: 50,
-      friction: 8,
-    });
-    anim.start();
-    return () => anim.stop();
+    scrollX.value = withSpring(currentIndex);
   }, [currentIndex, proofItems.length]);
 
   // Don't render if loading or no data
@@ -168,35 +179,14 @@ const SocialProofStrip = () => {
 
         <View style={styles.contentContainer}>
           {proofItems.map((item, index) => {
-            const inputRange = [index - 1, index, index + 1];
-            const opacity = scrollX.interpolate({
-              inputRange,
-              outputRange: [0, 1, 0],
-              extrapolate: 'clamp',
-            });
-            const translateY = scrollX.interpolate({
-              inputRange,
-              outputRange: [20, 0, -20],
-              extrapolate: 'clamp',
-            });
-
             return (
-              <Animated.View
+              <ProofItemView
                 key={item.id}
-                style={[
-                  styles.proofItem,
-                  {
-                    opacity,
-                    transform: [{ translateY }],
-                    position: index === currentIndex ? 'relative' : 'absolute',
-                  },
-                ]}
-              >
-                <View style={[styles.iconBadge, { backgroundColor: item.color + '20' }]}>
-                  <Ionicons name={item.icon as any} size={14} color={item.color} />
-                </View>
-                <Text style={styles.proofText}>{item.text}</Text>
-              </Animated.View>
+                item={item}
+                index={index}
+                scrollX={scrollX}
+                isCurrent={index === currentIndex}
+              />
             );
           })}
         </View>
@@ -220,15 +210,13 @@ const SocialProofStrip = () => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: Spacing.base,
-    paddingVertical: Spacing.md,
-  },
+    paddingVertical: Spacing.md },
   strip: {
     backgroundColor: Colors.background.secondary,
     borderRadius: BorderRadius.md,
     padding: Spacing.md,
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   liveIndicator: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -237,63 +225,51 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.xs,
     borderRadius: 10,
     marginRight: Spacing.md,
-    gap: Spacing.xs,
-  },
+    gap: Spacing.xs },
   liveDot: {
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: Colors.error,
-  },
+    backgroundColor: Colors.error },
   liveText: {
     fontSize: 9,
     fontWeight: '700',
-    color: Colors.error,
-  },
+    color: Colors.error },
   loadingContainer: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   contentContainer: {
     flex: 1,
     height: 24,
     justifyContent: 'center',
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   proofItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   iconBadge: {
     width: 24,
     height: 24,
     borderRadius: BorderRadius.md,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   proofText: {
     ...Typography.bodySmall,
     color: Colors.text.secondary,
     fontWeight: '500',
-    flex: 1,
-  },
+    flex: 1 },
   dotsContainer: {
     flexDirection: 'row',
     gap: Spacing.xs,
-    marginLeft: Spacing.sm,
-  },
+    marginLeft: Spacing.sm },
   dot: {
     width: 4,
     height: 4,
     borderRadius: 2,
-    backgroundColor: Colors.border.default,
-  },
+    backgroundColor: Colors.border.default },
   dotActive: {
     backgroundColor: Colors.gold,
-    width: 12,
-  },
-});
+    width: 12 } });
 
 export default SocialProofStrip;

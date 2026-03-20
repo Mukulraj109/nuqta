@@ -1,6 +1,11 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
-import React, { useRef } from 'react';
-import { View, Pressable, StyleSheet, Animated, Dimensions, Platform } from 'react-native';
+import React, {} from 'react';
+import { View, Pressable, StyleSheet, Dimensions, Platform } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withTiming } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { triggerImpact, triggerNotification } from "@/utils/haptics";
@@ -13,8 +18,7 @@ import {
   Typography,
   IconSize,
   Timing,
-  Gradients,
-} from '@/constants/DesignSystem';
+  Gradients } from '@/constants/DesignSystem';
 
 interface VisitStoreButtonProps {
   title?: string;
@@ -31,7 +35,10 @@ function VisitStoreButton({
 }: VisitStoreButtonProps) {
   const { width } = Dimensions.get('window');
   const isSmallScreen = width < 360;
-  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const scaleAnim = useSharedValue(1);
+  const scaleAnimStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scaleAnim.value }],
+  }));
 
   const handlePress = () => {
     if (disabled || loading) return;
@@ -42,21 +49,13 @@ function VisitStoreButton({
     // Add press animation (disabled on iOS to prevent conflicts)
     if (Platform.OS === 'ios') {
       // Quick scale without animation
-      scaleAnim.setValue(0.96);
-      setTimeout(() => scaleAnim.setValue(1), 50);
+      scaleAnim.value = 0.96;
+      setTimeout(() => scaleAnim.value = 1, 50);
     } else {
-      Animated.sequence([
-        Animated.timing(scaleAnim, {
-          toValue: 0.96,
-          duration: Timing.fast,
-          useNativeDriver: true,
-        }),
-        Animated.timing(scaleAnim, {
-          toValue: 1,
-          duration: Timing.fast,
-          useNativeDriver: true,
-        }),
-      ]).start();
+      scaleAnim.value = withSequence(
+        withTiming(0.96, { duration: Timing.fast }),
+        withTiming(1, { duration: Timing.fast }),
+      );
     }
 
     onPress?.();
@@ -73,10 +72,7 @@ function VisitStoreButton({
       styles.container,
       Platform.OS === 'ios' && styles.iosContainer
     ]}>
-      <Animated.View style={[
-        styles.buttonWrapper,
-        { transform: [{ scale: scaleAnim }] }
-      ]}>
+      <Animated.View style={[styles.buttonWrapper, scaleAnimStyle]}>
         <Pressable
           onPress={handlePress}
           disabled={disabled || loading}
@@ -143,46 +139,37 @@ const styles = StyleSheet.create({
     paddingBottom: Platform.OS === 'ios' ? 30 : Spacing.md,
     borderTopWidth: 1,
     borderTopColor: Colors.gray[100],
-    ...Shadows.medium,
-  },
+    ...Shadows.medium },
   iosContainer: {
     paddingBottom: 34, // Extra padding for iOS home indicator
   },
   buttonWrapper: {
-    width: '100%',
-  },
+    width: '100%' },
 
   // Modern Button with Purple Shadow
   button: {
     borderRadius: BorderRadius.lg,
     overflow: 'hidden',
-    ...Shadows.purpleMedium,
-  },
+    ...Shadows.purpleMedium },
   gradientButton: {
     paddingHorizontal: Spacing['2xl'] - 8,
     paddingVertical: Spacing.base,
     minHeight: 52,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   buttonContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   storeIcon: {
-    marginRight: Spacing.md,
-  },
+    marginRight: Spacing.md },
   loadingSpinner: {
-    marginRight: Spacing.md,
-  },
+    marginRight: Spacing.md },
 
   // Modern Typography
   buttonText: {
     color: Colors.text.white,
     ...Typography.h4,
     letterSpacing: 0.5,
-    textAlign: 'center',
-  },
-});
+    textAlign: 'center' } });
 export default withErrorBoundary(VisitStoreButton, 'MainStoreSectionVisitStoreButton');

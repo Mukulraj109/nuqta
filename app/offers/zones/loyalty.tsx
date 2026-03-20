@@ -5,7 +5,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
  * Fetches real data from backend API
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import {
   View,
   ScrollView,
@@ -14,9 +14,15 @@ import {
   StatusBar,
   Platform,
   Dimensions,
-  Animated,
-  RefreshControl,
+  RefreshControl
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -57,31 +63,26 @@ interface LoyaltyMilestone {
 
 // Shimmer animation component
 const ShimmerPlaceholder: React.FC<{ style?: any }> = ({ style }) => {
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
+
+  const shimmerStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: interpolate(shimmerAnim.value, [0, 1], [-SCREEN_WIDTH, SCREEN_WIDTH]) }],
+  }));
 
   useEffect(() => {
-    const shimmerLoop = Animated.loop(
-      Animated.timing(shimmerAnim, {
-        toValue: 1,
-        duration: 1500,
-        useNativeDriver: true,
-      })
+    shimmerAnim.value = withRepeat(
+      withTiming(1, { duration: 1500 }),
+      -1
     );
-    shimmerLoop.start();
-    return () => shimmerLoop.stop();
+    return () => { shimmerAnim.value = 0; };
   }, []);
-
-  const translateX = shimmerAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-SCREEN_WIDTH, SCREEN_WIDTH],
-  });
 
   return (
     <View style={[styles.shimmerContainer, style]}>
       <Animated.View
         style={[
           styles.shimmerGradient,
-          { transform: [{ translateX }] },
+          shimmerStyle,
         ]}
       >
         <LinearGradient
@@ -130,8 +131,7 @@ const mapIcon = (icon: string): keyof typeof Ionicons.glyphMap => {
     flame: 'flame-outline',
     ribbon: 'ribbon-outline',
     gift: 'gift-outline',
-    flag: 'flag-outline',
-  };
+    flag: 'flag-outline' };
   return iconMap[icon] || 'star-outline';
 };
 
@@ -223,8 +223,7 @@ function LoyaltyRewardsPage() {
           currentValue: progress.currentValue || 0,
           progress: progress.progress || 0,
           isCompleted: progress.isCompleted || false,
-          claimedAt: progress.claimedAt,
-        };
+          claimedAt: progress.claimedAt };
       });
 
       // Separate active and completed
@@ -606,68 +605,53 @@ function LoyaltyRewardsPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background.secondary,
-  },
+    backgroundColor: Colors.background.secondary },
   header: {
-    paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight || 0,
-  },
+    paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight || 0 },
   safeHeader: {
-    paddingBottom: Spacing.base,
-  },
+    paddingBottom: Spacing.base },
   headerContent: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: Spacing.base,
-    paddingVertical: Spacing.md,
-  },
+    paddingVertical: Spacing.md },
   backButton: {
     padding: Spacing.sm,
-    marginRight: Spacing.sm,
-  },
+    marginRight: Spacing.sm },
   headerTitleContainer: {
     flex: 1,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   headerTitle: {
     ...Typography.h3,
     color: colors.background.primary,
-    fontWeight: '700',
-  },
+    fontWeight: '700' },
   headerSubtitle: {
     ...Typography.bodySmall,
     color: 'rgba(255, 255, 255, 0.8)',
-    marginTop: 2,
-  },
+    marginTop: 2 },
   headerIcon: {
     width: 40,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   emoji: {
-    fontSize: 32,
-  },
+    fontSize: 32 },
   scrollView: {
-    flex: 1,
-  },
+    flex: 1 },
   scrollContent: {
-    paddingBottom: 150,
-  },
+    paddingBottom: 150 },
   progressBanner: {
     margin: Spacing.base,
     borderRadius: BorderRadius['2xl'],
     overflow: 'hidden',
-    ...Shadows.medium,
-  },
+    ...Shadows.medium },
   progressGradient: {
     padding: Spacing.lg,
     borderWidth: 1,
     borderColor: 'rgba(5, 150, 105, 0.2)',
-    borderRadius: BorderRadius['2xl'],
-  },
+    borderRadius: BorderRadius['2xl'] },
   progressHeaderContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base },
   progressIconContainer: {
     width: 64,
     height: 64,
@@ -675,179 +659,142 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 205, 87, 0.3)',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: Spacing.base,
-  },
+    marginRight: Spacing.base },
   progressTextContainer: {
-    flex: 1,
-  },
+    flex: 1 },
   progressTitle: {
     ...Typography.h4,
     color: Colors.text.primary,
     fontWeight: '600',
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   progressSubtitle: {
     ...Typography.bodySmall,
-    color: Colors.text.secondary,
-  },
+    color: Colors.text.secondary },
   overallProgressContainer: {
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base },
   overallProgressHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs },
   overallProgressLabel: {
     ...Typography.bodySmall,
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
   overallProgressValue: {
     ...Typography.label,
     color: colors.lightMustard,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   overallProgressBar: {
     height: 12,
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderRadius: BorderRadius.full,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   overallProgressFill: {
     height: '100%',
     backgroundColor: colors.lightMustard,
-    borderRadius: BorderRadius.full,
-  },
+    borderRadius: BorderRadius.full },
   statsGrid: {
     flexDirection: 'row',
     gap: Spacing.sm,
-    marginTop: Spacing.base,
-  },
+    marginTop: Spacing.base },
   statCard: {
     flex: 1,
     padding: Spacing.md,
     borderRadius: BorderRadius.lg,
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   statValue: {
     ...Typography.h2,
     fontWeight: '700',
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   statLabel: {
     ...Typography.caption,
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
   almostThereSection: {
     paddingHorizontal: Spacing.base,
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg },
   sectionHeader: {
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
   sectionHeaderRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.sm,
-    marginBottom: 4,
-  },
+    marginBottom: 4 },
   sectionTitle: {
     ...Typography.h4,
     color: Colors.text.primary,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   sectionSubtitle: {
     ...Typography.bodySmall,
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
   loyaltyCard: {
     backgroundColor: Colors.background.primary,
     borderRadius: BorderRadius.lg,
     padding: Spacing.base,
     marginBottom: Spacing.md,
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle },
   loyaltyContent: {
     flexDirection: 'row',
-    gap: Spacing.base,
-  },
+    gap: Spacing.base },
   milestoneIcon: {
     width: 56,
     height: 56,
     borderRadius: BorderRadius.md,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   loyaltyInfo: {
-    flex: 1,
-  },
+    flex: 1 },
   loyaltyHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   loyaltyStoreInfo: {
     flex: 1,
-    marginRight: Spacing.sm,
-  },
+    marginRight: Spacing.sm },
   loyaltyStore: {
     ...Typography.label,
     color: Colors.text.primary,
     fontWeight: '600',
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   loyaltyReward: {
     ...Typography.bodySmall,
-    color: colors.lightMustard,
-  },
+    color: colors.lightMustard },
   rewardValueContainer: {
-    alignItems: 'flex-end',
-  },
+    alignItems: 'flex-end' },
   rewardValueLabel: {
     ...Typography.caption,
     color: Colors.text.tertiary,
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   rewardValue: {
     ...Typography.label,
     color: colors.warningScale[400],
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   progressContainer: {
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   progressHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs },
   progressLabel: {
     ...Typography.bodySmall,
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
   progressPercentage: {
     ...Typography.labelSmall,
     color: colors.lightMustard,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   progressBar: {
     height: 8,
     backgroundColor: Colors.gray[100],
     borderRadius: BorderRadius.full,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   progressFill: {
     height: '100%',
-    borderRadius: BorderRadius.full,
-  },
+    borderRadius: BorderRadius.full },
   milestoneContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs },
   milestoneBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -855,112 +802,91 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.sm,
     paddingVertical: 2,
     borderRadius: BorderRadius.sm,
-    gap: 4,
-  },
+    gap: 4 },
   almostDoneBadge: {
-    backgroundColor: 'rgba(245, 158, 11, 0.15)',
-  },
+    backgroundColor: 'rgba(245, 158, 11, 0.15)' },
   milestoneText: {
     ...Typography.caption,
-    color: Colors.text.secondary,
-  },
+    color: Colors.text.secondary },
   almostDoneText: {
     color: colors.warningScale[400],
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   milestoneDescription: {
     ...Typography.caption,
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
   completedSection: {
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg },
   completedScroll: {
     paddingHorizontal: Spacing.base,
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   completedCard: {
     minWidth: 160,
     padding: Spacing.base,
     borderRadius: BorderRadius.lg,
     backgroundColor: 'rgba(167, 139, 250, 0.1)',
     borderWidth: 1,
-    borderColor: 'rgba(167, 139, 250, 0.2)',
-  },
+    borderColor: 'rgba(167, 139, 250, 0.2)' },
   completedHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   completedIcon: {
     width: 36,
     height: 36,
     borderRadius: BorderRadius.md,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   completedBadge: {
     backgroundColor: Colors.success,
     paddingHorizontal: Spacing.xs,
     paddingVertical: 2,
-    borderRadius: BorderRadius.sm,
-  },
+    borderRadius: BorderRadius.sm },
   completedBadgeText: {
     ...Typography.caption,
     color: colors.background.primary,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   completedReward: {
     ...Typography.label,
     color: Colors.text.primary,
     fontWeight: '600',
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   completedStore: {
     ...Typography.caption,
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary },
   howItWorks: {
     margin: Spacing.base,
     padding: Spacing.base,
     backgroundColor: Colors.background.primary,
     borderRadius: BorderRadius.lg,
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle },
   howItWorksTitle: {
     ...Typography.h4,
     color: Colors.text.primary,
     fontWeight: '600',
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
   stepsContainer: {
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   step: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: Spacing.md,
-  },
+    gap: Spacing.md },
   stepNumber: {
     width: 24,
     height: 24,
     borderRadius: 12,
     backgroundColor: 'rgba(26, 58, 82, 0.15)',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   stepNumberText: {
     ...Typography.caption,
     color: colors.nileBlue,
-    fontWeight: '700',
-  },
+    fontWeight: '700' },
   stepText: {
     ...Typography.body,
     color: Colors.text.secondary,
     flex: 1,
-    paddingTop: 2,
-  },
+    paddingTop: 2 },
   fixedCTA: {
     position: 'absolute',
     bottom: 70,
@@ -970,103 +896,83 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.primary,
     borderTopWidth: 1,
     borderTopColor: Colors.border.light,
-    ...Shadows.medium,
-  },
+    ...Shadows.medium },
   ctaButton: {
     borderRadius: BorderRadius.lg,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   ctaGradient: {
     flexDirection: 'row',
     paddingVertical: Spacing.base,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   ctaButtonText: {
     ...Typography.button,
     color: colors.background.primary,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   // Shimmer styles
   shimmerContainer: {
     backgroundColor: colors.neutral[200],
     borderRadius: BorderRadius.md,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   shimmerGradient: {
-    ...StyleSheet.absoluteFillObject,
-  },
+    ...StyleSheet.absoluteFillObject },
   skeletonLogo: {
     width: 56,
     height: 56,
-    borderRadius: BorderRadius.md,
-  },
+    borderRadius: BorderRadius.md },
   skeletonTitle: {
     width: 120,
     height: 16,
     borderRadius: BorderRadius.sm,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   skeletonSubtitle: {
     width: 80,
     height: 12,
-    borderRadius: BorderRadius.sm,
-  },
+    borderRadius: BorderRadius.sm },
   skeletonBadge: {
     width: 50,
     height: 24,
-    borderRadius: BorderRadius.sm,
-  },
+    borderRadius: BorderRadius.sm },
   skeletonProgress: {
     width: '100%',
     height: 8,
     borderRadius: BorderRadius.full,
-    marginVertical: 12,
-  },
+    marginVertical: 12 },
   skeletonMilestone: {
     width: 100,
     height: 20,
-    borderRadius: BorderRadius.sm,
-  },
+    borderRadius: BorderRadius.sm },
   // Error & Empty states
   errorContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: Spacing.xl,
-  },
+    padding: Spacing.xl },
   errorText: {
     ...Typography.body,
     color: Colors.text.secondary,
     marginTop: Spacing.md,
     marginBottom: Spacing.lg,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   retryButton: {
     backgroundColor: colors.nileBlue,
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.md,
-    borderRadius: BorderRadius.lg,
-  },
+    borderRadius: BorderRadius.lg },
   retryButtonText: {
     ...Typography.button,
     color: colors.background.primary,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   emptyState: {
     alignItems: 'center',
-    paddingVertical: Spacing.xl,
-  },
+    paddingVertical: Spacing.xl },
   emptyText: {
     ...Typography.h4,
     color: Colors.text.secondary,
-    marginTop: Spacing.md,
-  },
+    marginTop: Spacing.md },
   emptySubtext: {
     ...Typography.bodySmall,
     color: Colors.text.tertiary,
-    marginTop: Spacing.xs,
-  },
-});
+    marginTop: Spacing.xs } });
 
 export default withErrorBoundary(LoyaltyRewardsPage, 'OffersZonesLoyalty');

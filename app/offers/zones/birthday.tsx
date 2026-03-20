@@ -4,7 +4,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
  * Fetches real data from backend API
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import {
   View,
   ScrollView,
@@ -12,9 +12,15 @@ import {
   Pressable,
   StatusBar,
   Platform,
-  Dimensions,
-  Animated,
+  Dimensions
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -66,8 +72,20 @@ function BirthdayZonePage() {
   const [zoneInfo, setZoneInfo] = useState<ZoneInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
-  const confettiAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
+  const confettiAnim = useSharedValue(0);
+  const shimmerOpacityStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(shimmerAnim.value, [0, 1], [0.3, 0.7]),
+  }));
+  const confetti1Style = useAnimatedStyle(() => ({
+    transform: [{ translateY: interpolate(confettiAnim.value, [0, 1], [0, -10]) }],
+  }));
+  const confetti2Style = useAnimatedStyle(() => ({
+    transform: [{ translateY: interpolate(confettiAnim.value, [0, 1], [-10, 0]) }],
+  }));
+  const confetti3Style = useAnimatedStyle(() => ({
+    transform: [{ translateY: interpolate(confettiAnim.value, [0, 1], [0, -8]) }],
+  }));
   const bottomPadding = 80 + 70 + insets.bottom;
 
   // Check if it's user's birthday month
@@ -82,25 +100,24 @@ function BirthdayZonePage() {
 
   useEffect(() => {
     fetchZoneData();
-    const shimmerLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerAnim, { toValue: 1, duration: 1000, useNativeDriver: true }),
-        Animated.timing(shimmerAnim, { toValue: 0, duration: 1000, useNativeDriver: true }),
-      ])
+    shimmerAnim.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 1000 }),
+        withTiming(0, { duration: 1000 })
+      ),
+      -1
     );
-    shimmerLoop.start();
-
-    const confettiLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(confettiAnim, { toValue: 1, duration: 2000, useNativeDriver: true }),
-        Animated.timing(confettiAnim, { toValue: 0, duration: 2000, useNativeDriver: true }),
-      ])
+    confettiAnim.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 2000 }),
+        withTiming(0, { duration: 2000 })
+      ),
+      -1
     );
-    confettiLoop.start();
 
     return () => {
-      shimmerLoop.stop();
-      confettiLoop.stop();
+      shimmerAnim.value = 0;
+      confettiAnim.value = 0;
     };
   }, []);
 
@@ -124,8 +141,7 @@ function BirthdayZonePage() {
             offersCount: zone.offersCount || 0,
             verificationRequired: zone.verificationRequired,
             eligibilityDetails: zone.eligibilityDetails,
-            userEligible: zone.userEligible,
-          });
+            userEligible: zone.userEligible });
         }
       }
 
@@ -154,7 +170,7 @@ function BirthdayZonePage() {
   const renderSkeletonCard = () => (
     <View style={styles.dealCard}>
       <Animated.View
-        style={[styles.skeletonImage, { opacity: shimmerAnim.interpolate({ inputRange: [0, 1], outputRange: [0.3, 0.7] }) }]}
+        style={[styles.skeletonImage, shimmerOpacityStyle]}
       />
       <View style={styles.dealContent}>
         <View style={[styles.skeletonText, { width: '40%', marginBottom: 8 }]} />
@@ -255,19 +271,13 @@ function BirthdayZonePage() {
             style={styles.heroGradient}
           >
             {/* Floating confetti decorations */}
-            <Animated.View style={[styles.confetti, styles.confetti1, {
-              transform: [{ translateY: confettiAnim.interpolate({ inputRange: [0, 1], outputRange: [0, -10] }) }]
-            }]}>
+            <Animated.View style={[styles.confetti, styles.confetti1, confetti1Style]}>
               <ThemedText style={styles.confettiEmoji}>🎈</ThemedText>
             </Animated.View>
-            <Animated.View style={[styles.confetti, styles.confetti2, {
-              transform: [{ translateY: confettiAnim.interpolate({ inputRange: [0, 1], outputRange: [-10, 0] }) }]
-            }]}>
+            <Animated.View style={[styles.confetti, styles.confetti2, confetti2Style]}>
               <ThemedText style={styles.confettiEmoji}>🎁</ThemedText>
             </Animated.View>
-            <Animated.View style={[styles.confetti, styles.confetti3, {
-              transform: [{ translateY: confettiAnim.interpolate({ inputRange: [0, 1], outputRange: [0, -8] }) }]
-            }]}>
+            <Animated.View style={[styles.confetti, styles.confetti3, confetti3Style]}>
               <ThemedText style={styles.confettiEmoji}>🎉</ThemedText>
             </Animated.View>
 
@@ -442,7 +452,6 @@ const styles = StyleSheet.create({
   fixedCTA: { position: 'absolute', bottom: 70, left: 0, right: 0, padding: Spacing.base, backgroundColor: Colors.background.primary, borderTopWidth: 1, borderTopColor: Colors.border.light, ...Shadows.medium },
   ctaButton: { borderRadius: BorderRadius.lg, overflow: 'hidden' },
   ctaGradient: { flexDirection: 'row', paddingVertical: Spacing.base, alignItems: 'center', justifyContent: 'center', gap: Spacing.sm },
-  ctaButtonText: { ...Typography.button, color: colors.background.primary, fontWeight: '600' },
-});
+  ctaButtonText: { ...Typography.button, color: colors.background.primary, fontWeight: '600' } });
 
 export default withErrorBoundary(BirthdayZonePage, 'OffersZonesBirthday');

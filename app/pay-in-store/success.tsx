@@ -9,7 +9,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
  * - Social share prompt
  */
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect} from 'react';
 import { catchSilent } from '@/utils/catchAndReport';
 import {
   View,
@@ -17,9 +17,14 @@ import {
   StyleSheet,
   Pressable,
   ScrollView,
-  Platform,
-  Animated,
+  Platform
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withSpring,
+  withTiming } from 'react-native-reanimated';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -54,9 +59,7 @@ function PaymentSuccessScreen() {
     loyaltyProgress: rawRewards.loyaltyProgress || {
       currentVisits: 0,
       nextMilestone: 5,
-      milestoneReward: 'Bonus 50 Coins',
-    },
-  };
+      milestoneReward: 'Bonus 50 Coins' } };
 
   const billAmount = parseFloat(amount || '0');
   const coinsRedeemed = parseInt(coinsUsed || '0', 10);
@@ -78,9 +81,19 @@ function PaymentSuccessScreen() {
   });
 
   // Animations
-  const checkmarkScale = useRef(new Animated.Value(0)).current;
-  const contentOpacity = useRef(new Animated.Value(0)).current;
-  const rewardsSlide = useRef(new Animated.Value(50)).current;
+  const checkmarkScale = useSharedValue(0);
+  const contentOpacity = useSharedValue(0);
+  const rewardsSlide = useSharedValue(50);
+  const checkmarkStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: checkmarkScale.value }],
+  }));
+  const contentStyle = useAnimatedStyle(() => ({
+    opacity: contentOpacity.value,
+  }));
+  const rewardsStyle = useAnimatedStyle(() => ({
+    opacity: contentOpacity.value,
+    transform: [{ translateY: rewardsSlide.value }],
+  }));
 
   useEffect(() => {
     // Trigger haptic feedback
@@ -89,28 +102,9 @@ function PaymentSuccessScreen() {
     }
 
     // Run animations
-    const anim = Animated.sequence([
-      Animated.spring(checkmarkScale, {
-        toValue: 1,
-        tension: 150,
-        friction: 6,
-        useNativeDriver: true,
-      }),
-      Animated.parallel([
-        Animated.timing(contentOpacity, {
-          toValue: 1,
-          duration: 400,
-          useNativeDriver: true,
-        }),
-        Animated.spring(rewardsSlide, {
-          toValue: 0,
-          tension: 80,
-          friction: 10,
-          useNativeDriver: true,
-        }),
-      ]),
-    ]);
-    anim.start();
+    checkmarkScale.value = withSpring(1, { damping: 6, stiffness: 150 });
+    contentOpacity.value = withTiming(1, { duration: 400 });
+    rewardsSlide.value = withSpring(0, { damping: 10, stiffness: 80 });
 
     // Show reward popup after a short delay (let the success screen animate first)
     const popupTimer = setTimeout(() => {
@@ -133,7 +127,6 @@ function PaymentSuccessScreen() {
     }, 1500); // Show popup 1.5s after screen loads
 
     return () => {
-      anim.stop();
       clearTimeout(popupTimer);
     };
   }, []);
@@ -141,8 +134,7 @@ function PaymentSuccessScreen() {
   const handleViewReceipt = () => {
     router.push({
       pathname: '/transactions/[id]',
-      params: { id: paymentId },
-    });
+      params: { id: paymentId } });
   };
 
   const handleBackToHome = () => {
@@ -152,8 +144,7 @@ function PaymentSuccessScreen() {
   const loyaltyProgress = rewards.loyaltyProgress || {
     currentVisits: 0,
     nextMilestone: 5,
-    milestoneReward: 'Bonus 50 Coins',
-  };
+    milestoneReward: 'Bonus 50 Coins' };
   const progressPercent =
     loyaltyProgress.nextMilestone > 0
       ? (loyaltyProgress.currentVisits / loyaltyProgress.nextMilestone) * 100
@@ -168,7 +159,7 @@ function PaymentSuccessScreen() {
       >
         {/* Success Animation */}
         <Animated.View
-          style={[styles.successIconContainer, { transform: [{ scale: checkmarkScale }] }]}
+          style={[styles.successIconContainer, checkmarkStyle]}
         >
           <LinearGradient
             colors={[colors.successScale[400], colors.successScale[600]]}
@@ -181,7 +172,7 @@ function PaymentSuccessScreen() {
         </Animated.View>
 
         {/* Success Text */}
-        <Animated.View style={[styles.successTextContainer, { opacity: contentOpacity }]}>
+        <Animated.View style={[styles.successTextContainer, contentStyle]}>
           <Text style={styles.successTitle}>Payment Successful!</Text>
           <Text style={styles.successSubtitle}>
             Paid {currencySymbol}{billAmount.toFixed(0)} to {storeName}
@@ -196,7 +187,7 @@ function PaymentSuccessScreen() {
 
         {/* First Visit Bonus */}
         {rewards.firstVisitBonus != null && rewards.firstVisitBonus > 0 && (
-          <Animated.View style={[styles.firstVisitCard, { opacity: contentOpacity }]}>
+          <Animated.View style={[styles.firstVisitCard, contentStyle]}>
             <LinearGradient
               colors={[colors.tint.orange, colors.tint.amberLight]}
               start={{ x: 0, y: 0 }}
@@ -223,7 +214,7 @@ function PaymentSuccessScreen() {
         <Animated.View
           style={[
             { width: '100%', marginBottom: spacing.lg },
-            { opacity: contentOpacity, transform: [{ translateY: rewardsSlide }] },
+            rewardsStyle,
           ]}
         >
           <RewardsBreakdownCard
@@ -239,7 +230,7 @@ function PaymentSuccessScreen() {
 
         {/* Loyalty Progress */}
         {loyaltyProgress.nextMilestone > 0 && (
-          <Animated.View style={[styles.loyaltyCard, { opacity: contentOpacity }]}>
+          <Animated.View style={[styles.loyaltyCard, contentStyle]}>
             <View style={styles.loyaltyHeader}>
               <Ionicons name="trophy-outline" size={20} color={colors.warningScale[500]} />
               <Text style={styles.loyaltyTitle}>Loyalty Progress</Text>
@@ -293,133 +284,107 @@ function PaymentSuccessScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background.secondary,
-  },
+    backgroundColor: colors.background.secondary },
   content: {
-    flex: 1,
-  },
+    flex: 1 },
   contentContainer: {
     padding: spacing.md,
     alignItems: 'center',
-    paddingBottom: 120,
-  },
+    paddingBottom: 120 },
   successIconContainer: {
     marginTop: spacing.xl,
-    marginBottom: spacing.lg,
-  },
+    marginBottom: spacing.lg },
   successIconGradient: {
     width: 120,
     height: 120,
     borderRadius: 60,
     justifyContent: 'center',
     alignItems: 'center',
-    ...shadows.lg,
-  },
+    ...shadows.lg },
   successTextContainer: {
     alignItems: 'center',
-    marginBottom: spacing.xl,
-  },
+    marginBottom: spacing.xl },
   successTitle: {
     ...typography.h2,
     color: colors.text.primary,
-    marginBottom: spacing.xs,
-  },
+    marginBottom: spacing.xs },
   successSubtitle: {
     ...typography.body,
     color: colors.text.secondary,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   coinsUsedText: {
     ...typography.bodySmall,
     color: colors.primary[600],
-    marginTop: spacing.xs,
-  },
+    marginTop: spacing.xs },
   transactionId: {
     ...typography.caption,
     color: colors.text.tertiary,
-    marginTop: spacing.sm,
-  },
+    marginTop: spacing.sm },
   firstVisitCard: {
     width: '100%',
-    marginBottom: spacing.lg,
-  },
+    marginBottom: spacing.lg },
   firstVisitGradient: {
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     borderWidth: 1,
-    borderColor: colors.warningScale[400],
-  },
+    borderColor: colors.warningScale[400] },
   firstVisitContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.sm,
-  },
+    gap: spacing.sm },
   firstVisitEmoji: {
-    fontSize: 28,
-  },
+    fontSize: 28 },
   firstVisitTextContainer: {
-    flex: 1,
-  },
+    flex: 1 },
   firstVisitTitle: {
     fontSize: 16,
     fontWeight: '700',
     color: colors.brand.amberDark,
-    marginBottom: 2,
-  },
+    marginBottom: 2 },
   firstVisitSubtitle: {
     fontSize: 13,
     color: colors.brand.amberDeep,
-    lineHeight: 18,
-  },
+    lineHeight: 18 },
   firstVisitBadge: {
     backgroundColor: colors.warningScale[400],
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 20,
-  },
+    borderRadius: 20 },
   firstVisitBadgeText: {
     fontSize: 16,
     fontWeight: '700',
-    color: colors.background.primary,
-  },
+    color: colors.background.primary },
   loyaltyCard: {
     width: '100%',
     backgroundColor: colors.background.primary,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginBottom: spacing.lg,
-    ...shadows.sm,
-  },
+    ...shadows.sm },
   loyaltyHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: spacing.md,
-    gap: spacing.sm,
-  },
+    gap: spacing.sm },
   loyaltyTitle: {
     ...typography.button,
-    color: colors.text.primary,
-  },
+    color: colors.text.primary },
   progressContainer: {
-    marginBottom: spacing.sm,
-  },
+    marginBottom: spacing.sm },
   progressBar: {
     height: 8,
     backgroundColor: colors.neutral[200],
     borderRadius: 4,
     marginBottom: spacing.xs,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   progressFill: {
     height: '100%',
     backgroundColor: colors.warningScale[500],
-    borderRadius: 4,
-  },
+    borderRadius: 4 },
   progressText: {
     ...typography.caption,
     color: colors.text.secondary,
-    textAlign: 'right',
-  },
+    textAlign: 'right' },
   milestoneContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -427,12 +392,10 @@ const styles = StyleSheet.create({
     padding: spacing.sm,
     backgroundColor: colors.secondary[50],
     borderRadius: borderRadius.md,
-    gap: spacing.xs,
-  },
+    gap: spacing.xs },
   milestoneText: {
     ...typography.bodySmall,
-    color: colors.secondary[700],
-  },
+    color: colors.secondary[700] },
   bottomActions: {
     flexDirection: 'row',
     padding: spacing.md,
@@ -441,8 +404,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: colors.border.light,
     gap: spacing.md,
-    ...shadows.lg,
-  },
+    ...shadows.lg },
   receiptButton: {
     flex: 1,
     flexDirection: 'row',
@@ -452,26 +414,20 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.lg,
     borderWidth: 2,
     borderColor: colors.primary[500],
-    gap: spacing.sm,
-  },
+    gap: spacing.sm },
   receiptButtonText: {
     ...typography.button,
-    color: colors.primary[500],
-  },
+    color: colors.primary[500] },
   homeButton: {
     flex: 1,
     borderRadius: borderRadius.lg,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   homeButtonGradient: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: spacing.md,
-  },
+    paddingVertical: spacing.md },
   homeButtonText: {
     ...typography.button,
-    color: colors.background.primary,
-  },
-});
+    color: colors.background.primary } });
 
 export default withErrorBoundary(PaymentSuccessScreen, 'PayInStoreSuccess');

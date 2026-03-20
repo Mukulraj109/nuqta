@@ -5,15 +5,15 @@
  * Includes the category tab bar below it
  */
 
-import React, { useState, useEffect, useCallback, useMemo, memo, useRef } from 'react';
+import React, { useState, useEffect, useCallback, memo, useRef } from 'react';
 import {
   View,
   TextInput,
   Pressable,
   StyleSheet,
   Platform,
-  Animated,
 } from 'react-native';
+import Animated, { SharedValue, useAnimatedStyle, useAnimatedReaction, interpolate, Extrapolation, runOnJS } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { useRouter } from 'expo-router';
@@ -23,7 +23,7 @@ import { colors } from '@/constants/theme';
 
 interface StickySearchHeaderProps {
   /** Current scroll position for animation */
-  scrollY: Animated.Value;
+  scrollY: SharedValue<number>;
   /** Threshold to show sticky header */
   showThreshold?: number;
   /** Callback when search is pressed */
@@ -47,7 +47,7 @@ const HeaderContentComponent = memo<{
       <Pressable
         style={styles.searchContainer}
         onPress={onSearchPress}
-       
+
         accessibilityLabel="Search bar"
         accessibilityRole="search"
       >
@@ -86,43 +86,46 @@ const StickySearchHeader: React.FC<StickySearchHeaderProps> = ({
   const isVisibleRef = useRef(false);
   const containerRef = useRef<View>(null);
 
-  // Listen to scroll position to toggle pointer events
-  // Only call setState when visibility actually changes to avoid re-renders on every scroll frame
-  useEffect(() => {
-    const listenerId = scrollY.addListener(({ value }) => {
+  // React to scroll position changes to toggle visibility
+  const updateVisibility = useCallback((shouldBeVisible: boolean) => {
+    if (shouldBeVisible !== isVisibleRef.current) {
+      isVisibleRef.current = shouldBeVisible;
+      setIsVisible(shouldBeVisible);
+    }
+    // Also update directly for web
+    if (Platform.OS === 'web' && containerRef.current) {
+      (containerRef.current as any).style.pointerEvents = shouldBeVisible ? 'auto' : 'none';
+    }
+  }, []);
+
+  useAnimatedReaction(
+    () => scrollY.value,
+    (value) => {
       const shouldBeVisible = value >= showThreshold;
-      if (shouldBeVisible !== isVisibleRef.current) {
-        isVisibleRef.current = shouldBeVisible;
-        setIsVisible(shouldBeVisible);
-      }
-      // Also update directly for web
-      if (Platform.OS === 'web' && containerRef.current) {
-        (containerRef.current as any).style.pointerEvents = shouldBeVisible ? 'auto' : 'none';
-      }
-    });
-    return () => scrollY.removeListener(listenerId);
-  }, [scrollY, showThreshold]);
-
-  // Memoize animated values to prevent recreation
-  const headerOpacity = useMemo(
-    () =>
-      scrollY.interpolate({
-        inputRange: [showThreshold - 50, showThreshold],
-        outputRange: [0, 1],
-        extrapolate: 'clamp',
-      }),
-    [scrollY, showThreshold]
+      runOnJS(updateVisibility)(shouldBeVisible);
+    },
+    [showThreshold]
   );
 
-  const headerTranslateY = useMemo(
-    () =>
-      scrollY.interpolate({
-        inputRange: [showThreshold - 50, showThreshold],
-        outputRange: [-20, 0],
-        extrapolate: 'clamp',
-      }),
-    [scrollY, showThreshold]
-  );
+  // Animated styles using interpolation
+  const headerAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(
+      scrollY.value,
+      [showThreshold - 50, showThreshold],
+      [0, 1],
+      Extrapolation.CLAMP
+    ),
+    transform: [
+      {
+        translateY: interpolate(
+          scrollY.value,
+          [showThreshold - 50, showThreshold],
+          [-20, 0],
+          Extrapolation.CLAMP
+        ),
+      },
+    ],
+  }));
 
   // Memoize handlers to prevent recreation
   const handleSearchPress = useCallback(() => {
@@ -151,9 +154,8 @@ const StickySearchHeader: React.FC<StickySearchHeaderProps> = ({
       <Animated.View
         style={[
           styles.container,
+          headerAnimatedStyle,
           {
-            opacity: headerOpacity,
-            transform: [{ translateY: headerTranslateY }],
             pointerEvents: 'box-none',
           },
         ]}
@@ -181,9 +183,8 @@ const StickySearchHeader: React.FC<StickySearchHeaderProps> = ({
       style={[
         styles.container,
         styles.webContainer,
+        headerAnimatedStyle,
         {
-          opacity: headerOpacity,
-          transform: [{ translateY: headerTranslateY }],
           pointerEvents: 'box-none',
         },
       ]}

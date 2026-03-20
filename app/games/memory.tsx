@@ -11,9 +11,14 @@ import {
   Pressable,
   Platform,
   ScrollView,
-  Animated,
-  ActivityIndicator,
+  ActivityIndicator
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { router, Stack } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -60,6 +65,53 @@ function createDeck(): Card[] {
   }));
 }
 
+const MemoryCardView = React.memo(({ card, index, flipAnim, onPress, disabled }: {
+  card: Card;
+  index: number;
+  flipAnim: Animated.SharedValue<number>;
+  onPress: () => void;
+  disabled: boolean;
+}) => {
+  const frontStyle = useAnimatedStyle(() => ({
+    transform: [{ rotateY: `${interpolate(flipAnim.value, [0, 1], [0, 180])}deg` }],
+  }));
+  const backStyle = useAnimatedStyle(() => ({
+    transform: [{ rotateY: `${interpolate(flipAnim.value, [0, 1], [180, 360])}deg` }],
+  }));
+
+  return (
+    <Pressable
+      style={styles.cardContainer}
+      onPress={onPress}
+      disabled={disabled}
+    >
+      <Animated.View
+        style={[
+          styles.card,
+          styles.cardBack,
+          card.isMatched && styles.cardMatched,
+          frontStyle,
+        ]}
+      >
+        {card.isMatched ? (
+          <Ionicons name="checkmark-circle" size={28} color={Colors.success} />
+        ) : (
+          <Text style={styles.cardBackText}>?</Text>
+        )}
+      </Animated.View>
+      <Animated.View
+        style={[
+          styles.card,
+          styles.cardFront,
+          backStyle,
+        ]}
+      >
+        <Text style={styles.cardEmoji}>{card.emoji}</Text>
+      </Animated.View>
+    </Pressable>
+  );
+});
+
 function MemoryPage() {
   const isMounted = useIsMounted();
   const [gameState, setGameState] = useState<GameState>('idle');
@@ -74,8 +126,8 @@ function MemoryPage() {
   const [canFlip, setCanFlip] = useState(true);
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const flipAnimations = useRef<Animated.Value[]>(
-    Array.from({ length: 16 }, () => new Animated.Value(0))
+  const flipAnimations = useRef<any[]>(
+    Array.from({ length: 16 }, () => useSharedValue(0))
   ).current;
 
   // Timer effect
@@ -135,7 +187,7 @@ function MemoryPage() {
     if (!isMounted()) return;
     setCanFlip(true);
     if (!isMounted()) return;
-    flipAnimations.forEach(anim => anim.setValue(0));
+    flipAnimations.forEach(anim => anim.value = 0);
     if (!isMounted()) return;
     setGameState('playing');
     if (!isMounted()) return;
@@ -166,19 +218,11 @@ function MemoryPage() {
   };
 
   const flipCard = (index: number) => {
-    Animated.timing(flipAnimations[index], {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
+    flipAnimations[index].value = withTiming(1, { duration: 300 });
   };
 
   const unflipCard = (index: number) => {
-    Animated.timing(flipAnimations[index], {
-      toValue: 0,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
+    flipAnimations[index].value = withTiming(0, { duration: 300 });
   };
 
   const handleCardPress = useCallback((index: number) => {
@@ -233,53 +277,16 @@ function MemoryPage() {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const renderCard = (card: Card, index: number) => {
-    const frontInterpolate = flipAnimations[index].interpolate({
-      inputRange: [0, 1],
-      outputRange: ['0deg', '180deg'],
-    });
-    const backInterpolate = flipAnimations[index].interpolate({
-      inputRange: [0, 1],
-      outputRange: ['180deg', '360deg'],
-    });
-
-    return (
-      <Pressable
-        key={card.id}
-        style={styles.cardContainer}
-        onPress={() => handleCardPress(index)}
-       
-        disabled={card.isFlipped || card.isMatched || !canFlip}
-      >
-        {/* Card Back (question mark) */}
-        <Animated.View
-          style={[
-            styles.card,
-            styles.cardBack,
-            card.isMatched && styles.cardMatched,
-            { transform: [{ rotateY: frontInterpolate }] },
-          ]}
-        >
-          {card.isMatched ? (
-            <Ionicons name="checkmark-circle" size={28} color={Colors.success} />
-          ) : (
-            <Text style={styles.cardBackText}>?</Text>
-          )}
-        </Animated.View>
-
-        {/* Card Front (emoji) */}
-        <Animated.View
-          style={[
-            styles.card,
-            styles.cardFront,
-            { transform: [{ rotateY: backInterpolate }] },
-          ]}
-        >
-          <Text style={styles.cardEmoji}>{card.emoji}</Text>
-        </Animated.View>
-      </Pressable>
-    );
-  };
+  const renderCard = (card: Card, index: number) => (
+    <MemoryCardView
+      key={card.id}
+      card={card}
+      index={index}
+      flipAnim={flipAnimations[index]}
+      onPress={() => handleCardPress(index)}
+      disabled={card.isFlipped || card.isMatched || !canFlip}
+    />
+  );
 
   const renderIdleScreen = () => (
     <View style={styles.centerContent}>

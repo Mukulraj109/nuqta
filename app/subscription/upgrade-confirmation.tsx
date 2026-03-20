@@ -3,7 +3,13 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Confirm subscription tier upgrade with prorated pricing
 
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Pressable, StatusBar, ActivityIndicator, Animated } from 'react-native';
+import { View, StyleSheet, ScrollView, Pressable, StatusBar, ActivityIndicator} from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming} from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -42,16 +48,18 @@ function UpgradeConfirmationPage() {
   const isMounted = useIsMounted();
 
   // Animated arrow
-  const arrowAnim = React.useRef(new Animated.Value(0)).current;
+  const arrowAnim = useSharedValue(0);
+  const arrowStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: arrowAnim.value }]}));
   useEffect(() => {
-    const arrowLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(arrowAnim, { toValue: 5, duration: 800, useNativeDriver: true }),
-        Animated.timing(arrowAnim, { toValue: 0, duration: 800, useNativeDriver: true }),
-      ])
+    arrowAnim.value = withRepeat(
+      withSequence(
+        withTiming(5, { duration: 800 }),
+        withTiming(0, { duration: 800 })
+      ),
+      -1
     );
-    arrowLoop.start();
-    return () => arrowLoop.stop();
+    return () => { arrowAnim.value = 0; };
   }, []);
 
   // Get tier price from available tiers (DB-driven, not hardcoded)
@@ -140,8 +148,7 @@ function UpgradeConfirmationPage() {
         await actions.loadSubscription(true);
 
         router.push({
-          pathname: '/subscription/manage',
-        });
+          pathname: '/subscription/manage' });
         platformAlertSimple('Upgrade Complete', `You are now a ${TIER_NAMES[newTier]} member!`);
       } catch (error: any) {
         platformAlertSimple('Activation Failed', 'Payment received but upgrade activation failed. Please contact support.');
@@ -210,7 +217,7 @@ function UpgradeConfirmationPage() {
                 </ThemedText>
               </View>
 
-              <Animated.View style={{ transform: [{ translateX: arrowAnim }] }}>
+              <Animated.View style={arrowStyle}>
                 <Ionicons name="arrow-forward" size={32} color={Colors.brand.purpleLight} />
               </Animated.View>
 
@@ -369,34 +376,27 @@ function UpgradeConfirmationPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background.secondary,
-  },
+    backgroundColor: Colors.background.secondary },
   header: {
     paddingTop: StatusBar.currentHeight || 50,
     paddingBottom: Spacing.lg,
-    paddingHorizontal: Spacing.lg,
-  },
+    paddingHorizontal: Spacing.lg },
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between' },
   backButton: {
-    padding: Spacing.sm,
-  },
+    padding: Spacing.sm },
   headerTitle: {
     color: Colors.text.inverse,
     ...Typography.h3,
     fontWeight: 'bold',
     flex: 1,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   headerRight: {
-    width: 40,
-  },
+    width: 40 },
   scrollView: {
-    flex: 1,
-  },
+    flex: 1 },
   summaryCard: {
     margin: Spacing.lg,
     backgroundColor: Colors.background.primary,
@@ -406,41 +406,33 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
-    elevation: 5,
-  },
+    elevation: 5 },
   summaryHeader: {
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   tierContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.base,
-  },
+    gap: Spacing.base },
   tierBox: {
     padding: Spacing.base,
     borderRadius: BorderRadius.md,
     alignItems: 'center',
-    minWidth: 100,
-  },
+    minWidth: 100 },
   tierLabel: {
     ...Typography.bodySmall,
     fontWeight: '600',
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs },
   tierName: {
     ...Typography.h3,
-    fontWeight: 'bold',
-  },
+    fontWeight: 'bold' },
   section: {
     marginHorizontal: Spacing.lg,
-    marginBottom: Spacing.xl,
-  },
+    marginBottom: Spacing.xl },
   sectionTitle: {
     ...Typography.h4,
     fontWeight: 'bold',
     color: Colors.text.primary,
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base },
   benefitsContainer: {
     backgroundColor: Colors.background.primary,
     borderRadius: BorderRadius.md,
@@ -449,26 +441,22 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 4,
-    elevation: 2,
-  },
+    elevation: 2 },
   benefitRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: Spacing.md,
-  },
+    paddingVertical: Spacing.md },
   benefitIcon: {
     width: 40,
     height: 40,
     borderRadius: BorderRadius.xl,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: Spacing.md,
-  },
+    marginRight: Spacing.md },
   benefitText: {
     flex: 1,
     ...Typography.body,
-    color: Colors.text.secondary,
-  },
+    color: Colors.text.secondary },
   timingOption: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -477,12 +465,10 @@ const styles = StyleSheet.create({
     padding: Spacing.base,
     marginBottom: Spacing.md,
     borderWidth: 2,
-    borderColor: Colors.border.default,
-  },
+    borderColor: Colors.border.default },
   timingOptionSelected: {
     borderColor: Colors.brand.purpleLight,
-    backgroundColor: '#8B5CF605',
-  },
+    backgroundColor: '#8B5CF605' },
   radioButton: {
     width: 24,
     height: 24,
@@ -491,39 +477,32 @@ const styles = StyleSheet.create({
     borderColor: Colors.border.default,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: Spacing.md,
-  },
+    marginRight: Spacing.md },
   radioButtonInner: {
     width: 12,
     height: 12,
     borderRadius: 6,
-    backgroundColor: Colors.brand.purpleLight,
-  },
+    backgroundColor: Colors.brand.purpleLight },
   timingContent: {
-    flex: 1,
-  },
+    flex: 1 },
   timingTitle: {
     ...Typography.bodyLarge,
     fontWeight: '600',
     color: Colors.text.primary,
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs },
   timingDescription: {
     ...Typography.bodySmall,
     color: Colors.text.tertiary,
-    lineHeight: 18,
-  },
+    lineHeight: 18 },
   timingPrice: {
     ...Typography.body,
     fontWeight: '600',
     color: Colors.brand.purpleLight,
-    marginTop: Spacing.xs,
-  },
+    marginTop: Spacing.xs },
   actionsContainer: {
     padding: Spacing.lg,
     gap: Spacing.md,
-    paddingBottom: 40,
-  },
+    paddingBottom: 40 },
   confirmButton: {
     flexDirection: 'row',
     backgroundColor: Colors.brand.purpleLight,
@@ -531,24 +510,19 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm },
   confirmButtonText: {
     color: Colors.text.inverse,
     ...Typography.bodyLarge,
-    fontWeight: 'bold',
-  },
+    fontWeight: 'bold' },
   cancelButton: {
     backgroundColor: Colors.background.secondary,
     paddingVertical: Spacing.base,
     borderRadius: BorderRadius.md,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   cancelButtonText: {
     color: Colors.text.tertiary,
     ...Typography.bodyLarge,
-    fontWeight: '600',
-  },
-});
+    fontWeight: '600' } });
 
 export default withErrorBoundary(UpgradeConfirmationPage, 'SubscriptionUpgradeConfirmation');

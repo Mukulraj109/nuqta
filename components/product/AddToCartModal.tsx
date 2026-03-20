@@ -4,9 +4,9 @@ import {
   View,
   StyleSheet,
   Pressable,
-  Animated,
   Dimensions,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
@@ -43,23 +43,19 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
 }) => {
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
-  const [scaleAnim] = React.useState(new Animated.Value(0));
+  const scaleAnim = useSharedValue(0);
 
   React.useEffect(() => {
     if (visible) {
-      const anim = Animated.spring(scaleAnim, {
-        toValue: 1,
-        tension: 50,
-        friction: 7,
-        useNativeDriver: true,
-      });
-      anim.start();
-
-      return () => { anim.stop(); };
+      scaleAnim.value = withSpring(1, { stiffness: 50, damping: 7 });
     } else {
-      scaleAnim.setValue(0);
+      scaleAnim.value = 0;
     }
   }, [visible]);
+
+  const animatedModalStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scaleAnim.value }],
+  }));
 
   const totalPrice = quantity * price;
 
@@ -73,16 +69,14 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
       <View style={styles.overlay}>
         <Pressable
           style={StyleSheet.absoluteFill}
-         
+
           onPress={onClose}
         />
 
         <Animated.View
           style={[
             styles.modalContainer,
-            {
-              transform: [{ scale: scaleAnim }],
-            },
+            animatedModalStyle,
           ]}
         >
           {/* Success Icon */}

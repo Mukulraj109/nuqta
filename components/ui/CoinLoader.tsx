@@ -2,8 +2,15 @@
  * CoinLoader — Branded spinning coin loading indicator
  * Drop-in replacement for ActivityIndicator with brand identity.
  */
-import React, { useEffect, useRef } from 'react';
-import { View, Animated, StyleSheet, Easing } from 'react-native';
+import React, { useEffect} from 'react';
+import { View, StyleSheet} from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+  Easing,
+} from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
@@ -14,29 +21,22 @@ interface CoinLoaderProps {
 }
 
 function CoinLoader({ size = 48, message }: CoinLoaderProps) {
-  const rotation = useRef(new Animated.Value(0)).current;
+  const rotation = useSharedValue(0);
 
   useEffect(() => {
-    const spin = Animated.loop(
-      Animated.timing(rotation, {
-        toValue: 1,
-        duration: 1200,
-        easing: Easing.linear,
-        useNativeDriver: true,
-      })
+    rotation.value = withRepeat(
+      withTiming(1, { duration: 1200, easing: Easing.linear }),
+      -1
     );
-    spin.start();
-    return () => spin.stop();
   }, [rotation]);
 
-  const rotate = rotation.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'],
-  });
+  const rotateStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${rotation.value * 360}deg` }],
+  }));
 
   return (
     <View style={styles.container}>
-      <Animated.View style={{ transform: [{ rotate }] }}>
+      <Animated.View style={rotateStyle}>
         <CachedImage
           source={BRAND.COIN_IMAGE}
           style={[styles.localAssetContainer, { width: size, height: size }]}
@@ -54,17 +54,13 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 12,
-  },
+    gap: 12 },
   localAssetContainer: {
-    backgroundColor: 'transparent',
-  },
+    backgroundColor: 'transparent' },
   message: {
     fontSize: 13,
     color: colors.neutral[500],
     fontWeight: '500',
-    textAlign: 'center',
-  },
-});
+    textAlign: 'center' } });
 
 export default React.memo(CoinLoader);

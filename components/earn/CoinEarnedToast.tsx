@@ -6,11 +6,10 @@ import {
   View,
   Text,
   StyleSheet,
-  Animated,
   Pressable,
   Platform,
-  Dimensions,
-} from 'react-native';
+  Dimensions} from 'react-native';
+import Animated, { interpolate, runOnJS, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 
@@ -37,101 +36,63 @@ const CoinEarnedToast: React.FC<CoinEarnedToastProps> = ({
   source,
   onDismiss,
 }) => {
-  const translateY = useRef(new Animated.Value(-120)).current;
-  const opacity = useRef(new Animated.Value(0)).current;
-  const coinScale = useRef(new Animated.Value(0.5)).current;
-  const coinRotate = useRef(new Animated.Value(0)).current;
+  const translateY = useSharedValue(-120);
+  const opacity = useSharedValue(0);
+  const coinScale = useSharedValue(0.5);
+  const coinRotate = useSharedValue(0);
   const autoDismissTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const containerStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: translateY.value }],
+    opacity: opacity.value,
+  }));
+  const coinAnimStyle = useAnimatedStyle(() => ({
+    transform: [
+      { scale: coinScale.value },
+      { rotateY: `${interpolate(coinRotate.value, [0, 0.5, 1], [0, 180, 360])}deg` },
+    ],
+  }));
+
+  const dismissToast = useCallback(() => {
+    translateY.value = withTiming(-120, { duration: 300 });
+    opacity.value = withTiming(0, { duration: 250 }, (finished) => {
+      if (finished) runOnJS(onDismiss)();
+    });
+  }, [onDismiss]);
 
   useEffect(() => {
     if (visible) {
-      // Reset values
-      translateY.setValue(-120);
-      opacity.setValue(0);
-      coinScale.setValue(0.5);
-      coinRotate.setValue(0);
+      translateY.value = -120;
+      opacity.value = 0;
+      coinScale.value = 0.5;
+      coinRotate.value = 0;
 
-      // Slide down + fade in
-      const anim = Animated.parallel([
-        Animated.spring(translateY, {
-          toValue: 0,
-          tension: 60,
-          friction: 10,
-          useNativeDriver: true,
-        }),
-        Animated.timing(opacity, {
-          toValue: 1,
-          duration: 250,
-          useNativeDriver: true,
-        }),
-        Animated.spring(coinScale, {
-          toValue: 1,
-          tension: 80,
-          friction: 6,
-          useNativeDriver: true,
-        }),
-        Animated.timing(coinRotate, {
-          toValue: 1,
-          duration: 600,
-          useNativeDriver: true,
-        }),
-      ]);
-      anim.start();
+      translateY.value = withSpring(0);
+      opacity.value = withTiming(1, { duration: 250 });
+      coinScale.value = withSpring(1);
+      coinRotate.value = withTiming(1, { duration: 600 });
 
-      // Auto-dismiss after 3 seconds
       autoDismissTimer.current = setTimeout(() => {
         dismissToast();
       }, 3000);
 
       return () => {
-        anim.stop();
-        if (autoDismissTimer.current) {
-          clearTimeout(autoDismissTimer.current);
-        }
+        if (autoDismissTimer.current) clearTimeout(autoDismissTimer.current);
       };
     }
-  }, [visible]);
-
-  const dismissToast = useCallback(() => {
-    if (autoDismissTimer.current) {
-      clearTimeout(autoDismissTimer.current);
-    }
-
-    Animated.parallel([
-      Animated.timing(translateY, {
-        toValue: -120,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-      Animated.timing(opacity, {
-        toValue: 0,
-        duration: 250,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      onDismiss();
-    });
-  }, [onDismiss, translateY, opacity]);
+  }, [visible, dismissToast]);
 
   const handlePress = useCallback(() => {
     dismissToast();
   }, [dismissToast]);
 
-  if (!visible && !opacity.__getValue()) return null;
-
-  const spinInterpolation = coinRotate.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: ['0deg', '180deg', '360deg'],
-  });
+  if (!visible) return null;
 
   return (
     <Animated.View
       style={[
         styles.container,
-        {
-          transform: [{ translateY }],
-          opacity,
-        },
+        containerStyle,
       ]}
       pointerEvents={visible ? 'auto' : 'none'}
     >
@@ -149,12 +110,7 @@ const CoinEarnedToast: React.FC<CoinEarnedToastProps> = ({
         <Animated.View
           style={[
             styles.coinIconContainer,
-            {
-              transform: [
-                { scale: coinScale },
-                { rotateY: spinInterpolation },
-              ],
-            },
+            coinAnimStyle,
           ]}
         >
           <Ionicons name="diamond" size={24} color={colors.brand.goldBright} />

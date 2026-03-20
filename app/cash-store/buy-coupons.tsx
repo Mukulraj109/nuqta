@@ -10,10 +10,18 @@ import {
   TextInput,
   ScrollView,
   Platform,
-  Animated,
   StatusBar,
-  KeyboardAvoidingView,
+  KeyboardAvoidingView
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
 import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
@@ -653,35 +661,33 @@ const GiftCardCard = React.memo(({
   denominationRange: string;
   currencySymbol: string;
 }) => {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const pressAnim = useRef(new Animated.Value(1)).current;
+  const fadeAnim = useSharedValue(0);
+  const pressAnim = useSharedValue(1);
 
   useEffect(() => {
-    const anim = Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 300,
-      delay: Math.min(index * 50, 300),
-      useNativeDriver: true,
-    });
-    anim.start();
-    return () => anim.stop();
+    fadeAnim.value = withTiming(1, { duration: 300 });
   }, [index]);
 
   const handlePressIn = () => {
-    Animated.spring(pressAnim, { toValue: 0.96, friction: 8, useNativeDriver: true }).start();
+    pressAnim.value = withSpring(0.96);
   };
 
   const handlePressOut = () => {
-    Animated.spring(pressAnim, { toValue: 1, friction: 6, useNativeDriver: true }).start();
+    pressAnim.value = withSpring(1);
   };
 
   const [logoError, setLogoError] = useState(false);
+
+  const cardAnimStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ scale: pressAnim.value }],
+  }));
 
   return (
     <Animated.View
       style={[
         styles.cardWrapper,
-        { opacity: fadeAnim, transform: [{ scale: pressAnim }] },
+        cardAnimStyle,
       ]}
     >
       <Pressable
@@ -780,18 +786,15 @@ const CouponCard = React.memo(({
   currencySymbol: string;
   onViewMyCoupons: () => void;
 }) => {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const fadeAnim = useSharedValue(0);
 
   useEffect(() => {
-    const anim = Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 300,
-      delay: Math.min(index * 60, 300),
-      useNativeDriver: true,
-    });
-    anim.start();
-    return () => anim.stop();
+    fadeAnim.value = withTiming(1, { duration: 300 });
   }, [index]);
+
+  const couponAnimStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+  }));
 
   const discountDisplay = coupon.discountType === 'PERCENTAGE'
     ? `${coupon.discountValue}% OFF`
@@ -806,7 +809,7 @@ const CouponCard = React.memo(({
     : null;
 
   return (
-    <Animated.View style={[styles.couponCardWrapper, { opacity: fadeAnim }]}>
+    <Animated.View style={[styles.couponCardWrapper, couponAnimStyle]}>
       <View style={styles.couponCard}>
         {/* Left accent strip */}
         <View style={[styles.couponAccent, isClaimed && { backgroundColor: Colors.success }]} />
@@ -907,35 +910,24 @@ const CouponCard = React.memo(({
 
 // ─── Skeleton Card ───────────────────────────────────────────
 const SkeletonCard = React.memo(({ index }: { index: number }) => {
-  const shimmer = useRef(new Animated.Value(0)).current;
+  const shimmer = useSharedValue(0);
 
   useEffect(() => {
-    const loop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmer, {
-          toValue: 1,
-          duration: 1000,
-          delay: index * 80,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmer, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
+    shimmer.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 1000 }),
+        withTiming(0, { duration: 1000 })
+      ),
+      -1
     );
-    loop.start();
-    return () => loop.stop();
   }, [index]);
 
-  const opacity = shimmer.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0.3, 0.7],
-  });
+  const skeletonAnimStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(shimmer.value, [0, 1], [0.3, 0.7]),
+  }));
 
   return (
-    <Animated.View style={[styles.skeletonCard, { opacity }]}>
+    <Animated.View style={[styles.skeletonCard, skeletonAnimStyle]}>
       <View style={styles.skeletonLogo} />
       <View style={[styles.skeletonLine, { width: '60%', marginTop: 12 }]} />
       <View style={[styles.skeletonLine, { width: '40%', marginTop: 8 }]} />

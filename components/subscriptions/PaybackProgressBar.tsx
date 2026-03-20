@@ -2,8 +2,13 @@
  * PaybackProgressBar - Shows how quickly a subscription pays for itself
  * through estimated monthly savings vs subscription cost.
  */
-import React, { useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Platform, Animated } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, Platform } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+} from 'react-native-reanimated';
 
 interface PaybackProgressBarProps {
   subscriptionCost: number;
@@ -16,7 +21,7 @@ function PaybackProgressBar({
   estimatedMonthlySavings,
   currencySymbol,
 }: PaybackProgressBarProps) {
-  const progressAnim = useRef(new Animated.Value(0)).current;
+  const progressAnim = useSharedValue(0);
 
   const ratio = subscriptionCost > 0
     ? Math.min(1, estimatedMonthlySavings / subscriptionCost)
@@ -28,19 +33,13 @@ function PaybackProgressBar({
     : 0;
 
   useEffect(() => {
-    progressAnim.setValue(0);
-    Animated.spring(progressAnim, {
-      toValue: ratio,
-      useNativeDriver: false,
-      tension: 40,
-      friction: 10,
-    }).start();
+    progressAnim.value = 0;
+    progressAnim.value = withSpring(ratio, { damping: 20, stiffness: 80 });
   }, [ratio]);
 
-  const animatedWidth = progressAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0%', '100%'],
-  });
+  const animatedWidthStyle = useAnimatedStyle(() => ({
+    width: `${progressAnim.value * 100}%`,
+  }));
 
   if (subscriptionCost <= 0) return null;
 
@@ -58,7 +57,7 @@ function PaybackProgressBar({
 
       {/* Progress bar */}
       <View style={styles.barBackground}>
-        <Animated.View style={[styles.barFill, { width: animatedWidth }]} />
+        <Animated.View style={[styles.barFill, animatedWidthStyle]} />
       </View>
 
       {/* Payback message */}

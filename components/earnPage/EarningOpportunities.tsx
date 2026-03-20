@@ -1,17 +1,17 @@
 // Earning Opportunities Section Component
 // Displays various ways to earn rewards (bill upload, referrals, challenges, etc.)
 
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
   ScrollView,
-  Animated,
   Platform,
   Dimensions,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring, interpolate, useAnimatedScrollHandler } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -103,18 +103,17 @@ const opportunities: EarningOpportunity[] = [
 
 function EarningOpportunities() {
   const router = useRouter();
-  const scrollX = useRef(new Animated.Value(0)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const scrollX = useSharedValue(0);
+  const fadeAnim = useSharedValue(0);
+
+  const scrollHandler = useAnimatedScrollHandler((event) => {
+    scrollX.value = event.contentOffset.x;
+  });
 
   useEffect(() => {
-    const anim = Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 600,
-      useNativeDriver: true,
-    });
-    anim.start();
+    fadeAnim.value = withTiming(1, { duration: 600 });
 
-    return () => { anim.stop(); };
+    // cleanup handled by reanimated
   }, []);
 
   const handleOpportunityPress = (opportunity: EarningOpportunity) => {
@@ -123,24 +122,14 @@ function EarningOpportunities() {
 
   const renderOpportunityCard = (opportunity: EarningOpportunity, index: number) => {
     const isHighlight = opportunity.highlight;
-    const scaleAnim = useRef(new Animated.Value(1)).current;
+    const scaleAnim = useSharedValue(1);
 
     const handlePressIn = () => {
-      Animated.spring(scaleAnim, {
-        toValue: 0.95,
-        useNativeDriver: true,
-        tension: 300,
-        friction: 10,
-      }).start();
+      scaleAnim.value = withSpring(0.95, { stiffness: 300, damping: 10 });
     };
 
     const handlePressOut = () => {
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        useNativeDriver: true,
-        tension: 300,
-        friction: 10,
-      }).start();
+      scaleAnim.value = withSpring(1, { stiffness: 300, damping: 10 });
     };
 
     return (
@@ -151,10 +140,7 @@ function EarningOpportunities() {
             opacity: fadeAnim,
             transform: [
               {
-                translateY: fadeAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [20, 0],
-                }),
+                translateY: interpolate(fadeAnim.value, [0, 1], [20, 0]),
               },
             ],
           },
@@ -263,10 +249,7 @@ function EarningOpportunities() {
             opacity: fadeAnim,
             transform: [
               {
-                translateY: fadeAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [10, 0],
-                }),
+                translateY: interpolate(fadeAnim.value, [0, 1], [10, 0]),
               },
             ],
           },
@@ -281,7 +264,7 @@ function EarningOpportunities() {
         </ThemedText>
       </Animated.View>
 
-      <ScrollView
+      <Animated.ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
@@ -289,13 +272,10 @@ function EarningOpportunities() {
         snapToInterval={Dimensions.get('window').width * 0.72 + 16}
         snapToAlignment="start"
         scrollEventThrottle={16}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-          { useNativeDriver: true }
-        )}
+        onScroll={scrollHandler}
       >
         {opportunities.map((opp, index) => renderOpportunityCard(opp, index))}
-      </ScrollView>
+      </Animated.ScrollView>
     </View>
   );
 }

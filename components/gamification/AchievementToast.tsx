@@ -1,13 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  Animated,
   Pressable,
   Dimensions,
   Platform,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Achievement } from '@/services/achievementApi';
@@ -28,27 +28,14 @@ function AchievementToast({
   onPress,
   autoHideDuration = 5000,
 }: AchievementToastProps) {
-  const slideAnim = useRef(new Animated.Value(-200)).current;
-  const scaleAnim = useRef(new Animated.Value(0.8)).current;
+  const slideAnim = useSharedValue(-200);
+  const scaleAnim = useSharedValue(0.8);
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     // Slide in animation
-    const anim = Animated.parallel([
-      Animated.spring(slideAnim, {
-        toValue: 0,
-        useNativeDriver: true,
-        tension: 50,
-        friction: 7,
-      }),
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        useNativeDriver: true,
-        tension: 50,
-        friction: 7,
-      }),
-    ]);
-    anim.start();
+    slideAnim.value = withSpring(0, { stiffness: 50, damping: 7 });
+    scaleAnim.value = withSpring(1, { stiffness: 50, damping: 7 });
 
     // Auto-hide timer
     const timer = setTimeout(() => {
@@ -56,27 +43,17 @@ function AchievementToast({
     }, autoHideDuration);
 
     return () => {
-      anim.stop();
       clearTimeout(timer);
-    }
+    };
   }, []);
 
   const handleDismiss = () => {
-    Animated.parallel([
-      Animated.timing(slideAnim, {
-        toValue: -200,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-      Animated.timing(scaleAnim, {
-        toValue: 0.8,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
+    slideAnim.value = withTiming(-200, { duration: 300 });
+    scaleAnim.value = withTiming(0.8, { duration: 300 });
+    setTimeout(() => {
       setIsVisible(false);
       onDismiss();
-    });
+    }, 300);
   };
 
   const handlePress = () => {

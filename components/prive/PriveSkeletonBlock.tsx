@@ -2,8 +2,11 @@
  * Shared shimmer skeleton placeholder for Privé screens
  */
 
-import React, { useEffect, useRef } from 'react';
-import { Animated, ViewStyle } from 'react-native';
+import React, { useEffect } from 'react';
+import {
+  ViewStyle,
+} from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence, withRepeat, interpolate } from 'react-native-reanimated';
 import { PRIVE_COLORS } from './priveTheme';
 
 interface PriveSkeletonBlockProps {
@@ -14,20 +17,15 @@ interface PriveSkeletonBlockProps {
 }
 
 export const PriveSkeletonBlock = React.memo(({ width, height, style, borderRadius = 8 }: PriveSkeletonBlockProps) => {
-  const shimmer = useRef(new Animated.Value(0)).current;
+  const shimmer = useSharedValue(0);
 
   useEffect(() => {
-    const shimmerLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmer, { toValue: 1, duration: 1000, useNativeDriver: true }),
-        Animated.timing(shimmer, { toValue: 0, duration: 1000, useNativeDriver: true }),
-      ])
-    );
-    shimmerLoop.start();
-    return () => shimmerLoop.stop();
+    shimmer.value = withRepeat(withSequence(withTiming(1, { duration: 1000 }), withTiming(0, { duration: 1000 })), -1);
   }, [shimmer]);
 
-  const opacity = shimmer.interpolate({ inputRange: [0, 1], outputRange: [0.3, 0.6] });
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(shimmer.value, [0, 1], [0.3, 0.6]),
+  }));
 
   return (
     <Animated.View
@@ -37,8 +35,8 @@ export const PriveSkeletonBlock = React.memo(({ width, height, style, borderRadi
           height,
           borderRadius,
           backgroundColor: PRIVE_COLORS.transparent.white08,
-          opacity,
         },
+        animatedStyle,
         style,
       ]}
     />

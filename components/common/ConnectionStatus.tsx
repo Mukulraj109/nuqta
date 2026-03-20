@@ -1,26 +1,21 @@
 import React from 'react';
-import { View, Text, StyleSheet, Pressable, Animated } from 'react-native';
+import { View, Text, StyleSheet, Pressable} from 'react-native';
+import Animated, { useSharedValue, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { useSocket } from '@/contexts/SocketContext';
 import { colors } from '@/constants/theme';
 
 function ConnectionStatus() {
   const { state, connect } = useSocket();
-  const pulseAnim = React.useRef(new Animated.Value(1)).current;
+  const pulseAnim = useSharedValue(1);
 
   // Pulse animation for reconnecting state
   React.useEffect(() => {
     if (state.reconnecting) {
-      const loop = Animated.loop(
-        Animated.sequence([
-          Animated.timing(pulseAnim, { toValue: 1.2, duration: 500, useNativeDriver: true }),
-          Animated.timing(pulseAnim, { toValue: 1, duration: 500, useNativeDriver: true }),
-        ])
-      );
-      loop.start();
-      return () => loop.stop();
-    } else {
-      pulseAnim.setValue(1);
+      pulseAnim.value = withRepeat(withSequence(withTiming(1.2, { duration: 500 })), -1);
+      
+      } else {
+      pulseAnim.value = 1;
     }
   }, [state.reconnecting]);
 

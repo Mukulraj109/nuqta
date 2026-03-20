@@ -4,8 +4,9 @@
  * Tab navigation with Nuqta design palette
  */
 
-import React, { useRef, useEffect } from 'react';
-import { View, Pressable, StyleSheet, Animated, Dimensions, Easing } from 'react-native';
+import React, { useEffect} from 'react';
+import { View, Pressable, StyleSheet, Dimensions} from 'react-native';
+import Animated, { Easing, interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ThemedText';
@@ -24,7 +25,14 @@ function SlidingTabs({
 }: SlidingTabsProps) {
   const { width } = Dimensions.get('window');
   const tabWidth = width / tabs.length;
-  const underlinePosition = useRef(new Animated.Value(0)).current;
+  const underlinePosition = useSharedValue(0);
+  const underlineStyle = useAnimatedStyle(() => {
+    const inputRange = tabs.map((_: any, index: number) => index * tabWidth);
+    const outputRange = tabs.map((_: any, index: number) => (index * tabWidth) + (tabWidth * 0.2));
+    return {
+      transform: [{ translateX: interpolate(underlinePosition.value, inputRange, outputRange, 'clamp') }],
+    };
+  });
 
   // Responsive design considerations for three tabs
   const isSmallScreen = width < 375;
@@ -53,12 +61,7 @@ function SlidingTabs({
   }, [activeTab, tabs]);
 
   const animateUnderline = (tabIndex: number) => {
-    Animated.timing(underlinePosition, {
-      toValue: tabIndex * tabWidth,
-      duration: 200,
-      easing: Easing.out(Easing.cubic),
-      useNativeDriver: true,
-    }).start();
+    underlinePosition.value = withTiming(tabIndex, { duration: 200 });
   };
 
   const handleTabPress = (tabKey: string) => {
@@ -113,18 +116,8 @@ function SlidingTabs({
       <Animated.View
         style={[
           styles.underlineContainer,
-          {
-            width: tabWidth * 0.6,
-            transform: [
-              {
-                translateX: underlinePosition.interpolate({
-                  inputRange: tabs.map((_, index) => index * tabWidth),
-                  outputRange: tabs.map((_, index) => (index * tabWidth) + (tabWidth * 0.2)),
-                  extrapolate: 'clamp',
-                })
-              }
-            ]
-          }
+          { width: tabWidth * 0.6 },
+          underlineStyle
         ]}
       >
         <LinearGradient

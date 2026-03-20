@@ -4,7 +4,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
  * Connected to /api/travel-services
  */
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback} from 'react';
 import {
   View,
   Text,
@@ -13,9 +13,14 @@ import {
   Pressable,
   Platform,
   Dimensions,
-  RefreshControl,
-  Animated,
+  RefreshControl
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming} from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -55,8 +60,7 @@ const C = {
   blue500: colors.infoScale[400],
   orange500: colors.brand.orange,
   skeleton: colors.slateLight,
-  skeletonShine: colors.tint.slate,
-};
+  skeletonShine: colors.tint.slate };
 
 // ─── Category Config (Ionicons + gradients) ──────────────────────────────────
 const CATEGORY_CONFIG: Record<string, { icon: string; gradient: string[]; bg: string }> = {
@@ -65,8 +69,7 @@ const CATEGORY_CONFIG: Record<string, { icon: string; gradient: string[]; bg: st
   trains:   { icon: 'train',          gradient: [colors.success, colors.successScale[700]], bg: colors.successScale[50] },
   bus:      { icon: 'bus',            gradient: [colors.brand.orange, '#C2410C'], bg: colors.tint.orange },
   cab:      { icon: 'car-sport',      gradient: [colors.brand.amber, '#A16207'], bg: '#FEFCE8' },
-  packages: { icon: 'globe',          gradient: [colors.brand.purpleLight, colors.brand.purpleDeep], bg: colors.tint.purpleLight },
-};
+  packages: { icon: 'globe',          gradient: [colors.brand.purpleLight, colors.brand.purpleDeep], bg: colors.tint.purpleLight } };
 
 const getCategoryDetailRoute = (slug: string, id: string): string => {
   const routes: Record<string, string> = {
@@ -75,25 +78,25 @@ const getCategoryDetailRoute = (slug: string, id: string): string => {
     trains: `/train/${id}`,
     bus: `/bus/${id}`,
     cab: `/cab/${id}`,
-    packages: `/package/${id}`,
-  };
+    packages: `/package/${id}` };
   return routes[slug] || `/product-page?cardId=${id}&cardType=product`;
 };
 
 // ─── Skeleton Components ─────────────────────────────────────────────────────
 const SkeletonPulse: React.FC<{ style?: any }> = ({ style }) => {
-  const anim = useRef(new Animated.Value(0.3)).current;
+  const anim = useSharedValue(0.3);
+  const animStyle = useAnimatedStyle(() => ({ opacity: anim.value }));
   useEffect(() => {
-    const loop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(anim, { toValue: 1, duration: 800, useNativeDriver: true }),
-        Animated.timing(anim, { toValue: 0.3, duration: 800, useNativeDriver: true }),
-      ])
+    anim.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 800 }),
+        withTiming(0.3, { duration: 800 })
+      ),
+      -1
     );
-    loop.start();
-    return () => loop.stop();
+    return () => { anim.value = 0.3; };
   }, []);
-  return <Animated.View style={[{ backgroundColor: C.skeleton, borderRadius: 8 }, style, { opacity: anim }]} />;
+  return <Animated.View style={[{ backgroundColor: C.skeleton, borderRadius: 8 }, style, animStyle]} />;
 };
 
 const CategorySkeleton = () => (
@@ -217,8 +220,7 @@ const TravelPage: React.FC = () => {
             image: svc.images?.[0] || '',
             rating: svc.ratings?.average || 0,
             ratingCount: svc.ratings?.count || 0,
-            storeName: svc.store?.name,
-          };
+            storeName: svc.store?.name };
         });
         if (!isMounted()) return;
         setFeaturedDeals(transformed);
@@ -234,8 +236,7 @@ const TravelPage: React.FC = () => {
           price: svc.pricing?.selling || 0,
           cashback: svc.cashback?.percentage || svc.serviceCategory?.cashbackPercentage || 0,
           image: svc.images?.[0] || '',
-          rating: svc.ratings?.average || 0,
-        }));
+          rating: svc.ratings?.average || 0 }));
         if (!isMounted()) return;
         setPopularServices(popular);
       }
@@ -246,8 +247,7 @@ const TravelPage: React.FC = () => {
         setStats({
           serviceCount: statsRes.data.serviceCount || statsRes.data.hotels || 0,
           maxCashback: statsRes.data.maxCashback || 0,
-          coinMultiplier: statsRes.data.coinMultiplier || 2,
-        });
+          coinMultiplier: statsRes.data.coinMultiplier || 2 });
       }
     } catch (err) {
       if (categories.length === 0) {
@@ -641,22 +641,19 @@ const s = StyleSheet.create({
   // Header
   header: {
     paddingTop: Platform.OS === 'ios' ? 56 : 14,
-    paddingBottom: Spacing.base,
-  },
+    paddingBottom: Spacing.base },
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: Spacing.base,
-    marginBottom: 14,
-  },
+    marginBottom: 14 },
   headerBtn: {
     width: 38,
     height: 38,
     borderRadius: 19,
     backgroundColor: 'rgba(255,255,255,0.15)',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   headerTitle: { ...Typography.h3, fontWeight: '800', color: C.white, letterSpacing: -0.3 },
   headerSub: { ...Typography.bodySmall, color: 'rgba(255,255,255,0.75)', marginTop: 1 },
   searchBar: {
@@ -668,16 +665,14 @@ const s = StyleSheet.create({
     paddingHorizontal: 14,
     height: 44,
     gap: 10,
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle },
   searchPlaceholder: { ...Typography.body, color: C.slate400, flex: 1 },
   statsStrip: {
     flexDirection: 'row',
     paddingHorizontal: Spacing.base,
     marginTop: 14,
     gap: Spacing.sm,
-    flexWrap: 'wrap',
-  },
+    flexWrap: 'wrap' },
   statPill: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -685,8 +680,7 @@ const s = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.18)',
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: BorderRadius.xl,
-  },
+    borderRadius: BorderRadius.xl },
   statPillText: { ...Typography.bodySmall, fontWeight: '600', color: C.white },
 
   // Section
@@ -697,8 +691,7 @@ const s = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: Spacing.base,
-    marginBottom: 14,
-  },
+    marginBottom: 14 },
   viewAll: { ...Typography.body, fontWeight: '600', color: C.cyan600 },
 
   // Categories
@@ -706,24 +699,21 @@ const s = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     paddingHorizontal: Spacing.base,
-    gap: 10,
-  },
+    gap: 10 },
   catCard: {
     width: (SW - 52) / 3,
     alignItems: 'center',
     paddingVertical: Spacing.base,
     paddingHorizontal: Spacing.sm,
     borderRadius: BorderRadius.lg,
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle },
   catIconWrap: {
     width: 52,
     height: 52,
     borderRadius: BorderRadius.lg,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm },
   catName: { ...Typography.body, fontWeight: '700', color: C.navy, textAlign: 'center' },
   catCount: { fontSize: 11, color: C.slate500, marginTop: 2 },
 
@@ -734,8 +724,7 @@ const s = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: C.white,
     marginRight: Spacing.md,
-    ...Shadows.medium,
-  },
+    ...Shadows.medium },
   dealImg: { width: '100%', height: 160, backgroundColor: C.slate100 },
   dealOverlay: { position: 'absolute', top: 0, left: 0, right: 0, height: 160 },
   dealBadge: {
@@ -745,8 +734,7 @@ const s = StyleSheet.create({
     backgroundColor: C.green600,
     paddingHorizontal: Spacing.sm,
     paddingVertical: Spacing.xs,
-    borderRadius: BorderRadius.sm,
-  },
+    borderRadius: BorderRadius.sm },
   dealBadgeText: { fontSize: 11, fontWeight: '700', color: C.white },
   dealCatTag: {
     position: 'absolute',
@@ -758,8 +746,7 @@ const s = StyleSheet.create({
     gap: Spacing.xs,
     paddingHorizontal: Spacing.sm,
     paddingVertical: Spacing.xs,
-    borderRadius: BorderRadius.sm,
-  },
+    borderRadius: BorderRadius.sm },
   dealCatTagText: { ...Typography.caption, fontWeight: '600', color: C.white },
   dealBottom: {
     position: 'absolute',
@@ -767,8 +754,7 @@ const s = StyleSheet.create({
     left: 0,
     right: 0,
     padding: Spacing.md,
-    backgroundColor: 'rgba(0,0,0,0.45)',
-  },
+    backgroundColor: 'rgba(0,0,0,0.45)' },
   dealName: { ...Typography.body, fontWeight: '700', color: C.white, marginBottom: 3 },
   dealPriceRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   dealPrice: { ...Typography.bodyLarge, fontWeight: '800', color: C.white },
@@ -781,8 +767,7 @@ const s = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: C.white,
     marginRight: Spacing.md,
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle },
   popImg: { width: '100%', height: 110, backgroundColor: C.slate100 },
   popCbBadge: {
     position: 'absolute',
@@ -790,8 +775,7 @@ const s = StyleSheet.create({
     right: Spacing.sm,
     paddingHorizontal: 6,
     paddingVertical: 3,
-    borderRadius: 6,
-  },
+    borderRadius: 6 },
   popCbText: { ...Typography.caption, fontWeight: '700', color: C.white },
   popInfo: { padding: 10 },
   popName: { ...Typography.body, fontWeight: '600', color: C.navy, marginBottom: 6, minHeight: 34 },
@@ -802,8 +786,7 @@ const s = StyleSheet.create({
     gap: 3,
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 6,
-  },
+    borderRadius: 6 },
   popCatText: { ...Typography.caption, fontWeight: '600' },
   popPrice: { ...Typography.body, fontWeight: '700', color: C.green600 },
 
@@ -811,8 +794,7 @@ const s = StyleSheet.create({
   emptySection: {
     alignItems: 'center',
     paddingVertical: Spacing['2xl'],
-    paddingHorizontal: 40,
-  },
+    paddingHorizontal: 40 },
   emptyIcon: {
     width: 56,
     height: 56,
@@ -820,8 +802,7 @@ const s = StyleSheet.create({
     backgroundColor: C.slate100,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md },
   emptyTitle: { ...Typography.body, fontWeight: '600', color: C.navy, marginBottom: Spacing.xs },
   emptySub: { ...Typography.body, color: C.slate500, textAlign: 'center', lineHeight: 18 },
 
@@ -837,8 +818,7 @@ const s = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: 'rgba(255,255,255,0.3)',
-  },
+    borderColor: 'rgba(255,255,255,0.3)' },
   rewardsTitle: { ...Typography.h3, fontWeight: '800', color: C.white, marginBottom: 6, letterSpacing: -0.3 },
   rewardsSub: { ...Typography.body, color: 'rgba(255,255,255,0.85)', lineHeight: 18, marginBottom: Spacing.base },
   rewardsBtn: {
@@ -849,8 +829,7 @@ const s = StyleSheet.create({
     backgroundColor: C.white,
     paddingHorizontal: 18,
     paddingVertical: 10,
-    borderRadius: BorderRadius['2xl'],
-  },
+    borderRadius: BorderRadius['2xl'] },
   rewardsBtnText: { ...Typography.body, fontWeight: '700', color: colors.brand.purple },
 
   // Quick Links
@@ -860,8 +839,7 @@ const s = StyleSheet.create({
     borderRadius: BorderRadius.lg,
     padding: Spacing.base,
     justifyContent: 'space-around',
-    ...Shadows.subtle,
-  },
+    ...Shadows.subtle },
   quickLink: { alignItems: 'center', gap: 6 },
   qlIcon: { width: 42, height: 42, borderRadius: BorderRadius.md, justifyContent: 'center', alignItems: 'center' },
   qlText: { fontSize: 11, fontWeight: '600', color: C.slate500 },
@@ -883,7 +861,6 @@ const s = StyleSheet.create({
   popRatingRow: { flexDirection: 'row', alignItems: 'center', gap: 2 },
   popRatingText: { fontSize: 11, fontWeight: '600', color: C.navy },
   rewardsBannerWrap: { paddingHorizontal: 16, marginBottom: 20 },
-  quickLinksWrap: { paddingHorizontal: 16, marginBottom: 16 },
-});
+  quickLinksWrap: { paddingHorizontal: 16, marginBottom: 16 } });
 
 export default withErrorBoundary(TravelPage, 'TravelIndex');

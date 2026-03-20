@@ -3,10 +3,10 @@ import {
   View,
   Text,
   StyleSheet,
-  Animated,
   Pressable,
   ActivityIndicator,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence } from 'react-native-reanimated';
 import { useGreetingDisplay, useGreetingTime, useGreetingAnimation } from '@/hooks/useGreeting';
 import { useLocationBasedGreeting } from '@/hooks/useGreeting';
 import { GreetingData } from '@/types/greeting.types';
@@ -45,8 +45,8 @@ function GreetingDisplay({
   const { getGreetingWithLocation } = useLocationBasedGreeting();
   
   const [displayGreeting, setDisplayGreeting] = useState<GreetingData | null>(null);
-  const [fadeAnim] = useState(new Animated.Value(1));
-  const [slideAnim] = useState(new Animated.Value(0));
+  const fadeAnim = useSharedValue(1);
+  const slideAnim = useSharedValue(0);
 
   // Update greeting when context changes
   useEffect(() => {
@@ -58,39 +58,14 @@ function GreetingDisplay({
 
   // Handle animation
   useEffect(() => {
-    let _anim: Animated.CompositeAnimation;
+    let _anim: any;
     if (animationType === 'fade') {
-      _anim = Animated.sequence([
-        Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      _anim = fadeAnim.value = withSequence(withTiming(0, { duration: 200 }), withTiming(1, { duration: 300 }));
     } else if (animationType === 'slide') {
-      _anim = Animated.sequence([
-        Animated.timing(slideAnim, {
-          toValue: -20,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(slideAnim, {
-          toValue: 0,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      _anim = slideAnim.value = withSequence(withTiming(-20, { duration: 200 }), withTiming(0, { duration: 300 }));
     }
   
-    return () => _anim.stop();
-}, [animationKey, animationType, fadeAnim, slideAnim]);
+    }, [animationKey, animationType, fadeAnim, slideAnim]);
 
   const handlePress = () => {
     if (onPress) {

@@ -10,11 +10,13 @@
  */
 
 import React, { Suspense, useCallback } from 'react';
-import { View, Animated } from 'react-native';
+import { View } from 'react-native';
+import { SharedValue } from 'react-native-reanimated';
 import { useRouter } from 'expo-router';
 import LazySection from '@/components/homepage/LazySection';
 import { SectionSkeleton } from '@/components/homepage/skeletons';
 import HomeSavingsSummaryCard from '@/components/homepage/HomeSavingsSummaryCard';
+import { useUserIdentityStore } from '@/stores/userIdentityStore';
 
 // Identity Layer - renders at top of NearU tab (self-gates: null for general users)
 import IdentitySectionContainer from '@/components/homepage/identity/IdentitySectionContainer';
@@ -193,7 +195,7 @@ interface NearUTabContentProps {
   featuredLockProduct: any;
   trendingService: any;
   isLoyaltySectionLoading: boolean;
-  scrollY: Animated.Value;
+  scrollY: SharedValue<number>;
   totalSaved?: number;
   thisMonthSaved?: number;
   currencySymbol?: string;
@@ -223,6 +225,7 @@ const NearUTabContent: React.FC<NearUTabContentProps> = ({
   hasCompletedFirstOrder = false,
 }) => {
   const router = useRouter();
+  const { segment } = useUserIdentityStore();
   // Memoize card renderers
   const renderEventCard = useCallback((item: HomepageSectionItem) => {
     const event = item as EventItem;
@@ -451,6 +454,40 @@ const NearUTabContent: React.FC<NearUTabContentProps> = ({
       <IdentityPromptModal />
       <IdentitySectionContainer />
 
+      {/* ===== SEGMENT-FIRST: Promoted section for verified users ===== */}
+      {segment === 'verified_healthcare' && (
+        <LazySection sectionId="healthcare-priority" scrollY={scrollY} height={300}
+          renderSection={() => <Suspense fallback={<SuspensePlaceholder height={300} />}><HealthcareSection /></Suspense>} />
+      )}
+      {segment === 'verified_defence' && (
+        <LazySection sectionId="fitness-priority" scrollY={scrollY} height={300}
+          renderSection={() => <Suspense fallback={<SuspensePlaceholder height={300} />}><FitnessSportsSection /></Suspense>} />
+      )}
+      {segment === 'verified_employee' && (
+        <LazySection sectionId="financial-priority" scrollY={scrollY} height={300}
+          renderSection={() => <Suspense fallback={<SuspensePlaceholder height={300} />}><FinancialServicesSection /></Suspense>} />
+      )}
+      {segment === 'verified_student' && (
+        <LazySection sectionId="events-priority" scrollY={scrollY} height={300}
+          renderSection={() => <EventsExperiencesSection />} />
+      )}
+      {segment === 'verified_teacher' && (
+        <LazySection sectionId="beauty-priority" scrollY={scrollY} height={300}
+          renderSection={() => <Suspense fallback={<SuspensePlaceholder height={300} />}><BeautyWellnessSection /></Suspense>} />
+      )}
+      {segment === 'verified_senior' && (
+        <LazySection sectionId="healthcare-senior-priority" scrollY={scrollY} height={300}
+          renderSection={() => <Suspense fallback={<SuspensePlaceholder height={300} />}><HealthcareSection /></Suspense>} />
+      )}
+      {segment === 'verified_government' && (
+        <LazySection sectionId="financial-gov-priority" scrollY={scrollY} height={300}
+          renderSection={() => <Suspense fallback={<SuspensePlaceholder height={300} />}><FinancialServicesSection /></Suspense>} />
+      )}
+      {segment === 'verified_differentlyAbled' && (
+        <LazySection sectionId="home-services-priority" scrollY={scrollY} height={300}
+          renderSection={() => <Suspense fallback={<SuspensePlaceholder height={300} />}><HomeServicesSection /></Suspense>} />
+      )}
+
       {/* ===== TIER 1: Above the fold - render immediately ===== */}
       <HomeSavingsSummaryCard
         totalSaved={totalSaved ?? 0}
@@ -487,27 +524,39 @@ const NearUTabContent: React.FC<NearUTabContentProps> = ({
       )}
       <LazySection sectionId="new-on-rez" scrollY={scrollY} height={300}
         renderSection={() => <NewOnRezSection />} />
-      <LazySection sectionId="events-experiences" scrollY={scrollY} height={300}
-        renderSection={() => <EventsExperiencesSection />} />
+      {segment !== 'verified_student' && (
+        <LazySection sectionId="events-experiences" scrollY={scrollY} height={300}
+          renderSection={() => <EventsExperiencesSection />} />
+      )}
 
       {/* ===== TIER 3: Below fold - viewport + React.lazy dynamic loading ===== */}
-      <LazySection sectionId="beauty-wellness" scrollY={scrollY} height={300}
-        renderSection={() => <Suspense fallback={<SuspensePlaceholder height={300} />}><BeautyWellnessSection /></Suspense>} />
+      {segment !== 'verified_teacher' && (
+        <LazySection sectionId="beauty-wellness" scrollY={scrollY} height={300}
+          renderSection={() => <Suspense fallback={<SuspensePlaceholder height={300} />}><BeautyWellnessSection /></Suspense>} />
+      )}
 
-      <LazySection sectionId="fitness-sports" scrollY={scrollY} height={300}
-        renderSection={() => <Suspense fallback={<SuspensePlaceholder height={300} />}><FitnessSportsSection /></Suspense>} />
+      {segment !== 'verified_defence' && (
+        <LazySection sectionId="fitness-sports" scrollY={scrollY} height={300}
+          renderSection={() => <Suspense fallback={<SuspensePlaceholder height={300} />}><FitnessSportsSection /></Suspense>} />
+      )}
 
       <LazySection sectionId="grocery-essentials" scrollY={scrollY} height={300}
         renderSection={() => <Suspense fallback={<SuspensePlaceholder height={300} />}><GroceryEssentialsSection /></Suspense>} />
 
-      <LazySection sectionId="healthcare" scrollY={scrollY} height={300}
-        renderSection={() => <Suspense fallback={<SuspensePlaceholder height={300} />}><HealthcareSection /></Suspense>} />
+      {segment !== 'verified_healthcare' && segment !== 'verified_senior' && (
+        <LazySection sectionId="healthcare" scrollY={scrollY} height={300}
+          renderSection={() => <Suspense fallback={<SuspensePlaceholder height={300} />}><HealthcareSection /></Suspense>} />
+      )}
 
-      <LazySection sectionId="home-services" scrollY={scrollY} height={300}
-        renderSection={() => <Suspense fallback={<SuspensePlaceholder height={300} />}><HomeServicesSection /></Suspense>} />
+      {segment !== 'verified_differentlyAbled' && (
+        <LazySection sectionId="home-services" scrollY={scrollY} height={300}
+          renderSection={() => <Suspense fallback={<SuspensePlaceholder height={300} />}><HomeServicesSection /></Suspense>} />
+      )}
 
-      <LazySection sectionId="financial-services" scrollY={scrollY} height={300}
-        renderSection={() => <Suspense fallback={<SuspensePlaceholder height={300} />}><FinancialServicesSection /></Suspense>} />
+      {segment !== 'verified_employee' && segment !== 'verified_government' && (
+        <LazySection sectionId="financial-services" scrollY={scrollY} height={300}
+          renderSection={() => <Suspense fallback={<SuspensePlaceholder height={300} />}><FinancialServicesSection /></Suspense>} />
+      )}
 
       <LazySection sectionId="travel" scrollY={scrollY} height={300}
         renderSection={() => <Suspense fallback={<SuspensePlaceholder height={300} />}><TravelSection /></Suspense>} />

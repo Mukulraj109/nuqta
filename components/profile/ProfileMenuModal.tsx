@@ -1,7 +1,7 @@
 // ProfileMenuModal Component
 // Premium glassmorphism design with Nuqta palette (mustard/nile blue accents)
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Modal,
@@ -9,11 +9,16 @@ import {
   TouchableWithoutFeedback,
   StyleSheet,
   Dimensions,
-  Animated,
   StatusBar,
   Platform,
   ScrollView,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
 import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformAlert';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -103,44 +108,26 @@ const ConfirmationModal = ({
   icon = 'globe-outline',
   confirmColor = COLORS.primary,
 }: ConfirmModalProps) => {
-  const scaleAnim = useRef(new Animated.Value(0.8)).current;
-  const opacityAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useSharedValue(0.8);
+  const opacityAnim = useSharedValue(0);
 
   useEffect(() => {
-    let _anim: Animated.CompositeAnimation;
     if (visible) {
-      _anim = Animated.parallel([
-        Animated.spring(scaleAnim, {
-          toValue: 1,
-          useNativeDriver: true,
-          tension: 100,
-          friction: 8,
-        }),
-        Animated.timing(opacityAnim, {
-          toValue: 1,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      scaleAnim.value = withSpring(1, { damping: 12, stiffness: 100 });
+      opacityAnim.value = withTiming(1, { duration: 200 });
     } else {
-      _anim = Animated.parallel([
-        Animated.timing(scaleAnim, {
-          toValue: 0.8,
-          duration: 150,
-          useNativeDriver: true,
-        }),
-        Animated.timing(opacityAnim, {
-          toValue: 0,
-          duration: 150,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      scaleAnim.value = withTiming(0.8, { duration: 150 });
+      opacityAnim.value = withTiming(0, { duration: 150 });
     }
-  
-    return () => _anim.stop();
-}, [visible]);
+  }, [visible]);
+
+  const backdropStyle = useAnimatedStyle(() => ({
+    opacity: opacityAnim.value,
+  }));
+
+  const modalContainerStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scaleAnim.value }],
+  }));
 
   if (!visible) return null;
 
@@ -152,11 +139,11 @@ const ConfirmationModal = ({
       animationType="none"
       onRequestClose={onCancel}
     >
-      <Animated.View style={[confirmStyles.backdrop, { opacity: opacityAnim }]}>
+      <Animated.View style={[confirmStyles.backdrop, backdropStyle]}>
         <Animated.View
           style={[
             confirmStyles.modalContainer,
-            { transform: [{ scale: scaleAnim }] },
+            modalContainerStyle,
           ]}
         >
           {/* Icon */}
@@ -351,8 +338,8 @@ function ProfileMenuModal({
   menuSections,
   onMenuItemPress,
 }: ProfileMenuModalProps) {
-  const slideAnim = useRef(new Animated.Value(MODAL_WIDTH)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useSharedValue(MODAL_WIDTH);
+  const fadeAnim = useSharedValue(0);
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const actions = useAuthActions();
@@ -431,40 +418,22 @@ function ProfileMenuModal({
   };
 
   useEffect(() => {
-    let _anim: Animated.CompositeAnimation;
     if (visible) {
-      _anim = Animated.parallel([
-        Animated.spring(slideAnim, {
-          toValue: 0,
-          useNativeDriver: true,
-          tension: 80,
-          friction: 10,
-        }),
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      slideAnim.value = withSpring(0, { damping: 14, stiffness: 80 });
+      fadeAnim.value = withTiming(1, { duration: 300 });
     } else {
-      _anim = Animated.parallel([
-        Animated.timing(slideAnim, {
-          toValue: MODAL_WIDTH,
-          duration: 250,
-          useNativeDriver: true,
-        }),
-        Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim.start();
+      slideAnim.value = withTiming(MODAL_WIDTH, { duration: 250 });
+      fadeAnim.value = withTiming(0, { duration: 200 });
     }
-  
-    return () => _anim.stop();
-}, [visible]);
+  }, [visible]);
+
+  const mainBackdropStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+  }));
+
+  const mainSlideStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: slideAnim.value }],
+  }));
 
   const performLogout = async () => {
     try {
@@ -786,12 +755,12 @@ function ProfileMenuModal({
       <StatusBar backgroundColor="rgba(0,0,0,0.5)" barStyle="light-content" />
 
       <TouchableWithoutFeedback onPress={onClose}>
-        <Animated.View style={[styles.backdrop, { opacity: fadeAnim }]}>
+        <Animated.View style={[styles.backdrop, mainBackdropStyle]}>
           <Animated.View
             style={[
               styles.modalContainer,
+              mainSlideStyle,
               {
-                transform: [{ translateX: slideAnim }],
                 height: SCREEN_HEIGHT,
                 paddingBottom: insets.bottom,
               },

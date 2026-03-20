@@ -9,8 +9,13 @@
  * - Accessible (hidden from screen readers)
  */
 
-import React, { useEffect, useRef } from 'react';
-import { View, StyleSheet, Animated, useColorScheme } from 'react-native';
+import React, { useEffect } from 'react';
+import {
+  View,
+  StyleSheet,
+  useColorScheme,
+} from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withRepeat, interpolate } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '@/constants/theme';
 
@@ -29,29 +34,16 @@ function SkeletonLoader({
   style,
   variant = 'rect',
 }: SkeletonLoaderProps) {
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
   const colorScheme = useColorScheme();
 
   useEffect(() => {
-    const shimmerLoop = Animated.loop(
-      Animated.timing(shimmerAnim, {
-        toValue: 1,
-        duration: 1500,
-        useNativeDriver: true,
-      })
-    );
-    shimmerLoop.start();
-
-    // Cleanup: stop animation on unmount to prevent memory leak
-    return () => {
-      shimmerLoop.stop();
-    };
+    shimmerAnim.value = withRepeat(withTiming(1, { duration: 1500 }), -1);
   }, []);
 
-  const translateX = shimmerAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-300, 300],
-  });
+  const animatedTranslateStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: interpolate(shimmerAnim.value, [0, 1], [-300, 300]) }],
+  }));
 
   const finalBorderRadius = variant === 'circle' ? height / 2 : borderRadius;
   const finalWidth = variant === 'circle' ? height : width;
@@ -78,10 +70,10 @@ function SkeletonLoader({
       importantForAccessibility="no"
     >
       <Animated.View
-        style={{
-          flex: 1,
-          transform: [{ translateX }],
-        }}
+        style={[
+          { flex: 1 },
+          animatedTranslateStyle,
+        ]}
       >
         <LinearGradient
           colors={shimmerColors}

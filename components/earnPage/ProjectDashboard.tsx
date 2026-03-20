@@ -1,5 +1,6 @@
-import React, { useRef, useEffect } from 'react';
-import { View, StyleSheet, Animated, Platform } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, StyleSheet, Platform } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, interpolate } from 'react-native-reanimated';
 import { ThemedText } from '@/components/ThemedText';
 import { ProjectStatus } from '@/types/earnPage.types';
 import { EARN_COLORS } from '@/constants/EarnPageColors';
@@ -18,53 +19,33 @@ function ProjectDashboard({
   onStatusPress,
   loading = false
 }: ProjectDashboardProps) {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(30)).current;
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(30);
 
   useEffect(() => {
-    const anim = Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 600,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 600,
-        useNativeDriver: true,
-      }),
-    ]);
-    anim.start();
-
-    return () => { anim.stop(); };
+    fadeAnim.value = withTiming(1, { duration: 600 });
+    slideAnim.value = withTiming(0, { duration: 600 });
   }, []);
 
+  const containerStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ translateY: slideAnim.value }],
+  }));
+
+  const headerStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [
+      { translateY: interpolate(fadeAnim.value, [0, 1], [10, 0]) },
+    ],
+  }));
+
   return (
-    <Animated.View 
-      style={[
-        styles.container,
-        {
-          opacity: fadeAnim,
-          transform: [{ translateY: slideAnim }],
-        },
-      ]}
+    <Animated.View
+      style={[styles.container, containerStyle]}
     >
       {/* Header */}
-      <Animated.View 
-        style={[
-          styles.header,
-          {
-            opacity: fadeAnim,
-            transform: [
-              {
-                translateY: fadeAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [10, 0],
-                }),
-              },
-            ],
-          },
-        ]}
+      <Animated.View
+        style={[styles.header, headerStyle]}
       >
         <View style={styles.titleContainer}>
           <ThemedText style={styles.title}>

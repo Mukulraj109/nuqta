@@ -1,15 +1,21 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect,  useCallback } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
-  Animated,
   LayoutAnimation,
   UIManager,
   Platform,
-  ActivityIndicator,
+  ActivityIndicator
 } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from 'react-native-reanimated';
 
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -60,21 +66,18 @@ const COLORS = {
   textSecondary: colors.neutral[500],
   success: colors.success,
   warning: colors.warning,
-  error: colors.error,
-};
+  error: colors.error };
 
 const BREAKDOWN_TOOLTIPS: Record<string, string> = {
   'Partner Cashback': 'Cashback earned from orders and purchases as a partner',
   'Milestone Rewards': 'Bonuses from reaching order milestones and level upgrades',
   'Referral Bonus': `Rewards earned by referring friends to ${BRAND.APP_NAME}`,
-  'Task Rewards': 'Earned by completing partner tasks like reviews and social shares',
-};
+  'Task Rewards': 'Earned by completing partner tasks like reviews and social shares' };
 
 function EarningsBreakdown({
   onViewDetails,
   onRefresh,
-  compact = false,
-}: EarningsBreakdownProps) {
+  compact = false }: EarningsBreakdownProps) {
   const getCurrencySymbol = useGetCurrencySymbol();
   const formatPrice = useFormatPrice();
   const currencySymbol = getCurrencySymbol();
@@ -91,20 +94,17 @@ function EarningsBreakdown({
   const [state, setState] = useState<EarningsState>({ status: 'loading' });
   const [isExpanded, setIsExpanded] = useState(!compact);
   const isMounted = useIsMounted();
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useSharedValue(0);
 
   // Shimmer animation loop
   useEffect(() => {
     if (state.status === 'loading') {
-      const loop = Animated.loop(
-        Animated.timing(shimmerAnim, {
-          toValue: 1,
-          duration: 1200,
-          useNativeDriver: true,
-        })
+      shimmerAnim.value = withRepeat(
+        withTiming(1, { duration: 1200 }),
+        -1
       );
-      loop.start();
-      return () => loop.stop();
+    } else {
+      shimmerAnim.value = 0;
     }
   }, [state.status]);
 
@@ -114,15 +114,12 @@ function EarningsBreakdown({
       partnerCashback: data.breakdown?.partnerCashback?.amount || 0,
       milestoneRewards: data.breakdown?.milestoneRewards?.amount || 0,
       referralBonus: data.breakdown?.referralBonus?.amount || 0,
-      taskRewards: data.breakdown?.taskRewards?.amount || 0,
-    },
+      taskRewards: data.breakdown?.taskRewards?.amount || 0 },
     thisMonth: data.thisMonth || 0,
     pending: data.pendingPartnerEarnings || 0,
     partnerLevel: {
       level: data.partnerLevel?.level || 0,
-      name: data.partnerLevel?.name || 'None',
-    },
-  });
+      name: data.partnerLevel?.name || 'None' } });
 
   const fetchEarnings = useCallback(async (isRefresh = false) => {
     try {
@@ -155,8 +152,7 @@ function EarningsBreakdown({
       setState({
         status: 'error',
         error: error?.message || 'Failed to load earnings',
-        staleData: currentData,
-      });
+        staleData: currentData });
     }
   }, []);
 
@@ -196,34 +192,30 @@ function EarningsBreakdown({
       icon: 'cash-outline' as const,
       label: 'Partner Cashback',
       value: displayData?.breakdown.partnerCashback || 0,
-      color: COLORS.gold,
-    },
+      color: COLORS.gold },
     {
       icon: 'trophy-outline' as const,
       label: 'Milestone Rewards',
       value: displayData?.breakdown.milestoneRewards || 0,
-      color: COLORS.warning,
-    },
+      color: COLORS.warning },
     {
       icon: 'people-outline' as const,
       label: 'Referral Bonus',
       value: displayData?.breakdown.referralBonus || 0,
-      color: COLORS.success,
-    },
+      color: COLORS.success },
     {
       icon: 'checkmark-circle-outline' as const,
       label: 'Task Rewards',
       value: displayData?.breakdown.taskRewards || 0,
-      color: COLORS.primaryDark,
-    },
+      color: COLORS.primaryDark },
   ];
+
+  const shimmerStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: interpolate(shimmerAnim.value, [0, 1], [-200, 200]) }],
+  }));
 
   // --- LOADING STATE ---
   if (state.status === 'loading') {
-    const shimmerTranslate = shimmerAnim.interpolate({
-      inputRange: [0, 1],
-      outputRange: [-200, 200],
-    });
 
     return (
       <View style={styles.container}>
@@ -255,7 +247,7 @@ function EarningsBreakdown({
           </View>
         )}
         <Animated.View
-          style={[styles.shimmerOverlay, { transform: [{ translateX: shimmerTranslate }] }]}
+          style={[styles.shimmerOverlay, shimmerStyle]}
         />
       </View>
     );
@@ -431,164 +423,134 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
+    shadowRadius: 4 },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: colors.gray[100],
-  },
+    borderBottomColor: colors.gray[100] },
   headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
-  },
+    flex: 1 },
   iconContainer: {
     width: 40,
     height: 40,
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 12,
-  },
+    marginRight: 12 },
   headerText: {
-    flex: 1,
-  },
+    flex: 1 },
   headerTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: COLORS.textPrimary,
-  },
+    color: COLORS.textPrimary },
   headerSubtitle: {
     fontSize: 12,
     color: COLORS.textSecondary,
-    marginTop: 2,
-  },
+    marginTop: 2 },
   headerRight: {
-    alignItems: 'flex-end',
-  },
+    alignItems: 'flex-end' },
   totalAmount: {
     fontSize: 20,
     fontWeight: '700',
-    color: COLORS.primaryDark,
-  },
+    color: COLORS.primaryDark },
   content: {
     padding: 16,
-    paddingTop: 12,
-  },
+    paddingTop: 12 },
   quickStats: {
     flexDirection: 'row',
     gap: 12,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   statCard: {
     flex: 1,
     backgroundColor: COLORS.surface,
     borderRadius: 12,
     padding: 12,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   statCardPending: {
-    backgroundColor: colors.tint.amberLight,
-  },
+    backgroundColor: colors.tint.amberLight },
   statValue: {
     fontSize: 18,
     fontWeight: '700',
-    color: COLORS.primaryDark,
-  },
+    color: COLORS.primaryDark },
   statLabel: {
     fontSize: 12,
     color: COLORS.textSecondary,
-    marginTop: 4,
-  },
+    marginTop: 4 },
   breakdownSection: {
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   sectionTitle: {
     fontSize: 14,
     fontWeight: '600',
     color: COLORS.textSecondary,
-    marginBottom: 12,
-  },
+    marginBottom: 12 },
   breakdownItem: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: colors.gray[100],
-  },
+    borderBottomColor: colors.gray[100] },
   breakdownLeft: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   breakdownIcon: {
     width: 32,
     height: 32,
     borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 12,
-  },
+    marginRight: 12 },
   breakdownLabel: {
     fontSize: 14,
-    color: COLORS.textPrimary,
-  },
+    color: COLORS.textPrimary },
   breakdownValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: COLORS.textPrimary,
-  },
+    color: COLORS.textPrimary },
   infoBanner: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: COLORS.primaryDark + '10',
     borderRadius: 12,
     padding: 12,
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   infoText: {
     flex: 1,
     fontSize: 12,
     color: COLORS.textSecondary,
     marginLeft: 8,
-    lineHeight: 18,
-  },
+    lineHeight: 18 },
   actionButton: {
     borderRadius: 12,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   actionButtonGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 14,
-    gap: 8,
-  },
+    gap: 8 },
   actionButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: 'white',
-  },
+    color: 'white' },
 
   // Skeleton / shimmer
   skeleton: {
-    backgroundColor: colors.gray[200],
-  },
+    backgroundColor: colors.gray[200] },
   shimmerOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(255,255,255,0.4)',
-    width: 100,
-  },
+    width: 100 },
 
   // Empty state
   emptyState: {
     padding: 32,
-    alignItems: 'center',
-  },
+    alignItems: 'center' },
   emptyIconContainer: {
     width: 72,
     height: 72,
@@ -596,21 +558,18 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.surface,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 16,
-  },
+    marginBottom: 16 },
   emptyTitle: {
     fontSize: 18,
     fontWeight: '700',
     color: COLORS.textPrimary,
-    marginBottom: 8,
-  },
+    marginBottom: 8 },
   emptyDescription: {
     fontSize: 14,
     color: COLORS.textSecondary,
     textAlign: 'center',
     lineHeight: 20,
-    marginBottom: 20,
-  },
+    marginBottom: 20 },
   emptyButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -618,24 +577,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 20,
-    backgroundColor: COLORS.surface,
-  },
+    backgroundColor: COLORS.surface },
   emptyButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: COLORS.primaryDark,
-  },
+    color: COLORS.primaryDark },
 
   // Error state
   errorState: {
     padding: 32,
     alignItems: 'center',
-    gap: 8,
-  },
+    gap: 8 },
   errorText: {
     fontSize: 14,
-    color: COLORS.textSecondary,
-  },
+    color: COLORS.textSecondary },
   retryButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -644,13 +599,11 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 16,
     backgroundColor: COLORS.surface,
-    marginTop: 4,
-  },
+    marginTop: 4 },
   retryText: {
     fontSize: 13,
     fontWeight: '600',
-    color: COLORS.primaryDark,
-  },
+    color: COLORS.primaryDark },
 
   // Stale data banner
   staleBanner: {
@@ -659,12 +612,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 6,
     paddingVertical: 6,
-    backgroundColor: colors.tint.amberLight,
-  },
+    backgroundColor: colors.tint.amberLight },
   staleBannerText: {
     fontSize: 11,
-    color: COLORS.warning,
-  },
-});
+    color: COLORS.warning } });
 
 export default React.memo(EarningsBreakdown);

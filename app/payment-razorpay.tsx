@@ -12,9 +12,12 @@ import {
   StatusBar,
   Platform,
   ActivityIndicator,
-  Dimensions,
-  Animated,
-} from 'react-native';
+  Dimensions} from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  interpolate} from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -116,9 +119,9 @@ function PaymentPage() {
   }, [paymentStartedAt, isProcessing]);
 
   // Animation values
-  const fadeAnim = new Animated.Value(1);
-  const slideAnim = new Animated.Value(0);
-  const progressAnim = new Animated.Value(0);
+  const fadeAnim = useSharedValue(1);
+  const slideAnim = useSharedValue(0);
+  const progressAnim = useSharedValue(0);
 
   useEffect(() => {
     loadPaymentMethods();
@@ -132,30 +135,22 @@ function PaymentPage() {
   }, [currentStep]);
 
   const animateEntrance = () => {
-    fadeAnim.setValue(0.3);
-    slideAnim.setValue(20);
-
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 400,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 400,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    fadeAnim.value = 0.3;
+    slideAnim.value = 20;
+    fadeAnim.value = withTiming(1, { duration: 400 });
+    slideAnim.value = withTiming(0, { duration: 400 });
   };
 
   const animateProgress = () => {
-    Animated.timing(progressAnim, {
-      toValue: 1,
-      duration: 2000,
-      useNativeDriver: false,
-    }).start();
+    progressAnim.value = withTiming(1, { duration: 2000 });
   };
+
+  const stepContainerStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ translateY: slideAnim.value }]}));
+
+  const progressFillStyle = useAnimatedStyle(() => ({
+    width: `${interpolate(progressAnim.value, [0, 1], [0, 100])}%`}));
 
   const loadPaymentMethods = async () => {
     setIsLoading(true);
@@ -164,8 +159,7 @@ function PaymentPage() {
       if (response.success && response.data) {
         const methods = response.data.map(method => ({
           ...method,
-          gateway: paymentGateway,
-        }));
+          gateway: paymentGateway}));
         if (!isMounted()) return;
         setPaymentMethods(methods);
       }
@@ -246,8 +240,7 @@ function PaymentPage() {
           amount,
           currency,
           successUrl,
-          cancelUrl,
-        });
+          cancelUrl});
       }
 
       if (response.success && response.data) {
@@ -270,8 +263,7 @@ function PaymentPage() {
           const result = await WebBrowser.openBrowserAsync(checkoutUrl, {
             dismissButtonStyle: 'cancel',
             showTitle: true,
-            enableBarCollapsing: true,
-          });
+            enableBarCollapsing: true});
 
           // Browser closed — verify payment
           if (result.type === 'cancel' || result.type === 'dismiss') {
@@ -302,8 +294,7 @@ function PaymentPage() {
       } else {
         response = await apiClient.post('/payment/verify-stripe-session', {
           sessionId,
-          orderId,
-        });
+          orderId});
       }
 
       if (response.success && response.data?.verified) {
@@ -355,14 +346,12 @@ function PaymentPage() {
         response = await apiClient.post('/travel-payment/create-order', {
           bookingId,
           amount,
-          currency,
-        });
+          currency});
       } else {
         response = await apiClient.post('/payment/create-order', {
           orderId,
           amount,
-          currency,
-        });
+          currency});
       }
 
       if (response.success && response.data) {
@@ -383,15 +372,13 @@ function PaymentPage() {
           bookingId,
           razorpay_order_id: paymentData.razorpay_order_id,
           razorpay_payment_id: paymentData.razorpay_payment_id,
-          razorpay_signature: paymentData.razorpay_signature,
-        });
+          razorpay_signature: paymentData.razorpay_signature});
       } else {
         response = await apiClient.post('/payment/verify', {
           orderId,
           razorpay_order_id: paymentData.razorpay_order_id,
           razorpay_payment_id: paymentData.razorpay_payment_id,
-          razorpay_signature: paymentData.razorpay_signature,
-        });
+          razorpay_signature: paymentData.razorpay_signature});
       }
 
       return !!(response.success && response.data);
@@ -443,17 +430,14 @@ function PaymentPage() {
       prefill: {
         email: 'user@example.com',
         contact: '9876543210',
-        name: 'User Name',
-      },
+        name: 'User Name'},
       theme: { color: colors.brand.purpleLight },
       modal: {
         ondismiss: () => {
           setCurrentStep('methods');
           setIsProcessing(false);
           platformAlertSimple('Payment Cancelled', 'You cancelled the payment.');
-        },
-      },
-    };
+        }}};
 
     RazorpayCheckout.open(options)
       .then((data: any) => {
@@ -474,8 +458,7 @@ function PaymentPage() {
           const mockData = {
             razorpay_order_id: orderData.razorpayOrderId,
             razorpay_payment_id: 'pay_mock_' + Date.now(),
-            razorpay_signature: 'mock_signature_' + Date.now(),
-          };
+            razorpay_signature: 'mock_signature_' + Date.now()};
           handlePaymentSuccess(mockData);
         }, 2000);
         navTimeoutsRef.current.add(t);
@@ -590,10 +573,7 @@ function PaymentPage() {
     <Animated.View
       style={[
         styles.stepContainer,
-        {
-          opacity: fadeAnim,
-          transform: [{ translateY: slideAnim }],
-        },
+        stepContainerStyle,
       ]}
     >
       <ThemedText style={styles.stepTitle}>Choose Payment Method</ThemedText>
@@ -699,12 +679,7 @@ function PaymentPage() {
           <Animated.View
             style={[
               styles.progressFill,
-              {
-                width: progressAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: ['0%', '100%'],
-                }),
-              },
+              progressFillStyle,
             ]}
           />
         </View>
@@ -778,62 +753,50 @@ function PaymentPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background.secondary,
-  },
+    backgroundColor: Colors.background.secondary},
   headerBg: {
     paddingTop: Platform.OS === 'ios' ? 50 : StatusBar.currentHeight || 50,
     paddingBottom: 30,
     borderBottomLeftRadius: 25,
     borderBottomRightRadius: 25,
-    ...Shadows.strong,
-  },
+    ...Shadows.strong},
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.lg,
-    marginBottom: Spacing.lg,
-  },
+    marginBottom: Spacing.lg},
   backButton: {
-    padding: 5,
-  },
+    padding: 5},
   headerTitle: {
     color: Colors.text.inverse,
     ...Typography.h3,
-    fontWeight: 'bold',
-  },
+    fontWeight: 'bold'},
   placeholder: {
-    width: 34,
-  },
+    width: 34},
   amountSection: {
     alignItems: 'center',
-    paddingHorizontal: Spacing.lg,
-  },
+    paddingHorizontal: Spacing.lg},
   amountLabel: {
     color: '#E0E7FF',
     ...Typography.body,
-    marginBottom: 5,
-  },
+    marginBottom: 5},
   amountValue: {
     color: Colors.text.inverse,
     fontSize: 32,
-    fontWeight: '900',
-  },
+    fontWeight: '900'},
   currencyLabel: {
     color: '#E0E7FF',
     ...Typography.bodySmall,
     marginTop: Spacing.xs,
-    fontWeight: '600',
-  },
+    fontWeight: '600'},
   content: {
     flex: 1,
     paddingHorizontal: Spacing.lg,
-    paddingTop: Spacing.lg,
-  },
+    paddingTop: Spacing.lg},
   scrollContent: {
     paddingBottom: 40,
-    flexGrow: 1,
-  },
+    flexGrow: 1},
   stepContainer: {
     backgroundColor: Colors.background.primary,
     borderRadius: BorderRadius['2xl'],
@@ -842,26 +805,22 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.base,
     ...Shadows.strong,
     borderWidth: 1,
-    borderColor: Colors.border.default,
-  },
+    borderColor: Colors.border.default},
   stepTitle: {
     fontSize: 22,
     fontWeight: 'bold',
     color: Colors.text.primary,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm},
   stepSubtitle: {
     ...Typography.bodyLarge,
     color: Colors.text.tertiary,
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base},
   gatewayToggle: {
     flexDirection: 'row',
     backgroundColor: Colors.background.secondary,
     borderRadius: BorderRadius.md,
     padding: Spacing.xs,
-    marginBottom: Spacing.base,
-  },
+    marginBottom: Spacing.base},
   gatewayOption: {
     flex: 1,
     flexDirection: 'row',
@@ -869,19 +828,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 10,
     borderRadius: 10,
-    gap: 6,
-  },
+    gap: 6},
   gatewayOptionActive: {
-    backgroundColor: Colors.brand.purple,
-  },
+    backgroundColor: Colors.brand.purple},
   gatewayOptionText: {
     ...Typography.body,
     fontWeight: '600',
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary},
   gatewayOptionTextActive: {
-    color: Colors.text.inverse,
-  },
+    color: Colors.text.inverse},
   securityBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -890,13 +845,11 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.sm,
     marginBottom: Spacing.md,
-    gap: 6,
-  },
+    gap: 6},
   securityBadgeText: {
     ...Typography.bodySmall,
     color: Colors.success,
-    fontWeight: '600',
-  },
+    fontWeight: '600'},
   currencyBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -905,13 +858,11 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.sm,
     marginBottom: Spacing.lg,
-    gap: 6,
-  },
+    gap: 6},
   currencyBadgeText: {
     ...Typography.bodySmall,
     color: Colors.info,
-    fontWeight: '600',
-  },
+    fontWeight: '600'},
   stripePayButton: {
     marginTop: Spacing.sm,
     marginBottom: Spacing.base,
@@ -921,25 +872,21 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
-    elevation: 6,
-  },
+    elevation: 6},
   stripePayButtonGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 18,
     paddingHorizontal: Spacing.xl,
-    gap: 10,
-  },
+    gap: 10},
   stripePayButtonText: {
     color: Colors.text.inverse,
     fontSize: 17,
-    fontWeight: '700',
-  },
+    fontWeight: '700'},
   methodsGrid: {
     gap: Spacing.base,
-    marginTop: Spacing.sm,
-  },
+    marginTop: Spacing.sm},
   methodCard: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -949,8 +896,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: Colors.border.default,
     ...Shadows.medium,
-    marginHorizontal: Spacing.xs,
-  },
+    marginHorizontal: Spacing.xs},
   methodIconContainer: {
     width: 56,
     height: 56,
@@ -958,27 +904,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: Spacing.lg,
-    ...Shadows.medium,
-  },
+    ...Shadows.medium},
   methodInfo: {
-    flex: 1,
-  },
+    flex: 1},
   methodName: {
     fontSize: 17,
     fontWeight: '700',
     color: Colors.text.primary,
-    marginBottom: Spacing.xs,
-  },
+    marginBottom: Spacing.xs},
   methodGateway: {
     ...Typography.bodySmall,
     color: Colors.text.tertiary,
-    marginBottom: 6,
-  },
+    marginBottom: 6},
   methodDetails: {
     flexDirection: 'row',
     gap: Spacing.base,
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   methodFee: {
     ...Typography.bodySmall,
     color: Colors.success,
@@ -986,78 +927,64 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.successScale[50],
     paddingHorizontal: Spacing.sm,
     paddingVertical: 2,
-    borderRadius: 6,
-  },
+    borderRadius: 6},
   methodTime: {
     ...Typography.bodySmall,
     color: Colors.text.tertiary,
-    fontWeight: '500',
-  },
+    fontWeight: '500'},
   methodArrow: {
     padding: Spacing.sm,
     backgroundColor: Colors.background.secondary,
     borderRadius: BorderRadius.md,
-    marginLeft: Spacing.sm,
-  },
+    marginLeft: Spacing.sm},
   supportedMethods: {
     marginTop: Spacing.xl,
     paddingTop: Spacing.lg,
     borderTopWidth: 1,
-    borderTopColor: Colors.border.default,
-  },
+    borderTopColor: Colors.border.default},
   supportedTitle: {
     ...Typography.body,
     fontWeight: '600',
     color: Colors.text.secondary,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm},
   supportedText: {
     ...Typography.bodySmall,
     color: Colors.text.tertiary,
-    lineHeight: 20,
-  },
+    lineHeight: 20},
   processingContainer: {
     alignItems: 'center',
-    paddingVertical: 60,
-  },
+    paddingVertical: 60},
   processingIcon: {
-    marginBottom: Spacing.xl,
-  },
+    marginBottom: Spacing.xl},
   processingTitle: {
     ...Typography.h2,
     fontWeight: 'bold',
     color: Colors.text.primary,
-    marginBottom: Spacing.sm,
-  },
+    marginBottom: Spacing.sm},
   processingSubtitle: {
     ...Typography.bodyLarge,
     color: Colors.text.tertiary,
     textAlign: 'center',
     marginBottom: 30,
-    paddingHorizontal: Spacing.lg,
-  },
+    paddingHorizontal: Spacing.lg},
   progressContainer: {
     width: '100%',
     alignItems: 'center',
-    marginBottom: Spacing.xl,
-  },
+    marginBottom: Spacing.xl},
   progressBar: {
     width: '100%',
     height: 8,
     backgroundColor: Colors.border.default,
     borderRadius: 4,
     overflow: 'hidden',
-    marginBottom: Spacing.md,
-  },
+    marginBottom: Spacing.md},
   progressFill: {
     height: '100%',
     backgroundColor: Colors.brand.purpleLight,
-    borderRadius: 4,
-  },
+    borderRadius: 4},
   progressText: {
     ...Typography.body,
-    color: Colors.text.tertiary,
-  },
+    color: Colors.text.tertiary},
   securityInfo: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1065,23 +992,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.xl,
-    gap: Spacing.sm,
-  },
+    gap: Spacing.sm},
   securityText: {
     ...Typography.bodySmall,
     color: Colors.success,
-    fontWeight: '600',
-  },
+    fontWeight: '600'},
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   loadingText: {
     marginTop: Spacing.md,
     ...Typography.bodyLarge,
-    color: Colors.text.tertiary,
-  },
-});
+    color: Colors.text.tertiary}});
 
 export default withErrorBoundary(PaymentPage, 'PaymentRazorpay');

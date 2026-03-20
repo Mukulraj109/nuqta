@@ -21,7 +21,7 @@
  * </AnimatedButton>
  */
 
-import React, { useRef, useState } from 'react';
+import React, {  useState } from 'react';
 import {
   Pressable,
   Text,
@@ -30,9 +30,11 @@ import {
   TextStyle,
   ActivityIndicator,
   View,
-  Animated,
-  Platform,
-} from 'react-native';
+  Platform} from 'react-native';
+import Animated, {
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
@@ -77,17 +79,13 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
   textStyle,
 }) => {
   const { colors: Colors, shadows: Shadows, gradients: Gradients } = useTheme();
-  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const scaleAnim = useSharedValue(1);
   const [isPressed, setIsPressed] = useState(false);
 
   // Handle press animation
   const handlePressIn = () => {
     setIsPressed(true);
-    Animated.spring(scaleAnim, {
-      toValue: 0.96,
-      useNativeDriver: true,
-      ...Timing.springBouncy,
-    }).start();
+    scaleAnim.value = withSpring(0.96, { ...Timing.springBouncy });
 
     // Haptic feedback
     if (haptic && !disabled && !loading) {
@@ -101,11 +99,7 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
 
   const handlePressOut = () => {
     setIsPressed(false);
-    Animated.spring(scaleAnim, {
-      toValue: 1,
-      useNativeDriver: true,
-      ...Timing.springSmooth,
-    }).start();
+    scaleAnim.value = withSpring(1, { ...Timing.springSmooth });
   };
 
   const handlePress = async () => {
