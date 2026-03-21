@@ -28,10 +28,10 @@ const DEFAULT_CONFIG: LocationServiceConfig = {
   geocodingApiUrl: process.env.EXPO_PUBLIC_GEOCODING_API_URL || 'http://localhost:5001/api/location/geocode',
   storesApiUrl: process.env.EXPO_PUBLIC_STORES_API_URL || 'http://localhost:5001/api/stores',
   defaultLocation: {
-    latitude: parseFloat(process.env.EXPO_PUBLIC_DEFAULT_LOCATION_LAT || '25.2048'),
-    longitude: parseFloat(process.env.EXPO_PUBLIC_DEFAULT_LOCATION_LNG || '55.2708'),
+    latitude: parseFloat(process.env.EXPO_PUBLIC_DEFAULT_LOCATION_LAT || '12.9716'),
+    longitude: parseFloat(process.env.EXPO_PUBLIC_DEFAULT_LOCATION_LNG || '77.5946'),
   },
-  defaultLocationName: process.env.EXPO_PUBLIC_DEFAULT_LOCATION_NAME || 'Dubai, UAE',
+  defaultLocationName: process.env.EXPO_PUBLIC_DEFAULT_LOCATION_NAME || 'Bangalore, India',
   enableBackgroundLocation: process.env.EXPO_PUBLIC_ENABLE_BACKGROUND_LOCATION === 'true',
   locationUpdateInterval: parseInt(process.env.EXPO_PUBLIC_LOCATION_UPDATE_INTERVAL || '300000'),
   maxLocationAge: parseInt(process.env.EXPO_PUBLIC_MAX_LOCATION_AGE || '3600000'),
@@ -294,6 +294,7 @@ class LocationService {
       const data = response.data;
         return {
         address: data?.formattedAddress || '',
+        neighbourhood: data?.neighbourhood || undefined,
         city: data?.city || '',
         state: data?.state || '',
         country: data?.country || '',
@@ -497,12 +498,12 @@ class LocationService {
       coordinates: this.config.defaultLocation,
       address: {
         address: this.config.defaultLocationName,
-        city: 'Dubai',
-        state: 'Dubai',
-        country: 'United Arab Emirates',
+        city: 'Bangalore',
+        state: 'Karnataka',
+        country: 'India',
         formattedAddress: this.config.defaultLocationName,
       },
-      timezone: 'Asia/Dubai',
+      timezone: 'Asia/Kolkata',
       lastUpdated: new Date(),
       source: 'manual',
     };

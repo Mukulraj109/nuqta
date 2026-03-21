@@ -345,18 +345,23 @@ function PharmacyPage() {
       return;
     }
 
-    // Navigate to checkout or process order
-    platformAlertConfirm(
-      'Proceed to Checkout',
-      `Total: Rs ${getCartTotal()}\n\nThis will process your order for ${getCartItemCount()} items.`,
-      () => {
-        // Process order
-        platformAlertSimple('Order Placed', 'Your order has been placed successfully!');
-        setCart([]);
-        setCartModalVisible(false);
+    // Close cart modal and navigate to checkout
+    setCartModalVisible(false);
+    const firstItem = cart[0];
+    const storeId = firstItem?.medicine?.storeId || firstItem?.medicine?.store?._id;
+    router.push({
+      pathname: '/checkout',
+      params: {
+        storeId: storeId || '',
+        items: JSON.stringify(cart.map((item) => ({
+          productId: item.medicine._id,
+          name: item.medicine.name,
+          price: item.medicine.price?.selling || item.medicine.price?.mrp || 0,
+          quantity: item.quantity,
+        }))),
+        fulfillmentType: 'delivery',
       },
-      'Checkout'
-    );
+    } as any);
   };
 
   // Render category chip

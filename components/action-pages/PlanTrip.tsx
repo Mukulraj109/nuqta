@@ -15,6 +15,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { platformAlertConfirm } from '@/utils/platformAlert';
+import apiClient from '@/services/apiClient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
@@ -139,7 +140,21 @@ function PlanTripPage() {
   const selectedDest = POPULAR_DESTINATIONS.find(d => d.id === destination);
   const destName = selectedDest?.name || customDestination || 'Not selected';
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
+    // T-01: Save trip plan to backend (non-blocking)
+    try {
+      await apiClient.post('/travel-services/plan', {
+        destination: destination || customDestination,
+        startDate: startDate?.toISOString(),
+        endDate: endDate?.toISOString(),
+        tripDays,
+        adults,
+        children,
+        accommodation,
+        activities: selectedActivities,
+      });
+    } catch { /* non-blocking — plan is shown locally regardless */ }
+
     platformAlertConfirm(
       'Trip Planned!',
       `Your ${tripDays}-day trip to ${destName} has been saved. We'll find the best deals for you!`,

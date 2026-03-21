@@ -23,7 +23,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import apiClient from '@/services/apiClient';
+import serviceAppointmentApi from '@/services/serviceAppointmentApi';
 import { storesApi } from '@/services/storesApi';
 import { useAuthUser } from '@/stores/selectors';
 import CountryCodePicker, { CountryCode, COUNTRY_CODES } from '@/components/common/CountryCodePicker';
@@ -143,12 +143,12 @@ function TryAndBuyPage() {
       setTimeSlots([]);
       setSelectedTime('');
       const dateStr = date.toISOString().split('T')[0];
-      const res = await apiClient.get<any>(`/table-bookings/availability/${storeId}`, { date: dateStr });
-      if (res.success && res.data?.timeSlots) {
-        const slots: TimeSlot[] = res.data.timeSlots.map((s: any) => ({
+      const res = await serviceAppointmentApi.checkAvailability(storeId, dateStr);
+      if (res.success && res.data?.slots) {
+        const slots: TimeSlot[] = res.data.slots.map((s: any) => ({
           time: s.time,
           available: s.available,
-          remainingCapacity: s.remainingCapacity || 0,
+          remainingCapacity: s.staffAvailable || 10,
         }));
         const storeSlots = slots.filter(s => {
           const hour = parseInt(s.time.split(':')[0]);
@@ -223,21 +223,22 @@ function TryAndBuyPage() {
     try {
       setIsSubmitting(true);
       const bookingDateStr = selectedDate.toISOString().split('T')[0];
-      const itemLabels = selectedItems.map(id => ITEM_CATEGORIES.find(c => c.id === id)?.label || id).join(', ');
-      const res = await apiClient.post<any>('/table-bookings', {
+      const itemLabels = selectedItems.map(id => ITEM_CATEGORIES.find(c => c.id === id)?.label || id);
+      const res = await serviceAppointmentApi.createServiceAppointment({
         storeId: selectedStore._id,
-        bookingDate: bookingDateStr,
-        bookingTime: selectedTime,
-        partySize: 1,
+        serviceType: 'home-trial',
+        appointmentDate: bookingDateStr,
+        appointmentTime: selectedTime,
+        duration: 1440,
         customerName: customerName.trim(),
         customerPhone: `${selectedCountry.dialCode}${customerPhone.trim()}`,
-        specialRequests: `Try & Buy Session - Items: ${itemLabels}${specialRequests.trim() ? `. ${specialRequests.trim()}` : ''}`,
+        specialInstructions: `Items: ${itemLabels.join(', ') || 'All items'}${specialRequests.trim() ? `. ${specialRequests.trim()}` : ''}`,
       });
 
       if (res.success) {
         if (!isMounted()) return;
-        setBookingId(res.data?._id || null);
-        setBookingNumber(res.data?.bookingNumber || null);
+        setBookingId(res.data?.id || res.data?._id || null);
+        setBookingNumber(res.data?.appointmentNumber || res.data?.bookingNumber || null);
         setStep('confirm');
       } else {
         platformAlertSimple('Booking Failed', res.message || 'Could not create booking. Please try again.');
@@ -439,6 +440,13 @@ function TryAndBuyPage() {
             <Ionicons name="information-circle" size={16} color={COLORS.purple} />
             <Text style={styles.confirmNoteText}>
               No pre-payment required. Earn bonus coins when you visit the store and make a purchase!
+            </Text>
+          </View>
+
+          <View style={{ backgroundColor: '#FFF7ED', borderRadius: 12, padding: 14, marginTop: 12 }}>
+            <Text style={{ fontSize: 13, fontWeight: '600', color: '#92400E' }}>How Home Trial Works</Text>
+            <Text style={{ fontSize: 12, color: '#B45309', marginTop: 4, lineHeight: 18 }}>
+              {'1. Items will be delivered on your selected date\n2. Try items for up to 24 hours\n3. Keep what you love — return the rest\n4. A pickup will be scheduled for returns'}
             </Text>
           </View>
 

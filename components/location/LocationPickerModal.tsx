@@ -117,10 +117,23 @@ function LocationPickerModal({
       enhancedAddress = `${locality.trim()}, ${enhancedAddress}`;
     }
 
+    // Extract neighbourhood from the address (first part before comma, if not the city itself)
+    let neighbourhood: string | undefined;
+    if (locality.trim()) {
+      neighbourhood = locality.trim();
+    } else if (selectedLocation.address) {
+      const firstPart = selectedLocation.address.split(',')[0].trim();
+      const cityName = selectedLocation.city || '';
+      if (firstPart && firstPart !== cityName && firstPart.length < 40) {
+        neighbourhood = firstPart;
+      }
+    }
+
     const enhancedLocation: AddressSearchResult = {
       ...selectedLocation,
       formattedAddress: enhancedAddress,
       address: enhancedAddress,
+      neighbourhood,
       pincode: pincode.trim() || selectedLocation.pincode || '',
     };
 
@@ -267,10 +280,14 @@ function LocationPickerModal({
         <Pressable
           style={styles.skipButton}
           onPress={handleConfirmLocation}
-         
+
         >
           <Text style={styles.skipButtonText}>Skip & Continue</Text>
         </Pressable>
+
+        <Text style={styles.locationHintText}>
+          You can change this anytime — set a different area to browse deals for a friend or specific location.
+        </Text>
       </View>
     </ScrollView>
   );
@@ -694,6 +711,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     color: colors.neutral[500],
+  },
+  locationHintText: {
+    fontSize: 12,
+    color: '#94a3b8',
+    textAlign: 'center',
+    marginTop: 8,
+    lineHeight: 18,
   },
 });
 

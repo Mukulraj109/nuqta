@@ -22,6 +22,22 @@ import { MapViewSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { Platform } from 'react-native';
+
+// Real MapView — native only
+let MapView: any = null;
+let Marker: any = null;
+let PROVIDER_GOOGLE: any = null;
+if (Platform.OS !== 'web') {
+  try {
+    const Maps = require('react-native-maps');
+    MapView = Maps.default;
+    Marker = Maps.Marker;
+    PROVIDER_GOOGLE = Maps.PROVIDER_GOOGLE;
+  } catch {
+    // react-native-maps not available
+  }
+}
 
 const { width, height } = Dimensions.get('window');
 
@@ -73,7 +89,7 @@ const ExploreMapPage = () => {
         source: 'region' as const,
       };
     }
-    return { latitude: 25.2048, longitude: 55.2708, source: 'default' as const }; // Dubai default
+    return { latitude: 12.9716, longitude: 77.5946, source: 'default' as const }; // Bangalore default
   }, [currentLocation?.coordinates, regionState.regionConfig?.defaultCoordinates]);
 
   // API state
@@ -193,11 +209,40 @@ const ExploreMapPage = () => {
         ))}
       </ScrollView>
 
-      {/* Interactive Map Preview */}
+      {/* Interactive Map */}
       <View style={styles.mapContainer}>
-        {/* Map Background with realistic styling */}
+        {/* Real MapView on native, mock on web */}
+        {MapView && effectiveCoordinates ? (
+          <MapView
+            style={StyleSheet.absoluteFill}
+            provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : undefined}
+            initialRegion={{
+              latitude: effectiveCoordinates.latitude,
+              longitude: effectiveCoordinates.longitude,
+              latitudeDelta: 0.025,
+              longitudeDelta: 0.025,
+            }}
+            showsUserLocation
+            showsMyLocationButton
+          >
+            {stores.slice(0, 20).map((store) => {
+              const coords = (store as any).location?.coordinates;
+              if (!coords || coords.length < 2) return null;
+              const [lng, lat] = coords;
+              return (
+                <Marker
+                  key={store.id}
+                  coordinate={{ latitude: lat, longitude: lng }}
+                  onPress={() => setSelectedStore(store.id === selectedStore ? null : store.id)}
+                  title={store.name}
+                  description={`${store.cashback} cashback`}
+                />
+              );
+            })}
+          </MapView>
+        ) : (
         <View style={styles.mapBackground}>
-          {/* Base gradient */}
+          {/* Fallback mock map for web */}
           <LinearGradient
             colors={['#E8F4F8', '#D1E7DD', colors.slateLight]}
             start={{ x: 0, y: 0 }}
@@ -205,19 +250,16 @@ const ExploreMapPage = () => {
             style={StyleSheet.absoluteFill}
           />
 
-          {/* Decorative map elements - roads */}
           <View style={styles.roadHorizontal1} />
           <View style={styles.roadHorizontal2} />
           <View style={styles.roadVertical1} />
           <View style={styles.roadVertical2} />
           <View style={styles.roadDiagonal} />
 
-          {/* Decorative areas (parks, water) */}
           <View style={styles.parkArea1} />
           <View style={styles.parkArea2} />
           <View style={styles.waterArea} />
 
-          {/* Buildings/Blocks */}
           <View style={styles.block1} />
           <View style={styles.block2} />
           <View style={styles.block3} />
@@ -317,6 +359,7 @@ const ExploreMapPage = () => {
             <Ionicons name="navigate" size={14} color={colors.error} style={{ transform: [{ rotate: '-45deg' }] }} />
           </View>
         </View>
+        )}
       </View>
 
       {/* Store List */}

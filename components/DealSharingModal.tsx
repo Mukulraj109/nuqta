@@ -11,7 +11,7 @@ import {
   Clipboard} from 'react-native';
 import Animated, { interpolate, runOnJS, useAnimatedStyle, useSharedValue, withDelay, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 import { platformAlertSimple } from '@/utils/platformAlert';
-import { BlurView } from 'expo-blur';
+import { CrossPlatformBlurView as BlurView } from '@/components/ui/CrossPlatformBlurView';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { Deal } from '@/types/deals';

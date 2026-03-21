@@ -165,9 +165,9 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
             size="small"
             onPress={() => {
               if (Platform.OS === 'ios') {
-                setTimeout(() => router.push('/coins'), 50);
+                setTimeout(() => router.push('/wallet-screen'), 50);
               } else {
-                router.push('/coins');
+                router.push('/wallet-screen');
               }
             }}
           />

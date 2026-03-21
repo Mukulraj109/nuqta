@@ -20,10 +20,9 @@ import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Region data with flags
-const REGIONS: { id: RegionId; name: string; flag: string; description: string }[] = [
-  { id: 'bangalore', name: 'Bangalore', flag: '\uD83C\uDDEE\uD83C\uDDF3', description: 'India' },
-  { id: 'dubai', name: 'Dubai', flag: '\uD83C\uDDE6\uD83C\uDDEA', description: 'UAE' },
-  { id: 'china', name: 'China', flag: '\uD83C\uDDE8\uD83C\uDDF3', description: 'Mainland China' },
+const REGIONS: { id: RegionId; name: string; flag: string; description: string; comingSoon?: boolean }[] = [
+  { id: 'bangalore', name: 'India', flag: '\uD83C\uDDEE\uD83C\uDDF3', description: 'Bangalore, Mumbai, Delhi & more' },
+  { id: 'dubai', name: 'Dubai', flag: '\uD83C\uDDE6\uD83C\uDDEA', description: 'UAE', comingSoon: true },
 ];
 
 interface RegionSelectorProps {
@@ -171,18 +170,23 @@ function RegionModal({
                 key={region.id}
                 style={[
                   styles.regionOption,
-                  region.id === currentRegion && styles.selectedRegion
+                  region.id === currentRegion && !region.comingSoon && styles.selectedRegion,
+                  region.comingSoon && { opacity: 0.5 },
                 ]}
-                onPress={() => onSelect(region.id)}
-                disabled={isChanging}
-               
+                onPress={() => !region.comingSoon && onSelect(region.id)}
+                disabled={region.comingSoon || isChanging}
               >
                 <Text style={styles.regionFlag}>{region.flag}</Text>
                 <View style={styles.regionInfo}>
                   <Text style={styles.regionOptionName}>{region.name}</Text>
                   <Text style={styles.regionDescription}>{region.description}</Text>
                 </View>
-                {region.id === currentRegion && (
+                {region.comingSoon && (
+                  <View style={styles.comingSoonBadge}>
+                    <Text style={styles.comingSoonText}>Coming Soon</Text>
+                  </View>
+                )}
+                {region.id === currentRegion && !region.comingSoon && (
                   <Ionicons name="checkmark-circle" size={24} color={colors.brand.ios} />
                 )}
               </Pressable>
@@ -206,6 +210,7 @@ export function RegionSelectorPage() {
   const state = useRegionState();
   const setRegion = useSetRegion();
   const [isChanging, setIsChanging] = useState(false);
+  const isMounted = useIsMounted();
 
   const handleSelect = async (regionId: RegionId) => {
     if (regionId === state.currentRegion) return;
@@ -241,17 +246,22 @@ export function RegionSelectorPage() {
           key={region.id}
           style={[
             styles.pageRegionOption,
-            region.id === state.currentRegion && styles.pageSelectedRegion
+            region.id === state.currentRegion && !region.comingSoon && styles.pageSelectedRegion,
+            region.comingSoon && { opacity: 0.5 },
           ]}
-          onPress={() => handleSelect(region.id)}
-          disabled={isChanging}
+          onPress={() => !region.comingSoon && handleSelect(region.id)}
+          disabled={region.comingSoon || isChanging}
         >
           <Text style={styles.pageRegionFlag}>{region.flag}</Text>
           <View style={styles.pageRegionInfo}>
             <Text style={styles.pageRegionName}>{region.name}</Text>
             <Text style={styles.pageRegionDescription}>{region.description}</Text>
           </View>
-          {region.id === state.currentRegion ? (
+          {region.comingSoon ? (
+            <View style={styles.comingSoonBadge}>
+              <Text style={styles.comingSoonText}>Coming Soon</Text>
+            </View>
+          ) : region.id === state.currentRegion ? (
             <Ionicons name="checkmark-circle" size={28} color={colors.brand.ios} />
           ) : (
             <View style={styles.unselectedCircle} />
@@ -384,6 +394,19 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: colors.midGray,
     marginTop: 2,
+  },
+  comingSoonBadge: {
+    backgroundColor: '#FEF9C3',
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderWidth: 1,
+    borderColor: '#FCD34D',
+  },
+  comingSoonText: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: '#92400E',
   },
   cancelButton: {
     marginHorizontal: 20,

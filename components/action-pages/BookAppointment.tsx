@@ -23,12 +23,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import apiClient from '@/services/apiClient';
 import { storesApi } from '@/services/storesApi';
 import { useAuthUser } from '@/stores/selectors';
 import CountryCodePicker, { CountryCode, COUNTRY_CODES } from '@/components/common/CountryCodePicker';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import serviceAppointmentApi from '@/services/serviceAppointmentApi';
 
 const COLORS = {
   pink: colors.brand.pink,
@@ -56,6 +56,13 @@ const SERVICE_TYPES = [
   { id: 'waxing', label: 'Waxing', icon: '🧴', duration: '30 min' },
   { id: 'makeup', label: 'Makeup', icon: '💄', duration: '60 min' },
   { id: 'bridal', label: 'Bridal', icon: '👰', duration: '120 min' },
+];
+
+const DURATION_OPTIONS = [
+  { label: '30 min', value: 30 },
+  { label: '45 min', value: 45 },
+  { label: '60 min', value: 60 },
+  { label: '90 min', value: 90 },
 ];
 
 interface TimeSlot {
@@ -98,6 +105,8 @@ function BookAppointmentPage() {
   const [customerPhone, setCustomerPhone] = useState(userPhone);
   const [selectedCountry, setSelectedCountry] = useState<CountryCode>(COUNTRY_CODES[0]);
   const [specialRequests, setSpecialRequests] = useState('');
+  const [selectedDuration, setSelectedDuration] = useState<number>(60);
+  const [staffPreference, setStaffPreference] = useState('');
 
   const filteredSalons = useMemo(() => {
     if (!searchQuery.trim()) return salons;
@@ -142,12 +151,12 @@ function BookAppointmentPage() {
       setTimeSlots([]);
       setSelectedTime('');
       const dateStr = date.toISOString().split('T')[0];
-      const res = await apiClient.get<any>(`/table-bookings/availability/${storeId}`, { date: dateStr });
-      if (res.success && res.data?.timeSlots) {
-        const slots: TimeSlot[] = res.data.timeSlots.map((s: any) => ({
+      const res = await serviceAppointmentApi.checkAvailability(storeId, dateStr);
+      if (res.success && res.data?.slots) {
+        const slots: TimeSlot[] = res.data.slots.map((s: any) => ({
           time: s.time,
           available: s.available,
-          remainingCapacity: s.remainingCapacity || 0,
+          remainingCapacity: s.staffAvailable || 10,
         }));
         const serviceSlots = slots.filter(s => {
           const hour = parseInt(s.time.split(':')[0]);
@@ -215,20 +224,22 @@ function BookAppointmentPage() {
     try {
       setIsSubmitting(true);
       const bookingDateStr = selectedDate.toISOString().split('T')[0];
-      const res = await apiClient.post<any>('/table-bookings', {
+      const res = await serviceAppointmentApi.createServiceAppointment({
         storeId: selectedStore._id,
-        bookingDate: bookingDateStr,
-        bookingTime: selectedTime,
-        partySize: 1,
+        serviceType: SERVICE_TYPES.find(s => s.id === selectedService)?.label || selectedService,
+        appointmentDate: bookingDateStr,
+        appointmentTime: selectedTime,
+        duration: selectedDuration,
         customerName: customerName.trim(),
         customerPhone: `${selectedCountry.dialCode}${customerPhone.trim()}`,
-        specialRequests: `Service: ${SERVICE_TYPES.find(s => s.id === selectedService)?.label || selectedService}${specialRequests.trim() ? `. ${specialRequests.trim()}` : ''}`,
+        specialInstructions: specialRequests.trim() || undefined,
+        staffMember: staffPreference.trim() || undefined,
       });
 
       if (res.success) {
         if (!isMounted()) return;
-        setBookingId(res.data?._id || null);
-        setBookingNumber(res.data?.bookingNumber || null);
+        setBookingId(res.data?.id || res.data?._id || null);
+        setBookingNumber(res.data?.appointmentNumber || res.data?.bookingNumber || null);
         setStep('confirm');
       } else {
         platformAlertSimple('Booking Failed', res.message || 'Could not create booking. Please try again.');
@@ -524,6 +535,30 @@ function BookAppointmentPage() {
             );
           })}
         </View>
+
+        {/* Duration */}
+        <Text style={{ fontSize: 14, fontWeight: '600', color: COLORS.textPrimary, marginTop: 16, marginBottom: 8 }}>Duration</Text>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+          {DURATION_OPTIONS.map(opt => (
+            <Pressable
+              key={opt.value}
+              onPress={() => setSelectedDuration(opt.value)}
+              style={{ paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, backgroundColor: selectedDuration === opt.value ? COLORS.pink : COLORS.background, borderWidth: 1, borderColor: selectedDuration === opt.value ? COLORS.pink : COLORS.border }}
+            >
+              <Text style={{ fontSize: 13, fontWeight: '600', color: selectedDuration === opt.value ? COLORS.white : COLORS.textSecondary }}>{opt.label}</Text>
+            </Pressable>
+          ))}
+        </View>
+
+        {/* Preferred Stylist */}
+        <Text style={{ fontSize: 14, fontWeight: '600', color: COLORS.textPrimary, marginTop: 16, marginBottom: 8 }}>Preferred Stylist (Optional)</Text>
+        <TextInput
+          value={staffPreference}
+          onChangeText={setStaffPreference}
+          placeholder="Enter stylist name if you have a preference"
+          placeholderTextColor={COLORS.textSecondary}
+          style={{ borderWidth: 1, borderColor: COLORS.border, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 10, fontSize: 14, color: COLORS.textPrimary, backgroundColor: COLORS.white }}
+        />
 
         {/* Date Selection */}
         <Text style={styles.formLabel}>Select Date</Text>

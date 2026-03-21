@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter, usePathname } from 'expo-router';
-import { BlurView } from 'expo-blur';
+import { CrossPlatformBlurView as BlurView } from '@/components/ui/CrossPlatformBlurView';
 import { colors } from '@/constants/theme';
 
 // Module-level variable to persist scroll position across re-renders

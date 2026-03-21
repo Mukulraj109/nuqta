@@ -15,7 +15,7 @@ import {
   Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { BlurView } from 'expo-blur';
+import { CrossPlatformBlurView as BlurView } from '@/components/ui/CrossPlatformBlurView';
 import { Ionicons } from '@expo/vector-icons';
 import { PRIVE_COLORS, PRIVE_SPACING, PRIVE_RADIUS } from './priveTheme';
 import { FlashList } from '@shopify/flash-list';

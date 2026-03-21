@@ -26,6 +26,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { useIsMounted } from '@/hooks/useIsMounted';
 
 const TRAVEL_SLUGS = ['flights', 'hotels', 'trains', 'bus', 'cab', 'packages'];
+const EDUCATION_KEYWORDS = ['class', 'course', 'tutorial', 'workshop', 'enrollment', 'lesson', 'training'];
 
 const CATEGORY_ICONS: Record<string, string> = {
   flights: 'airplane',
@@ -50,7 +51,7 @@ const MyBookingsPage = () => {
   const [bookings, setBookings] = useState<ServiceBooking[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
+  const [activeTab, setActiveTab] = useState<'upcoming' | 'past' | 'courses'>('upcoming');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const fetchBookings = useCallback(async () => {
@@ -75,7 +76,15 @@ const MyBookingsPage = () => {
       if (response.success && response.data) {
         let filteredBookings = response.data;
 
-        if (activeTab === 'upcoming') {
+        if (activeTab === 'courses') {
+          // ED-02: Filter education-related bookings
+          filteredBookings = filteredBookings.filter(booking => {
+            const sType = (booking as any).serviceType?.toLowerCase() || '';
+            const catSlug = booking.serviceCategory?.slug?.toLowerCase() || '';
+            return EDUCATION_KEYWORDS.some(kw => sType.includes(kw) || catSlug.includes(kw));
+          });
+          filteredBookings.sort((a, b) => new Date(a.bookingDate).getTime() - new Date(b.bookingDate).getTime());
+        } else if (activeTab === 'upcoming') {
           filteredBookings = filteredBookings.filter(booking => {
             const bookingDate = new Date(booking.bookingDate);
             if (!isMounted()) return;
@@ -458,6 +467,14 @@ const MyBookingsPage = () => {
           >
             <Text style={[styles.tabText, activeTab === 'past' && styles.activeTabText]}>
               Past
+            </Text>
+          </Pressable>
+          <Pressable
+            style={[styles.tab, activeTab === 'courses' && styles.activeTab]}
+            onPress={() => setActiveTab('courses')}
+          >
+            <Text style={[styles.tabText, activeTab === 'courses' && styles.activeTabText]}>
+              Courses
             </Text>
           </Pressable>
         </View>

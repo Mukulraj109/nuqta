@@ -143,6 +143,10 @@ function CompareDevicesPage() {
   };
 
   const handleToggleDevice = (device: any) => {
+    if (device.inventory?.inStock === false) {
+      platformAlertSimple('Out of Stock', 'This device is currently out of stock and cannot be selected for comparison.');
+      return;
+    }
     const isSelected = selectedDevices.some(d => (d._id || d.id) === (device._id || device.id));
     if (isSelected) {
       setSelectedDevices(prev => prev.filter(d => (d._id || d.id) !== (device._id || device.id)));
@@ -383,12 +387,21 @@ function CompareDevicesPage() {
               <Text style={styles.productPrice}>{currencySymbol}{price}</Text>
             )}
           </View>
+          {product.inventory?.inStock === false && (
+            <View style={{ backgroundColor: '#FEE2E2', borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2, marginTop: 4, alignSelf: 'flex-start' }}>
+              <Text style={{ fontSize: 10, color: '#DC2626', fontWeight: '600' }}>Out of Stock</Text>
+            </View>
+          )}
         </View>
-        <View style={[styles.selectIndicator, isSelected && styles.selectIndicatorActive]}>
+        <View style={[
+          styles.selectIndicator,
+          isSelected && styles.selectIndicatorActive,
+          product.inventory?.inStock === false && { borderColor: colors.neutral[300], opacity: 0.5 },
+        ]}>
           <Ionicons
             name={isSelected ? 'checkmark' : 'add'}
             size={18}
-            color={isSelected ? COLORS.white : COLORS.blue}
+            color={product.inventory?.inStock === false ? colors.neutral[400] : (isSelected ? COLORS.white : COLORS.blue)}
           />
         </View>
       </Pressable>

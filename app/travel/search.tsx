@@ -136,7 +136,10 @@ function TravelSearchPage() {
           <Pressable style={styles.backBtn} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
           </Pressable>
-          <Text style={styles.headerTitle}>Search Travel</Text>
+          <View>
+            <Text style={styles.headerTitle}>Search Travel</Text>
+            <Text style={{ fontSize: 12, color: '#94a3b8', marginTop: 2 }}>Find travel cashback deals from our partners</Text>
+          </View>
           <View style={{ width: 40 }} />
         </View>
 

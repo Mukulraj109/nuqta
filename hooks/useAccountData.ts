@@ -1,5 +1,5 @@
 // useAccountData Hook
-// Fetches dynamic badge data and merges with static section definitions
+// Fetches dynamic badge data + user stats and merges with static section definitions
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import {
@@ -9,6 +9,13 @@ import {
 } from '@/types/account.types';
 import { getSectionsForTab } from '@/data/accountData';
 import { fetchAccountBadges, AccountBadgeData } from '@/services/accountApi';
+import apiClient from '@/services/apiClient';
+
+export interface UserStats {
+  totalOrders?: number;
+  totalSaved?: number;
+  memberSince?: string;
+}
 
 interface UseAccountDataReturn {
   sections: AccountSection[];
@@ -16,6 +23,7 @@ interface UseAccountDataReturn {
   error: string | null;
   refreshing: boolean;
   refresh: () => void;
+  userStats: UserStats | null;
 }
 
 /** Merge dynamic badge data into section items */
@@ -57,6 +65,7 @@ export default function useAccountData(
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [userStats, setUserStats] = useState<UserStats | null>(null);
   const fetchingRef = useRef(false);
 
   const loadData = useCallback(
@@ -90,6 +99,17 @@ export default function useAccountData(
     [activeTab]
   );
 
+  // Fetch user stats (orders count, savings, member since) for overview tab
+  useEffect(() => {
+    if (activeTab === 'overview') {
+      apiClient.get('/user/stats').then((res: any) => {
+        if (res.success && res.data) {
+          setUserStats(res.data);
+        }
+      }).catch(() => { /* non-blocking */ });
+    }
+  }, [activeTab]);
+
   useEffect(() => {
     loadData(false);
   }, [loadData]);
@@ -98,5 +118,5 @@ export default function useAccountData(
     loadData(true);
   }, [loadData]);
 
-  return { sections, loading, error, refreshing, refresh };
+  return { sections, loading, error, refreshing, refresh, userStats };
 }

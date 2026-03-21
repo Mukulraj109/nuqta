@@ -115,6 +115,8 @@ function transformStoreToMallBrand(store: any): MallBrand {
     logo: store.logo,
     banner: store.banner?.[0] || '',
     externalUrl: '',
+    storeId: store._id,
+    isInAppStore: true,
     mallCategory,
     tier: store.deliveryCategories?.premium ? 'premium' : 'standard',
     badges: [
@@ -129,7 +131,7 @@ function transformStoreToMallBrand(store: any): MallBrand {
     ratings: {
       average: store.ratings?.average || 0,
       count: store.ratings?.count || 0,
-      successRate: 95,
+      successRate: store.ratings?.successRate || Math.min(Math.round((store.ratings?.average || 0) / 5 * 100), 100),
       distribution: store.ratings?.distribution || { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 },
     },
     isFeatured: store.isFeatured || false,

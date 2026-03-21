@@ -26,6 +26,7 @@ import cashbackService, {
   CashbackSummary,
   UserCashback,
   CashbackCampaign } from '@/services/cashbackApi';
+import cashStoreApi, { AffiliatePurchase, AffiliateCashbackSummary } from '@/services/cashStoreApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
@@ -33,6 +34,7 @@ import { TransactionListSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
 
+type SourceType = 'store' | 'cashstore';
 type TabType = 'all' | 'pending' | 'credited' | 'expired';
 
 function CashbackPage() {
@@ -43,6 +45,7 @@ function CashbackPage() {
   const currencySymbol = getCurrencySymbol();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [activeSource, setActiveSource] = useState<SourceType>('store');
   const [activeTab, setActiveTab] = useState<TabType>('all');
   const [isRedeeming, setIsRedeeming] = useState(false);
   const [summary, setSummary] = useState<CashbackSummary>({
@@ -63,6 +66,11 @@ function CashbackPage() {
   const [historyPage, setHistoryPage] = useState(1);
   const [historyTotal, setHistoryTotal] = useState(0);
 
+  // ─── Cash Store Affiliate State ──────────────────────────────
+  const [affiliatePurchases, setAffiliatePurchases] = useState<AffiliatePurchase[]>([]);
+  const [affiliateSummary, setAffiliateSummary] = useState<AffiliateCashbackSummary | null>(null);
+  const [affiliateLoading, setAffiliateLoading] = useState(false);
+
   // Animations
   const totalAnim = useSharedValue(0);
   const totalAnimStyle = useAnimatedStyle(() => ({
@@ -74,8 +82,9 @@ function CashbackPage() {
   }, []);
 
   useEffect(() => {
-    loadCashbackHistory();
-  }, [activeTab]);
+    if (activeSource === 'store') loadCashbackHistory();
+    else loadAffiliateData();
+  }, [activeTab, activeSource]);
 
   useEffect(() => {
     totalAnim.value = withTiming(1, { duration: 600 });
@@ -147,6 +156,35 @@ function CashbackPage() {
     } catch (err) {
       if (!isMounted()) return;
       setCashbacks([]);
+    }
+  };
+
+  const loadAffiliateData = async () => {
+    setAffiliateLoading(true);
+    try {
+      const [summaryRes, purchasesRes] = await Promise.allSettled([
+        cashStoreApi.getCashbackSummary(),
+        cashStoreApi.getUserPurchases(1, 20),
+      ]);
+
+      if (summaryRes.status === 'fulfilled' && summaryRes.value) {
+        if (!isMounted()) return;
+        setAffiliateSummary(summaryRes.value);
+      }
+
+      if (purchasesRes.status === 'fulfilled' && purchasesRes.value) {
+        if (!isMounted()) return;
+        let filtered = purchasesRes.value.purchases || [];
+        if (activeTab === 'pending') filtered = filtered.filter(p => p.status === 'pending' || p.status === 'confirmed');
+        else if (activeTab === 'credited') filtered = filtered.filter(p => p.status === 'credited');
+        else if (activeTab === 'expired') filtered = filtered.filter(p => p.status === 'rejected' || p.status === 'refunded');
+        setAffiliatePurchases(filtered);
+      }
+    } catch {
+      // silent
+    } finally {
+      if (!isMounted()) return;
+      setAffiliateLoading(false);
     }
   };
 
@@ -237,6 +275,16 @@ function CashbackPage() {
     }
   };
 
+  const getAffiliatePurchaseStatusColor = (status: string) => {
+    switch (status) {
+      case 'pending': return Colors.warning;
+      case 'confirmed': return '#3B82F6';
+      case 'credited': return Colors.success;
+      case 'rejected': case 'refunded': return Colors.error;
+      default: return Colors.text.secondary;
+    }
+  };
+
   const headerTop = Platform.OS === 'web' ? 0 : insets.top;
 
   // ─── Loading State ─────────────────────────────────────────
@@ -281,6 +329,24 @@ function CashbackPage() {
         </View>
       </View>
 
+      {/* ─── Source Toggle (Store vs Cash Store) ─────────────── */}
+      <View style={styles.sourceToggleRow}>
+        <Pressable
+          style={[styles.sourceToggle, activeSource === 'store' && styles.sourceToggleActive]}
+          onPress={() => setActiveSource('store')}
+        >
+          <Ionicons name="storefront-outline" size={14} color={activeSource === 'store' ? Colors.text.inverse : '#7C8A97'} />
+          <Text style={[styles.sourceToggleText, activeSource === 'store' && styles.sourceToggleTextActive]}>Store Cashback</Text>
+        </Pressable>
+        <Pressable
+          style={[styles.sourceToggle, activeSource === 'cashstore' && styles.sourceToggleActive]}
+          onPress={() => setActiveSource('cashstore')}
+        >
+          <Ionicons name="globe-outline" size={14} color={activeSource === 'cashstore' ? Colors.text.inverse : '#7C8A97'} />
+          <Text style={[styles.sourceToggleText, activeSource === 'cashstore' && styles.sourceToggleTextActive]}>Cash Store</Text>
+        </Pressable>
+      </View>
+
       <ScrollView
         contentContainerStyle={{ paddingBottom: 120 }}
         style={styles.content}
@@ -294,6 +360,131 @@ function CashbackPage() {
           />
         }
       >
+        {/* ─── Cash Store Affiliate View ────────────────────────── */}
+        {activeSource === 'cashstore' ? (
+          <View>
+            {/* Affiliate Summary Hero */}
+            <Animated.View style={[styles.heroCard, totalAnimStyle]}>
+              <LinearGradient
+                colors={[colors.nileBlue, '#234b6b']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.heroGradient}
+              >
+                <View style={[styles.decoCircle, { top: -20, right: -20, width: 80, height: 80 }]} />
+                <View style={[styles.decoCircle, { bottom: -15, left: -15, width: 60, height: 60 }]} />
+                <View style={styles.heroRow}>
+                  <View style={styles.heroLeft}>
+                    <Text style={styles.heroLabel}>Total Coins Earned</Text>
+                    <Text style={styles.heroAmount}>{affiliateSummary?.totalCoinsEarned ?? 0} coins</Text>
+                  </View>
+                  <View style={styles.heroIconWrap}>
+                    <Ionicons name="globe" size={28} color="rgba(232,184,150,0.6)" />
+                  </View>
+                </View>
+                <View style={styles.heroStatsRow}>
+                  <View style={styles.heroStat}>
+                    <View style={[styles.heroStatDot, { backgroundColor: Colors.warning }]} />
+                    <Text style={styles.heroStatLabel}>Pending</Text>
+                    <Text style={styles.heroStatValue}>{affiliateSummary?.pendingCoins ?? 0}</Text>
+                  </View>
+                  <View style={styles.heroStatDivider} />
+                  <View style={styles.heroStat}>
+                    <View style={[styles.heroStatDot, { backgroundColor: '#3B82F6' }]} />
+                    <Text style={styles.heroStatLabel}>Confirmed</Text>
+                    <Text style={styles.heroStatValue}>{affiliateSummary?.confirmedCoins ?? 0}</Text>
+                  </View>
+                  <View style={styles.heroStatDivider} />
+                  <View style={styles.heroStat}>
+                    <View style={[styles.heroStatDot, { backgroundColor: Colors.success }]} />
+                    <Text style={styles.heroStatLabel}>Credited</Text>
+                    <Text style={styles.heroStatValue}>{affiliateSummary?.creditedCoins ?? 0}</Text>
+                  </View>
+                </View>
+              </LinearGradient>
+            </Animated.View>
+
+            {/* History Tabs */}
+            <View style={styles.tabsContainer}>
+              {(['all', 'pending', 'credited', 'expired'] as TabType[]).map((tab) => {
+                const isActive = activeTab === tab;
+                return (
+                  <Pressable
+                    key={tab}
+                    style={[styles.tab, isActive && styles.activeTab]}
+                    onPress={() => setActiveTab(tab)}
+                  >
+                    <Text style={[styles.tabText, isActive && styles.activeTabText]}>
+                      {tab === 'expired' ? 'Rejected' : tab.charAt(0).toUpperCase() + tab.slice(1)}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+
+            {/* Affiliate Purchase List */}
+            <View style={styles.historySection}>
+              <Text style={styles.historyTitle}>Affiliate Purchases</Text>
+              {affiliateLoading ? (
+                <ActivityIndicator size="large" color={colors.brand.sand} style={{ marginTop: 20 }} />
+              ) : affiliatePurchases.length > 0 ? (
+                affiliatePurchases.map((purchase) => (
+                  <View key={purchase._id} style={styles.historyCard}>
+                    <View style={[styles.historyIcon, { backgroundColor: `${getAffiliatePurchaseStatusColor(purchase.status)}12` }]}>
+                      <Ionicons name="globe-outline" size={20} color={getAffiliatePurchaseStatusColor(purchase.status)} />
+                    </View>
+                    <View style={styles.historyInfo}>
+                      <Text style={styles.historyDesc} numberOfLines={1}>
+                        {purchase.brand?.name || 'Online Purchase'}
+                      </Text>
+                      <View style={styles.historyMeta}>
+                        <Text style={styles.historyDate}>{formatDate(purchase.purchasedAt)}</Text>
+                        <View style={styles.historyDot} />
+                        <Text style={styles.historyDate}>{formatAmount(purchase.orderAmount)}</Text>
+                      </View>
+                      {/* Purchase Timeline (CS-M02) */}
+                      {(purchase.status === 'pending' || purchase.status === 'confirmed') && (
+                        <View style={styles.historyExpiryRow}>
+                          <Ionicons name="time-outline" size={11} color={Colors.warning} />
+                          <Text style={styles.historyExpiryText}>
+                            {purchase.status === 'pending' ? 'Awaiting confirmation' : 'Confirmed — coins crediting soon'}
+                          </Text>
+                        </View>
+                      )}
+                      {purchase.creditedAt && (
+                        <View style={styles.historyExpiryRow}>
+                          <Ionicons name="checkmark-circle-outline" size={11} color={Colors.success} />
+                          <Text style={[styles.historyExpiryText, { color: Colors.success }]}>
+                            Credited {formatDate(purchase.creditedAt)}
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                    <View style={styles.historyRight}>
+                      <Text style={[styles.historyAmount, { color: getAffiliatePurchaseStatusColor(purchase.status) }]}>
+                        {purchase.actualCashback} coins
+                      </Text>
+                      <View style={[styles.statusPill, { backgroundColor: `${getAffiliatePurchaseStatusColor(purchase.status)}15` }]}>
+                        <Text style={[styles.statusPillText, { color: getAffiliatePurchaseStatusColor(purchase.status) }]}>
+                          {purchase.status.toUpperCase()}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                ))
+              ) : (
+                <View style={styles.emptyContainer}>
+                  <View style={styles.emptyIconWrap}>
+                    <Ionicons name="globe-outline" size={32} color="#C4956A" />
+                  </View>
+                  <Text style={styles.emptyText}>No affiliate purchases</Text>
+                  <Text style={styles.emptySubtext}>Shop through Cash Store brands to earn coins!</Text>
+                </View>
+              )}
+            </View>
+          </View>
+        ) : (
+        <>
         {/* ─── Total Earned Hero ──────────────────────────────── */}
         <Animated.View style={[styles.heroCard, totalAnimStyle]}>
           <LinearGradient
@@ -601,6 +792,8 @@ function CashbackPage() {
         </View>
 
         <View style={{ height: Spacing['3xl'] }} />
+        </>
+        )}
       </ScrollView>
     </View>
   );
@@ -756,6 +949,32 @@ const styles = StyleSheet.create({
     backgroundColor: '#F4F1ED',
     justifyContent: 'center',
     alignItems: 'center' },
+
+  sourceToggleRow: {
+    flexDirection: 'row',
+    paddingHorizontal: Spacing.base,
+    paddingVertical: Spacing.sm,
+    gap: 8,
+    backgroundColor: Colors.background.primary,
+    borderBottomWidth: 1,
+    borderBottomColor: '#EDEAE6' },
+  sourceToggle: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingVertical: Spacing.sm,
+    borderRadius: 10,
+    backgroundColor: '#F4F1ED' },
+  sourceToggleActive: {
+    backgroundColor: Colors.nileBlue },
+  sourceToggleText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#7C8A97' },
+  sourceToggleTextActive: {
+    color: Colors.text.inverse },
 
   content: {
     flex: 1 },

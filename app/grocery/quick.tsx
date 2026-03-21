@@ -366,58 +366,13 @@ const QuickDeliveryPage: React.FC = () => {
 
 // Fallback data
 function getFallbackQuickStores(): QuickStore[] {
-  return [
-    { id: 'blinkit', name: 'Blinkit', logo: undefined as any, deliveryTime: '8-15 min', cashback: 20, rating: 4.6, isOpen: true },
-    { id: 'zepto', name: 'Zepto', logo: undefined as any, deliveryTime: '10-20 min', cashback: 25, rating: 4.4, isOpen: true },
-    { id: 'instamart', name: 'Instamart', logo: undefined as any, deliveryTime: '15-25 min', cashback: 15, rating: 4.3, isOpen: true },
-    { id: 'bb-now', name: 'BB Now', logo: undefined as any, deliveryTime: '20-30 min', cashback: 15, rating: 4.5, isOpen: true },
-  ];
+  return []; // G-01: No fake partner data — show empty state when API returns nothing
 }
 
 function getFallbackProducts(): any[] {
-  return [
-    {
-      id: 'quick-1',
-      name: 'Amul Milk 1L',
-      images: [],
-      pricing: { basePrice: 68, salePrice: 65 },
-      cashback: { percentage: 10 },
-      rating: { average: 4.5, count: 120 },
-      unit: '1 L',
-      store: { id: 'blinkit', name: 'Blinkit' },
-    },
-    {
-      id: 'quick-2',
-      name: 'Bread',
-      images: [],
-      pricing: { basePrice: 45 },
-      cashback: { percentage: 8 },
-      rating: { average: 4.3, count: 80 },
-      unit: '400 g',
-      store: { id: 'zepto', name: 'Zepto' },
-    },
-    {
-      id: 'quick-3',
-      name: 'Eggs (12 pcs)',
-      images: [],
-      pricing: { basePrice: 90, salePrice: 85 },
-      cashback: { percentage: 5 },
-      rating: { average: 4.6, count: 200 },
-      unit: '12 pcs',
-      store: { id: 'blinkit', name: 'Blinkit' },
-    },
-    {
-      id: 'quick-4',
-      name: 'Curd 400g',
-      images: [],
-      pricing: { basePrice: 45 },
-      cashback: { percentage: 8 },
-      rating: { average: 4.4, count: 150 },
-      unit: '400 g',
-      store: { id: 'zepto', name: 'Zepto' },
-    },
-  ];
+  return []; // G-01: No fake product data
 }
+
 
 const styles = StyleSheet.create({
   container: {

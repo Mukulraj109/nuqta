@@ -70,7 +70,7 @@ const DEFAULT_HERO_BANNERS: CashStoreHeroBanner[] = [
   {
     _id: 'hero-1',
     id: 'hero-1',
-    title: 'Earn cashback on every online order',
+    title: `Earn ${BRAND.COIN_NAME} on every online order`,
     subtitle: 'Shop from 1000+ brands and get instant rewards',
     backgroundColor: colors.warning,
     gradientColors: [colors.warning, '#F77F00'],
@@ -166,6 +166,12 @@ function transformMallBrandToCashStoreBrand(brand: any): CashStoreBrand {
     rating: brand.ratings?.average,
     ratingCount: brand.ratings?.count,
     successRate: brand.ratings?.successRate,
+    rezCoinReward: brand.rezCoinReward ? {
+      coinsPerHundred: brand.rezCoinReward.coinsPerHundred,
+      isActive: brand.rezCoinReward.isActive,
+      minimumOrderAmount: brand.rezCoinReward.minimumOrderAmount,
+      maximumCoinsPerOrder: brand.rezCoinReward.maximumCoinsPerOrder,
+    } : undefined,
     analytics: brand.analytics ? {
       views: brand.analytics.views,
       clicks: brand.analytics.clicks,
@@ -497,9 +503,18 @@ export function useCashStoreSection(
     setIsRefreshing(false);
   }, [queryClient]);
 
-  const copyCouponCode = useCallback(async (code: string): Promise<boolean> => {
+  const copyCouponCode = useCallback(async (code: string, couponId?: string): Promise<boolean> => {
     try {
       await Clipboard.setString(code);
+      // Track the coupon claim if we have a couponId
+      if (couponId) {
+        try {
+          const couponApi = (await import('../services/couponApi')).default;
+          await couponApi.claimCoupon(couponId);
+        } catch {
+          // Claim tracking is best-effort — copy still succeeds
+        }
+      }
       platformAlertSimple('Copied!', `Coupon code "${code}" copied to clipboard`);
       return true;
     } catch {
@@ -525,8 +540,8 @@ export function useCashStoreSection(
 
           if (trackingResult) {
             platformAlertSimple(
-              'Cashback Tracking Active',
-              `Complete your purchase on ${brand.name} to earn up to ${trackingResult.brand.cashback}% cashback!`
+              'Tracking Active',
+              `Complete your purchase on ${brand.name} to earn ${trackingResult.coinsPerHundred} ${BRAND.COIN_NAME} per ₹100!`
             );
           }
         } catch {

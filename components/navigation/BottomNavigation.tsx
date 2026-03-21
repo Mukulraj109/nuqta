@@ -47,11 +47,11 @@ const CurvedBackground = ({ isPrive = false, isDark = false }: { isPrive?: boole
   // SVG path: flat on sides, curves DOWN in center to create semi-circle dip
   const path = `
     M 0 0
-    L ${Math.floor(120 * scale)} 0
-    C ${Math.floor(140 * scale)} 0 ${Math.floor(150 * scale)} 5 ${Math.floor(160 * scale)} 18
-    C ${Math.floor(170 * scale)} 32 ${Math.floor(180 * scale)} 38 ${Math.floor(187.5 * scale)} 38
-    C ${Math.floor(195 * scale)} 38 ${Math.floor(205 * scale)} 32 ${Math.floor(215 * scale)} 18
-    C ${Math.floor(225 * scale)} 5 ${Math.floor(235 * scale)} 0 ${Math.floor(255 * scale)} 0
+    L ${Math.floor(108 * scale)} 0
+    C ${Math.floor(130 * scale)} 0 ${Math.floor(142 * scale)} 4 ${Math.floor(152 * scale)} 20
+    C ${Math.floor(162 * scale)} 36 ${Math.floor(173 * scale)} 48 ${Math.floor(187.5 * scale)} 48
+    C ${Math.floor(202 * scale)} 48 ${Math.floor(213 * scale)} 36 ${Math.floor(223 * scale)} 20
+    C ${Math.floor(233 * scale)} 4 ${Math.floor(245 * scale)} 0 ${Math.floor(267 * scale)} 0
     L ${width} 0
     L ${width} ${height}
     L 0 ${height}
@@ -509,9 +509,15 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ style }) => {
           accessibilityLabel={`${centerTab.name} tab`}
           accessibilityRole="tab"
         >
+          {/* White backing disc — blocks page content showing through the SVG gap */}
+          <View style={[
+            styles.floatingButtonBacking,
+            isPriveActive && { backgroundColor: '#1F2937' },
+            isDark && !isPriveActive && { backgroundColor: '#1E1E1E' },
+          ]} />
           <View style={[
             styles.floatingButtonCircle,
-            isPriveActive && styles.floatingButtonCirclePrive
+            isPriveActive && styles.floatingButtonCirclePrive,
           ]}>
             <ExpoImage
               source={payInStoreIcon}
@@ -559,7 +565,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 95, // Taller to accommodate floating button
+    height: 105, // Taller to accommodate floating button lifted above curve
     zIndex: 1000,
     overflow: 'visible',
   },
@@ -567,7 +573,7 @@ const styles = StyleSheet.create({
   // Floating center button container - positioned above the curve
   floatingButtonContainer: {
     position: 'absolute',
-    top: 0,
+    top: -18, // Negative: lifts coin button above the nav bar top edge
     left: 0,
     right: 0,
     alignItems: 'center',
@@ -611,6 +617,25 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 8,
     overflow: 'hidden',
+  },
+
+  // White backing disc behind coin button — blocks page bleed-through the SVG gap
+  floatingButtonBacking: {
+    position: 'absolute',
+    width: 66,
+    height: 66,
+    borderRadius: 33,
+    backgroundColor: 'white',
+    zIndex: -1,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOpacity: 0.12,
+        shadowRadius: 8,
+        shadowOffset: { width: 0, height: -2 },
+      },
+      android: { elevation: 8 },
+    }),
   },
 
   // Pay in Store icon (Nuqta coin) - fills the circle completely
@@ -664,7 +689,7 @@ const styles = StyleSheet.create({
 
   // Center spacer for floating button
   centerSpacer: {
-    width: 80,
+    width: 96,
   },
 
   // Right tabs section

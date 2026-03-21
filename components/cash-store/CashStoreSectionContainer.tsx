@@ -135,7 +135,7 @@ const CashStoreSectionContainer: React.FC<CashStoreSectionContainerProps> = ({
 
   const handleCouponCopy = useCallback(
     (coupon: CashStoreCoupon) => {
-      copyCouponCode(coupon.code);
+      copyCouponCode(coupon.code, coupon.id);
     },
     [copyCouponCode]
   );
@@ -169,8 +169,8 @@ const CashStoreSectionContainer: React.FC<CashStoreSectionContainerProps> = ({
 
   const handleTravelDealPress = useCallback(
     (deal: TravelDeal) => {
-      // Navigate to travel section or external
-      router.push(`/travel/${deal.category}` as any);
+      // Navigate to cash store brands filtered by travel category
+      router.push(`/cash-store/brands?category=${deal.category}` as any);
     },
     [router]
   );
@@ -236,7 +236,7 @@ const CashStoreSectionContainer: React.FC<CashStoreSectionContainerProps> = ({
   }, [router]);
 
   const handleViewAllTravel = useCallback(() => {
-    router.push('/travel' as any);
+    router.push('/cash-store/brands?category=travel' as any);
   }, [router]);
 
   const handleViewAllActivity = useCallback(() => {

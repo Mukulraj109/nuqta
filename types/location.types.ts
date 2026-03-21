@@ -7,6 +7,7 @@ export interface LocationCoordinates {
 
 export interface LocationAddress {
   address: string;
+  neighbourhood?: string; // BTM Layout, HSR Layout, Koramangala, etc.
   city: string;
   state: string;
   country: string;
@@ -41,7 +42,7 @@ export interface LocationState {
 
 export interface LocationContextType {
   state: LocationState;
-  updateLocation: (coordinates: LocationCoordinates, address?: string, source?: 'manual' | 'gps' | 'ip', extraData?: { city?: string; state?: string; pincode?: string }) => Promise<void>;
+  updateLocation: (coordinates: LocationCoordinates, address?: string, source?: 'manual' | 'gps' | 'ip', extraData?: { city?: string; state?: string; pincode?: string; neighbourhood?: string }) => Promise<void>;
   setManualLocation: (location: UserLocation) => Promise<void>;
   getCurrentLocation: () => Promise<UserLocation | null>;
   getLocationHistory: () => Promise<LocationHistoryEntry[]>;
@@ -58,6 +59,7 @@ export interface AddressSearchResult {
   coordinates: LocationCoordinates;
   formattedAddress: string;
   placeId?: string;
+  neighbourhood?: string;
   city?: string;
   state?: string;
   country?: string;

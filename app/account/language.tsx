@@ -114,13 +114,13 @@ function LanguageSettingsPage() {
       const success = await updateGeneralSettings({ language });
       
       if (success) {
-        // Update app context
+        // Update app context — this persists the language preference
         await appActions.setLanguage(language);
-        
+
         // Show success feedback
         platformAlertSimple(
           'Language Updated',
-          `App language changed to ${LANGUAGE_OPTIONS.find(l => l.code === language)?.name}`,
+          `App language changed to ${LANGUAGE_OPTIONS.find(l => l.code === language)?.name}. Some changes may require an app restart.`,
         );
       } else {
         // Revert on failure

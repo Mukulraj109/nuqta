@@ -14,7 +14,7 @@ import {
 import { FlashList } from '@shopify/flash-list';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { BlurView } from 'expo-blur';
+import { CrossPlatformBlurView as BlurView } from '@/components/ui/CrossPlatformBlurView';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { Article } from '@/types/article.types';

@@ -22,9 +22,11 @@ export function useCashbackSummaryQuery() {
   return useQuery({
     queryKey: queryKeys.cashStore.summary(),
     queryFn: async () => {
-      const cashbackService = (await import('@/services/cashbackApi')).default;
-      return cashbackService.getCashbackSummary();
+      // Affiliate cashback (Cash Store earnings) — NOT store-payment cashback
+      const cashStoreApi = (await import('@/services/cashStoreApi')).default;
+      return cashStoreApi.getCashbackSummary();
     },
+    staleTime: 2 * 60_000,
   });
 }
 
@@ -52,8 +54,28 @@ export function useCashbackActivityQuery() {
   return useQuery({
     queryKey: queryKeys.cashStore.activity(),
     queryFn: async () => {
-      const cashbackService = (await import('@/services/cashbackApi')).default;
-      return cashbackService.getCashbackHistory({ limit: 5 });
+      const cashStoreApi = (await import('@/services/cashStoreApi')).default;
+      const result = await cashStoreApi.getUserPurchases(1, 5);
+      // Normalize to same shape the section hook expects: { success, data: { cashbacks } }
+      return {
+        success: true,
+        data: {
+          cashbacks: (result.purchases || []).map((p: any) => ({
+            _id: p._id,
+            amount: p.actualCashback || 0,
+            status: p.status === 'credited' ? 'credited' : p.status,
+            earnedDate: p.purchasedAt || p.createdAt,
+            source: 'affiliate',
+            metadata: {
+              storeId: p.brand?._id || '',
+              storeName: p.brand?.name || 'Cash Store',
+              orderAmount: p.orderAmount || 0,
+            },
+            order: { orderNumber: p.externalOrderId },
+          })),
+        },
+      };
     },
+    staleTime: 2 * 60_000,
   });
 }

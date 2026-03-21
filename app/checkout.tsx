@@ -5,6 +5,8 @@ import {
   StyleSheet,
   Platform,
   KeyboardAvoidingView,
+  Text,
+  Pressable,
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useCheckout } from '@/hooks/useCheckout';
@@ -34,6 +36,33 @@ import AddressSelectionModal from '@/components/checkout/AddressSelectionModal';
 import PaymentFailureModal from '@/components/checkout/PaymentFailureModal';
 import { colors } from '@/constants/theme';
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
+
+// G-03: Delivery time slot picker
+const DELIVERY_SLOTS = [
+  { label: 'Morning (9-12)', value: 'morning' },
+  { label: 'Afternoon (12-3)', value: 'afternoon' },
+  { label: 'Evening (3-6)', value: 'evening' },
+  { label: 'Night (6-9)', value: 'night' },
+];
+
+function DeliverySlotPicker({ selectedSlot, onSelectSlot }: { selectedSlot?: string; onSelectSlot: (s: string) => void }) {
+  return (
+    <View style={{ backgroundColor: colors.background.primary, borderRadius: 14, padding: 14, marginBottom: 12, shadowOpacity: 0.04, shadowRadius: 4, shadowOffset: { width: 0, height: 1 }, elevation: 1 }}>
+      <Text style={{ fontSize: 14, fontWeight: '700', color: colors.text.primary, marginBottom: 10 }}>Delivery Time Slot</Text>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+        {DELIVERY_SLOTS.map(slot => (
+          <Pressable
+            key={slot.value}
+            onPress={() => onSelectSlot(slot.value)}
+            style={{ paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, backgroundColor: selectedSlot === slot.value ? '#7C3AED' : '#F1F5F9', borderWidth: 1, borderColor: selectedSlot === slot.value ? '#7C3AED' : '#E2E8F0' }}
+          >
+            <Text style={{ fontSize: 12, fontWeight: '600', color: selectedSlot === slot.value ? '#fff' : '#64748B' }}>{slot.label}</Text>
+          </Pressable>
+        ))}
+      </View>
+    </View>
+  );
+}
 
 function CheckoutPage() {
   const router = useRouter();
@@ -171,6 +200,14 @@ function CheckoutPage() {
             onOpenAddressModal={() => dispatch({ type: 'SET_FIELD', field: 'showAddressModal', value: true })}
             onSetFulfillmentDetails={actions.setFulfillmentDetails}
           />
+
+          {/* G-03: Delivery time slot selector */}
+          {state.fulfillment.selectedType === 'delivery' && (
+            <DeliverySlotPicker
+              selectedSlot={state.fulfillment.deliverySlot}
+              onSelectSlot={(slot: string) => actions.setFulfillmentDetails({ deliverySlot: slot })}
+            />
+          )}
 
           <PromoCodeSection
             appliedPromoCode={state.appliedPromoCode}

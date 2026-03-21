@@ -15,7 +15,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { type ImageSource } from 'expo-image';
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { BlurView } from "expo-blur";
+import { CrossPlatformBlurView as BlurView } from '@/components/ui/CrossPlatformBlurView';
 import { triggerImpact } from "@/utils/haptics";
 import { ThemedText } from "@/components/ThemedText";
 import discountsApi, { Discount } from "@/services/discountsApi";

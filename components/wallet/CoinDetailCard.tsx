@@ -40,16 +40,22 @@ export const CoinDetailCard: React.FC<CoinDetailCardProps> = React.memo(({ coin,
 
   // Determine info line
   const getInfoText = (): string => {
+    // Check actual expiryDate first (set by backend based on admin config)
+    if (coin.expiryDate) {
+      const parsed = new Date(coin.expiryDate).getTime();
+      if (Number.isFinite(parsed)) {
+        const daysLeft = Math.ceil((parsed - Date.now()) / 86400000);
+        if (daysLeft <= 0) return 'Expired';
+        if (daysLeft === 1) return 'Expires tomorrow';
+        if (daysLeft <= 30) return `Expires in ${daysLeft} days`;
+        const months = Math.ceil(daysLeft / 30);
+        return `Expires in ~${months} months`;
+      }
+    }
+    // No expiryDate = admin configured 0 days = never expires
     if (coin.type === 'rez' || coin.type === 'nuqta') return 'Never expires';
     if (coin.type === 'promo') {
       if (coin.expiryCountdown) return coin.expiryCountdown;
-      if (coin.expiryDate) {
-        const parsed = new Date(coin.expiryDate).getTime();
-        if (Number.isFinite(parsed)) {
-          const days = Math.ceil((parsed - Date.now()) / 86400000);
-          return days > 0 ? `Expires in ${days} days` : 'Expired';
-        }
-      }
       return 'Max 20% per bill';
     }
     if (coin.type === 'branded') {

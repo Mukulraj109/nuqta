@@ -22,7 +22,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { BlurView } from 'expo-blur';
+import { CrossPlatformBlurView as BlurView } from '@/components/ui/CrossPlatformBlurView';
 import productsApi, { Product } from '@/services/productsApi';
 import { RetryButton } from '@/components/common/RetryButton';
 import { useGetCurrencySymbol } from '@/stores/selectors';

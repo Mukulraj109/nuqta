@@ -23,7 +23,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import apiClient from '@/services/apiClient';
+import serviceAppointmentApi from '@/services/serviceAppointmentApi';
 import { storesApi } from '@/services/storesApi';
 import { useAuthUser } from '@/stores/selectors';
 import CountryCodePicker, { CountryCode, COUNTRY_CODES } from '@/components/common/CountryCodePicker';
@@ -107,6 +107,7 @@ function BookTicketsPage() {
   const [customerPhone, setCustomerPhone] = useState(userPhone);
   const [selectedCountry, setSelectedCountry] = useState<CountryCode>(COUNTRY_CODES[0]);
   const [specialRequests, setSpecialRequests] = useState('');
+  const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
 
   const filteredVenues = useMemo(() => {
     if (!searchQuery.trim()) return venues;
@@ -149,10 +150,10 @@ function BookTicketsPage() {
       setTimeSlots([]);
       setSelectedTime('');
       const dateStr = date.toISOString().split('T')[0];
-      const res = await apiClient.get<any>(`/table-bookings/availability/${storeId}`, { date: dateStr });
-      if (res.success && res.data?.timeSlots) {
-        const slots: TimeSlot[] = res.data.timeSlots.map((s: any) => ({
-          time: s.time, available: s.available, remainingCapacity: s.remainingCapacity || 0,
+      const res = await serviceAppointmentApi.checkAvailability(storeId, dateStr);
+      if (res.success && res.data?.slots) {
+        const slots: TimeSlot[] = res.data.slots.map((s: any) => ({
+          time: s.time, available: s.available, remainingCapacity: s.staffAvailable || 10,
         }));
         const eventSlots = slots.filter(s => {
           const hour = parseInt(s.time.split(':')[0]);
@@ -213,21 +214,21 @@ function BookTicketsPage() {
     try {
       setIsSubmitting(true);
       const bookingDateStr = selectedDate.toISOString().split('T')[0];
-      const seatInfo = SEAT_TYPES.find(s => s.id === selectedSeat);
-      const res = await apiClient.post<any>('/table-bookings', {
+      const res = await serviceAppointmentApi.createServiceAppointment({
         storeId: selectedStore._id,
-        bookingDate: bookingDateStr,
-        bookingTime: selectedTime,
-        partySize: ticketCount,
+        serviceType: SEAT_TYPES.find(s => s.id === selectedSeat)?.label || selectedSeat || 'event-ticket',
+        appointmentDate: bookingDateStr,
+        appointmentTime: selectedTime,
+        duration: 120,
         customerName: customerName.trim(),
         customerPhone: `${selectedCountry.dialCode}${customerPhone.trim()}`,
-        specialRequests: `Event: ${EVENT_TYPES.find(s => s.id === selectedService)?.label || selectedService}. Seats: ${ticketCount}x ${seatInfo?.label || 'Standard'}${specialRequests.trim() ? `. ${specialRequests.trim()}` : ''}`,
+        specialInstructions: `Tickets: ${ticketCount || 1}. Seat: ${selectedSeat}${selectedSeats.length > 0 ? `. Seats: ${selectedSeats.join(', ')}` : ''}${specialRequests.trim() ? `. ${specialRequests.trim()}` : ''}`,
       });
 
       if (res.success) {
         if (!isMounted()) return;
-        setBookingId(res.data?._id || null);
-        setBookingNumber(res.data?.bookingNumber || null);
+        setBookingId(res.data?.id || res.data?._id || null);
+        setBookingNumber(res.data?.appointmentNumber || res.data?.bookingNumber || null);
         setStep('confirm');
       } else {
         platformAlertSimple('Booking Failed', res.message || 'Could not create booking. Please try again.');
@@ -358,6 +359,11 @@ function BookTicketsPage() {
               <Text style={styles.bookingIdValue}>{bookingNumber}</Text>
             </View>
           )}
+          <View style={{ alignItems: 'center', marginVertical: 16, padding: 16, backgroundColor: '#F8FAFC', borderRadius: 12, borderWidth: 1, borderColor: '#E2E8F0' }}>
+            <Ionicons name="qr-code-outline" size={80} color="#7C3AED" />
+            <Text style={{ fontSize: 12, fontWeight: '700', color: '#111827', marginTop: 8 }}>{bookingNumber}</Text>
+            <Text style={{ fontSize: 11, color: '#94A3B8', marginTop: 4 }}>Show this at entry</Text>
+          </View>
           <View style={styles.confirmCard}>
             <View style={styles.confirmRow}>
               <View style={[styles.confirmRowIcon, { backgroundColor: 'rgba(139,92,246,0.1)' }]}>
@@ -506,6 +512,35 @@ function BookTicketsPage() {
             );
           })}
         </View>
+
+        {selectedSeat && (
+          <View style={{ marginTop: 16 }}>
+            <Text style={{ fontSize: 14, fontWeight: '600', color: '#111827', marginBottom: 8 }}>Select Seat</Text>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, justifyContent: 'center' }}>
+              {Array.from({ length: 40 }, (_, i) => {
+                const row = String.fromCharCode(65 + Math.floor(i / 8));
+                const col = (i % 8) + 1;
+                const seatLabel = `${row}${col}`;
+                const isSelected = selectedSeats?.includes(seatLabel);
+                return (
+                  <Pressable
+                    key={seatLabel}
+                    onPress={() => {
+                      setSelectedSeats(prev =>
+                        prev?.includes(seatLabel)
+                          ? prev.filter(s => s !== seatLabel)
+                          : [...(prev || []), seatLabel]
+                      );
+                    }}
+                    style={{ width: 36, height: 36, borderRadius: 6, alignItems: 'center', justifyContent: 'center', backgroundColor: isSelected ? '#7C3AED' : '#F1F5F9', borderWidth: 1, borderColor: isSelected ? '#7C3AED' : '#E2E8F0' }}
+                  >
+                    <Text style={{ fontSize: 10, fontWeight: '600', color: isSelected ? '#fff' : '#64748B' }}>{seatLabel}</Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+          </View>
+        )}
 
         {/* Ticket Count */}
         <Text style={styles.formLabel}>Number of Tickets</Text>

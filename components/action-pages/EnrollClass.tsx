@@ -23,7 +23,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import apiClient from '@/services/apiClient';
+import serviceAppointmentApi from '@/services/serviceAppointmentApi';
 import { storesApi } from '@/services/storesApi';
 import { useAuthUser } from '@/stores/selectors';
 import CountryCodePicker, { CountryCode, COUNTRY_CODES } from '@/components/common/CountryCodePicker';
@@ -142,10 +142,10 @@ function EnrollClassPage() {
       setTimeSlots([]);
       setSelectedTime('');
       const dateStr = date.toISOString().split('T')[0];
-      const res = await apiClient.get<any>(`/table-bookings/availability/${storeId}`, { date: dateStr });
-      if (res.success && res.data?.timeSlots) {
-        const slots: TimeSlot[] = res.data.timeSlots.map((s: any) => ({
-          time: s.time, available: s.available, remainingCapacity: s.remainingCapacity || 0,
+      const res = await serviceAppointmentApi.checkAvailability(storeId, dateStr);
+      if (res.success && res.data?.slots) {
+        const slots: TimeSlot[] = res.data.slots.map((s: any) => ({
+          time: s.time, available: s.available, remainingCapacity: s.staffAvailable || 10,
         }));
         const serviceSlots = slots.filter(s => {
           const hour = parseInt(s.time.split(':')[0]);
@@ -206,20 +206,21 @@ function EnrollClassPage() {
     try {
       setIsSubmitting(true);
       const bookingDateStr = selectedDate.toISOString().split('T')[0];
-      const res = await apiClient.post<any>('/table-bookings', {
+      const res = await serviceAppointmentApi.createServiceAppointment({
         storeId: selectedStore._id,
-        bookingDate: bookingDateStr,
-        bookingTime: selectedTime,
-        partySize: 1,
+        serviceType: selectedService,
+        appointmentDate: bookingDateStr,
+        appointmentTime: selectedTime,
+        duration: 60,
         customerName: customerName.trim(),
         customerPhone: `${selectedCountry.dialCode}${customerPhone.trim()}`,
-        specialRequests: `Subject: ${SUBJECT_TYPES.find(s => s.id === selectedService)?.label || selectedService}${specialRequests.trim() ? `. ${specialRequests.trim()}` : ''}`,
+        specialInstructions: specialRequests.trim() || undefined,
       });
 
       if (res.success) {
         if (!isMounted()) return;
-        setBookingId(res.data?._id || null);
-        setBookingNumber(res.data?.bookingNumber || null);
+        setBookingId(res.data?.id || res.data?._id || null);
+        setBookingNumber(res.data?.appointmentNumber || res.data?.bookingNumber || null);
         setStep('confirm');
       } else {
         platformAlertSimple('Enrollment Failed', res.message || 'Could not create enrollment. Please try again.');

@@ -13,6 +13,7 @@ import {
 import { useAuthUser, useIsAuthenticated, useAuthLoading, useAuthActions } from '@/stores/selectors';
 import authService, { User as BackendUser, ProfileUpdate } from '@/services/authApi';
 import profileApi from '@/services/profileApi';
+import walletApi from '@/services/walletApi';
 
 interface ProfileProviderProps {
   children: ReactNode;
@@ -68,6 +69,7 @@ const mapBackendUserToProfileUser = (backendUser: BackendUser): User => {
     phone: backendUser.phoneNumber,
     joinDate: backendUser.createdAt,
     isVerified: backendUser.isVerified,
+    isOnboarded: backendUser.isOnboarded,
     // Map wallet data from backend
     wallet: {
       balance: typeof backendUser.wallet?.balance === 'object'
@@ -79,6 +81,27 @@ const mapBackendUserToProfileUser = (backendUser: BackendUser): User => {
         ? (backendUser.wallet.pendingAmount as any).pending || 0
         : backendUser.wallet?.pendingAmount || 0,
     },
+    // Map subscription/creator tier fields
+    subscriptionTier: (backendUser as any).priveTier
+      || (backendUser as any).subscriptionTier
+      || (backendUser as any).nuqtaPlusTier
+      || undefined,
+    creatorLevel: (backendUser as any).creatorLevel
+      || (backendUser as any).partner?.level
+      || undefined,
+    tier: (() => {
+      const priveTier = (backendUser as any).priveTier
+        || (backendUser as any).nuqtaPlus?.tier
+        || (backendUser as any).nuqtaPlusTier
+        || (backendUser as any).subscriptionTier;
+      if (priveTier === 'elite') return 'Privé Elite';
+      if (priveTier === 'prive' || priveTier === 'premium') return 'Privé';
+      if ((backendUser as any).segment === 'verified_student') return 'Verified Student';
+      if ((backendUser as any).segment === 'verified_employee') return 'Corporate Member';
+      if ((backendUser as any).segment === 'verified_defence') return 'Defence Member';
+      if ((backendUser as any).segment === 'verified_healthcare') return 'Healthcare Worker';
+      return 'REZ Member';
+    })(),
     preferences: {
       notifications: {
         push: backendUser.preferences?.pushNotifications ?? true,
@@ -122,13 +145,38 @@ export const ProfileProvider = ({ children }: ProfileProviderProps) => {
   const [completionStatus, setCompletionStatus] = useState<ProfileCompletionStatus | null>(null);
 
   // Convert backend user to profile user format
+  const [walletOverride, setWalletOverride] = useState<User['wallet'] | null>(null);
+
   const user = useMemo(() => {
     if (authUser) {
       const mappedUser = mapBackendUserToProfileUser(authUser);
+      // Use wallet override if the mapped wallet data looks empty
+      if (walletOverride && (!mappedUser.wallet?.balance && !mappedUser.wallet?.totalEarned)) {
+        mappedUser.wallet = walletOverride;
+      }
       return mappedUser;
     }
     return null;
-  }, [authUser, isAuthenticated]);
+  }, [authUser, isAuthenticated, walletOverride]);
+
+  // Fetch wallet balance separately if user's wallet data seems empty
+  useEffect(() => {
+    if (!authUser || !isAuthenticated || authLoading) return;
+    const w = authUser.wallet;
+    const balance = typeof w?.balance === 'object' ? (w.balance as any).available || (w.balance as any).total || 0 : w?.balance || 0;
+    if (balance || w?.totalEarned) return; // wallet data looks populated
+
+    walletApi.getBalance().then((res) => {
+      if (res.success && res.data) {
+        setWalletOverride({
+          balance: (res.data as any).balance?.available || (res.data as any).balance || 0,
+          totalEarned: (res.data as any).totalEarned || 0,
+          totalSpent: (res.data as any).totalSpent || 0,
+          pendingAmount: (res.data as any).pendingAmount || 0,
+        });
+      }
+    }).catch(() => { /* non-blocking */ });
+  }, [authUser, isAuthenticated, authLoading]);
 
   // Fetch profile completion from backend (single source of truth)
   const refreshCompletionStatus = useCallback(async () => {

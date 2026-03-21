@@ -79,7 +79,7 @@ export const profileMenuSections: ProfileMenuSection[] = [
         id: 'store',
         title: 'Store',
         icon: 'storefront-outline',
-        route: '/Store',
+        route: '/store',
         isEnabled: true,
         showArrow: true,
       },
@@ -209,6 +209,14 @@ export const profileMenuSections: ProfileMenuSection[] = [
   {
     id: 'support_section',
     items: [
+      {
+        id: 'change_password',
+        title: 'Change Password',
+        icon: 'key-outline',
+        route: '/account/change-password',
+        isEnabled: true,
+        showArrow: true,
+      },
       {
         id: 'help_support',
         title: 'Help & Support',

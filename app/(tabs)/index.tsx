@@ -87,7 +87,7 @@ import { AddressSearchResult } from '@/types/location.types';
 // Cart & Auth now from Zustand selectors (imported above)
 import { HomepageCacheWarmer } from '@/services/homepageApi';
 // Wallet now from Zustand selectors (imported above)
-import WhatsNewBadge from '@/components/common/WhatsNewBadge';
+import StoriesRow from '@/components/whats-new/StoriesRow';
 // HomeTab now from Zustand selectors (imported above)
 import CachedImage, { prefetchImages } from '@/components/ui/CachedImage';
 import HomepageSkeleton from '@/components/homepage/HomepageSkeleton';
@@ -299,6 +299,29 @@ function HomeScreen() {
   // Get current location hook for editable location
   const { currentLocation, updateLocation: updateUserLocation } = useCurrentLocation();
 
+  // Serviceability check — auto-switch to Mall if no local stores nearby
+  const [isAreaServiceable, setIsAreaServiceable] = React.useState(true);
+  const [serviceabilityChecked, setServiceabilityChecked] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!currentLocation?.coordinates || serviceabilityChecked) return;
+
+    const lat = currentLocation.coordinates.latitude;
+    const lng = currentLocation.coordinates.longitude;
+
+    import('@/utils/serviceabilityCheck').then(({ checkAreaServiceability }) => {
+      checkAreaServiceability(lat, lng).then(result => {
+        setIsAreaServiceable(result.isServiceable);
+        setServiceabilityChecked(true);
+
+        // Auto-switch to Mall if area is not serviceable AND user is on Near U
+        if (!result.isServiceable && activeTab === 'near-u') {
+          setActiveTab('mall');
+        }
+      });
+    });
+  }, [currentLocation?.coordinates?.latitude, currentLocation?.coordinates?.longitude]);
+
   // Get recently viewed items
   const { items: recentlyViewedItems, isLoading: isLoadingRecentlyViewed, refresh: refreshRecentlyViewed } = useRecentlyViewed();
 
@@ -504,9 +527,9 @@ function HomeScreen() {
   const handleCoinPress = useCallback(() => {
     if (IS_IOS) {
       clearTimeout(navTimerRef.current);
-      navTimerRef.current = setTimeout(() => router.push('/coins'), 50);
+      navTimerRef.current = setTimeout(() => router.push('/wallet-screen'), 50);
     } else {
-      router.push('/coins');
+      router.push('/wallet-screen');
     }
   }, [router]);
 
@@ -533,10 +556,6 @@ function HomeScreen() {
     }
   }, [isAuthenticated, authUser, showModal]);
 
-  const handleWhatsNewPress = useCallback(() => {
-    router.push('/whats-new');
-  }, [router]);
-
   // Handle location selection from the picker modal
   const handleLocationSelect = useCallback(async (selectedLocation: AddressSearchResult) => {
     try {
@@ -544,11 +563,12 @@ function HomeScreen() {
         latitude: selectedLocation.coordinates.latitude,
         longitude: selectedLocation.coordinates.longitude,
       };
-      // Pass city/state/pincode from search results
+      // Pass city/state/pincode/neighbourhood from search results
       await updateUserLocation(coordinates, selectedLocation.formattedAddress, 'manual', {
         city: selectedLocation.city,
         state: selectedLocation.state,
         pincode: selectedLocation.pincode,
+        neighbourhood: selectedLocation.neighbourhood,
       });
       if (!isMounted()) return;
       setIsLocationModalVisible(false);
@@ -666,13 +686,6 @@ function HomeScreen() {
               />
               <Text style={[viewStyles.headerCoinText, tabStyles.coinTextColor]}>{!walletData && isWalletLoading ? '...' : userPoints}</Text>
             </Pressable>
-
-            {/* What's New Badge */}
-            <WhatsNewBadge
-              onPress={handleWhatsNewPress}
-              style={viewStyles.whatsNewBadge}
-              variant={tabStyles.whatsNewVariant}
-            />
 
             {/* Cart Button with Modern Badge */}
             <Pressable
@@ -856,6 +869,11 @@ function HomeScreen() {
         </View>
       )}
 
+      {/* Stories Row — What's New (Instagram-style) */}
+      {activeTab !== 'prive' && (
+        <StoriesRow variant={tabStyles.whatsNewVariant} />
+      )}
+
       {/* Content */}
       <View style={[
         viewStyles.content,
@@ -887,6 +905,9 @@ function HomeScreen() {
                 currencySymbol={currencySymbol}
                 featureLevel={featureLevel}
                 hasCompletedFirstOrder={featureLevel >= 3}
+                isAreaServiceable={isAreaServiceable}
+                areaName={currentLocation?.address?.neighbourhood || currentLocation?.address?.city}
+                onSwitchToMall={() => setActiveTab('mall')}
               />
             </Suspense>
           </FeatureErrorBoundary>
@@ -1048,13 +1069,6 @@ const viewStyles = StyleSheet.create({
     }),
   },
   // What's New Badge
-  whatsNewBadge: {
-    ...Platform.select({
-      android: { marginLeft: 4, flexShrink: 0 },
-      ios: { marginLeft: 4, flexShrink: 0 },
-      default: {}, // Web: gap handles spacing
-    }),
-  },
   // Header Coin - Horizontal Pill Style
   headerCoinContainer: {
     flexDirection: 'row',

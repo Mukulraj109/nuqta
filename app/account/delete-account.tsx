@@ -65,11 +65,24 @@ function DeleteAccountPage() {
           'OK'
         );
       } else {
-        platformAlertSimple('Error', data?.message || 'Failed to delete account');
+        const msg = data?.message || 'Failed to delete account';
+        if (msg.toLowerCase().includes('active order')) {
+          platformAlertSimple('Cannot Delete', 'You have active orders. Please wait for them to complete before deleting your account.');
+        } else if (msg.toLowerCase().includes('wallet balance') || msg.toLowerCase().includes('pending')) {
+          platformAlertSimple('Cannot Delete', 'Please withdraw your wallet balance before deleting your account.');
+        } else {
+          platformAlertSimple('Error', msg);
+        }
       }
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || 'Failed to delete account. Please try again.';
-      platformAlertSimple('Error', errorMessage);
+      if (errorMessage.toLowerCase().includes('active order')) {
+        platformAlertSimple('Cannot Delete', 'You have active orders. Please wait for them to complete before deleting your account.');
+      } else if (errorMessage.toLowerCase().includes('wallet balance') || errorMessage.toLowerCase().includes('pending')) {
+        platformAlertSimple('Cannot Delete', 'Please withdraw your wallet balance before deleting your account.');
+      } else {
+        platformAlertSimple('Error', errorMessage);
+      }
     } finally {
       if (!isMounted()) return;
       setIsLoading(false);

@@ -63,7 +63,7 @@ const STEPS = [
     id: 4,
     icon: 'wallet',
     title: 'Earn',
-    description: 'Get cashback credited',
+    description: 'Get REZ coins in wallet',
     color: colors.nileBlue,
     gradient: ['#243f55', colors.nileBlue],
     iconColor: colors.background.primary,
@@ -186,7 +186,7 @@ const HowItWorksPreview: React.FC<HowItWorksPreviewProps> = ({ onLearnMore }) =>
         <View style={styles.infoBox}>
           <Ionicons name="information-circle" size={16} color={colors.brand.sand} />
           <Text style={styles.infoText}>
-            Cashback is typically credited within 24-72 hours after delivery
+            REZ coins are typically credited within 24-72 hours after delivery
           </Text>
         </View>
 

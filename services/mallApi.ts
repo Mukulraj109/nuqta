@@ -406,6 +406,7 @@ class MallApiService {
   /**
    * Track brand click for affiliate cashback tracking
    * Returns tracking URL to redirect user through
+   * @deprecated Use Cash Store instead — Mall is now an in-app delivery marketplace
    */
   async trackAffiliateClick(brandId: string): Promise<{
     clickId: string;
@@ -453,6 +454,7 @@ class MallApiService {
 
   /**
    * Get user's click history
+   * @deprecated Use Cash Store instead — Mall is now an in-app delivery marketplace
    */
   async getUserClicks(page: number = 1, limit: number = 20): Promise<{
     clicks: any[];
@@ -476,6 +478,7 @@ class MallApiService {
 
   /**
    * Get user's purchase history
+   * @deprecated Use Cash Store instead — Mall is now an in-app delivery marketplace
    */
   async getUserPurchases(page: number = 1, limit: number = 20): Promise<{
     purchases: any[];
@@ -499,6 +502,7 @@ class MallApiService {
 
   /**
    * Get user's cashback summary
+   * @deprecated Use Cash Store instead — Mall is now an in-app delivery marketplace
    */
   async getCashbackSummary(): Promise<{
     totalEarned: number;

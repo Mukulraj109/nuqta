@@ -129,14 +129,35 @@ const CashStoreBrandCard: React.FC<CashStoreBrandCardProps> = ({ brand, index, o
           </View>
         </View>
 
-        {/* Cashback Badge */}
+        {/* REZ Coin Reward Badge */}
         <View style={styles.cashbackOuter}>
           <View style={[styles.cashbackBadge, { backgroundColor: cashbackBg }]}>
-            {brand.maxCashback ? (
-              <Text style={[styles.cashbackUpTo, { color: isHot ? colors.successScale[700] : colors.neutral[400] }]}>Up to</Text>
-            ) : null}
-            <Text style={[styles.cashbackRate, { color: cashbackColor }]}>{brand.cashbackRate}%</Text>
-            <Text style={[styles.cashbackLabel, { color: isHot ? colors.successScale[700] : colors.neutral[500] }]}>cashback</Text>
+            {(() => {
+              const coins = brand.rezCoinReward?.coinsPerHundred;
+              const coinActive = brand.rezCoinReward?.isActive !== false;
+              if (coins != null && coinActive) {
+                return (
+                  <>
+                    <Text style={[styles.cashbackUpTo, { color: isHot ? colors.successScale[700] : colors.neutral[400] }]}>
+                      {coins}
+                    </Text>
+                    <Text style={[styles.cashbackRate, { color: cashbackColor, fontSize: 10 }]}>coins</Text>
+                    <Text style={[styles.cashbackLabel, { color: isHot ? colors.successScale[700] : colors.neutral[500] }]}>
+                      /₹100
+                    </Text>
+                  </>
+                );
+              }
+              return (
+                <>
+                  {brand.maxCashback ? (
+                    <Text style={[styles.cashbackUpTo, { color: isHot ? colors.successScale[700] : colors.neutral[400] }]}>Up to</Text>
+                  ) : null}
+                  <Text style={[styles.cashbackRate, { color: cashbackColor }]}>{brand.cashbackRate}%</Text>
+                  <Text style={[styles.cashbackLabel, { color: isHot ? colors.successScale[700] : colors.neutral[500] }]}>cashback</Text>
+                </>
+              );
+            })()}
           </View>
           <View style={styles.arrowCircle}>
             <Ionicons name="arrow-forward" size={12} color={colors.nileBlue} />

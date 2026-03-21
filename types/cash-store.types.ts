@@ -89,6 +89,13 @@ export interface CashStoreBrand {
   };
   createdAt: string;
   updatedAt: string;
+  // REZ Coin reward — how many coins per ₹100 spent at this brand
+  rezCoinReward?: {
+    coinsPerHundred: number;
+    isActive: boolean;
+    minimumOrderAmount: number;
+    maximumCoinsPerOrder: number;
+  };
 }
 
 // ============================================================================

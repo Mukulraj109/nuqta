@@ -303,6 +303,24 @@ const MallSectionContainer: React.FC<MallSectionContainerProps> = ({
           />
         }
       >
+      {/* Search Bar */}
+      <View style={styles.searchBarSection}>
+        <Pressable
+          style={styles.searchBar}
+          onPress={() => router.push('/mall/brands?filter=all' as any)}
+        >
+          <Ionicons name="search" size={18} color={colors.neutral[400]} />
+          <Text style={styles.searchPlaceholder}>Search all mall stores...</Text>
+        </Pressable>
+        <Pressable
+          style={styles.bestPriceButton}
+          onPress={() => router.push('/mall/lowest-price' as any)}
+        >
+          <Ionicons name="pricetag" size={14} color={colors.nileBlue} />
+          <Text style={styles.bestPriceText}>Best Price</Text>
+        </Pressable>
+      </View>
+
       {/* Mall Quick Actions */}
       <View style={styles.quickActionsSection}>
         <View style={styles.quickActionsRow}>
@@ -532,6 +550,46 @@ const styles = StyleSheet.create({
   },
   bottomSpacer: {
     height: 40,
+  },
+  searchBarSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingTop: 10,
+    paddingBottom: 4,
+    gap: 10,
+  },
+  searchBar: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.background.primary,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 11,
+    borderWidth: 1,
+    borderColor: '#E8F0F8',
+    gap: 8,
+  },
+  searchPlaceholder: {
+    fontSize: 14,
+    color: colors.neutral[400],
+  },
+  bestPriceButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.lavenderMist,
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 11,
+    gap: 6,
+    borderWidth: 1,
+    borderColor: '#E8F0F8',
+  },
+  bestPriceText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: colors.nileBlue,
   },
   quickActionsSection: {
     paddingHorizontal: 16,

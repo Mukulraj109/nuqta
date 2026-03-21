@@ -114,7 +114,7 @@ export function LocationProvider({ children }: LocationProviderProps) {
         dispatch({ type: 'SET_PERMISSION_STATUS', payload: permission });
 
         // Don't auto-fetch from server or GPS on initialization
-        // Let LocationRegionSync set the default based on current region (Dubai)
+        // Let LocationRegionSync set the default based on current region (Bangalore)
         // GPS/server location will only be fetched when user explicitly clicks "Use current location"
         dispatch({ type: 'SET_LOADING', payload: false });
       };
@@ -123,19 +123,19 @@ export function LocationProvider({ children }: LocationProviderProps) {
       await Promise.race([initPromise(), timeoutPromise]);
       
     } catch (error) {
-      // Set a default location if initialization fails - default to Dubai
+      // Set a default location if initialization fails - default to Bangalore
       const defaultLocation: UserLocation = {
         coordinates: {
-          latitude: 25.2048,
-          longitude: 55.2708,
+          latitude: 12.9716,
+          longitude: 77.5946,
         },
         address: {
-          address: 'Dubai, United Arab Emirates',
-          city: 'Dubai',
-          state: 'Dubai',
-          country: 'United Arab Emirates',
+          address: 'Bangalore, India',
+          city: 'Bangalore',
+          state: 'Karnataka',
+          country: 'India',
           pincode: '',
-          formattedAddress: 'Dubai, United Arab Emirates',
+          formattedAddress: 'Bangalore, India',
         },
         lastUpdated: new Date(),
         source: 'gps' as const,
@@ -149,13 +149,17 @@ export function LocationProvider({ children }: LocationProviderProps) {
     coordinates: LocationCoordinates,
     address?: string,
     source: 'manual' | 'gps' | 'ip' = 'gps',
-    extraData?: { city?: string; state?: string; pincode?: string }
+    extraData?: { city?: string; state?: string; pincode?: string; neighbourhood?: string }
   ): Promise<void> => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
       dispatch({ type: 'CLEAR_ERROR' });
 
       const userLocation = await (await getLocationService()).updateUserLocation(coordinates, address, source, extraData);
+      // Merge neighbourhood from search results if the backend didn't return it
+      if (extraData?.neighbourhood && userLocation.address && !userLocation.address.neighbourhood) {
+        userLocation.address.neighbourhood = extraData.neighbourhood;
+      }
       dispatch({ type: 'SET_CURRENT_LOCATION', payload: userLocation });
     } catch (error) {
       dispatch({ type: 'SET_ERROR', payload: 'Failed to update location' });

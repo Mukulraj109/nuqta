@@ -167,22 +167,42 @@ const LabTestsPage: React.FC = () => {
     setShowBookingModal(true);
   };
 
+  const [isBooking, setIsBooking] = useState(false);
+
   const handleConfirmBooking = async () => {
-    if (!bookingForm.patientName || !bookingForm.patientPhone || !bookingForm.address) {
-      platformAlertSimple('Missing Information', 'Please fill in all required fields');
+    if (!bookingForm.patientName.trim()) {
+      platformAlertSimple('Error', 'Please enter patient name');
+      return;
+    }
+    if (!bookingForm.patientPhone.trim()) {
+      platformAlertSimple('Error', 'Please enter phone number');
       return;
     }
 
     try {
-      // In a real app, this would call the service booking API
-      platformAlertConfirm(
-        'Booking Confirmed!',
-        `Your ${selectedTest?.name} has been booked.\n\nA phlebotomist will visit on ${bookingForm.preferredDate || 'tomorrow'} in the ${bookingForm.preferredTime}.`,
-        () => setShowBookingModal(false),
-        'OK'
-      );
-    } catch (error) {
-      platformAlertSimple('Error', 'Failed to book test. Please try again.');
+      setIsBooking(true);
+      const serviceAppointmentApi = (await import('@/services/serviceAppointmentApi')).default;
+      const res = await serviceAppointmentApi.createServiceAppointment({
+        storeId: selectedProvider?._id || selectedProvider?.slug,
+        serviceType: 'lab-test',
+        appointmentDate: bookingForm.preferredDate || new Date().toISOString().split('T')[0],
+        appointmentTime: bookingForm.preferredTime === 'morning' ? '08:00' : bookingForm.preferredTime === 'afternoon' ? '11:00' : '15:00',
+        duration: 30,
+        customerName: bookingForm.patientName.trim(),
+        customerPhone: bookingForm.patientPhone.trim(),
+        specialInstructions: `${selectedTest?.name || 'Lab Test'}${bookingForm.homeCollection ? ' (Home Collection)' : ' (Lab Visit)'}${bookingForm.address ? `. Address: ${bookingForm.address}` : ''}`,
+      });
+
+      if (res.success) {
+        setShowBookingModal(false);
+        platformAlertSimple('Booked!', `Your ${selectedTest?.name || 'lab test'} has been booked. Appointment: ${(res as any).data?.appointmentNumber || 'Confirmed'}`);
+      } else {
+        platformAlertSimple('Booking Failed', (res as any).error || 'Could not book. Please try again.');
+      }
+    } catch (err: any) {
+      platformAlertSimple('Error', err?.message || 'Something went wrong');
+    } finally {
+      setIsBooking(false);
     }
   };
 
@@ -515,8 +535,8 @@ const LabTestsPage: React.FC = () => {
               <Text style={styles.totalLabel}>Total Amount</Text>
               <Text style={styles.totalValue}>{currencySymbol}{selectedTest?.price || 0}</Text>
             </View>
-            <Pressable style={styles.confirmButton} onPress={handleConfirmBooking}>
-              <Text style={styles.confirmButtonText}>Confirm Booking</Text>
+            <Pressable style={[styles.confirmButton, isBooking && { opacity: 0.6 }]} onPress={handleConfirmBooking} disabled={isBooking}>
+              <Text style={styles.confirmButtonText}>{isBooking ? 'Booking...' : 'Confirm Booking'}</Text>
             </Pressable>
           </View>
         </View>

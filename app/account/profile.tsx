@@ -3,7 +3,18 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // User's account information and settings overview
 
 import { colors } from '@/constants/theme';
+import { Text, ActivityIndicator } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import * as ImagePicker from 'expo-image-picker';
+import profileApi from '@/services/profileApi';
+import { CachedImage } from '@/components/ui/CachedImage';
+
+const SEGMENT_BADGES: Record<string, { label: string; icon: string; bg: string; text: string }> = {
+  verified_student:    { label: 'Verified Student',  icon: '🎓', bg: '#DBEAFE', text: '#1D4ED8' },
+  verified_employee:   { label: 'Corporate Member',  icon: '💼', bg: '#EDE9FE', text: '#5B21B6' },
+  verified_defence:    { label: 'Defence Member',    icon: '🎖️', bg: '#FEE2E2', text: '#991B1B' },
+  verified_healthcare: { label: 'Healthcare Worker', icon: '⚕️', bg: '#DCFCE7', text: '#166534' },
+};
 import {
   View,
   ScrollView,
@@ -13,6 +24,7 @@ import {
   Platform,
   Switch,
   RefreshControl,
+  TextInput,
 } from 'react-native';
 import { FormPageSkeleton } from '@/components/skeletons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -68,6 +80,65 @@ function AccountProfilePage() {
   const [settings, setSettings] = useState<UserSettings | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const [avatarUri, setAvatarUri] = useState<string | undefined>(user?.profile?.avatar);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedFirstName, setEditedFirstName] = useState(user?.profile?.firstName || '');
+  const [editedLastName, setEditedLastName] = useState(user?.profile?.lastName || '');
+  const [savingProfile, setSavingProfile] = useState(false);
+
+  const handleSaveProfile = async () => {
+    setSavingProfile(true);
+    try {
+      const response = await profileApi.updateProfile({
+        profile: {
+          firstName: editedFirstName.trim(),
+          lastName: editedLastName.trim(),
+        },
+      } as any);
+      if (response.success) {
+        setIsEditing(false);
+        platformAlertSimple('Success', 'Profile updated successfully.');
+      } else {
+        platformAlertSimple('Error', 'Could not update profile. Please try again.');
+      }
+    } catch {
+      platformAlertSimple('Error', 'Could not update profile. Please try again.');
+    } finally {
+      setSavingProfile(false);
+    }
+  };
+
+  const handleAvatarPress = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      platformAlertSimple('Permission Required', 'Please allow access to your photo library to change your profile picture.');
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.7,
+    });
+
+    if (!result.canceled && result.assets[0]) {
+      setUploadingPhoto(true);
+      try {
+        const response = await profileApi.uploadProfilePicture(result.assets[0].uri);
+        if (response.success && response.data?.profilePicture) {
+          setAvatarUri(response.data.profilePicture);
+        } else {
+          platformAlertSimple('Error', 'Could not update photo. Please try again.');
+        }
+      } catch {
+        platformAlertSimple('Error', 'Could not update photo. Please try again.');
+      } finally {
+        setUploadingPhoto(false);
+      }
+    }
+  };
 
   useEffect(() => {
     loadSettings();
@@ -199,33 +270,102 @@ function AccountProfilePage() {
 
           <Pressable
             style={styles.editButton}
-            onPress={() => router.push('/profile/edit' as any)}
-            accessibilityLabel="Edit profile"
+            onPress={() => {
+              if (isEditing) {
+                handleSaveProfile();
+              } else {
+                setEditedFirstName(user?.profile?.firstName || '');
+                setEditedLastName(user?.profile?.lastName || '');
+                setIsEditing(true);
+              }
+            }}
+            accessibilityLabel={isEditing ? "Save profile" : "Edit profile"}
             accessibilityRole="button"
-            accessibilityHint="Navigate to edit profile screen"
           >
-            <Ionicons name="create-outline" size={22} color="white" />
+            {savingProfile ? (
+              <ActivityIndicator size="small" color="white" />
+            ) : (
+              <Ionicons name={isEditing ? "checkmark" : "create-outline"} size={22} color="white" />
+            )}
           </Pressable>
         </View>
 
         {/* User Info Card */}
         {user && (
           <View style={styles.userCard}>
-            <View style={styles.avatarContainer}>
+            <Pressable style={styles.avatarContainer} onPress={handleAvatarPress}>
               <View style={styles.avatar}>
-                <ThemedText style={styles.avatarText}>
-                  {user.profile?.firstName?.[0]}{user.profile?.lastName?.[0]}
-                </ThemedText>
+                {uploadingPhoto ? (
+                  <ActivityIndicator color="#FFCD57" />
+                ) : (avatarUri || user.profile?.avatar) ? (
+                  <CachedImage
+                    source={{ uri: avatarUri || user.profile?.avatar }}
+                    style={{ width: 64, height: 64, borderRadius: 32 }}
+                  />
+                ) : (
+                  <ThemedText style={styles.avatarText}>
+                    {user.profile?.firstName?.[0]}{user.profile?.lastName?.[0]}
+                  </ThemedText>
+                )}
               </View>
-            </View>
+              {/* Camera overlay */}
+              <View style={{
+                position: 'absolute', bottom: 0, right: 0,
+                width: 22, height: 22, borderRadius: 11,
+                backgroundColor: '#FFCD57', alignItems: 'center', justifyContent: 'center',
+                borderWidth: 2, borderColor: '#1a3a52',
+              }}>
+                <Ionicons name="camera" size={11} color="#1a3a52" />
+              </View>
+            </Pressable>
             <View style={styles.userInfo}>
-              <ThemedText style={styles.userName}>
-                {user.profile?.firstName} {user.profile?.lastName}
-              </ThemedText>
-              <ThemedText style={styles.userEmail}>{user.email}</ThemedText>
-              <ThemedText style={styles.userPhone}>
-                {user.phoneNumber}
-              </ThemedText>
+              {isEditing ? (
+                <View style={{ gap: 6 }}>
+                  <TextInput
+                    style={styles.editInput}
+                    value={editedFirstName}
+                    onChangeText={setEditedFirstName}
+                    placeholder="First name"
+                    placeholderTextColor="rgba(255,255,255,0.4)"
+                  />
+                  <TextInput
+                    style={styles.editInput}
+                    value={editedLastName}
+                    onChangeText={setEditedLastName}
+                    placeholder="Last name"
+                    placeholderTextColor="rgba(255,255,255,0.4)"
+                  />
+                  <Pressable onPress={() => setIsEditing(false)} style={{ alignSelf: 'flex-start', marginTop: 2 }}>
+                    <ThemedText style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)' }}>Cancel</ThemedText>
+                  </Pressable>
+                </View>
+              ) : (
+                <>
+                  <ThemedText style={styles.userName}>
+                    {user.profile?.firstName} {user.profile?.lastName}
+                  </ThemedText>
+                  <ThemedText style={styles.userEmail}>{user.email}</ThemedText>
+                  <ThemedText style={styles.userPhone}>
+                    {user.phoneNumber}
+                  </ThemedText>
+                </>
+              )}
+              {/* Verified identity badge */}
+              {(user as any).segment && SEGMENT_BADGES[(user as any).segment] && (() => {
+                const badge = SEGMENT_BADGES[(user as any).segment!];
+                return (
+                  <View style={{
+                    flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 6,
+                    backgroundColor: badge.bg, borderRadius: 20,
+                    paddingHorizontal: 10, paddingVertical: 4, alignSelf: 'flex-start',
+                  }}>
+                    <Text style={{ fontSize: 14 }}>{badge.icon}</Text>
+                    <Text style={{ fontSize: 12, fontWeight: '700', color: badge.text }}>
+                      {badge.label}
+                    </Text>
+                  </View>
+                );
+              })()}
             </View>
           </View>
         )}
@@ -690,6 +830,17 @@ const styles = StyleSheet.create({
   userPhone: {
     ...Typography.body,
     color: Colors.text.tertiary,
+  },
+  editInput: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: Colors.text.primary,
+    backgroundColor: 'rgba(0,0,0,0.04)',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: Colors.border?.light || '#E5E7EB',
   },
   content: {
     flex: 1,

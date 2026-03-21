@@ -100,7 +100,7 @@ const ExploreStoresPage = () => {
         source: 'region' as const,
       };
     }
-    return { latitude: 25.2048, longitude: 55.2708, source: 'default' as const }; // Dubai default
+    return { latitude: 12.9716, longitude: 77.5946, source: 'default' as const }; // Bangalore default
   }, [currentLocation?.coordinates, regionState.regionConfig?.defaultCoordinates]);
 
   // Fetch stores from API

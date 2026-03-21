@@ -148,7 +148,7 @@ export function useOffersData() {
 
     try {
       const response = await realOffersApi.getAggregatedPageData({
-        lat: 25.2048, lng: 55.2708, tab: 'all',
+        lat: 12.9716, lng: 77.5946, tab: 'all',
       });
 
       if (response.success && response.data) {
@@ -225,7 +225,7 @@ export function useOffersData() {
         realOffersApi.getFlashSales(10),
         realOffersApi.getDiscountBuckets(),
         realOffersApi.getTrendingOffers(10),
-        realOffersApi.getNearbyOffers({ lat: 25.2048, lng: 55.2708, limit: 10 }),
+        realOffersApi.getNearbyOffers({ lat: 12.9716, lng: 77.5946, limit: 10 }),
         realOffersApi.getHotspots({ limit: 10 }),
         realOffersApi.getDoubleCashbackCampaigns(5),
         realOffersApi.getCoinDrops({ limit: 20 }),

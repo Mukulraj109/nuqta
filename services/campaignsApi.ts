@@ -57,7 +57,7 @@ export interface Campaign {
   minOrderValue?: number;
   maxBenefit?: number;
   eligibleCategories?: string[];
-  region?: 'bangalore' | 'dubai' | 'china' | 'all';
+  region?: 'bangalore' | 'dubai' | 'all';
   exclusiveToProgramSlug?: string;
   userEligible?: boolean;
 }

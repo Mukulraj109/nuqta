@@ -34,7 +34,11 @@ const CASH_STORE_ENDPOINTS = {
 export interface AffiliateClickResult {
   clickId: string;
   trackingUrl: string;
-  brand: {
+  brandName: string;
+  cashbackPercentage: number;
+  coinsPerHundred: number;
+  displayText: string;
+  brand?: {
     name: string;
     cashback: number;
   };
@@ -76,6 +80,10 @@ export interface AffiliatePurchase {
 }
 
 export interface AffiliateCashbackSummary {
+  totalCoinsEarned: number;
+  pendingCoins: number;
+  confirmedCoins: number;
+  creditedCoins: number;
   totalEarned: number;
   pending: number;
   confirmed: number;
@@ -83,6 +91,8 @@ export interface AffiliateCashbackSummary {
   totalClicks: number;
   totalPurchases: number;
   conversionRate: number;
+  displayLabel: string;
+  coinValue: number;
   recentActivity: Array<{
     type: 'click' | 'purchase' | 'credit';
     brand: string;
@@ -190,7 +200,20 @@ class CashStoreApiService {
         CASH_STORE_ENDPOINTS.AFFILIATE_CLICK,
         { brandId }
       );
-      return response.data || null;
+
+      const data = response.data;
+      if (!data) return null;
+
+      const coins = data.coinsPerHundred ?? data.cashbackPercentage ?? 5;
+      return {
+        clickId: data.clickId || '',
+        trackingUrl: data.trackingUrl || '',
+        brandName: data.brandName || data.brand?.name || '',
+        cashbackPercentage: data.cashbackPercentage || 0,
+        coinsPerHundred: coins,
+        displayText: `${coins} REZ coins per ₹100`,
+        brand: { name: data.brandName || '', cashback: data.cashbackPercentage || 0 },
+      };
     } catch (error) {
       return null;
     }

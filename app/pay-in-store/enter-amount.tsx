@@ -10,7 +10,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
  * - Available offers section
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -205,6 +205,14 @@ function EnterAmountScreen() {
 
   const numericAmount = parseFloat(amount) || 0;
 
+  // Coin earning forecast (F-08)
+  const forecastCoins = useMemo(() => {
+    if (!numericAmount || numericAmount < 1) return 0;
+    const cashbackPct = store?.rewardRules?.baseCashbackPercent ?? 0;
+    if (!cashbackPct) return 0;
+    return Math.floor(numericAmount * (cashbackPct / 100));
+  }, [numericAmount, store?.rewardRules?.baseCashbackPercent]);
+
   const handleProceed = () => {
     if (numericAmount <= 0) return;
 
@@ -322,6 +330,20 @@ function EnterAmountScreen() {
             <Text style={styles.currencySymbol}>{currencySymbol}</Text>
             <Text style={styles.amountDisplay}>{formatDisplayAmount(amount)}</Text>
           </View>
+
+          {/* Coin earning forecast */}
+          {forecastCoins > 0 && (
+            <View style={{
+              flexDirection: 'row', alignItems: 'center', gap: 6,
+              backgroundColor: 'rgba(255,205,87,0.15)', borderRadius: 8,
+              paddingHorizontal: 12, paddingVertical: 6, marginTop: 8,
+            }}>
+              <Text style={{ fontSize: 16 }}>🪙</Text>
+              <Text style={{ fontSize: 13, fontWeight: '700', color: '#92400E' }}>
+                You'll earn ~{forecastCoins} REZ coins
+              </Text>
+            </View>
+          )}
 
           {/* EMI Banner - Nile Blue to Mustard */}
           <LinearGradient

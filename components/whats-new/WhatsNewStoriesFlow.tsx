@@ -29,9 +29,10 @@ const SLIDE_DURATION = 5000; // 5 seconds per slide
 
 interface WhatsNewStoriesFlowProps {
   onClose: () => void;
+  startIndex?: number;
 }
 
-const WhatsNewStoriesFlow: React.FC<WhatsNewStoriesFlowProps> = ({ onClose }) => {
+const WhatsNewStoriesFlow: React.FC<WhatsNewStoriesFlowProps> = ({ onClose, startIndex = 0 }) => {
   const router = useRouter();
   const [stories, setStories] = useState<IWhatsNewStory[]>([]);
   const [loading, setLoading] = useState(true);
@@ -66,6 +67,13 @@ const WhatsNewStoriesFlow: React.FC<WhatsNewStoriesFlowProps> = ({ onClose }) =>
 
     fetchStories();
   }, []);
+
+  // Jump to startIndex when stories load
+  useEffect(() => {
+    if (stories.length > 0 && startIndex > 0 && startIndex < stories.length) {
+      setCurrentStoryIndex(startIndex);
+    }
+  }, [stories.length, startIndex]);
 
   // Track view when story changes
   useEffect(() => {

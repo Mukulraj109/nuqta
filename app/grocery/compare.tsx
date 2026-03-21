@@ -89,21 +89,19 @@ const GroceryComparePage: React.FC = () => {
           // Handle both API formats: pricing.original/selling and pricing.basePrice/salePrice
           const basePrice = product.pricing?.original || product.pricing?.basePrice || product.pricing?.selling || product.pricing?.salePrice || 100;
 
-          // Simulate prices across stores (in production, this would come from API)
+          // G-02: Use actual store prices (no random simulation)
           const storeComparisons = stores.map((store: any, index: number) => {
-            const priceVariation = 0.85 + Math.random() * 0.3; // 85% to 115% of base price
-            const price = Math.round(basePrice * priceVariation);
+            // Use the product's actual price — no random variation
+            const price = basePrice;
             return {
               storeId: store.id || store._id,
               storeName: store.name,
               storeLogo: store.logo || store.banner || undefined,
               price,
-              originalPrice: price > basePrice ? Math.round(price * 1.1) : undefined,
+              originalPrice: product.pricing?.original && product.pricing.original > price ? product.pricing.original : undefined,
               cashback: store.offers?.cashback || store.maxCashback || 0,
-              deliveryTime: store.operationalInfo?.deliveryTime
-                ? store.operationalInfo?.deliveryTime || "15-30 min"
-                : `${15 + index * 10}-${30 + index * 10} min`,
-              inStock: Math.random() > 0.1,
+              deliveryTime: store.operationalInfo?.deliveryTime || `${15 + index * 10}-${30 + index * 10} min`,
+              inStock: true, // Default to true — real stock data would come from a per-store inventory API
             };
           });
 
@@ -338,7 +336,7 @@ function getFallbackCompareItems(): CompareItem[] {
       storeId: store.id,
       storeName: store.name,
       storeLogo: store.logo,
-      price: basePrice + (storeIdx - 1) * 10 + Math.floor(Math.random() * 20),
+      price: basePrice + (storeIdx) * 10, // G-02: deterministic fallback prices, no random
       cashback: store.offers?.cashback || store.maxCashback || 0,
       deliveryTime: `${15 + storeIdx * 10}-${30 + storeIdx * 10} min`,
       inStock: true,

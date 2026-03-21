@@ -9,7 +9,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
  * - Social share prompt
  */
 
-import React, { useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import { catchSilent } from '@/utils/catchAndReport';
 import {
   View,
@@ -144,6 +144,29 @@ function PaymentSuccessScreen() {
     router.replace('/(tabs)');
   };
 
+  // Savings streak (C-04)
+  const [savingsStreak, setSavingsStreak] = useState<number>(0);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      import('@/services/gamificationApi').then(mod => {
+        mod.default.getStreakStatus().then((res: any) => {
+          if (res?.success && res.data) {
+            setSavingsStreak(res.data.currentStreak || res.data.savings?.currentStreak || 0);
+          }
+        }).catch(() => {});
+      }).catch(() => {});
+    }, 800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const getStreakTier = (days: number) => {
+    if (days >= 60) return { name: 'Smart Saver Elite', icon: '💎', multiplier: 1.20 };
+    if (days >= 21) return { name: 'Gold Saver', icon: '🥇', multiplier: 1.15 };
+    if (days >= 7) return { name: 'Silver Saver', icon: '🥈', multiplier: 1.10 };
+    if (days >= 1) return { name: 'Bronze Saver', icon: '🥉', multiplier: 1.05 };
+    return null;
+  };
+
   const loyaltyProgress = rewards.loyaltyProgress || {
     currentVisits: 0,
     nextMilestone: 5,
@@ -181,9 +204,14 @@ function PaymentSuccessScreen() {
             Paid {currencySymbol}{billAmount.toFixed(0)} to {storeName}
           </Text>
           {coinsRedeemed > 0 && (
-            <Text style={styles.coinsUsedText}>
-              Used {coinsRedeemed} {BRAND.COIN_NAME}
-            </Text>
+            <View style={{ alignItems: 'center' }}>
+              <Text style={styles.coinsUsedText}>
+                Used {coinsRedeemed} {BRAND.COIN_NAME}
+              </Text>
+              <Animated.Text style={[{ fontSize: 16, fontWeight: '800', color: '#ef4444', marginTop: 2 }, contentStyle]}>
+                -{coinsRedeemed} 🔥
+              </Animated.Text>
+            </View>
           )}
           <Text style={styles.transactionId}>Transaction ID: {paymentId?.slice(-8).toUpperCase()}</Text>
         </Animated.View>
@@ -266,6 +294,36 @@ function PaymentSuccessScreen() {
             currencySymbol={currencySymbol}
           />
         </Animated.View>
+
+        {/* Savings Streak */}
+        {savingsStreak >= 1 && (() => {
+          const tier = getStreakTier(savingsStreak);
+          const milestoneText =
+            savingsStreak < 7 ? `${7 - savingsStreak} more days to Silver Saver` :
+            savingsStreak < 21 ? `${21 - savingsStreak} more days to Gold Saver` :
+            savingsStreak < 60 ? `${60 - savingsStreak} more days to Elite` : null;
+          return (
+            <View style={{ backgroundColor: '#FFF8E1', borderRadius: 14, padding: 14, marginTop: 10 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 10 }}>
+                <Text style={{ fontSize: 28 }}>🔥</Text>
+                <View style={{ flex: 1 }}>
+                  <Text style={{ fontSize: 15, fontWeight: '700', color: '#5D4037' }}>
+                    Day {savingsStreak} Savings Streak!
+                  </Text>
+                  {tier && (
+                    <Text style={{ fontSize: 13, color: '#795548', marginTop: 2 }}>
+                      {tier.icon} {tier.name}
+                      {tier.multiplier > 1 && ` · +${Math.round((tier.multiplier - 1) * 100)}% coin bonus`}
+                    </Text>
+                  )}
+                  {milestoneText && (
+                    <Text style={{ fontSize: 12, color: '#9e9e9e', marginTop: 2 }}>{milestoneText}</Text>
+                  )}
+                </View>
+              </View>
+            </View>
+          );
+        })()}
 
         {/* Loyalty Progress */}
         {loyaltyProgress.nextMilestone > 0 && (

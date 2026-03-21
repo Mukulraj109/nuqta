@@ -19,7 +19,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
-import { BlurView } from 'expo-blur';
+import { CrossPlatformBlurView as BlurView } from '@/components/ui/CrossPlatformBlurView';
 import { ProductItem } from '@/types/homepage.types';
 import { useCartActions, useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
 import { useWishlist } from '@/contexts/WishlistContext';

@@ -15,8 +15,12 @@ export interface User {
   phone?: string;
   joinDate: string;
   isVerified: boolean;
+  isOnboarded?: boolean;
   wallet?: WalletData;
   preferences: UserPreferences;
+  subscriptionTier?: string;
+  creatorLevel?: number;
+  tier?: string;
 }
 
 export interface WalletData {
@@ -63,6 +67,7 @@ export interface ProfileMenuItem {
   route?: string;
   action?: () => void;
   badge?: string | number;
+  description?: string;
   isEnabled: boolean;
   showArrow: boolean;
   dividerAfter?: boolean;

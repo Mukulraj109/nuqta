@@ -40,6 +40,10 @@ export interface MallBrand {
   mallCategory: MallCategory;
   badges: BrandBadge[];
   externalUrl?: string;
+  /** The linked Store._id when this brand maps to an in-app store */
+  storeId?: string;
+  /** true when the brand is backed by an in-app Store (not external/affiliate) */
+  isInAppStore?: boolean;
   isActive: boolean;
   isFeatured: boolean;
   isLuxury: boolean;
@@ -127,11 +131,13 @@ export interface MallBanner {
   gradientColors?: string[];
   textColor: string;
   ctaText: string;
-  ctaAction: 'navigate' | 'external' | 'brand' | 'category' | 'collection';
+  ctaAction: 'navigate' | 'external' | 'brand' | 'category' | 'collection' | 'store';
   ctaUrl?: string;
   ctaBrand?: MallBrand;
   ctaCategory?: MallCategory;
   ctaCollection?: MallCollection;
+  /** Store ID for ctaAction='store' — navigates to MainStorePage */
+  ctaStoreId?: string;
   position: BannerPosition;
   priority: number;
   validFrom: string;

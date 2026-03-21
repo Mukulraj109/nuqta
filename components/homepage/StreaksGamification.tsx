@@ -14,6 +14,26 @@ import { useStreaksGamification } from '@/hooks/useStreaksGamification';
 import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { Mission } from '@/types/streaksGamification.types';
 import { colors } from '@/constants/theme';
+import { platformAlertConfirm, platformAlertSimple } from '@/utils/platformAlert';
+import apiClient from '@/services/apiClient';
+
+interface StreakTier {
+  name: string;
+  level: number;
+  icon: string;
+  color: string;
+  nextTierDays: number | null;
+  daysToNext: number;
+  description: string;
+}
+
+function getStreakTier(currentStreak: number): StreakTier {
+  if (currentStreak >= 60) return { name: 'Smart Saver Elite', level: 4, icon: '💎', color: '#60a5fa', nextTierDays: null, daysToNext: 0, description: 'Top 1% of savers on REZ' };
+  if (currentStreak >= 21) return { name: 'Gold Saver', level: 3, icon: '🥇', color: '#F59E0B', nextTierDays: 60, daysToNext: 60 - currentStreak, description: `${60 - currentStreak} more days to Elite` };
+  if (currentStreak >= 7) return { name: 'Silver Saver', level: 2, icon: '🥈', color: '#94a3b8', nextTierDays: 21, daysToNext: 21 - currentStreak, description: `${21 - currentStreak} more days to Gold` };
+  if (currentStreak >= 1) return { name: 'Bronze Saver', level: 1, icon: '🥉', color: '#cd7f32', nextTierDays: 7, daysToNext: 7 - currentStreak, description: `${7 - currentStreak} more days to Silver` };
+  return { name: 'Start Saving', level: 0, icon: '🔥', color: '#ef4444', nextTierDays: 1, daysToNext: 1, description: 'Make your first saving today' };
+}
 
 interface StreaksGamificationProps {
   onViewAllPress?: () => void;
@@ -27,7 +47,7 @@ const StreaksGamification: React.FC<StreaksGamificationProps> = ({
   const isAuthLoading = useAuthLoading();
 
   // Fetch real data from gamification API (only if authenticated)
-  const { streak, missions, loading, error } = useStreaksGamification();
+  const { streak, missions, loading, error, campusRank } = useStreaksGamification();
 
   const streakPercentage = streak.target > 0 ? (streak.current / streak.target) * 100 : 0;
   const daysRemaining = Math.max(0, streak.target - streak.current);
@@ -136,8 +156,28 @@ const StreaksGamification: React.FC<StreaksGamificationProps> = ({
             </View>
           </View>
           <View style={styles.streakContent}>
+            {/* Tier badge */}
+            {(() => {
+              const tier = getStreakTier(streak.current);
+              return (
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                  <Text style={{ fontSize: 18 }}>{tier.icon}</Text>
+                  <Text style={{ fontSize: 13, fontWeight: '700', color: tier.color }}>
+                    {tier.name}
+                  </Text>
+                  {tier.level > 0 && (
+                    <View style={{ backgroundColor: tier.color + '22', borderRadius: 10, paddingHorizontal: 6, paddingVertical: 2 }}>
+                      <Text style={{ fontSize: 10, color: tier.color, fontWeight: '700' }}>
+                        Level {tier.level}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              );
+            })()}
+
             <Text style={styles.streakTitle}>
-              🔥 {streak.current}-day saving streak!
+              {streak.current}-day saving streak!
             </Text>
             <Text style={styles.streakSubtitle}>
               {daysRemaining} more days to unlock +{streak.nextReward} bonus coins
@@ -152,6 +192,65 @@ const StreaksGamification: React.FC<StreaksGamificationProps> = ({
                 />
               </View>
             </View>
+
+            {/* Tier progress */}
+            <Text style={{ fontSize: 11, color: colors.neutral?.[500] ?? '#888', marginTop: 4 }}>
+              {getStreakTier(streak.current).description}
+            </Text>
+
+            {/* Freeze button */}
+            {streak.current >= 3 && (
+              <Pressable
+                onPress={() => {
+                  platformAlertConfirm(
+                    'Protect Your Savings Streak',
+                    `Spend 50 REZ coins to protect your ${streak.current}-day streak for 1 day?\n\nIf you miss saving tomorrow, your streak won't reset.`,
+                    async () => {
+                      try {
+                        const res = await apiClient.post('/streak/freeze', { type: 'savings', days: 1 });
+                        if ((res as any).success) {
+                          platformAlertSimple('Streak Protected!', 'Your savings streak is safe for 1 day.');
+                        }
+                      } catch {
+                        platformAlertSimple('Error', 'Could not protect streak. Please try again.');
+                      }
+                    },
+                    'Protect (50 coins)'
+                  );
+                }}
+                style={{
+                  flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 8,
+                  alignSelf: 'flex-start', backgroundColor: 'rgba(96, 165, 250, 0.15)',
+                  borderRadius: 8, paddingHorizontal: 10, paddingVertical: 5,
+                }}
+              >
+                <Ionicons name="snow-outline" size={13} color="#60a5fa" />
+                <Text style={{ fontSize: 12, color: '#60a5fa', fontWeight: '600' }}>
+                  Protect streak (50 coins)
+                </Text>
+              </Pressable>
+            )}
+
+            {/* Campus rank */}
+            {campusRank !== null && (
+              <Pressable
+                onPress={() => router.push('/leaderboard' as any)}
+                style={{
+                  flexDirection: 'row', alignItems: 'center', gap: 5, marginTop: 6,
+                  backgroundColor: 'rgba(245, 158, 11, 0.15)', borderRadius: 8,
+                  paddingHorizontal: 10, paddingVertical: 5, alignSelf: 'flex-start',
+                }}
+              >
+                <Ionicons name="trophy" size={13} color="#F59E0B" />
+                <Text style={{ fontSize: 12, color: '#F59E0B', fontWeight: '700' }}>
+                  {campusRank <= 3
+                    ? `#${campusRank} Saver on your campus!`
+                    : campusRank <= 10
+                      ? `#${campusRank} Saver on campus`
+                      : `#${campusRank} on campus`}
+                </Text>
+              </Pressable>
+            )}
           </View>
         </View>
 

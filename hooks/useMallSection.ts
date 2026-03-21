@@ -88,6 +88,8 @@ function transformStoreToMallBrand(store: any): MallBrand {
     logo: store.logo,
     banner: store.banner?.[0] || '',
     externalUrl: '', // No external URL for in-app stores
+    storeId: store._id,
+    isInAppStore: true,
     mallCategory,
     tier: store.deliveryCategories?.premium ? 'premium' : 'standard',
     badges: [

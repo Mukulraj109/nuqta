@@ -4,6 +4,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import gamificationAPI from '@/services/gamificationApi';
+import apiClient from '@/services/apiClient';
 import { useIsAuthenticated } from '@/stores/selectors';
 import {
   StreakData,
@@ -208,12 +209,34 @@ export function useStreaksGamification(): UseStreaksGamificationResult {
     }
   }, [fetchData, isAuthenticated]);
 
+  // Campus rank (S-05)
+  const [campusRank, setCampusRank] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    // Fetch campus leaderboard to find user rank
+    apiClient.get('/leaderboard/campus').then((res: any) => {
+      if (!isMountedRef.current) return;
+      const ranks = res?.data?.ranks || res?.data?.entries || [];
+      // The API returns the user's rank in the response
+      const myRank = res?.data?.myRank || res?.data?.userRank;
+      if (typeof myRank === 'number' && myRank > 0) {
+        setCampusRank(myRank);
+      } else if (ranks.length > 0) {
+        // If no direct rank field, check if there's a highlighted entry
+        const myEntry = ranks.find((r: any) => r.isCurrentUser);
+        if (myEntry) setCampusRank(myEntry.rank || ranks.indexOf(myEntry) + 1);
+      }
+    }).catch(() => { /* non-blocking */ });
+  }, [isAuthenticated]);
+
   return {
     streak,
     missions,
     loading,
     error,
     coinBalance,
+    campusRank,
     actions: {
       refresh,
       claimReward,

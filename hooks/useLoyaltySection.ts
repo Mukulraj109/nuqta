@@ -73,10 +73,10 @@ export function useLoyaltySection(options: UseLoyaltySectionOptions = {}): UseLo
       };
     }
 
-    // Final fallback: Dubai coordinates
+    // Final fallback: Bangalore coordinates
     return {
-      latitude: 25.2048,
-      longitude: 55.2708,
+      latitude: 12.9716,
+      longitude: 77.5946,
     };
   }, [currentLocation?.coordinates, regionConfig?.defaultCoordinates]);
 

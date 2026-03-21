@@ -303,8 +303,10 @@ function LocationDisplay({
     const address = webLocation.address;
 
     if (compact) {
-      // For compact mode, show only city name
-      if (address.city) {
+      // For compact mode, show neighbourhood if available, then city
+      if (address.neighbourhood) {
+        return address.neighbourhood;
+      } else if (address.city) {
         return address.city;
       } else {
         // Extract city from formatted address (usually first meaningful part)
@@ -328,7 +330,11 @@ function LocationDisplay({
     // In compact mode, prioritize the actual location city from currentLocation
     // Only fall back to region name if no location city is available
     if (compact) {
-      // First check if location has a city in its address
+      // First check if location has a neighbourhood in its address
+      if (typeof location.address === 'object' && location.address.neighbourhood) {
+        return location.address.neighbourhood;
+      }
+      // Then check for city
       if (typeof location.address === 'object' && location.address.city) {
         return location.address.city;
       }

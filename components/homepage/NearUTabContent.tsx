@@ -9,10 +9,12 @@
  * LazySection controls mount timing independently of React.lazy().
  */
 
-import React, { Suspense, useCallback } from 'react';
-import { View } from 'react-native';
+import React, { Suspense, useCallback, useState } from 'react';
+import { View, Text, Pressable } from 'react-native';
 import { SharedValue } from 'react-native-reanimated';
 import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 import LazySection from '@/components/homepage/LazySection';
 import { SectionSkeleton } from '@/components/homepage/skeletons';
 import HomeSavingsSummaryCard from '@/components/homepage/HomeSavingsSummaryCard';
@@ -201,6 +203,9 @@ interface NearUTabContentProps {
   currencySymbol?: string;
   featureLevel?: number;
   hasCompletedFirstOrder?: boolean;
+  isAreaServiceable?: boolean;
+  areaName?: string;
+  onSwitchToMall?: () => void;
 }
 
 const NearUTabContent: React.FC<NearUTabContentProps> = ({
@@ -223,9 +228,13 @@ const NearUTabContent: React.FC<NearUTabContentProps> = ({
   currencySymbol,
   featureLevel = 1,
   hasCompletedFirstOrder = false,
+  isAreaServiceable = true,
+  areaName,
+  onSwitchToMall,
 }) => {
   const router = useRouter();
   const { segment } = useUserIdentityStore();
+  const [bannerDismissed, setBannerDismissed] = useState(false);
   // Memoize card renderers
   const renderEventCard = useCallback((item: HomepageSectionItem) => {
     const event = item as EventItem;
@@ -454,6 +463,49 @@ const NearUTabContent: React.FC<NearUTabContentProps> = ({
       <IdentityPromptModal />
       <IdentitySectionContainer />
 
+      {/* Coming soon banner — shown when user is outside serviceable area */}
+      {!isAreaServiceable && !bannerDismissed && (
+        <View style={{
+          backgroundColor: '#FFF8E1',
+          borderRadius: 14,
+          padding: 14,
+          marginHorizontal: 16,
+          marginTop: 12,
+          marginBottom: 4,
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 10,
+          borderWidth: 1,
+          borderColor: '#FFD54F',
+        }}>
+          <Ionicons name="location-outline" size={22} color="#5D4037" />
+          <View style={{ flex: 1 }}>
+            <Text style={{ fontSize: 14, fontWeight: '700', color: '#5D4037' }}>
+              Near U is coming soon{areaName ? ` in ${areaName}` : ' in your area'}
+            </Text>
+            <Text style={{ fontSize: 12, color: '#795548', marginTop: 3 }}>
+              Meanwhile, shop from top brands across India on REZ Mall.
+            </Text>
+          </View>
+          {onSwitchToMall && (
+            <Pressable
+              onPress={onSwitchToMall}
+              style={{
+                backgroundColor: colors.nileBlue,
+                borderRadius: 8,
+                paddingHorizontal: 10,
+                paddingVertical: 6,
+              }}
+            >
+              <Text style={{ color: '#fff', fontSize: 12, fontWeight: '700' }}>Mall</Text>
+            </Pressable>
+          )}
+          <Pressable onPress={() => setBannerDismissed(true)} style={{ padding: 4 }}>
+            <Ionicons name="close" size={16} color="#94a3b8" />
+          </Pressable>
+        </View>
+      )}
+
       {/* ===== SEGMENT-FIRST: Promoted section for verified users ===== */}
       {segment === 'verified_healthcare' && (
         <LazySection sectionId="healthcare-priority" scrollY={scrollY} height={300}
@@ -510,6 +562,11 @@ const NearUTabContent: React.FC<NearUTabContentProps> = ({
       {/* ===== TIER 2: Near fold - static imports, LazySection controls mount ===== */}
       <HowRezWorksCard />
       <EarnRezCoinsSection />
+      {/* Savings Streak — FIRST for habit formation */}
+      {featureLevel >= 2 && (
+        <LazySection sectionId="streaks" scrollY={scrollY} height={200}
+          renderSection={() => <Suspense fallback={<SuspensePlaceholder height={200} />}><StreaksGamification /></Suspense>} />
+      )}
       {featureLevel >= 5 && (
         <LazySection sectionId="play-earn-v2" scrollY={scrollY} height={250}
           renderSection={() => <PlayAndEarnSectionV2 />} />
@@ -517,10 +574,6 @@ const NearUTabContent: React.FC<NearUTabContentProps> = ({
       {featureLevel >= 2 && (
         <LazySection sectionId="bonus-zone" scrollY={scrollY} height={200}
           renderSection={() => <BonusZoneHighlight />} />
-      )}
-      {featureLevel >= 2 && (
-        <LazySection sectionId="streaks" scrollY={scrollY} height={200}
-          renderSection={() => <Suspense fallback={<SuspensePlaceholder height={200} />}><StreaksGamification /></Suspense>} />
       )}
       <LazySection sectionId="new-on-rez" scrollY={scrollY} height={300}
         renderSection={() => <NewOnRezSection />} />

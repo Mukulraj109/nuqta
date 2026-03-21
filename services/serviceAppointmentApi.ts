@@ -12,14 +12,23 @@ const devLog = {
 // TypeScript Interfaces
 export interface ServiceAppointmentRequest {
   storeId: string;
-  serviceId: string;
-  date: string;
-  time: string;
+  serviceType: string;
+  appointmentDate: string;
+  appointmentTime: string;
   duration?: number;
-  notes?: string;
   customerName: string;
   customerPhone: string;
-  customerEmail: string;
+  customerEmail?: string;
+  specialInstructions?: string;
+  staffMember?: string;
+  /** @deprecated Use serviceType instead */
+  serviceId?: string;
+  /** @deprecated Use appointmentDate instead */
+  date?: string;
+  /** @deprecated Use appointmentTime instead */
+  time?: string;
+  /** @deprecated Use specialInstructions instead */
+  notes?: string;
 }
 
 export interface ServiceAppointment {

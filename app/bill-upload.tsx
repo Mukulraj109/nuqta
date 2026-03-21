@@ -42,6 +42,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Services & Hooks
 import { billUploadService } from '@/services/billUploadService';
+import apiClient from '@/services/apiClient';
 import storesApi from '@/services/storesApi';
 import { useSafeNavigation } from '@/hooks/useSafeNavigation';
 import { useBillUpload } from '@/hooks/useBillUpload';
@@ -201,6 +202,10 @@ function BillUploadPage() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [, setIsValidating] = useState(false);
+
+  // Bill AI auto-detect (F-01)
+  const [isAnalyzingBill, setIsAnalyzingBill] = useState(false);
+  const [autoDetectedAmount, setAutoDetectedAmount] = useState(false);
 
   // Merchant selection
   const [merchants, setMerchants] = useState<Store[]>([]);
@@ -624,6 +629,31 @@ function BillUploadPage() {
 
         handleFieldChange('billImage', compressedUri);
         showToast(`Bill photo selected (Quality: ${quality.score}/100)`, 'success');
+
+        // Auto-detect bill amount via OCR (F-01)
+        try {
+          setIsAnalyzingBill(true);
+          showToast('Detecting bill amount...', 'info');
+          const fd = new (globalThis as any).FormData();
+          fd.append('billImage', { uri: compressedUri, type: 'image/jpeg', name: 'bill.jpg' } as any);
+          const analyzed = await apiClient.post<{
+            amount: number | null; merchantName: string | null;
+            date: string | null; billNumber: string | null; confidence: number;
+          }>('/bills/analyze-image', fd);
+          if (analyzed.success && analyzed.data) {
+            const d = analyzed.data;
+            if (d.amount && d.amount > 0) {
+              handleFieldChange('amount', String(d.amount));
+              setAutoDetectedAmount(true);
+            }
+            if (d.billNumber) handleFieldChange('billNumber', d.billNumber);
+            if (d.amount) showToast(`Detected: ${d.amount} — please verify`, 'success');
+          }
+        } catch {
+          // Silent — user can still enter manually
+        } finally {
+          setIsAnalyzingBill(false);
+        }
       }
     } catch (error) {
       logger.error('Error picking image:', error);
@@ -910,6 +940,49 @@ function BillUploadPage() {
    * Render camera view
    */
   if (showCamera) {
+    // Web fallback: file input instead of native camera (expo-camera doesn't work on web)
+    if (Platform.OS === 'web') {
+      return (
+        <View style={styles.cameraContainer}>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#111', padding: 24 }}>
+            <Pressable
+              style={styles.cameraCloseButton}
+              onPress={() => setShowCamera(false)}
+            >
+              <Ionicons name="close" size={32} color={Colors.text.inverse} />
+            </Pressable>
+            <View style={{ width: 80, height: 80, borderRadius: 40, backgroundColor: 'rgba(255,255,255,0.1)', justifyContent: 'center', alignItems: 'center', marginBottom: 16 }}>
+              <Ionicons name="cloud-upload-outline" size={40} color="#fff" />
+            </View>
+            <Text style={{ color: '#fff', fontSize: 18, fontWeight: '700', marginBottom: 8, textAlign: 'center' }}>
+              Upload Bill Photo
+            </Text>
+            <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14, marginBottom: 24, textAlign: 'center' }}>
+              Select a clear photo of your bill
+            </Text>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e: any) => {
+                const file = e.target?.files?.[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onload = (ev: any) => {
+                    const uri = ev.target?.result as string;
+                    setShowCamera(false);
+                    handleFieldChange('billImage', uri);
+                    showToast('Bill photo selected', 'success');
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
+              style={{ padding: 12, backgroundColor: '#7C3AED', color: '#fff', borderRadius: 8, cursor: 'pointer', border: 'none', fontSize: 16 } as any}
+            />
+          </View>
+        </View>
+      );
+    }
+
     return (
       <View style={styles.cameraContainer}>
         <ExpoCamera.CameraView ref={cameraRef} style={styles.camera} facing={cameraType}>
@@ -1398,6 +1471,20 @@ function BillUploadPage() {
           <Text style={styles.sectionTitle}>
             Bill Amount <Text style={styles.required}>*</Text>
           </Text>
+          {autoDetectedAmount && (
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 4, gap: 4 }}>
+              <Ionicons name="checkmark-circle" size={14} color="#22c55e" />
+              <Text style={{ fontSize: 12, color: '#22c55e', fontWeight: '600' }}>
+                Auto-detected — verify before submitting
+              </Text>
+            </View>
+          )}
+          {isAnalyzingBill && (
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 4, gap: 4 }}>
+              <ActivityIndicator size="small" color={Colors.nileBlue} />
+              <Text style={{ fontSize: 12, color: Colors.nileBlue }}>Detecting amount...</Text>
+            </View>
+          )}
           <View
             style={[
               styles.inputContainer,
@@ -1411,7 +1498,7 @@ function BillUploadPage() {
               placeholder="0.00"
               keyboardType="decimal-pad"
               value={formData.amount}
-              onChangeText={(text) => handleFieldChange('amount', text)}
+              onChangeText={(text) => { handleFieldChange('amount', text); setAutoDetectedAmount(false); }}
               onBlur={() => handleFieldBlur('amount')}
               returnKeyType="next"
               onSubmitEditing={() => billNumberInputRef.current?.focus()}

@@ -15,7 +15,7 @@ const getHomepageDataService = async () => (await initHomepageSetter).default;
 
 // ── Types ──
 
-export type RegionId = 'bangalore' | 'dubai' | 'china';
+export type RegionId = 'bangalore' | 'dubai';
 
 export interface RegionConfig {
   id: RegionId;
@@ -35,7 +35,7 @@ export interface RegionConfig {
 // ── Constants ──
 
 const REGION_STORAGE_KEY = 'user_region';
-const DEFAULT_REGION: RegionId = 'dubai';
+const DEFAULT_REGION: RegionId = 'bangalore';
 
 const DEFAULT_CONFIGS: Record<RegionId, RegionConfig> = {
   bangalore: {
@@ -60,23 +60,12 @@ const DEFAULT_CONFIGS: Record<RegionId, RegionConfig> = {
     countryCode: 'AE',
     defaultCoordinates: { latitude: 25.2048, longitude: 55.2708 },
   },
-  china: {
-    id: 'china',
-    name: 'China',
-    displayName: 'China',
-    currency: 'CNY',
-    currencySymbol: '\u00A5',
-    locale: 'zh-CN',
-    timezone: 'Asia/Shanghai',
-    countryCode: 'CN',
-    defaultCoordinates: { latitude: 31.2304, longitude: 121.4737 },
-  },
 };
 
 // ── Utilities ──
 
 function isValidRegion(region: string): region is RegionId {
-  return ['bangalore', 'dubai', 'china'].includes(region);
+  return ['bangalore', 'dubai'].includes(region);
 }
 
 // Cart clear callback (set by CartContext)

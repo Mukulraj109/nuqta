@@ -2,7 +2,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Coin System Guide Page
 // Educational/informational page about the ReZ coin system
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -32,6 +32,8 @@ import { useRouter } from 'expo-router';
 import { useTotalBalance, useWalletLoading } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import walletApi from '@/services/walletApi';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -51,48 +53,53 @@ interface CoinTypeInfo {
   usableAt: string;
 }
 
-const COIN_TYPES: CoinTypeInfo[] = [
+// Static template — expiry values are overridden dynamically inside the component
+const COIN_TYPE_TEMPLATES = [
   {
+    key: 'rez' as const,
     name: 'ReZ Coins',
     color: colors.brand.greenDark,
     backgroundColor: colors.successScale[50],
-    gradientColors: [colors.brand.greenDark, colors.successScale[700]],
-    icon: 'diamond',
+    gradientColors: [colors.brand.greenDark, colors.successScale[700]] as [string, string],
+    icon: 'diamond' as const,
     description: 'Universal coins that work everywhere on the platform. The backbone of your rewards.',
-    expiry: 'Never expires',
+    defaultExpiry: 'Never expires',
     earnedFrom: 'Shopping, games, challenges, referrals',
     usableAt: 'Everywhere on ReZ',
   },
   {
+    key: 'prive' as const,
     name: 'Priv\u00e9 Coins',
     color: colors.brand.amberDeep,
     backgroundColor: colors.tint.amber,
-    gradientColors: [colors.warningScale[400], colors.warningScale[700]],
-    icon: 'diamond-outline',
+    gradientColors: [colors.warningScale[400], colors.warningScale[700]] as [string, string],
+    icon: 'diamond-outline' as const,
     description: 'Premium tier coins with higher value. Earned from Priv\u00e9-eligible purchases.',
-    expiry: '12 months',
+    defaultExpiry: '12 months',
     earnedFrom: 'Priv\u00e9-eligible purchases',
     usableAt: 'All Priv\u00e9 partners',
   },
   {
+    key: 'branded' as const,
     name: 'Branded Coins',
     color: colors.brand.blue,
     backgroundColor: colors.tint.blue,
-    gradientColors: [colors.infoScale[400], colors.brand.blue],
-    icon: 'storefront',
+    gradientColors: [colors.infoScale[400], colors.brand.blue] as [string, string],
+    icon: 'storefront' as const,
     description: 'Store-specific coins earned from participating merchants. Only usable at the issuing store.',
-    expiry: '6 months',
+    defaultExpiry: 'Set by merchant',
     earnedFrom: 'Participating stores',
     usableAt: 'Issuing store only',
   },
   {
+    key: 'promo' as const,
     name: 'Promo Coins',
     color: colors.warningScale[700],
     backgroundColor: colors.tint.amberLight,
-    gradientColors: [colors.warningScale[400], colors.warningScale[700]],
-    icon: 'gift',
+    gradientColors: [colors.warningScale[400], colors.warningScale[700]] as [string, string],
+    icon: 'gift' as const,
     description: 'Campaign-based coins from special promotions and events. Limited time availability.',
-    expiry: 'Per campaign',
+    defaultExpiry: 'Per campaign',
     earnedFrom: 'Special promotions',
     usableAt: 'As per campaign rules',
   },
@@ -171,10 +178,10 @@ interface FAQItem {
   answer: string;
 }
 
-const FAQ_ITEMS: FAQItem[] = [
+const FAQ_ITEMS_STATIC: FAQItem[] = [
   {
     question: 'Do my coins expire?',
-    answer: 'It depends on the coin type. ReZ Coins never expire. Priv\u00e9 Coins expire after 12 months of earning. Branded Coins expire 6 months after earning. Promo Coins expire based on the specific campaign end date. You can always check expiry dates in your Wallet.',
+    answer: '__DYNAMIC_EXPIRY__', // Replaced dynamically inside component
   },
   {
     question: 'How are coins spent?',
@@ -253,6 +260,52 @@ const CoinSystemPage = () => {
   const walletBalance = useTotalBalance();
   const loadingWallet = useWalletLoading();
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
+  const isMounted = useIsMounted();
+  const [liveExpiryConfig, setLiveExpiryConfig] = useState<Record<string, { expiryDays: number; maxUsagePct: number }> | null>(null);
+
+  // Fetch live coin expiry config from admin settings
+  useEffect(() => {
+    walletApi.getCoinRules().then((res: any) => {
+      if (!isMounted()) return;
+      if (res?.success && res.data?.coinExpiryConfig) {
+        setLiveExpiryConfig(res.data.coinExpiryConfig);
+      }
+    }).catch(() => {/* use defaults */});
+  }, []);
+
+  // Convert expiryDays to user-friendly string
+  const getExpiryText = (coinType: string, defaultText: string): string => {
+    if (!liveExpiryConfig?.[coinType]) return defaultText;
+    const days = liveExpiryConfig[coinType]?.expiryDays ?? 0;
+    if (days === 0) return 'Never expires';
+    if (days <= 31) return `${days} days`;
+    if (days === 90) return '3 months';
+    if (days === 180) return '6 months';
+    if (days === 365) return '12 months';
+    return `${Math.round(days / 30)} months`;
+  };
+
+  // Build FAQ with dynamic expiry answer
+  const FAQ_ITEMS: FAQItem[] = FAQ_ITEMS_STATIC.map(item =>
+    item.answer === '__DYNAMIC_EXPIRY__'
+      ? { ...item, answer: `It depends on the coin type. ReZ Coins: ${getExpiryText('rez', 'Never expires')}. Privé Coins: ${getExpiryText('prive', '12 months')}. Branded Coins: ${getExpiryText('branded', 'Set by merchant')}. Promo Coins expire based on the specific campaign end date. Check expiry in your Wallet.` }
+      : item
+  );
+
+  // Build COIN_TYPES with dynamic expiry from admin config
+  const COIN_TYPES: CoinTypeInfo[] = COIN_TYPE_TEMPLATES.map(t => ({
+    name: t.name,
+    color: t.color,
+    backgroundColor: t.backgroundColor,
+    gradientColors: t.gradientColors,
+    icon: t.icon,
+    description: t.description,
+    expiry: t.key === 'promo'
+      ? (getExpiryText(t.key, t.defaultExpiry) === 'Never expires' ? 'Per campaign' : getExpiryText(t.key, t.defaultExpiry))
+      : getExpiryText(t.key, t.defaultExpiry),
+    earnedFrom: t.earnedFrom,
+    usableAt: t.usableAt,
+  }));
 
   const toggleFAQ = (index: number) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);

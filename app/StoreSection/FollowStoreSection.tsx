@@ -23,7 +23,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { triggerImpact, triggerNotification } from "@/utils/haptics";
 import { ThemedText } from '@/components/ThemedText';
 import { LinearGradient } from 'expo-linear-gradient';
-import { BlurView } from 'expo-blur';
+import { CrossPlatformBlurView as BlurView } from '@/components/ui/CrossPlatformBlurView';
 import wishlistApi from '@/services/wishlistApi';
 import { showAlert } from '@/components/common/CrossPlatformAlert';
 import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
