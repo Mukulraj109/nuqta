@@ -18,7 +18,7 @@ import * as Clipboard from 'expo-clipboard';
 import QRCode from 'react-native-qrcode-svg';
 import { ThemedText } from '@/components/ThemedText';
 import referralTierApi from '@/services/referralTierApi';
-import { useGetCurrencySymbol } from '@/stores/selectors';
+import { useGetCurrencySymbol, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { REFERRAL_TIERS, SHARE_TEMPLATES, type ShareTemplate } from '@/types/referral.types';
 import { CardGridSkeleton } from '@/components/skeletons';
@@ -39,10 +39,13 @@ function ReferralSharePage() {
   const [qrCode, setQrCode] = useState('');
   const [currentTier, setCurrentTier] = useState('STARTER');
   const isMounted = useIsMounted();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     loadData();
-  }, []);
+  }, [isAuthenticated, authLoading]);
 
   const loadData = async () => {
     try {
@@ -149,7 +152,7 @@ function ReferralSharePage() {
       <Stack.Screen options={{ headerShown: false }} />
 
       {/* Header */}
-      <LinearGradient colors={['#7c3aed', '#a78bfa']} style={styles.header}>
+      <LinearGradient colors={[Colors.brand.purple, Colors.brand.purpleLight || '#a78bfa']} style={styles.header}>
         <View style={styles.headerRow}>
           <Pressable
             style={styles.backButton}
@@ -189,7 +192,7 @@ function ReferralSharePage() {
           <Pressable style={styles.codeContainer} onPress={handleCopyCode}>
             <Text style={styles.codeText}>{referralCode}</Text>
             <View style={styles.copyBadge}>
-              <Ionicons name={isCopied ? 'checkmark' : 'copy'} size={18} color="#7c3aed" />
+              <Ionicons name={isCopied ? 'checkmark' : 'copy'} size={18} color={Colors.brand.purple} />
               <Text style={styles.copyText}>{isCopied ? 'Copied!' : 'Copy'}</Text>
             </View>
           </Pressable>
@@ -239,7 +242,7 @@ function ReferralSharePage() {
           accessibilityLabel="Share with more apps"
           accessibilityRole="button"
         >
-          <LinearGradient colors={['#7c3aed', '#a78bfa']} style={styles.nativeShareGradient}>
+          <LinearGradient colors={[Colors.brand.purple, Colors.brand.purpleLight || '#a78bfa']} style={styles.nativeShareGradient}>
             <Ionicons name="share-social" size={22} color={Colors.text.inverse} />
             <Text style={styles.nativeShareText}>More Sharing Options</Text>
           </LinearGradient>
@@ -299,11 +302,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.lg,
     padding: Spacing.xl,
     marginTop: Spacing.base,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 3,
+    ...Shadows.medium,
   },
   qrContainer: {
     padding: Spacing.base,
@@ -318,11 +317,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.lg,
     padding: Spacing.lg,
     marginTop: Spacing.base,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 3,
+    ...Shadows.medium,
   },
   codeContainer: {
     flexDirection: 'row',
@@ -338,29 +333,25 @@ const styles = StyleSheet.create({
   codeText: {
     ...Typography.h2,
     fontWeight: '800',
-    color: '#7c3aed',
+    color: Colors.brand.purple,
     letterSpacing: 3,
   },
   copyBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#ede9fe',
+    backgroundColor: Colors.purpleScale?.[50] || '#ede9fe',
     paddingHorizontal: Spacing.md,
     paddingVertical: 6,
     borderRadius: BorderRadius.sm,
     gap: Spacing.xs,
   },
-  copyText: { ...Typography.bodySmall, fontWeight: '600', color: '#7c3aed' },
+  copyText: { ...Typography.bodySmall, fontWeight: '600', color: Colors.brand.purple },
   linkSection: {
     backgroundColor: Colors.background.primary,
     borderRadius: BorderRadius.lg,
     padding: Spacing.lg,
     marginTop: Spacing.base,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 3,
+    ...Shadows.medium,
   },
   linkContainer: {
     flexDirection: 'row',
@@ -378,11 +369,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.lg,
     padding: Spacing.lg,
     marginTop: Spacing.base,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 3,
+    ...Shadows.medium,
   },
   platformsGrid: {
     flexDirection: 'row',
@@ -398,11 +385,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 6,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    ...Shadows.medium,
   },
   platformText: { ...Typography.caption, color: '#475569', textAlign: 'center' },
   nativeShareButton: {

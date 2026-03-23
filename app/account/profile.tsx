@@ -7,7 +7,7 @@ import { Text, ActivityIndicator } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import profileApi from '@/services/profileApi';
-import { CachedImage } from '@/components/ui/CachedImage';
+import CachedImage from '@/components/ui/CachedImage';
 
 const SEGMENT_BADGES: Record<string, { label: string; icon: string; bg: string; text: string }> = {
   verified_student:    { label: 'Verified Student',  icon: '🎓', bg: '#DBEAFE', text: '#1D4ED8' },
@@ -31,7 +31,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, Stack } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
-import { useAuthUser } from '@/stores/selectors';
+import { useAuthUser, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { useNotifications } from '@/contexts/NotificationContext';
 import { useSecurity } from '@/contexts/SecurityContext';
@@ -74,6 +74,8 @@ function AccountProfilePage() {
   const isMounted = useIsMounted();
   const router = useRouter();
   const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const { settings: notificationSettings, updateSettings: updateNotificationSettings } = useNotifications();
   const { securitySettings, privacySettings, updateSecuritySettings, updatePrivacySettings } = useSecurity();
   const { preferences: appPreferences, updatePreferences: updateAppPreferences } = useAppPreferences();
@@ -141,8 +143,9 @@ function AccountProfilePage() {
   };
 
   useEffect(() => {
+    if (!isAuthenticated || authLoading) return;
     loadSettings();
-  }, []);
+  }, [isAuthenticated, authLoading]);
 
   const loadSettings = async () => {
     try {

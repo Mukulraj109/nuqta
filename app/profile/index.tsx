@@ -3,7 +3,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // User profile page with icon grid and menu list
 
 import { colors } from '@/constants/theme';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useFocusEffect } from 'expo-router';
 import { View, ScrollView, StyleSheet, Pressable, StatusBar, Platform, SafeAreaView, RefreshControl, ActivityIndicator } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
@@ -38,6 +38,8 @@ import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert
 import { getReferralStats } from '@/services/referralApi';
 import { useUserIdentityStore } from '@/stores/userIdentityStore';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import loyaltyApi from '@/services/loyaltyApi';
+import partnerApi from '@/services/partnerApi';
 
 function ProfilePage() {
   const router = useRouter();
@@ -54,50 +56,35 @@ function ProfilePage() {
   const [refreshing, setRefreshing] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [referralCount, setReferralCount] = useState<number | null>(null);
+  const [referralRewardAmount, setReferralRewardAmount] = useState<number>(100);
+  const [loyaltyTier, setLoyaltyTier] = useState<string>('Bronze');
+  const [partnerLevel, setPartnerLevel] = useState<number>(1);
   const { segment: identitySegment, verificationSegment, instituteName, companyName } = useUserIdentityStore();
   const isMounted = useIsMounted();
 
-  // Fetch referral stats for "Friends joined" count
-  useEffect(() => {
-    if (!isAuthenticated || authLoading) return;
-    let cancelled = false;
-    getReferralStats().then(stats => {
-      if (!cancelled && stats) {
-        setReferralCount(stats.totalReferrals);
-      }
-    });
-    return () => { cancelled = true; };
-  }, [isAuthenticated, authLoading]);
+  // useFocusEffect handles initial mount + re-focus via onRefresh — no separate useEffect needed
 
-  // Removed - using SafeBackButton component instead
-
-  const handleIconGridItemPress = (item: ProfileIconGridItem) => {
-
-    // Handle icon grid navigation
+  const handleIconGridItemPress = useCallback((item: ProfileIconGridItem) => {
     switch (item.id) {
       case 'product':
-        // Navigate to My Products page
         router.push('/my-products' as any);
         break;
       case 'service':
-        // Navigate to My Services page
         router.push('/my-services' as any);
         break;
       case 'voucher':
-        // Navigate to My Vouchers page
         router.push('/my-vouchers' as any);
         break;
       case 'earns':
-        // Navigate to My Earnings page
         router.push('/my-earnings' as any);
         break;
       default:
         router.push(item.route as any);
         break;
     }
-  };
+  }, [router]);
 
-  const handleMenuItemPress = (item: ProfileMenuListItem) => {
+  const handleMenuItemPress = useCallback((item: ProfileMenuListItem) => {
 
     // Enhanced navigation logic for profile menu items
     switch (item.id) {
@@ -153,15 +140,15 @@ function ProfilePage() {
         }
         break;
     }
-  };
+  }, [router]);
 
-  const handleLocationHistoryPress = () => {
+  const handleLocationHistoryPress = useCallback(() => {
     router.push('/location/history' as any);
-  };
+  }, [router]);
 
-  const handleLocationSettingsPress = () => {
+  const handleLocationSettingsPress = useCallback(() => {
     router.push('/location/settings' as any);
-  };
+  }, [router]);
 
   // Pull-to-refresh handler
   const onRefresh = React.useCallback(async () => {
@@ -170,15 +157,26 @@ function ProfilePage() {
       // Clear statistics cache first
       await AsyncStorage.removeItem('user_statistics_cache');
 
-      // Refresh wallet balance, profile, statistics, referral count, and completion status
+      // Refresh wallet balance, profile, statistics, referral count, loyalty tier, partner level, and completion status
       await Promise.allSettled([
         refreshWallet(),
         authActions.checkAuthStatus(),
         refetchStats(),
         refreshCompletionStatus(),
         getReferralStats().then(stats => {
-          if (stats) setReferralCount(stats.totalReferrals);
+          if (stats) {
+            setReferralCount(stats.totalReferrals);
+            if (stats.averageRewardPerReferral) {
+              setReferralRewardAmount(stats.averageRewardPerReferral);
+            }
+          }
         }),
+        loyaltyApi.getTierInfo().then(res => {
+          if (res.success && res.data?.currentTier) setLoyaltyTier(res.data.currentTier);
+        }).catch(() => {}),
+        partnerApi.getProfile().then(res => {
+          if (res.success && res.data?.profile?.level?.level) setPartnerLevel(res.data.profile.level.level);
+        }).catch(() => {}),
       ]);
 
     } catch (error) {
@@ -328,7 +326,7 @@ function ProfilePage() {
     ];
   }, [statistics]);
 
-  const renderIconGridItem = (item: ProfileIconGridItem) => (
+  const renderIconGridItem = useCallback((item: ProfileIconGridItem) => (
     <Pressable
       key={item.id}
       style={styles.iconGridItem}
@@ -350,7 +348,7 @@ function ProfilePage() {
         <ThemedText style={styles.iconCount}>{item.count}</ThemedText>
       )}
     </Pressable>
-  );
+  ), [handleIconGridItemPress]);
 
   // Get dynamic badge count for menu items
   const getMenuItemBadge = (itemId: string): string | undefined => {
@@ -377,7 +375,7 @@ function ProfilePage() {
     }
   };
 
-  const renderMenuListItem = (item: ProfileMenuListItem) => {
+  const renderMenuListItem = useCallback((item: ProfileMenuListItem) => {
     // Get dynamic badge value
     const dynamicBadge = getMenuItemBadge(item.id);
     const badgeValue = dynamicBadge || item.badge;
@@ -436,7 +434,7 @@ function ProfilePage() {
         </View>
       </Pressable>
     );
-  };
+  }, [handleMenuItemPress, statistics]);
 
   return (
     <View style={styles.container}>
@@ -697,7 +695,7 @@ function ProfilePage() {
             style={styles.referralCard}
             onPress={() => router.push('/referral' as any)}
            
-            accessibilityLabel="Refer and Earn 100 rupees"
+            accessibilityLabel={`Refer and Earn ${referralRewardAmount} rupees`}
             accessibilityRole="button"
             accessibilityHint="Double tap to invite friends and get rewards"
           >
@@ -713,7 +711,7 @@ function ProfilePage() {
                 </View>
                 <View style={styles.referralText}>
                   <ThemedText style={styles.referralTitle}>
-                    Refer & Earn {currencySymbol}100
+                    Refer & Earn {currencySymbol}{referralRewardAmount}
                   </ThemedText>
                   <ThemedText style={styles.referralSubtitle}>
                     {referralCount !== null && referralCount > 0
@@ -731,14 +729,14 @@ function ProfilePage() {
             style={styles.loyaltyCard}
             onPress={() => router.push('/profile/achievements' as any)}
            
-            accessibilityLabel={`${userPoints} loyalty points. Gold tier`}
+            accessibilityLabel={`${userPoints} loyalty points. ${loyaltyTier} tier`}
             accessibilityRole="button"
             accessibilityHint="Double tap to view your loyalty rewards and achievements"
           >
             <View style={styles.loyaltyContent}>
               <View style={styles.loyaltyLeft}>
                 <View style={styles.loyaltyIcon}>
-                  <Ionicons name="diamond" size={24} color={Colors.warning} />
+                  <CachedImage source={require('@/assets/images/nuqta-coin.png')} style={{ width: 24, height: 24 }} />
                 </View>
                 <View style={styles.loyaltyText}>
                   <ThemedText style={styles.loyaltyPoints}>
@@ -750,7 +748,7 @@ function ProfilePage() {
               <View style={styles.loyaltyRight}>
                 <View style={styles.tierBadge}>
                   <Ionicons name="star" size={12} color={Colors.warning} />
-                  <ThemedText style={styles.tierText}>Gold</ThemedText>
+                  <ThemedText style={styles.tierText}>{loyaltyTier}</ThemedText>
                 </View>
                 <Ionicons name="chevron-forward" size={20} color={PROFILE_COLORS.primary} />
               </View>
@@ -762,7 +760,7 @@ function ProfilePage() {
             style={styles.partnerCard}
             onPress={() => router.push('/profile/partner' as any)}
            
-            accessibilityLabel="Partner Program, Level 1"
+            accessibilityLabel={`Partner Program, Level ${partnerLevel}`}
             accessibilityRole="button"
             accessibilityHint="Double tap to unlock exclusive rewards and benefits"
           >
@@ -789,7 +787,7 @@ function ProfilePage() {
                 <View style={styles.partnerRight}>
                   <View style={styles.partnerLevelBadge}>
                     <Ionicons name="star" size={12} color={PROFILE_COLORS.gold} />
-                    <ThemedText style={styles.partnerLevelText}>Level 1</ThemedText>
+                    <ThemedText style={styles.partnerLevelText}>Level {partnerLevel}</ThemedText>
                   </View>
                   <Ionicons name="chevron-forward" size={20} color={Colors.nileBlue} />
                 </View>

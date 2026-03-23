@@ -9,7 +9,7 @@ import { partnerLevels } from '@/data/partnerData';
 import partnerApi from '@/services/partnerApi';
 import { useSafeNavigation } from '@/hooks/useSafeNavigation';
 import toast from '@/utils/toast';
-import { useGetCurrencySymbol } from '@/stores/selectors';
+import { useGetCurrencySymbol, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 
 // Import all partner components
 import JackpotTimeline from '@/components/partner/JackpotTimeline';
@@ -32,6 +32,8 @@ function PartnerProfilePage() {
   const { goBack } = useSafeNavigation();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const [enrolled, setEnrolled] = useState<boolean | null>(null); // null = unknown yet
   const [enrolling, setEnrolling] = useState(false);
   const [partnerState, setPartnerState] = useState<PartnerPageState>({
@@ -64,8 +66,9 @@ function PartnerProfilePage() {
   const previousLevelRef = React.useRef<number | null>(null);
 
   useEffect(() => {
+    if (!isAuthenticated || authLoading) return;
     loadPartnerData();
-  }, []);
+  }, [isAuthenticated, authLoading]);
 
   const loadPartnerData = async () => {
     try {

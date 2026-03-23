@@ -21,7 +21,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuthLoading, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import apiClient from '@/services/apiClient';
-import { CachedImage } from '@/components/ui/CachedImage';
+import CachedImage from '@/components/ui/CachedImage';
 import { catchAndReport } from '@/utils/catchAndReport';
 
 import { Colors, Spacing, BorderRadius } from '@/constants/DesignSystem';

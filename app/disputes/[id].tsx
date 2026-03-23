@@ -12,7 +12,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@/contexts/AuthContext';
 import disputeApi, { Dispute } from '@/services/disputeApi';
-import { CachedImage } from '@/components/ui/CachedImage';
+import CachedImage from '@/components/ui/CachedImage';
 import { platformAlert } from '@/utils/platformAlert';
 import { colors, typography, spacing, borderRadius, shadows } from '@/constants/theme';
 import ScreenSkeleton from '@/components/common/ScreenSkeleton';

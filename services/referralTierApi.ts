@@ -53,11 +53,11 @@ export const referralTierApi = {
   /**
    * Claim specific reward
    */
-  async claimReward(referralId: string, rewardIndex: number): Promise<any> {
+  async claimReward(referralId: string, rewardType: string): Promise<any> {
     try {
       const response = await apiClient.post('/api/referral/claim-reward', {
         referralId,
-        rewardIndex
+        rewardType
       });
       return extractData(response);
     } catch (error) {

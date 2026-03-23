@@ -157,7 +157,7 @@ function TimeDisplay({
         {/* Timezone */}
         {showTimezone && (
           <Text style={[styles.timezone, timezoneStyle]}>
-            Asia/Kolkata
+            {Intl.DateTimeFormat().resolvedOptions().timeZone}
           </Text>
         )}
       </View>

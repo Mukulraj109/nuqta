@@ -1,12 +1,12 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, ScrollView, Pressable, StyleSheet, Dimensions, RefreshControl } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import * as Clipboard from 'expo-clipboard';
 import referralTierApi from '../../services/referralTierApi';
-import { useGetCurrencySymbol } from '@/stores/selectors';
+import { useGetCurrencySymbol, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import {
@@ -28,6 +28,8 @@ function ReferralDashboard() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -48,8 +50,9 @@ function ReferralDashboard() {
   } | null>(null);
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     loadData();
-  }, []);
+  }, [isAuthenticated, authLoading]);
 
   const loadData = async () => {
     try {
@@ -103,15 +106,15 @@ function ReferralDashboard() {
     setRefreshing(false);
   };
 
-  const handleClaimReward = async (referralId: string, rewardIndex: number) => {
+  const handleClaimReward = useCallback(async (referralId: string, rewardType: string) => {
     try {
-      await referralTierApi.claimReward(referralId, rewardIndex);
+      await referralTierApi.claimReward(referralId, rewardType);
       platformAlertSimple('Success', 'Reward claimed successfully!');
       await loadData();
     } catch (error: any) {
       platformAlertSimple('Error', error.message || 'Failed to claim reward');
     }
-  };
+  }, []);
 
   const handleCopyCode = async () => {
     if (qrData?.referralCode) {
@@ -241,7 +244,7 @@ function ReferralDashboard() {
           accessibilityRole="button"
           accessibilityHint="Opens share options to invite friends"
         >
-          <LinearGradient colors={[Colors.brand.purple, '#a78bfa']} style={styles.shareButtonGradient}>
+          <LinearGradient colors={[Colors.brand.purple, Colors.brand.purpleLight || '#a78bfa']} style={styles.shareButtonGradient}>
             <Ionicons name="share-social" size={24} color={Colors.text.inverse} />
             <View style={styles.shareButtonText}>
               <Text style={styles.shareButtonTitle}>Invite Friends</Text>
@@ -270,7 +273,7 @@ function ReferralDashboard() {
       </View>
 
       {/* Claimable Rewards */}
-      {rewards && rewards.claimable.length > 0 && (
+      {rewards && rewards.claimable.length > 0 ? (
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Claimable Rewards</Text>
 
@@ -302,7 +305,7 @@ function ReferralDashboard() {
               <Pressable
                 style={styles.claimButton}
                 onPress={() =>
-                  handleClaimReward(reward.referralId!, reward.rewardIndex!)
+                  handleClaimReward(reward.referralId!, reward.type!)
                 }
                 accessibilityLabel={`Claim ${reward.description}`}
                 accessibilityRole="button"
@@ -316,6 +319,19 @@ function ReferralDashboard() {
           <View style={styles.totalClaimable}>
             <Text style={styles.totalClaimableText}>
               Total Claimable: {currencySymbol}{rewards.totalClaimableValue}
+            </Text>
+          </View>
+        </View>
+      ) : (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Rewards</Text>
+          <View style={styles.emptyState}>
+            <View style={styles.emptyStateIconContainer}>
+              <Ionicons name="gift-outline" size={36} color={Colors.text.tertiary} />
+            </View>
+            <Text style={styles.emptyStateTitle}>No rewards yet</Text>
+            <Text style={styles.emptyStateSubtitle}>
+              Invite friends to start earning rewards
             </Text>
           </View>
         </View>
@@ -348,26 +364,38 @@ function ReferralDashboard() {
           </View>
         )}
 
-        {leaderboard.slice(0, 5).map((entry) => (
-          <View key={entry.userId} style={styles.leaderboardItem}>
-            <View style={styles.leaderboardRank}>
-              <Text style={styles.leaderboardRankText}>#{entry.rank}</Text>
+        {leaderboard.length > 0 ? (
+          leaderboard.slice(0, 5).map((entry) => (
+            <View key={entry.userId} style={styles.leaderboardItem}>
+              <View style={styles.leaderboardRank}>
+                <Text style={styles.leaderboardRankText}>#{entry.rank}</Text>
+              </View>
+              <View style={styles.leaderboardInfo}>
+                <Text style={styles.leaderboardName}>
+                  {entry.fullName || entry.username}
+                </Text>
+                <Text style={styles.leaderboardStats}>
+                  {entry.totalReferrals} referrals · {currencySymbol}{entry.lifetimeEarnings}
+                </Text>
+              </View>
+              <View style={styles.leaderboardTierBadge}>
+                <Text style={styles.leaderboardTierText}>
+                  {REFERRAL_TIERS[entry.tier]?.badge || 'Starter'}
+                </Text>
+              </View>
             </View>
-            <View style={styles.leaderboardInfo}>
-              <Text style={styles.leaderboardName}>
-                {entry.fullName || entry.username}
-              </Text>
-              <Text style={styles.leaderboardStats}>
-                {entry.totalReferrals} referrals · {currencySymbol}{entry.lifetimeEarnings}
-              </Text>
+          ))
+        ) : (
+          <View style={styles.emptyState}>
+            <View style={styles.emptyStateIconContainer}>
+              <Ionicons name="podium-outline" size={36} color={Colors.text.tertiary} />
             </View>
-            <View style={styles.leaderboardTierBadge}>
-              <Text style={styles.leaderboardTierText}>
-                {REFERRAL_TIERS[entry.tier]?.badge || 'Starter'}
-              </Text>
-            </View>
+            <Text style={styles.emptyStateTitle}>No rankings yet</Text>
+            <Text style={styles.emptyStateSubtitle}>
+              Be the first to climb the leaderboard!
+            </Text>
           </View>
-        ))}
+        )}
       </View>
     </ScrollView>
 );
@@ -572,7 +600,7 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingVertical: Spacing.sm,
     paddingHorizontal: Spacing.base,
-    backgroundColor: '#ede9fe',
+    backgroundColor: Colors.purpleScale?.[50] || '#ede9fe',
     borderRadius: BorderRadius.sm
   },
   copyButtonText: {
@@ -696,14 +724,38 @@ const styles = StyleSheet.create({
   leaderboardTierBadge: {
     paddingVertical: Spacing.xs,
     paddingHorizontal: Spacing.md,
-    backgroundColor: '#ede9fe',
+    backgroundColor: Colors.purpleScale?.[50] || '#ede9fe',
     borderRadius: BorderRadius.md
   },
   leaderboardTierText: {
     ...Typography.bodySmall,
     fontWeight: '600',
     color: Colors.brand.purple
-  }
+  },
+  emptyState: {
+    alignItems: 'center',
+    paddingVertical: Spacing.xl,
+  },
+  emptyStateIconContainer: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    backgroundColor: Colors.background.secondary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: Spacing.base,
+  },
+  emptyStateTitle: {
+    ...Typography.bodyLarge,
+    fontWeight: '600',
+    color: Colors.text.primary,
+    marginBottom: Spacing.xs,
+  },
+  emptyStateSubtitle: {
+    ...Typography.body,
+    color: Colors.text.tertiary,
+    textAlign: 'center',
+  },
 });
 
 export default withErrorBoundary(ReferralDashboard, 'ReferralDashboard');

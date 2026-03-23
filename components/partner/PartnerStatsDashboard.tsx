@@ -12,6 +12,7 @@ import { useRouter } from 'expo-router';
 import partnerApi, { PartnerStats } from '@/services/partnerApi';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 
 interface PartnerStatsDashboardProps {
   compact?: boolean;
@@ -35,14 +36,17 @@ function PartnerStatsDashboard({
   onViewLeaderboard,
 }: PartnerStatsDashboardProps) {
   const router = useRouter();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const [stats, setStats] = useState<PartnerStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const isMounted = useIsMounted();
 
   useEffect(() => {
+    if (!isAuthenticated || authLoading) return;
     fetchStats();
-  }, []);
+  }, [isAuthenticated, authLoading]);
 
   const fetchStats = async () => {
     try {

@@ -19,7 +19,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuthLoading } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
-import { CachedImage } from '@/components/ui/CachedImage';
+import CachedImage from '@/components/ui/CachedImage';
 import apiClient from '@/services/apiClient';
 import storesService from '@/services/storesApi';
 import categoriesService from '@/services/categoriesApi';

@@ -2,43 +2,45 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Profile QR Code Page
 // Display QR code for profile sharing and wallet payments
 
-import React, { useState } from 'react';
-import { View, ScrollView, StyleSheet, Pressable, StatusBar, Share } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { View, ScrollView, StyleSheet, Pressable, StatusBar, Share, ActivityIndicator, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
-import { useAuthUser, useGetCurrencySymbol } from '@/stores/selectors';
+import { useAuthUser, useGetCurrencySymbol, useIsAuthenticated, useAuthLoading, useRezBalance } from '@/stores/selectors';
 import * as Clipboard from 'expo-clipboard';
 import QRCode from 'react-native-qrcode-svg';
 import { platformAlertSimple } from '@/utils/platformAlert';
-import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
-import { useIsMounted } from '@/hooks/useIsMounted';
+import { BRAND } from '@/constants/brand';
 
 const QRCodePage = () => {
   const router = useRouter();
   const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
+  const rezBalance = useRezBalance();
   const [activeTab, setActiveTab] = useState<'profile' | 'wallet'>('profile');
   const getCurrencySymbol = useGetCurrencySymbol();
-  const isMounted = useIsMounted();
   const currencySymbol = getCurrencySymbol();
 
   // Generate profile link
   const profileLink = `https://rezapp.com/user/${user?.id || 'user123'}`;
   const walletId = `REZW${user?.phoneNumber?.slice(-6) || '123456'}`;
 
-  const handleCopyLink = async () => {
+  const handleCopyLink = useCallback(async () => {
     await Clipboard.setStringAsync(activeTab === 'profile' ? profileLink : walletId);
     platformAlertSimple('Copied!', `${activeTab === 'profile' ? 'Profile link' : 'Wallet ID'} copied to clipboard`);
-  };
+  }, [activeTab, profileLink, walletId]);
 
-  const handleShare = async () => {
+  const handleShare = useCallback(async () => {
     try {
       const message =
         activeTab === 'profile'
-          ? `Check out my profile on REZ App!\n${profileLink}`
-          : `Send payment to my REZ Wallet:\nID: ${walletId}`;
+          ? `Check out my profile on ${BRAND.APP_NAME}!\n${profileLink}`
+          : `Send payment to my ${BRAND.APP_NAME} Wallet:\nID: ${walletId}`;
 
       await Share.share({
         message,
@@ -47,11 +49,19 @@ const QRCodePage = () => {
     } catch (error) {
       // silently handle
     }
-  };
+  }, [activeTab, profileLink, walletId]);
 
-  const handleScan = () => {
+  const handleScan = useCallback(() => {
     router.push('/pay-in-store' as any);
-  };
+  }, [router]);
+
+  if (authLoading || !isAuthenticated) {
+    return (
+      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color={Colors.gold} />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -64,7 +74,7 @@ const QRCodePage = () => {
             style={styles.backButton} 
             onPress={() => {
               if (router.canGoBack()) {
-                router.canGoBack() ? router.back() : router.replace('/(tabs)');
+                router.back();
               } else {
                 router.push('/profile');
               }
@@ -154,7 +164,7 @@ const QRCodePage = () => {
                   <Ionicons name="wallet" size={32} color={Colors.gold} />
                   <ThemedText style={styles.walletId}>{walletId}</ThemedText>
                   <ThemedText style={styles.walletBalance}>
-                    Balance: {currencySymbol}{user?.wallet?.balance || 0}
+                    Balance: {currencySymbol}{rezBalance.toFixed(2)}
                   </ThemedText>
                 </View>
                 <View style={styles.instructionBox}>
@@ -322,49 +332,20 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.primary,
     borderRadius: BorderRadius.xl,
     padding: Spacing.xl,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 6,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 12,
+      },
+      android: { elevation: 6 },
+      web: { boxShadow: '0 4px 12px rgba(0,0,0,0.1)' },
+    }),
   },
   qrContainer: {
     alignItems: 'center',
     marginBottom: Spacing.xl,
-  },
-  qrPlaceholder: {
-    width: 220,
-    height: 220,
-    backgroundColor: Colors.background.primary,
-    borderRadius: BorderRadius.lg,
-    borderWidth: 2,
-    borderColor: Colors.border.default,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: Spacing.lg,
-  },
-  qrPattern: {
-    width: 180,
-    height: 180,
-  },
-  qrRow: {
-    flexDirection: 'row',
-    flex: 1,
-  },
-  qrDot: {
-    flex: 1,
-    backgroundColor: 'transparent',
-    margin: 1,
-  },
-  qrDotFilled: {
-    backgroundColor: Colors.text.primary,
-  },
-  qrNote: {
-    position: 'absolute',
-    bottom: 10,
-    ...Typography.bodySmall,
-    color: Colors.text.tertiary,
-    fontWeight: '600',
   },
   infoSection: {
     gap: Spacing.base,
@@ -484,11 +465,16 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.primary,
     borderRadius: BorderRadius.lg,
     padding: Spacing.lg,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.05,
+        shadowRadius: 8,
+      },
+      android: { elevation: 2 },
+      web: { boxShadow: '0 2px 8px rgba(0,0,0,0.05)' },
+    }),
   },
   featuresTitle: {
     ...Typography.bodyLarge,

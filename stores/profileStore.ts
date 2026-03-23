@@ -8,6 +8,8 @@ import {
   UserPreferences,
 } from '@/types/profile.types';
 import profileApi from '@/services/profileApi';
+import { useAuthStore } from './authStore';
+import { mapBackendUserToProfileUser } from '@/utils/profileMapper';
 
 interface ProfileStoreState extends ProfileContextType {}
 
@@ -64,3 +66,26 @@ export const useProfileStore = create<ProfileStoreState>((set, get) => ({
     }
   },
 }));
+
+// Subscribe to auth store changes and sync user data into profile store
+useAuthStore.subscribe((authState) => {
+  const authUser = authState.state.user;
+  const currentProfileUser = useProfileStore.getState().user;
+
+  if (authUser) {
+    const mappedUser = mapBackendUserToProfileUser(authUser);
+    // Only update if the mapped user actually changed (avoid unnecessary re-renders)
+    if (!currentProfileUser || currentProfileUser.id !== mappedUser.id ||
+        currentProfileUser.name !== mappedUser.name ||
+        currentProfileUser.email !== mappedUser.email ||
+        currentProfileUser.phone !== mappedUser.phone ||
+        currentProfileUser.avatar !== mappedUser.avatar ||
+        currentProfileUser.bio !== mappedUser.bio ||
+        currentProfileUser.website !== mappedUser.website) {
+      useProfileStore.setState({ user: mappedUser });
+    }
+  } else if (currentProfileUser) {
+    // Auth user logged out — clear profile user
+    useProfileStore.setState({ user: null, completionStatus: null });
+  }
+});

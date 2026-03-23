@@ -14,118 +14,11 @@ import { useAuthUser, useIsAuthenticated, useAuthLoading, useAuthActions } from 
 import authService, { User as BackendUser, ProfileUpdate } from '@/services/authApi';
 import profileApi from '@/services/profileApi';
 import walletApi from '@/services/walletApi';
+import { mapBackendUserToProfileUser } from '@/utils/profileMapper';
 
 interface ProfileProviderProps {
   children: ReactNode;
 }
-
-// Helper function to map backend user data to profile user format
-const mapBackendUserToProfileUser = (backendUser: BackendUser): User => {
-  // Get initials from email first character or name if available
-  const getInitials = (): string => {
-    if (backendUser.profile?.firstName && backendUser.profile?.lastName) {
-      return (backendUser.profile.firstName.charAt(0) + backendUser.profile.lastName.charAt(0)).toUpperCase();
-    }
-    if (backendUser.profile?.firstName) {
-      return backendUser.profile.firstName.charAt(0).toUpperCase();
-    }
-    if (backendUser.email) {
-      return backendUser.email.charAt(0).toUpperCase();
-    }
-    if (backendUser.phoneNumber) {
-      return backendUser.phoneNumber.charAt(1).toUpperCase(); // Skip the + sign
-    }
-    return 'U'; // User
-  };
-
-  // Get display name - use email or phone if no name available
-  const getDisplayName = (): string => {
-    if (backendUser.profile?.firstName && backendUser.profile?.lastName) {
-      return `${backendUser.profile.firstName} ${backendUser.profile.lastName}`;
-    }
-    if (backendUser.profile?.firstName) {
-      return backendUser.profile.firstName;
-    }
-    if (backendUser.email) {
-      return backendUser.email.split('@')[0]; // Use email username part
-    }
-    if (backendUser.phoneNumber) {
-      return backendUser.phoneNumber;
-    }
-    return 'User';
-  };
-
-  return {
-    id: backendUser.id,
-    name: getDisplayName(),
-    email: backendUser.email || '',
-    avatar: backendUser.profile?.avatar,
-    bio: backendUser.profile?.bio || '',
-    location: backendUser.profile?.location?.address || '',
-    website: backendUser.profile?.website || '',
-    dateOfBirth: backendUser.profile?.dateOfBirth ? new Date(backendUser.profile.dateOfBirth).toLocaleDateString() : '',
-    gender: backendUser.profile?.gender || '',
-    initials: getInitials(),
-    phone: backendUser.phoneNumber,
-    joinDate: backendUser.createdAt,
-    isVerified: backendUser.isVerified,
-    isOnboarded: backendUser.isOnboarded,
-    // Map wallet data from backend
-    wallet: {
-      balance: typeof backendUser.wallet?.balance === 'object'
-        ? (backendUser.wallet.balance as any).available || (backendUser.wallet.balance as any).total || 0
-        : backendUser.wallet?.balance || 0,
-      totalEarned: backendUser.wallet?.totalEarned || 0,
-      totalSpent: backendUser.wallet?.totalSpent || 0,
-      pendingAmount: typeof backendUser.wallet?.pendingAmount === 'object'
-        ? (backendUser.wallet.pendingAmount as any).pending || 0
-        : backendUser.wallet?.pendingAmount || 0,
-    },
-    // Map subscription/creator tier fields
-    subscriptionTier: (backendUser as any).priveTier
-      || (backendUser as any).subscriptionTier
-      || (backendUser as any).nuqtaPlusTier
-      || undefined,
-    creatorLevel: (backendUser as any).creatorLevel
-      || (backendUser as any).partner?.level
-      || undefined,
-    tier: (() => {
-      const priveTier = (backendUser as any).priveTier
-        || (backendUser as any).nuqtaPlus?.tier
-        || (backendUser as any).nuqtaPlusTier
-        || (backendUser as any).subscriptionTier;
-      if (priveTier === 'elite') return 'Privé Elite';
-      if (priveTier === 'prive' || priveTier === 'premium') return 'Privé';
-      if ((backendUser as any).segment === 'verified_student') return 'Verified Student';
-      if ((backendUser as any).segment === 'verified_employee') return 'Corporate Member';
-      if ((backendUser as any).segment === 'verified_defence') return 'Defence Member';
-      if ((backendUser as any).segment === 'verified_healthcare') return 'Healthcare Worker';
-      return 'REZ Member';
-    })(),
-    preferences: {
-      notifications: {
-        push: backendUser.preferences?.pushNotifications ?? true,
-        email: backendUser.preferences?.emailNotifications ?? true,
-        sms: backendUser.preferences?.smsNotifications ?? false,
-        orderUpdates: true,
-        promotions: false,
-        reminders: true,
-      },
-      privacy: {
-        profileVisible: true,
-        showActivity: false,
-        allowMessaging: true,
-        dataSharing: false,
-      },
-      display: {
-        theme: backendUser.preferences?.theme === 'dark' ? 'dark' : backendUser.preferences?.theme === 'light' ? 'light' : 'auto',
-        language: backendUser.preferences?.language || 'en',
-        currency: 'USD',
-        timezone: 'America/New_York',
-      },
-    },
-  };
-};
 
 const ProfileContext = createContext<ProfileContextType | null>(null);
 
