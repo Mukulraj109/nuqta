@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
-  ScrollView,
+  FlatList,
   StyleSheet,
   Pressable,
   Linking,
@@ -319,35 +319,15 @@ function OutletsPage() {
       <Stack.Screen options={{ headerShown: false }} />
       {renderHeader()}
 
-      <ScrollView
+      <FlatList
+        data={outlets}
+        keyExtractor={(item) => item._id}
         style={styles.scrollView}
-        showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
-      >
-        {outlets.length === 0 ? (
-          <View style={styles.emptyContainer}>
-            <LinearGradient
-              colors={[colors.tint.green, '#A7F3D0']}
-              style={styles.emptyIconBg}
-            >
-              <Ionicons name="location-outline" size={56} color={colors.successScale[400]} />
-            </LinearGradient>
-            <Text style={styles.emptyTitle}>No Outlets Found</Text>
-            <Text style={styles.emptyText}>
-              This store doesn't have any outlet locations listed yet. Please check back later.
-            </Text>
-            <Pressable
-              style={styles.backToStoreButton}
-              onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
-             
-            >
-              <Ionicons name="arrow-back" size={18} color={colors.successScale[400]} />
-              <Text style={styles.backToStoreText}>Back to Store</Text>
-            </Pressable>
-          </View>
-        ) : (
-          <>
-            {/* Quick Stats */}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item, index }) => renderOutletCard(item, index)}
+        ListHeaderComponent={
+          outlets.length > 0 ? (
             <View style={styles.statsContainer}>
               <View style={styles.statCard}>
                 <LinearGradient
@@ -372,14 +352,30 @@ function OutletsPage() {
                 <Text style={styles.statLabel}>Open Now</Text>
               </View>
             </View>
-
-            {/* Outlet Cards */}
-            {outlets.map((outlet, index) => renderOutletCard(outlet, index))}
-          </>
-        )}
-
-        <View style={{ height: 100 }} />
-      </ScrollView>
+          ) : null
+        }
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <LinearGradient
+              colors={[colors.tint.green, '#A7F3D0']}
+              style={styles.emptyIconBg}
+            >
+              <Ionicons name="location-outline" size={56} color={colors.successScale[400]} />
+            </LinearGradient>
+            <Text style={styles.emptyTitle}>No Outlets Found</Text>
+            <Text style={styles.emptyText}>
+              This store doesn't have any outlet locations listed yet. Please check back later.
+            </Text>
+            <Pressable
+              style={styles.backToStoreButton}
+              onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
+            >
+              <Ionicons name="arrow-back" size={18} color={colors.successScale[400]} />
+              <Text style={styles.backToStoreText}>Back to Store</Text>
+            </Pressable>
+          </View>
+        }
+      />
     </View>
   );
 }
@@ -438,26 +434,6 @@ const styles = StyleSheet.create({
   scrollContent: {
     padding: Spacing.base,
     paddingBottom: 120,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: Spacing['2xl'],
-  },
-  loadingSpinner: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: Colors.successScale[100],
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: Spacing.lg,
-  },
-  loadingText: {
-    ...Typography.bodyLarge,
-    color: Colors.text.tertiary,
-    fontWeight: '500',
   },
   errorContainer: {
     flex: 1,

@@ -32,8 +32,7 @@ import EventReviews from "@/components/events/EventReviews";
 import StarRating from "@/components/events/StarRating";
 import { useEventBooking } from "@/hooks/useEventBooking";
 import eventsApiService from "@/services/eventsApi";
-import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
-import { useRegion } from "@/contexts/RegionContext";
+import { useAuthUser, useIsAuthenticated, useGetCurrencySymbol } from '@/stores/selectors';
 import { BUSINESS_CONFIG } from "@/config/env";
 import stripeApi from "@/services/stripeApi";
 import eventAnalytics from "@/services/eventAnalytics";
@@ -90,7 +89,7 @@ function EventPage({ eventId, initialEvent }: EventPageProps = {}) {
   const params = useLocalSearchParams();
   const user = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [screenData, setScreenData] = useState(Dimensions.get("window"));
   const resizeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);

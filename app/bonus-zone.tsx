@@ -15,7 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Stack, useRouter } from 'expo-router';
 import bonusZoneApi, { BonusZoneCampaign, BonusCampaignType } from '@/services/bonusZoneApi';
 import BonusZoneCard from '@/components/earn/BonusZoneCard';
-import { useGetCurrencySymbol, useRegionState } from '@/stores/selectors';
+import { useGetCurrencySymbol, useRegionState, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
@@ -49,6 +49,8 @@ function BonusZonePage() {
   const getCurrencySymbol = useGetCurrencySymbol();
   const regionState = useRegionState();
   const currencySymbol = getCurrencySymbol();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   const [campaigns, setCampaigns] = useState<BonusZoneCampaign[]>([]);
   const [loading, setLoading] = useState(true);
@@ -76,8 +78,9 @@ function BonusZonePage() {
   }, [regionState?.currentRegion]);
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     fetchCampaigns();
-  }, [fetchCampaigns]);
+  }, [fetchCampaigns, authLoading, isAuthenticated]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);

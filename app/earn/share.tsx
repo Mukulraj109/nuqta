@@ -26,6 +26,7 @@ import shareApi, { ShareableItem } from '../../services/shareApi';
 import { platformAlert } from '@/utils/platformAlert';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 
 interface ShareableContent {
   id: string;
@@ -49,6 +50,8 @@ const SHARE_PLATFORMS = [
 function ShareToEarnPage() {
   const isMounted = useIsMounted();
   const router = useRouter();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const [selectedContent, setSelectedContent] = useState<ShareableContent | null>(null);
   const [totalEarned, setTotalEarned] = useState(0);
   const [totalShares, setTotalShares] = useState(0);
@@ -57,6 +60,7 @@ function ShareToEarnPage() {
 
   // Fetch share stats and real shareable content from backend
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     const fetchData = async () => {
       try {
         const [statsRes, contentRes] = await Promise.all([
@@ -132,7 +136,7 @@ function ShareToEarnPage() {
       }
     };
     fetchData();
-  }, []);
+  }, [authLoading, isAuthenticated]);
 
   const handleShare = async (content: ShareableContent, platform: string) => {
     try {
@@ -211,8 +215,8 @@ function ShareToEarnPage() {
         <ThemedText style={styles.contentTitle}>{item.title}</ThemedText>
         <ThemedText style={styles.contentDesc}>{item.description}</ThemedText>
         <View style={styles.coinsBadge}>
-          <Ionicons name="diamond" size={14} color={Colors.gold} />
-          <ThemedText style={styles.coinsText}>Earn {item.coins} RC</ThemedText>
+          <CachedImage source={BRAND.COIN_IMAGE} style={{ width: 14, height: 14 }} />
+          <ThemedText style={styles.coinsText}>Earn {item.coins} {BRAND.COIN_SHORT}</ThemedText>
         </View>
       </View>
       <Pressable style={styles.shareButton}>
@@ -251,7 +255,7 @@ function ShareToEarnPage() {
         {/* Stats */}
         <View style={styles.statsContainer}>
           <View style={styles.statItem}>
-            <ThemedText style={styles.statValue}>{totalEarned} RC</ThemedText>
+            <ThemedText style={styles.statValue}>{totalEarned} {BRAND.COIN_SHORT}</ThemedText>
             <ThemedText style={styles.statLabel}>Total Earned</ThemedText>
           </View>
           <View style={styles.statDivider} />
@@ -311,7 +315,7 @@ function ShareToEarnPage() {
           />
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <ThemedText style={styles.modalTitle}>Share & Earn {selectedContent.coins} RC</ThemedText>
+              <ThemedText style={styles.modalTitle}>Share & Earn {selectedContent.coins} {BRAND.COIN_SHORT}</ThemedText>
               <Pressable onPress={() => setSelectedContent(null)}>
                 <Ionicons name="close" size={24} color={Colors.text.primary} />
               </Pressable>

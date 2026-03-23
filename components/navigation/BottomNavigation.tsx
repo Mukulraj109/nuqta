@@ -297,6 +297,15 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ style }) => {
       }
     }
 
+    // Check for Earn tab - Play & Earn and game routes
+    if (normalizedPath === '/playandearn' || normalizedPath.startsWith('/playandearn/')) {
+      return 'Earn';
+    }
+    if (normalizedPath.startsWith('/games/') || normalizedPath === '/games' ||
+        normalizedPath === '/scratch-card' || normalizedPath === '/coin-hunt') {
+      return 'Earn';
+    }
+
     // Check for Home tab - handle multiple formats
     // Home is at /(tabs) or /(tabs)/index, or root /
     // IMPORTANT: Check home last, after other tabs, to avoid conflicts

@@ -23,6 +23,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { PRIVE_COLORS, PRIVE_SPACING, PRIVE_RADIUS } from '@/components/prive/priveTheme';
 import { PriveSkeletonBlock } from '@/components/prive/PriveSkeletonBlock';
 import priveApi, { SmartSpendItem, SmartSpendSection } from '@/services/priveApi';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -30,6 +31,8 @@ const CARD_WIDTH = (SCREEN_WIDTH - PRIVE_SPACING.lg * 2 - PRIVE_SPACING.md) / 2;
 
 function SmartSpendScreen() {
   const router = useRouter();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   // State
   const [items, setItems] = useState<SmartSpendItem[]>([]);
@@ -97,8 +100,9 @@ function SmartSpendScreen() {
   }, [selectedSection]);
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     fetchCatalog(1);
-  }, [selectedSection]);
+  }, [selectedSection, isAuthenticated, authLoading]);
 
   const handleRefresh = useCallback(() => {
     fetchCatalog(1, true);

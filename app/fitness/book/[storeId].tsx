@@ -250,7 +250,7 @@ const FitnessBookingPage: React.FC = () => {
       slots.push({
         id: `${hour}:00`,
         time: `${hour > 12 ? hour - 12 : hour}:00 ${hour >= 12 ? 'PM' : 'AM'}`,
-        available: Math.random() > 0.3, // Simulated availability
+        available: true, // Needs backend fitness slot availability endpoint (e.g. GET /api/fitness/:storeId/availability?date=); show all slots, let backend reject unavailable
       });
     }
     return slots;

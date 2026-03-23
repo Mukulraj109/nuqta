@@ -560,7 +560,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: Spacing.base,
-    paddingBottom: Spacing.lg,
+    paddingBottom: 120,
   },
   amountLabel: {
     ...Typography.h4,

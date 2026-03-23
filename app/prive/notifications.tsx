@@ -13,6 +13,7 @@ import priveApi from '@/services/priveApi';
 import { NotificationListSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
 import { catchAndReport } from '@/utils/catchAndReport';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface NotificationItem {
@@ -26,6 +27,8 @@ interface NotificationItem {
 }
 
 function NotificationsScreen() {
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const router = useRouter();
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [counts, setCounts] = useState({ critical: 0, warning: 0, info: 0 });
@@ -45,7 +48,10 @@ function NotificationsScreen() {
   }, []);
 
   const isMounted = useIsMounted();
-  useEffect(() => { fetchData(); }, [fetchData]);
+  useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
+    fetchData();
+  }, [fetchData, isAuthenticated, authLoading]);
   const onRefresh = () => { setIsRefreshing(true); fetchData(); };
 
   const getUrgencyColor = (urgency: string) => {

@@ -12,7 +12,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import RatingStars from './RatingStars';
 import { Review } from '@/types/review.types';
-import reviewService from '@/services/reviewApi';
+import reviewService from '@/services/reviewsApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';

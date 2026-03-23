@@ -28,6 +28,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import financialServicesApi, { FinancialService } from '@/services/financialServicesApi';
+import { fetchBill as fetchBillApi } from '@/services/billPaymentApi';
 import cartApi from '@/services/cartApi';
 import { useRefreshCart, useGetCurrencySymbol } from '@/stores/selectors';
 import { useComprehensiveAnalytics } from '@/hooks/useComprehensiveAnalytics';
@@ -196,7 +197,7 @@ const FinancialServiceDetailPage: React.FC<FinancialServiceDetailPageProps> = ()
   };
 
   // Handle bill fetch
-  const handleFetchBill = () => {
+  const handleFetchBill = async () => {
     const sanitizedNumber = sanitizeNumericInput(consumerNumber);
     
     if (!sanitizedNumber || sanitizedNumber.length < 8) {
@@ -210,17 +211,25 @@ const FinancialServiceDetailPage: React.FC<FinancialServiceDetailPageProps> = ()
       service_type: serviceType,
     });
 
-    // Simulate bill fetch - in production, this would call an API
-    const amount = Math.floor(Math.random() * 3000) + 500;
-    setFetchedBill({
-      amount,
-      dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString('en-IN', {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric',
-      }),
-    });
-    setBillAmount(amount.toString());
+    try {
+      const response = await fetchBillApi(String(id), sanitizedNumber);
+      if (response.success && response.data) {
+        const amount = response.data.amount || 0;
+        setFetchedBill({
+          amount,
+          dueDate: response.data.dueDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString('en-IN', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric',
+          }),
+        });
+        setBillAmount(amount.toString());
+      } else {
+        platformAlertSimple('Bill Not Found', response.message || 'Could not fetch bill details. Please enter the amount manually.');
+      }
+    } catch (err: any) {
+      platformAlertSimple('Error', err?.message || 'Failed to fetch bill. Please enter the amount manually.');
+    }
   };
 
   // Handle proceed to payment

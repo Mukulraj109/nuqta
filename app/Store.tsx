@@ -21,7 +21,7 @@ import { useHomepage, useHomepageNavigation } from '@/hooks/useHomepage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useProfile, useProfileMenu } from '@/contexts/ProfileContext';
 import ProfileMenuModal from '@/components/profile/ProfileMenuModal';
-import { profileMenuSections } from '@/data/profileData';
+import { profileMenuSections } from '@/constants/profileMenu';
 import { useRouter } from 'expo-router';
 import deal from '@/assets/images/deal.png';
 import CachedImage from '@/components/ui/CachedImage';

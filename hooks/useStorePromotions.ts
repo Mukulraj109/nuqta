@@ -8,7 +8,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import offersApi from '@/services/offersApi';
+import { offersApi } from '@/services/offersApi';
 import { errorReporter } from '@/utils/errorReporter';
 
 interface UseStorePromotionsResult {
@@ -55,15 +55,12 @@ export function useStorePromotions(storeId: string): UseStorePromotionsResult {
       setLoading(true);
       setError(null);
 
-      const response = await offersApi.getStorePromotions(storeId);
+      const response = await offersApi.getStoreOffers(storeId, { active: true, limit: 20 });
 
-      // Handle different response formats
-      if (response.success) {
-        const promoData = response.data || [];
-        setPromotions(Array.isArray(promoData) ? promoData : []);
-      } else if (Array.isArray(response)) {
-        // Direct array response
-        setPromotions(response);
+      // Handle response from real API
+      if (response.success && response.data) {
+        const deals = (response.data as any)?.deals || [];
+        setPromotions(Array.isArray(deals) ? deals : []);
       } else {
         setPromotions([]);
       }

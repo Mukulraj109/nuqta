@@ -100,6 +100,14 @@ interface Store {
   isActive: boolean;
   isFeatured: boolean;
   isVerified: boolean;
+  socialCashback?: {
+    enabled: boolean;
+    postCashbackPercent: number;
+    postTypes: string[];
+    minimumFollowers: number;
+    verificationWindowHours: number;
+    activeCampaignId?: string;
+  };
 }
 
 const StoreDetailPage: React.FC = () => {
@@ -438,6 +446,40 @@ const StoreDetailPage: React.FC = () => {
             <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor={COLORS.orange500} />
           }
         >
+          {/* Social Cashback Banner */}
+          {store.socialCashback?.enabled && store.socialCashback.postCashbackPercent > 0 && (
+            <Pressable
+              style={styles.socialCashbackBanner}
+              onPress={() => {
+                if (store.socialCashback?.activeCampaignId) {
+                  router.push(`/prive/campaigns/${store.socialCashback.activeCampaignId}` as any);
+                } else {
+                  router.push('/prive/campaigns' as any);
+                }
+              }}
+            >
+              <LinearGradient
+                colors={['#7C3AED', '#5B21B6']}
+                style={styles.socialCashbackGradient}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+              >
+                <View style={styles.socialCashbackIcon}>
+                  <Ionicons name="camera" size={20} color={COLORS.white} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.socialCashbackTitle}>
+                    Post about your purchase & earn extra {store.socialCashback.postCashbackPercent}% cashback!
+                  </Text>
+                  <Text style={styles.socialCashbackSubtitle}>
+                    Submit your {store.socialCashback.postTypes?.join(' or ') || 'Instagram post'} within {store.socialCashback.verificationWindowHours || 48}h
+                  </Text>
+                </View>
+                <Ionicons name="chevron-forward" size={18} color="rgba(255,255,255,0.7)" />
+              </LinearGradient>
+            </Pressable>
+          )}
+
           {/* Main Info Card */}
           <View style={styles.mainCard}>
             <View style={styles.storeHeader}>
@@ -756,6 +798,38 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.gray50,
+  },
+  socialCashbackBanner: {
+    marginHorizontal: 16,
+    marginTop: 12,
+    marginBottom: 4,
+    borderRadius: 14,
+    overflow: 'hidden',
+  },
+  socialCashbackGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 14,
+    paddingVertical: 14,
+    gap: 12,
+  },
+  socialCashbackIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  socialCashbackTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    marginBottom: 2,
+  },
+  socialCashbackSubtitle: {
+    fontSize: 12,
+    color: 'rgba(255,255,255,0.8)',
   },
   loadingContainer: {
     flex: 1,

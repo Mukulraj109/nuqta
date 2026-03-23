@@ -48,7 +48,6 @@ export function useLeaderboardRealtime(
     recentChanges: [],
   });
 
-  const celebrationTimeoutRef = useRef<NodeJS.Timeout>();
   const updateTimeoutsRef = useRef<Set<NodeJS.Timeout>>(new Set());
 
   // Update entries when initial data changes
@@ -246,10 +245,6 @@ export function useLeaderboardRealtime(
       socket.off(SocketEvents.LEADERBOARD_UPDATE, handleLeaderboardUpdate);
       socket.off(SocketEvents.LEADERBOARD_USER_SCORED, handleUserScored);
       socket.off(SocketEvents.LEADERBOARD_RANK_CHANGE, handleRankChange);
-
-      if (celebrationTimeoutRef.current) {
-        clearTimeout(celebrationTimeoutRef.current);
-      }
 
       // Clear all tracked update timeouts
       updateTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));

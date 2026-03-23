@@ -22,7 +22,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { GroceryHubSkeleton } from '@/components/grocery/GrocerySkeleton';
 import { productsApi } from '@/services/productsApi';
 import { storesApi } from '@/services/storesApi';
-import { useGetCurrencySymbol } from '@/stores/selectors';
+import { useGetCurrencySymbol, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -51,6 +51,8 @@ const GroceryComparePage: React.FC = () => {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   // State
   const [compareItems, setCompareItems] = useState<CompareItem[]>([]);
@@ -89,9 +91,10 @@ const GroceryComparePage: React.FC = () => {
           // Handle both API formats: pricing.original/selling and pricing.basePrice/salePrice
           const basePrice = product.pricing?.original || product.pricing?.basePrice || product.pricing?.selling || product.pricing?.salePrice || 100;
 
-          // G-02: Use actual store prices (no random simulation)
+          // NOTE: Currently all stores show the same base price for each product
+          // because per-store pricing is not yet supported by the backend.
+          // When backend adds store-specific pricing, update this to use store-level prices.
           const storeComparisons = stores.map((store: any, index: number) => {
-            // Use the product's actual price — no random variation
             const price = basePrice;
             return {
               storeId: store.id || store._id,
@@ -140,8 +143,9 @@ const GroceryComparePage: React.FC = () => {
   }, [selectedCategory]);
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     fetchCompareData();
-  }, [fetchCompareData]);
+  }, [fetchCompareData, authLoading, isAuthenticated]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);

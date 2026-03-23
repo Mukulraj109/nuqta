@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useReducer, useCallback, useMemo, ReactNode } from 'react';
 import { OfferState, OffersPageData, OfferFilters } from '@/types/offers.types';
 import { offersApi } from '@/services/offersApi';
-// Note: Using offersApi which contains mock data since offers backend is not implemented yet
 
 // Action Types
 type OffersAction =

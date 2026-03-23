@@ -14,7 +14,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useOrderTracking } from '@/hooks/useOrderTracking';
-import { useGetCurrencySymbol } from '@/stores/selectors';
+import { useGetCurrencySymbol, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -38,6 +38,8 @@ function DriveThruTrackingScreen() {
   const { orderId } = useLocalSearchParams<{ orderId: string }>();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const currency = getCurrencySymbol();
 
   const {
@@ -47,7 +49,7 @@ function DriveThruTrackingScreen() {
     statusUpdate,
     isLive,
     refresh,
-  } = useOrderTracking(orderId || null);
+  } = useOrderTracking((!authLoading && isAuthenticated && orderId) ? orderId : null);
 
   const currentStatus = statusUpdate?.status || order?.status || 'placed';
   const currentStep = getStepIndex(currentStatus);

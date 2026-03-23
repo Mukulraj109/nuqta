@@ -30,7 +30,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Clipboard from 'expo-clipboard';
 import { ThemedText } from '@/components/ThemedText';
 import apiClient from '@/services/apiClient';
-import { useGetCurrencySymbol } from '@/stores/selectors';
+import { useGetCurrencySymbol, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -41,6 +41,8 @@ function DealSuccessPage() {
   const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   // Support multiple param naming conventions
   const params = useLocalSearchParams<{
@@ -76,13 +78,14 @@ function DealSuccessPage() {
   }));
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     if (sessionId) {
       verifyPayment();
     } else {
       setError('Missing payment session information');
       setIsLoading(false);
     }
-  }, [sessionId]);
+  }, [sessionId, isAuthenticated, authLoading]);
 
   const verifyPayment = async (retryCount = 0): Promise<void> => {
     const maxRetries = 3;

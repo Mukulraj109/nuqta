@@ -23,7 +23,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Clipboard from 'expo-clipboard';
 import { ThemedText } from '@/components/ThemedText';
 import realOffersApi from '@/services/realOffersApi';
-import { useGetCurrencySymbol } from '@/stores/selectors';
+import { useGetCurrencySymbol, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import logger from '@/utils/logger';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -35,6 +35,8 @@ function FlashSaleSuccessPage() {
   const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const currencySymbol = getCurrencySymbol();
   const { purchaseId, session_id } = useLocalSearchParams<{
     purchaseId?: string;
@@ -60,13 +62,14 @@ function FlashSaleSuccessPage() {
   }));
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     if (purchaseId && session_id) {
       verifyPayment();
     } else {
       setError('Missing payment information');
       setIsLoading(false);
     }
-  }, [purchaseId, session_id]);
+  }, [purchaseId, session_id, isAuthenticated, authLoading]);
 
   const verifyPayment = async () => {
     try {

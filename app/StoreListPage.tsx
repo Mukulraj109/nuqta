@@ -24,7 +24,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { SearchFilters, StoreResult, ProductItem, SearchResults, SearchError, AvailableFilters } from '@/types/store-search';
 import {
   defaultSearchFilters
-} from '@/utils/mock-store-search-data';
+} from '@/utils/storeTransformers';
 import { getSubSubCategories, SubSubCategory } from '@/config/subSubCategoryConfig';
 import SearchHeader from '@/components/store-search/SearchHeader';
 import FilterChips from '@/components/store-search/FilterChips';

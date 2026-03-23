@@ -26,7 +26,7 @@ function transformWalletResponse(backendData: any, userId: string): WalletData {
       currency: BRAND.CURRENCY_CODE,
       formattedAmount: `${BRAND.CURRENCY_CODE} ${rezCoin?.amount || 0}`,
       description: `Universal rewards usable anywhere on ${BRAND.APP_NAME}`,
-      iconPath: require('@/assets/images/wasil-coin.png'),
+      iconPath: BRAND.COIN_IMAGE,
       backgroundColor: '#FFF9E6',
       color: '#B45309',
       isActive: rezCoin?.isActive !== false,

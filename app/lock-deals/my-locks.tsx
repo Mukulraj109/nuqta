@@ -28,6 +28,7 @@ import { CardGridSkeleton } from '@/components/skeletons';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 type TabKey = 'active' | 'completed' | 'cancelled';
 
 const TABS: { key: TabKey; label: string; statuses: string }[] = [
@@ -39,6 +40,8 @@ const TABS: { key: TabKey; label: string; statuses: string }[] = [
 const MyLocksPage: React.FC = () => {
   const isMounted = useIsMounted();
   const router = useRouter();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const [locks, setLocks] = useState<UserLockDeal[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -46,8 +49,9 @@ const MyLocksPage: React.FC = () => {
   const [cancellingId, setCancellingId] = useState<string | null>(null);
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     fetchLocks();
-  }, [activeTab]);
+  }, [activeTab, authLoading, isAuthenticated]);
 
   const fetchLocks = async () => {
     try {

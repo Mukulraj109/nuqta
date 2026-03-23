@@ -7,6 +7,7 @@ import {
   Pressable,
   Dimensions,
   ScrollView,
+  FlatList,
   StatusBar,
   TextInput,
   ActivityIndicator,
@@ -16,7 +17,6 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, Stack } from 'expo-router';
-import { platformAlertConfirm } from '@/utils/platformAlert';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import exploreApi, { ExploreStore } from '@/services/exploreApi';
 import { useRegionState } from '@/stores/selectors';
@@ -75,6 +75,10 @@ const ExploreStoresPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
   const [sortBy, setSortBy] = useState<'default' | 'rating' | 'name' | 'distance'>('default');
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const PAGE_LIMIT = 20;
 
   // Region context for coordinates and region name
   const regionState = useRegionState();
@@ -104,28 +108,40 @@ const ExploreStoresPage = () => {
   }, [currentLocation?.coordinates, regionState.regionConfig?.defaultCoordinates]);
 
   // Fetch stores from API
-  const fetchStores = useCallback(async (isRefresh = false) => {
+  const fetchStores = useCallback(async (isRefresh = false, pageNum = 1) => {
     try {
-      if (isRefresh) {
-        setRefreshing(true);
+      if (isRefresh || pageNum === 1) {
+        if (isRefresh) {
+          setRefreshing(true);
+        } else {
+          setLoading(true);
+        }
       } else {
-        setLoading(true);
+        setLoadingMore(true);
       }
       setError(null);
 
       let response;
       if (searchQuery.trim()) {
-        response = await exploreApi.searchStores(searchQuery);
+        response = await exploreApi.searchStores(searchQuery, { page: pageNum, limit: PAGE_LIMIT });
       } else {
         response = await exploreApi.getStores({
           category: selectedCategory !== 'all' ? selectedCategory : undefined,
-          limit: 30,
+          page: pageNum,
+          limit: PAGE_LIMIT,
         });
       }
 
       if (response.success && response.data) {
         if (!isMounted()) return;
-        setStores(response.data.stores || []);
+        const newStores = response.data.stores || [];
+        if (pageNum === 1) {
+          setStores(newStores);
+        } else {
+          setStores(prev => [...prev, ...newStores]);
+        }
+        setPage(pageNum);
+        setHasMore(newStores.length >= PAGE_LIMIT);
       } else {
         if (!isMounted()) return;
         setError(response.error || 'Failed to fetch stores');
@@ -138,6 +154,7 @@ const ExploreStoresPage = () => {
       setLoading(false);
       if (!isMounted()) return;
       setRefreshing(false);
+      setLoadingMore(false);
     }
   }, [selectedCategory, searchQuery]);
 
@@ -164,8 +181,15 @@ const ExploreStoresPage = () => {
   }, [searchQuery]);
 
   const onRefresh = useCallback(() => {
-    fetchStores(true);
+    setPage(1);
+    setHasMore(true);
+    fetchStores(true, 1);
   }, [fetchStores]);
+
+  const loadMore = useCallback(() => {
+    if (loadingMore || !hasMore) return;
+    fetchStores(false, page + 1);
+  }, [loadingMore, hasMore, page, fetchStores]);
 
   const navigateTo = (path: string) => {
     router.push(path as any);
@@ -183,6 +207,8 @@ const ExploreStoresPage = () => {
 
   const handleCategoryChange = (categoryId: string) => {
     setSelectedCategory(categoryId);
+    setPage(1);
+    setHasMore(true);
   };
 
   const handleSort = () => {
@@ -456,67 +482,65 @@ const ExploreStoresPage = () => {
         </View>
 
         {/* Stores List/Grid */}
-        <ScrollView
-          style={styles.storesList}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={[
-            styles.storesContainer,
-            viewMode === 'grid' && styles.storesContainerGrid,
-          ]}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[colors.lightMustard]} />
-          }
-        >
-          {/* Loading State */}
-          {loading && !refreshing && (
-            <MapViewSkeleton />
-          )}
-
-          {/* Error State */}
-          {error && !loading && (
-            <View style={styles.errorContainer}>
-              <View style={styles.errorIconContainer}>
-                <Ionicons name="alert-circle" size={48} color={colors.error} />
-              </View>
-              <Text style={styles.errorTitle}>Oops! Something went wrong</Text>
-              <Text style={styles.errorText}>{error}</Text>
-              <Pressable style={styles.retryButton} onPress={() => fetchStores()}>
-                <Text style={styles.retryButtonText}>Try Again</Text>
-              </Pressable>
+        {loading && !refreshing ? (
+          <MapViewSkeleton />
+        ) : error && !loading ? (
+          <View style={[styles.storesList, styles.errorContainer]}>
+            <View style={styles.errorIconContainer}>
+              <Ionicons name="alert-circle" size={48} color={colors.error} />
             </View>
-          )}
-
-          {/* Empty State */}
-          {!loading && !error && filteredStores.length === 0 && (
-            <View style={styles.emptyContainer}>
-              <View style={styles.emptyIconContainer}>
-                <Ionicons name="storefront-outline" size={48} color={colors.neutral[400]} />
+            <Text style={styles.errorTitle}>Oops! Something went wrong</Text>
+            <Text style={styles.errorText}>{error}</Text>
+            <Pressable style={styles.retryButton} onPress={() => fetchStores(false, 1)}>
+              <Text style={styles.retryButtonText}>Try Again</Text>
+            </Pressable>
+          </View>
+        ) : (
+          <FlatList
+            data={filteredStores}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => viewMode === 'grid' ? renderGridCard(item) : renderListCard(item)}
+            numColumns={viewMode === 'grid' ? 2 : 1}
+            key={viewMode} // Re-render FlatList when switching between grid/list
+            style={styles.storesList}
+            contentContainerStyle={[
+              styles.storesContainer,
+              viewMode === 'grid' && styles.storesContainerGrid,
+            ]}
+            showsVerticalScrollIndicator={false}
+            onEndReached={loadMore}
+            onEndReachedThreshold={0.3}
+            ListEmptyComponent={
+              <View style={styles.emptyContainer}>
+                <View style={styles.emptyIconContainer}>
+                  <Ionicons name="storefront-outline" size={48} color={colors.neutral[400]} />
+                </View>
+                <Text style={styles.emptyTitle}>No stores found</Text>
+                <Text style={styles.emptySubtext}>
+                  {searchQuery ? `No results for "${searchQuery}"` : `Try adjusting your filters`}
+                </Text>
+                {searchQuery && (
+                  <Pressable style={styles.clearSearchBtn} onPress={() => setSearchQuery('')}>
+                    <Text style={styles.clearSearchText}>Clear Search</Text>
+                  </Pressable>
+                )}
               </View>
-              <Text style={styles.emptyTitle}>No stores found</Text>
-              <Text style={styles.emptySubtext}>
-                {searchQuery ? `No results for "${searchQuery}"` : `Try adjusting your filters`}
-              </Text>
-              {searchQuery && (
-                <Pressable style={styles.clearSearchBtn} onPress={() => setSearchQuery('')}>
-                  <Text style={styles.clearSearchText}>Clear Search</Text>
-                </Pressable>
-              )}
-            </View>
-          )}
-
-          {/* Store Cards */}
-          {!loading && !error && (
-            viewMode === 'grid' ? (
-              <View style={styles.gridContainer}>
-                {filteredStores.map((store) => renderGridCard(store))}
-              </View>
-            ) : (
-              filteredStores.map((store) => renderListCard(store))
-            )
-          )}
-
-          <View style={{ height: 120 }} />
-        </ScrollView>
+            }
+            ListFooterComponent={
+              <>
+                {loadingMore && (
+                  <View style={{ paddingVertical: 16, alignItems: 'center' }}>
+                    <ActivityIndicator size="small" color={colors.lightMustard} />
+                  </View>
+                )}
+                <View style={{ height: 120 }} />
+              </>
+            }
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[colors.lightMustard]} />
+            }
+          />
+        )}
 
         {/* Floating Map Button */}
         <Pressable
@@ -726,11 +750,6 @@ const styles = StyleSheet.create({
   },
   storesContainerGrid: {
     paddingHorizontal: Spacing.base,
-  },
-  gridContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
   },
   loadingContainer: {
     flex: 1,

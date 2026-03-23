@@ -24,7 +24,7 @@ import { GroceryHubSkeleton } from '@/components/grocery/GrocerySkeleton';
 import GroceryStoreCard from '@/components/grocery/GroceryStoreCard';
 import { categoriesApi } from '@/services/categoriesApi';
 import { storesApi } from '@/services/storesApi';
-import { useGetCurrencySymbol } from '@/stores/selectors';
+import { useGetCurrencySymbol, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
@@ -101,6 +101,8 @@ const GroceryPage: React.FC = () => {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   // State
   const [categories, setCategories] = useState<Category[]>(defaultCategories);
@@ -188,7 +190,10 @@ const GroceryPage: React.FC = () => {
         // Calculate stats
         const maxCashback = Math.max(...stores.map((s: any) => s.maxCashback || 0), 25);
         const fastestTime = Math.min(
-          ...stores.map((s: any) => s.operationalInfo?.deliveryTime?.min || 30),
+          ...stores.map((s: any) => {
+            const dt = s.operationalInfo?.deliveryTime;
+            return typeof dt === 'object' ? (dt?.min || 30) : (parseInt(String(dt)) || 30);
+          }),
           10
         );
         if (!isMounted()) return;
@@ -218,8 +223,9 @@ const GroceryPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     fetchData();
-  }, [fetchData]);
+  }, [fetchData, authLoading, isAuthenticated]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);

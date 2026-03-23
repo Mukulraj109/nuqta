@@ -381,6 +381,7 @@ const ENDPOINTS = {
   NOTIFICATIONS: '/prive/notifications',
   PROGRAM_CONFIG: '/prive/program-config/public',
   CONCIERGE: '/prive/concierge/tickets',
+  CAMPAIGNS: '/prive/campaigns',
 };
 
 class PriveApi {
@@ -714,6 +715,43 @@ class PriveApi {
 
   async addConciergeMessage(ticketId: string, message: string): Promise<ApiResponse<any>> {
     return apiClient.post(`${ENDPOINTS.CONCIERGE}/${ticketId}/message`, { message });
+  }
+
+  // ─── Campaigns ────────────────────────────────────────────────────────
+
+  async getCampaigns(params?: {
+    page?: number;
+    limit?: number;
+    status?: string;
+    taskType?: string;
+  }): Promise<ApiResponse<any>> {
+    return apiClient.get(ENDPOINTS.CAMPAIGNS, params);
+  }
+
+  async getCampaignById(id: string): Promise<ApiResponse<any>> {
+    return apiClient.get(`${ENDPOINTS.CAMPAIGNS}/${id}`);
+  }
+
+  async joinCampaign(id: string): Promise<ApiResponse<any>> {
+    return apiClient.post(`${ENDPOINTS.CAMPAIGNS}/${id}/join`);
+  }
+
+  async submitCampaignPost(id: string, data: {
+    postUrl: string;
+    postScreenshotUrl: string;
+  }): Promise<ApiResponse<any>> {
+    return apiClient.post(`${ENDPOINTS.CAMPAIGNS}/${id}/submit`, data);
+  }
+
+  async getCampaignStatus(id: string): Promise<ApiResponse<any>> {
+    return apiClient.get(`${ENDPOINTS.CAMPAIGNS}/${id}/status`);
+  }
+
+  async getCampaignEarnings(params?: {
+    page?: number;
+    limit?: number;
+  }): Promise<ApiResponse<any>> {
+    return apiClient.get(`${ENDPOINTS.CAMPAIGNS}/earnings`, params);
   }
 }
 

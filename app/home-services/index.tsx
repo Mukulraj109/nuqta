@@ -115,8 +115,8 @@ const HomeServicesPage: React.FC = () => {
                 <Pressable key={cat.id} style={styles.categoryCard} onPress={() => router.push(`/home-services/${cat.id}` as any)}>
                   <View style={[styles.categoryIcon, { backgroundColor: `${cat.color}20` }]}>
                     {isIconUrl ? (
-                      <Image
-                        source={{ uri: cat.icon }}
+                      <CachedImage
+                        source={cat.icon}
                         style={{ width: 32, height: 32 }}
                         contentFit="contain"
                         cachePolicy="memory-disk"

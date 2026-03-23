@@ -6,7 +6,7 @@
 
 import { cartApi } from '@/services/cartApi';
 import { productsApi } from '@/services/productsApi';
-import { orderApi } from '@/services/orderApi';
+import orderApi from '@/services/ordersApi';
 import { paymentService } from '@/services/paymentService';
 import { addressApi } from '@/services/addressApi';
 import apiClient from '@/services/apiClient';

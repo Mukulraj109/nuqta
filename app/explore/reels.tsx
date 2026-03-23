@@ -21,7 +21,7 @@ import { useRouter, Stack } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import reelApi, { Reel } from '@/services/reelApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
-import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
@@ -47,36 +47,52 @@ const ExploreReelsPage = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [reels, setReels] = useState<Reel[]>([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const PAGE_LIMIT = 20;
 
   // Fetch reels based on active tab
-  const fetchReels = useCallback(async (isRefresh = false) => {
+  const fetchReels = useCallback(async (isRefresh = false, pageNum = 1) => {
     try {
-      if (isRefresh) {
-        setRefreshing(true);
+      if (isRefresh || pageNum === 1) {
+        if (isRefresh) {
+          setRefreshing(true);
+        } else {
+          setLoading(true);
+        }
       } else {
-        setLoading(true);
+        setLoadingMore(true);
       }
       setError(null);
 
       let response;
       if (activeTab === 'trending') {
-        response = await reelApi.getTrendingReels({ limit: 20 });
+        response = await reelApi.getTrendingReels({ limit: PAGE_LIMIT });
       } else {
-        // For 'following' and 'nearby' tabs, use general reels endpoint
         response = await reelApi.getReels({
           sortBy: activeTab === 'following' ? 'newest' : 'popular',
-          limit: 20,
+          page: pageNum,
+          limit: PAGE_LIMIT,
         });
       }
 
       if (response?.success) {
+        let newReels: Reel[];
         if (activeTab === 'trending') {
-          if (!isMounted()) return;
-          setReels(response.data || []);
+          newReels = response.data || [];
         } else {
-          if (!isMounted()) return;
-          setReels(response.data?.reels || []);
+          newReels = response.data?.reels || [];
         }
+
+        if (!isMounted()) return;
+        if (pageNum === 1) {
+          setReels(newReels);
+        } else {
+          setReels(prev => [...prev, ...newReels]);
+        }
+        setPage(pageNum);
+        setHasMore(newReels.length >= PAGE_LIMIT);
       } else {
         if (!isMounted()) return;
         setError(response?.error || 'Failed to fetch reels');
@@ -89,18 +105,28 @@ const ExploreReelsPage = () => {
       setLoading(false);
       if (!isMounted()) return;
       setRefreshing(false);
+      setLoadingMore(false);
     }
   }, [activeTab]);
 
   // Initial fetch and refetch on tab change
   useEffect(() => {
-    fetchReels();
+    setPage(1);
+    setHasMore(true);
+    fetchReels(false, 1);
     flatListRef.current?.scrollToOffset({ offset: 0, animated: false });
   }, [fetchReels]);
 
   const onRefresh = useCallback(() => {
-    fetchReels(true);
+    setPage(1);
+    setHasMore(true);
+    fetchReels(true, 1);
   }, [fetchReels]);
+
+  const loadMore = useCallback(() => {
+    if (loadingMore || !hasMore) return;
+    fetchReels(false, page + 1);
+  }, [loadingMore, hasMore, page, fetchReels]);
 
   const navigateTo = useCallback((path: string) => {
     router.push(path as any);
@@ -278,7 +304,18 @@ const ExploreReelsPage = () => {
             </View>
           ) : null
         }
-        ListFooterComponent={<View style={{ height: 100 }} />}
+        ListFooterComponent={
+          <>
+            {loadingMore && (
+              <View style={{ paddingVertical: 16, alignItems: 'center' }}>
+                <ActivityIndicator size="small" color={Colors.gold} />
+              </View>
+            )}
+            <View style={{ height: 100 }} />
+          </>
+        }
+        onEndReached={loadMore}
+        onEndReachedThreshold={0.3}
         />
       </SafeAreaView>
     </>

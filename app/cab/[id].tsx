@@ -30,7 +30,7 @@ import productsApi from '@/services/productsApi';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { useProductReviews } from '@/hooks/useProductReviews';
-import { useCurrency, useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
+import { useCurrency, useGetCurrencySymbol, useGetLocale, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import ProductReviewsSection from '@/components/reviews/ProductReviewsSection';
 import CabBookingFlow from '../../components/cab/CabBookingFlow';
 import CabBookingConfirmation from '../../components/cab/CabBookingConfirmation';
@@ -127,6 +127,8 @@ function CabDetailsPage() {
   const getLocale = useGetLocale();
   const currencySymbol = getCurrencySymbol();
   const locale = getLocale();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   const [cab, setCab] = useState<CabDetails | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -153,10 +155,11 @@ function CabDetailsPage() {
     autoLoad: true });
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     if (id) {
       loadCabDetails();
     }
-  }, [id]);
+  }, [id, isAuthenticated, authLoading]);
 
   const loadCabDetails = async () => {
     try {

@@ -131,13 +131,15 @@ function RefundPolicyPage() {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 500);
+    // Content is static/hardcoded — brief delay for smooth UI transition only
+    const timer = setTimeout(() => setLoading(false), 100);
     return () => clearTimeout(timer);
   }, []);
 
   const handleRefresh = () => {
     setRefreshing(true);
-    setTimeout(() => setRefreshing(false), 1000);
+    // Static content, just dismiss the refresh indicator
+    setRefreshing(false);
   };
 
   const toggleSection = (index: number) => {

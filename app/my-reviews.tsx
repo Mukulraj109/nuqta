@@ -20,7 +20,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, Stack } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
-import reviewService from '@/services/reviewApi';
+import reviewService from '@/services/reviewsApi';
 import { UserReview } from '@/types/review.types';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -63,7 +63,7 @@ function MyReviewsPage() {
         setLoading(true);
       }
 
-      const response = await reviewService.getUserReviews(isRefresh ? 1 : page, 20);
+      const response = await reviewService.getUserOwnReviews(isRefresh ? 1 : page, 20);
 
       if (response.success && response.data) {
         if (isRefresh) {

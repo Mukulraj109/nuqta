@@ -37,29 +37,100 @@ import PaymentFailureModal from '@/components/checkout/PaymentFailureModal';
 import { colors } from '@/constants/theme';
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
 
-// G-03: Delivery time slot picker
-const DELIVERY_SLOTS = [
-  { label: 'Morning (9-12)', value: 'morning' },
-  { label: 'Afternoon (12-3)', value: 'afternoon' },
-  { label: 'Evening (3-6)', value: 'evening' },
-  { label: 'Night (6-9)', value: 'night' },
+// G-03: Delivery time slot picker with scheduled delivery support
+const DELIVERY_TIME_SLOTS = [
+  { label: '8 AM - 10 AM', value: '08:00-10:00' },
+  { label: '10 AM - 12 PM', value: '10:00-12:00' },
+  { label: '12 PM - 2 PM', value: '12:00-14:00' },
+  { label: '2 PM - 4 PM', value: '14:00-16:00' },
+  { label: '4 PM - 6 PM', value: '16:00-18:00' },
+  { label: '6 PM - 8 PM', value: '18:00-20:00' },
+  { label: '8 PM - 10 PM', value: '20:00-22:00' },
 ];
 
-function DeliverySlotPicker({ selectedSlot, onSelectSlot }: { selectedSlot?: string; onSelectSlot: (s: string) => void }) {
+function getNextDays(count: number) {
+  const days: { label: string; value: string; isToday: boolean }[] = [];
+  const now = new Date();
+  for (let i = 0; i < count; i++) {
+    const d = new Date(now);
+    d.setDate(d.getDate() + i);
+    const dayName = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : d.toLocaleDateString('en-US', { weekday: 'short' });
+    const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    days.push({
+      label: `${dayName}, ${dateStr}`,
+      value: d.toISOString().split('T')[0],
+      isToday: i === 0,
+    });
+  }
+  return days;
+}
+
+function DeliverySlotPicker({
+  selectedSlot,
+  scheduledDate,
+  isScheduled,
+  onSelectSlot,
+  onScheduleChange,
+}: {
+  selectedSlot?: string;
+  scheduledDate?: string;
+  isScheduled?: boolean;
+  onSelectSlot: (s: string) => void;
+  onScheduleChange: (details: { deliverySlot?: string; scheduledDate?: string; isScheduled?: boolean }) => void;
+}) {
+  const days = getNextDays(7);
+
   return (
     <View style={{ backgroundColor: colors.background.primary, borderRadius: 14, padding: 14, marginBottom: 12, shadowOpacity: 0.04, shadowRadius: 4, shadowOffset: { width: 0, height: 1 }, elevation: 1 }}>
-      <Text style={{ fontSize: 14, fontWeight: '700', color: colors.text.primary, marginBottom: 10 }}>Delivery Time Slot</Text>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-        {DELIVERY_SLOTS.map(slot => (
-          <Pressable
-            key={slot.value}
-            onPress={() => onSelectSlot(slot.value)}
-            style={{ paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, backgroundColor: selectedSlot === slot.value ? '#7C3AED' : '#F1F5F9', borderWidth: 1, borderColor: selectedSlot === slot.value ? '#7C3AED' : '#E2E8F0' }}
-          >
-            <Text style={{ fontSize: 12, fontWeight: '600', color: selectedSlot === slot.value ? '#fff' : '#64748B' }}>{slot.label}</Text>
-          </Pressable>
-        ))}
+      <Text style={{ fontSize: 14, fontWeight: '700', color: colors.text.primary, marginBottom: 10 }}>Delivery Schedule</Text>
+
+      {/* Deliver Now vs Schedule toggle */}
+      <View style={{ flexDirection: 'row', gap: 8, marginBottom: 12 }}>
+        <Pressable
+          onPress={() => onScheduleChange({ isScheduled: false, scheduledDate: undefined, deliverySlot: undefined })}
+          style={{ flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: !isScheduled ? '#7C3AED' : '#F1F5F9', alignItems: 'center', borderWidth: 1, borderColor: !isScheduled ? '#7C3AED' : '#E2E8F0' }}
+        >
+          <Text style={{ fontSize: 13, fontWeight: '600', color: !isScheduled ? '#fff' : '#64748B' }}>Deliver Now</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => onScheduleChange({ isScheduled: true })}
+          style={{ flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: isScheduled ? '#7C3AED' : '#F1F5F9', alignItems: 'center', borderWidth: 1, borderColor: isScheduled ? '#7C3AED' : '#E2E8F0' }}
+        >
+          <Text style={{ fontSize: 13, fontWeight: '600', color: isScheduled ? '#fff' : '#64748B' }}>Schedule for Later</Text>
+        </Pressable>
       </View>
+
+      {isScheduled && (
+        <>
+          {/* Date Selection */}
+          <Text style={{ fontSize: 12, fontWeight: '600', color: '#6B7280', marginBottom: 8 }}>Select Date</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 12 }} contentContainerStyle={{ gap: 8, paddingRight: 8 }}>
+            {days.map(day => (
+              <Pressable
+                key={day.value}
+                onPress={() => onScheduleChange({ scheduledDate: day.value })}
+                style={{ paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, backgroundColor: scheduledDate === day.value ? '#7C3AED' : '#F1F5F9', borderWidth: 1, borderColor: scheduledDate === day.value ? '#7C3AED' : '#E2E8F0' }}
+              >
+                <Text style={{ fontSize: 12, fontWeight: '600', color: scheduledDate === day.value ? '#fff' : '#64748B' }}>{day.label}</Text>
+              </Pressable>
+            ))}
+          </ScrollView>
+
+          {/* Time Slot Selection */}
+          <Text style={{ fontSize: 12, fontWeight: '600', color: '#6B7280', marginBottom: 8 }}>Select Time Slot</Text>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+            {DELIVERY_TIME_SLOTS.map(slot => (
+              <Pressable
+                key={slot.value}
+                onPress={() => onSelectSlot(slot.value)}
+                style={{ paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, backgroundColor: selectedSlot === slot.value ? '#7C3AED' : '#F1F5F9', borderWidth: 1, borderColor: selectedSlot === slot.value ? '#7C3AED' : '#E2E8F0' }}
+              >
+                <Text style={{ fontSize: 12, fontWeight: '600', color: selectedSlot === slot.value ? '#fff' : '#64748B' }}>{slot.label}</Text>
+              </Pressable>
+            ))}
+          </View>
+        </>
+      )}
     </View>
   );
 }
@@ -154,7 +225,7 @@ function CheckoutPage() {
           onBack={checkoutHandlers.handleBackNavigation}
         />
 
-        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        <ScrollView style={styles.content} contentContainerStyle={{ paddingBottom: 120 }} showsVerticalScrollIndicator={false}>
           {uiState.showWarningBanner && validationState.validationResult && validationState.validationResult.issues.length > 0 && (
             <StockWarningBanner
               issues={validationState.validationResult.issues}
@@ -201,11 +272,14 @@ function CheckoutPage() {
             onSetFulfillmentDetails={actions.setFulfillmentDetails}
           />
 
-          {/* G-03: Delivery time slot selector */}
+          {/* G-03: Delivery time slot selector with scheduled delivery */}
           {state.fulfillment.selectedType === 'delivery' && (
             <DeliverySlotPicker
               selectedSlot={state.fulfillment.deliverySlot}
+              scheduledDate={state.fulfillment.scheduledDate}
+              isScheduled={state.fulfillment.isScheduled}
               onSelectSlot={(slot: string) => actions.setFulfillmentDetails({ deliverySlot: slot })}
+              onScheduleChange={(details) => actions.setFulfillmentDetails(details)}
             />
           )}
 

@@ -28,6 +28,8 @@ import { cartApi } from '@/services/cartApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
+import { platformAlertSimple } from '@/utils/platformAlert';
 interface QuickStore {
   id: string;
   name: string;
@@ -52,6 +54,8 @@ interface QuickProduct {
 const QuickDeliveryPage: React.FC = () => {
   const isMounted = useIsMounted();
   const router = useRouter();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   // State
   const [quickStores, setQuickStores] = useState<QuickStore[]>([]);
@@ -152,8 +156,9 @@ const QuickDeliveryPage: React.FC = () => {
   }, [selectedCategory]);
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     fetchQuickData();
-  }, [fetchQuickData]);
+  }, [fetchQuickData, authLoading, isAuthenticated]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -165,8 +170,8 @@ const QuickDeliveryPage: React.FC = () => {
     try {
       const productId = product.id || product._id;
       await cartApi.addToCart(productId, 1);
-    } catch (err) {
-      // silently handle
+    } catch (err: any) {
+      platformAlertSimple('Error', err?.message || 'Failed to add item to cart. Please try again.');
     }
   };
 

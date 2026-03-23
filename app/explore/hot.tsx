@@ -10,7 +10,6 @@ import {
   StatusBar,
   ActivityIndicator,
   RefreshControl,
-  Alert,
 } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { CardGridSkeleton } from '@/components/skeletons';
@@ -22,7 +21,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import exploreApi, { HotProduct } from '@/services/exploreApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import apiClient from '@/services/apiClient';
-import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
 
@@ -45,26 +44,40 @@ const ExploreHotPage = () => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const PAGE_LIMIT = 20;
 
   // Raw data from API — sorting is done via useMemo (no refetch on sort change)
   const [rawHotItems, setRawHotItems] = useState<HotProduct[]>([]);
 
   // Fetch hot deals from API — no dependency on selectedSort (sort is client-side only)
-  const fetchHotDeals = useCallback(async (isRefresh = false) => {
+  const fetchHotDeals = useCallback(async (isRefresh = false, pageNum = 1) => {
     try {
-      if (isRefresh) {
-        setRefreshing(true);
+      if (isRefresh || pageNum === 1) {
+        if (isRefresh) {
+          setRefreshing(true);
+        } else {
+          setLoading(true);
+        }
       } else {
-        setLoading(true);
+        setLoadingMore(true);
       }
       setError(null);
 
-      const response = await exploreApi.getHotDeals({ limit: 20 });
+      const response = await exploreApi.getHotDeals({ limit: PAGE_LIMIT, page: pageNum });
 
       if (response.success && response.data) {
         const products = response.data.products || [];
         if (!isMounted()) return;
-        setRawHotItems(products);
+        if (pageNum === 1) {
+          setRawHotItems(products);
+        } else {
+          setRawHotItems(prev => [...prev, ...products]);
+        }
+        setPage(pageNum);
+        setHasMore(products.length >= PAGE_LIMIT);
       } else {
         if (!isMounted()) return;
         setError(response.error || 'Failed to fetch hot deals');
@@ -77,17 +90,25 @@ const ExploreHotPage = () => {
       setLoading(false);
       if (!isMounted()) return;
       setRefreshing(false);
+      setLoadingMore(false);
     }
   }, []);
 
   // Initial fetch
   useEffect(() => {
-    fetchHotDeals();
+    fetchHotDeals(false, 1);
   }, [fetchHotDeals]);
 
   const onRefresh = useCallback(() => {
-    fetchHotDeals(true);
+    setPage(1);
+    setHasMore(true);
+    fetchHotDeals(true, 1);
   }, [fetchHotDeals]);
+
+  const loadMore = useCallback(() => {
+    if (loadingMore || !hasMore) return;
+    fetchHotDeals(false, page + 1);
+  }, [loadingMore, hasMore, page, fetchHotDeals]);
 
   // Sorted view of raw data — instant sort without API refetch
   const hotItems = useMemo(() => {
@@ -298,6 +319,15 @@ const ExploreHotPage = () => {
               <Text style={styles.emptySubtext}>Check back later for trending items</Text>
             </View>
           }
+          ListFooterComponent={
+            loadingMore ? (
+              <View style={{ paddingVertical: 16, alignItems: 'center' }}>
+                <ActivityIndicator size="small" color={Colors.gold} />
+              </View>
+            ) : null
+          }
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.3}
           renderItem={renderHotItem}
         />
       )}

@@ -12,7 +12,7 @@ import { colors } from '@/constants/theme';
 import { useUserIdentityStore, IdentitySegment } from '@/stores/userIdentityStore';
 
 // Color themes for each action - Nuqta palette
-const ACTION_THEMES = {
+const ACTION_THEMES: Record<string, { iconBg: string; iconColor: string; descBg: string; descColor: string }> = {
   voucher: {
     iconBg: colors.linen,      // Linen
     iconColor: colors.nileBlue,    // Nile Blue
@@ -37,6 +37,18 @@ const ACTION_THEMES = {
     descBg: colors.lightMustard,
     descColor: colors.nileBlue,
   },
+  recharge: {
+    iconBg: '#D1FAE5',     // Light green
+    iconColor: '#10B981',  // Emerald
+    descBg: '#D1FAE5',
+    descColor: '#065F46',
+  },
+  bills: {
+    iconBg: '#FEF3C7',     // Light amber
+    iconColor: '#F59E0B',  // Amber
+    descBg: '#FEF3C7',
+    descColor: '#92400E',
+  },
 };
 
 interface QuickActionsSectionProps {
@@ -46,11 +58,12 @@ interface QuickActionsSectionProps {
 }
 
 interface QuickActionItem {
-  id: 'voucher' | 'wallet' | 'offers' | 'store';
+  id: string;
   title: string;
   icon: keyof typeof Ionicons.glyphMap;
   route: string;
   description: string;
+  badge?: string;
 }
 
 const SEGMENT_OFFERS_ACTION: Partial<Record<IdentitySegment, QuickActionItem>> = {
@@ -119,6 +132,8 @@ function getQuickActions(segment: IdentitySegment): QuickActionItem[] {
     { id: 'wallet', title: 'Wallet', icon: 'wallet-outline', route: '/wallet-screen', description: 'Your rewards' },
     SEGMENT_OFFERS_ACTION[segment] ?? DEFAULT_OFFERS_ACTION,
     { id: 'store', title: 'Store', icon: 'storefront-outline', route: '/Store', description: 'Nearby' },
+    { id: 'recharge', title: 'Recharge', icon: 'phone-portrait-outline', route: '/bill-payment?type=mobile_prepaid', description: '+10 coins', badge: '+10 coins' },
+    { id: 'bills', title: 'Pay Bills', icon: 'flash-outline', route: '/bill-payment', description: '+20 coins', badge: '+20 coins' },
   ];
 }
 
@@ -179,6 +194,16 @@ function QuickActionsSection({
             <Text style={[styles.valueText, { color: greyText }]}>Explore</Text>
           </View>
         );
+      case 'recharge':
+      case 'bills':
+        return (
+          <View style={[styles.valuePill, { backgroundColor: greyBg }]}>
+            <Text style={[styles.valueText, { color: colors.primary[700] }]}>
+              {actionId === 'recharge' ? '+10' : '+20'}
+            </Text>
+            <Text style={[styles.valueLabel, { color: greyText }]}>coins</Text>
+          </View>
+        );
       default:
         return null;
     }
@@ -188,7 +213,7 @@ function QuickActionsSection({
     <View style={styles.container}>
       <View style={styles.actionsRow}>
         {actions.map((action) => {
-          const theme = ACTION_THEMES[action.id];
+          const theme = ACTION_THEMES[action.id] || ACTION_THEMES.store;
           return (
             <Pressable
               key={action.id}
@@ -226,12 +251,14 @@ const styles = StyleSheet.create({
   },
   actionsRow: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'space-between',
     alignItems: 'stretch',
     gap: 8,
+    rowGap: 12,
   },
   actionItem: {
-    flex: 1,
+    width: '22%',
     alignItems: 'center',
     paddingHorizontal: 2,
   },

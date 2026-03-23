@@ -25,7 +25,7 @@ import productsApi from '@/services/productsApi';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { useProductReviews } from '@/hooks/useProductReviews';
 import { DetailPageSkeleton } from '@/components/skeletons';
-import { useCurrency, useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
+import { useCurrency, useGetCurrencySymbol, useGetLocale, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import ProductReviewsSection from '@/components/reviews/ProductReviewsSection';
 import FlightBookingFlow from '../../components/flight/FlightBookingFlow';
 import FlightBookingConfirmation from '../../components/flight/FlightBookingConfirmation';
@@ -136,6 +136,8 @@ function FlightDetailsPage() {
   const getLocale = useGetLocale();
   const currencySymbol = getCurrencySymbol();
   const locale = getLocale();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   const [flight, setFlight] = useState<FlightDetails | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -157,8 +159,9 @@ function FlightDetailsPage() {
   });
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     if (id) loadFlightDetails();
-  }, [id]);
+  }, [id, isAuthenticated, authLoading]);
 
   const loadFlightDetails = async () => {
     try {

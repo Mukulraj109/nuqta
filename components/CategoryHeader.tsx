@@ -24,7 +24,7 @@ import Animated, {
 import { useProfile, useProfileMenu } from '@/contexts/ProfileContext';
 import { useAuthUser, useIsAuthenticated, useRezBalance } from '@/stores/selectors';
 import ProfileMenuModal from '@/components/profile/ProfileMenuModal';
-import { profileMenuSections } from '@/data/profileData';
+import { profileMenuSections } from '@/constants/profileMenu';
 import { CategoryBanner } from '@/config/categoryConfig';
 import { colors } from '@/constants/theme';
 

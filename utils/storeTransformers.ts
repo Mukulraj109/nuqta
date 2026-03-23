@@ -4,6 +4,7 @@
  */
 
 import { Discount } from '@/services/discountsApi';
+import type { SearchFilters } from '@/types/store-search';
 
 // ============================================================================
 // TYPE DEFINITIONS
@@ -371,6 +372,49 @@ function toRad(degrees: number): number {
 }
 
 // ============================================================================
+// STORE STATUS UTILITIES
+// ============================================================================
+
+/**
+ * Get human-readable store status text
+ */
+export function getStoreStatusText(store: { isOpen: boolean; hasOnlineDelivery: boolean }): string {
+  if (!store.isOpen && store.hasOnlineDelivery) {
+    return 'Online available';
+  }
+  if (store.isOpen) {
+    return 'Open';
+  }
+  return 'Closed';
+}
+
+/**
+ * Get store status indicator color
+ */
+export function getStoreStatusColor(store: { isOpen: boolean; hasOnlineDelivery: boolean }): string {
+  if (store.isOpen) {
+    return '#10B981'; // Green
+  }
+  if (store.hasOnlineDelivery) {
+    return '#3B82F6'; // Blue
+  }
+  return '#6B7280'; // Gray
+}
+
+// ============================================================================
+// DEFAULT SEARCH FILTERS
+// ============================================================================
+
+export const defaultSearchFilters: SearchFilters = {
+  categories: [],
+  gender: [],
+  hasRezPay: false,
+  priceRange: undefined,
+  distance: undefined,
+  storeStatus: [],
+};
+
+// ============================================================================
 // EXPORT ALL
 // ============================================================================
 
@@ -390,4 +434,7 @@ export default {
   isDiscountApplicable,
   formatDistance,
   calculateDistance,
+  getStoreStatusText,
+  getStoreStatusColor,
+  defaultSearchFilters,
 };

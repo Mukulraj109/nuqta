@@ -17,7 +17,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useRouter } from 'expo-router';
 import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import shareApi from '@/services/shareApi';
-import reviewService from '@/services/reviewApi';
+import reviewService from '@/services/reviewsApi';
 import apiClient from '@/services/apiClient';
 
 interface UsePostOrderRewardsParams {

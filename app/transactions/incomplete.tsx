@@ -34,19 +34,27 @@ const IncompleteTransactionsPage = () => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const PAGE_LIMIT = 20;
 
-  const fetchIncompleteOrders = useCallback(async (refresh: boolean = false) => {
+  const fetchIncompleteOrders = useCallback(async (refresh: boolean = false, pageNum = 1) => {
     try {
-      if (refresh) {
-        setRefreshing(true);
+      if (refresh || pageNum === 1) {
+        if (refresh) {
+          setRefreshing(true);
+        } else {
+          setLoading(true);
+        }
       } else {
-        setLoading(true);
+        setLoadingMore(true);
       }
       setError(null);
 
       const response = await ordersApi.getOrders({
-        page: 1,
-        limit: 50,
+        page: pageNum,
+        limit: PAGE_LIMIT,
       });
 
       if (response.success && response.data) {
@@ -55,7 +63,14 @@ const IncompleteTransactionsPage = () => {
           INCOMPLETE_STATUSES.includes(order.status as any)
         );
         if (!isMounted()) return;
-        setOrders(incompleteOrders);
+        if (pageNum === 1) {
+          setOrders(incompleteOrders);
+        } else {
+          setOrders(prev => [...prev, ...incompleteOrders]);
+        }
+        setPage(pageNum);
+        // If the API returned fewer than PAGE_LIMIT, no more pages
+        setHasMore((response.data.orders?.length || 0) >= PAGE_LIMIT);
       } else {
         throw new Error(response.message || 'Failed to fetch orders');
       }
@@ -68,6 +83,7 @@ const IncompleteTransactionsPage = () => {
       setLoading(false);
       if (!isMounted()) return;
       setRefreshing(false);
+      setLoadingMore(false);
     }
   }, []);
   const isMounted = useIsMounted();
@@ -77,8 +93,15 @@ const IncompleteTransactionsPage = () => {
   }, [fetchIncompleteOrders]);
 
   const onRefresh = () => {
-    fetchIncompleteOrders(true);
+    setPage(1);
+    setHasMore(true);
+    fetchIncompleteOrders(true, 1);
   };
+
+  const loadMore = useCallback(() => {
+    if (loadingMore || !hasMore) return;
+    fetchIncompleteOrders(false, page + 1);
+  }, [loadingMore, hasMore, page, fetchIncompleteOrders]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -240,6 +263,15 @@ const IncompleteTransactionsPage = () => {
           keyExtractor={(item) => item._id}
           contentContainerStyle={styles.listContainer}
           ListEmptyComponent={renderEmptyState}
+          ListFooterComponent={
+            loadingMore ? (
+              <View style={{ paddingVertical: 16, alignItems: 'center' }}>
+                <ActivityIndicator size="small" color={Colors.brand.purple} />
+              </View>
+            ) : null
+          }
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.3}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}

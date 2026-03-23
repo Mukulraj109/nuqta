@@ -75,6 +75,9 @@ export interface SurveySessionResult {
   resumed: boolean;
 }
 
+// Alias for backwards compatibility (was SurveySession in surveyApi.ts)
+export type SurveySession = SurveySessionResult;
+
 export interface SurveySubmitResult {
   sessionId: string;
   coinsEarned: number;

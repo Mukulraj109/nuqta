@@ -227,7 +227,6 @@ const GroupBuyPage = () => {
             )}
           </View>
         ))}
-        <View style={styles.bottomSpacing} />
       </ScrollView>
     );
   };
@@ -270,6 +269,7 @@ const GroupBuyPage = () => {
       <ScrollView
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
@@ -315,7 +315,6 @@ const GroupBuyPage = () => {
             )}
           </View>
         ))}
-        <View style={styles.bottomSpacing} />
       </ScrollView>
     );
   };
@@ -342,6 +341,7 @@ const GroupBuyPage = () => {
       <ScrollView
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
@@ -384,7 +384,6 @@ const GroupBuyPage = () => {
             </View>
           </Pressable>
         ))}
-        <View style={styles.bottomSpacing} />
       </ScrollView>
     );
   };
@@ -608,17 +607,6 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
   },
-  centerContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: Spacing.lg,
-  },
-  loadingText: {
-    marginTop: Spacing.base,
-    ...Typography.bodyLarge,
-    color: Colors.text.tertiary,
-  },
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -782,9 +770,6 @@ const styles = StyleSheet.create({
   },
   createGroupButton: {
     marginLeft: Spacing.md,
-  },
-  bottomSpacing: {
-    height: 20,
   },
 });
 

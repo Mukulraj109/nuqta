@@ -1,5 +1,5 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -26,44 +26,73 @@ function ProductsScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedFilter, setSelectedFilter] = useState<'all' | 'active' | 'warranty_expired'>('all');
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const PAGE_LIMIT = 20;
 
   useEffect(() => {
-    loadProducts();
+    loadProducts(1);
   }, [selectedFilter]);
 
-  const loadProducts = async () => {
+  const loadProducts = useCallback(async (pageNum = 1) => {
     try {
-      setLoading(true);
+      if (pageNum === 1) {
+        setLoading(true);
+      } else {
+        setLoadingMore(true);
+      }
       setError(null);
-      const filters = selectedFilter !== 'all' ? { status: selectedFilter as any } : undefined;
+      const filters: any = selectedFilter !== 'all' ? { status: selectedFilter as any } : {};
+      filters.page = pageNum;
+      filters.limit = PAGE_LIMIT;
       const response = await userProductService.getUserProducts(filters);
 
       if (response.success && response.data) {
         if (!isMounted()) return;
-        setProducts(response.data);
+        const newProducts = response.data;
+        if (pageNum === 1) {
+          setProducts(Array.isArray(newProducts) ? newProducts : []);
+        } else {
+          setProducts(prev => [...prev, ...(Array.isArray(newProducts) ? newProducts : [])]);
+        }
+        setPage(pageNum);
+        setHasMore(Array.isArray(newProducts) && newProducts.length >= PAGE_LIMIT);
       } else {
         if (!isMounted()) return;
         setError('Failed to load products. Please try again.');
-        if (!isMounted()) return;
-        setProducts([]);
+        if (pageNum === 1) {
+          if (!isMounted()) return;
+          setProducts([]);
+        }
       }
     } catch (error) {
       if (!isMounted()) return;
       setError('Failed to load products. Please check your connection and try again.');
-      if (!isMounted()) return;
-      setProducts([]);
+      if (pageNum === 1) {
+        if (!isMounted()) return;
+        setProducts([]);
+      }
     } finally {
       if (!isMounted()) return;
       setLoading(false);
+      setLoadingMore(false);
     }
-  };
+  }, [selectedFilter]);
 
-  const onRefresh = async () => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    await loadProducts();
+    setPage(1);
+    setHasMore(true);
+    await loadProducts(1);
     if (!isMounted()) return;
     setRefreshing(false);
-  };
+  }, [loadProducts]);
+
+  const loadMore = useCallback(() => {
+    if (loadingMore || !hasMore) return;
+    loadProducts(page + 1);
+  }, [loadingMore, hasMore, page, loadProducts]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -328,6 +357,15 @@ function ProductsScreen() {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
           ListEmptyComponent={renderEmptyState}
+          ListFooterComponent={
+            loadingMore ? (
+              <View style={{ paddingVertical: 16, alignItems: 'center' }}>
+                <ActivityIndicator size="small" color={Colors.info} />
+              </View>
+            ) : null
+          }
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.3}
           estimatedItemSize={100}
         />
       )}

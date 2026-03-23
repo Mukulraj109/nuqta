@@ -773,7 +773,7 @@ const MyVouchersPage = () => {
                   logo: selectedVoucher.brandLogo || '',
                   backgroundColor: Colors.background.secondary,
                   logoColor: '#000000',
-                  websiteUrl: undefined, // TODO: Add website URL from brand data
+                  websiteUrl: undefined, // Requires backend to include brand.websiteUrl in voucher response (GiftCard/Prive catalog brand schema)
                 },
               }
             : null

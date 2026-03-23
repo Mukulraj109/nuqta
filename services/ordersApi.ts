@@ -78,6 +78,13 @@ export interface Order {
   payment: {
     method: 'cod' | 'wallet' | 'card' | 'upi' | 'netbanking';
     status: 'pending' | 'paid' | 'failed' | 'refunded';
+    transactionId?: string;
+    coinsUsed?: {
+      rezCoins?: number;
+      promoCoins?: number;
+      storePromoCoins?: number;
+      totalCoinsValue?: number;
+    };
   };
   delivery: {
     method: 'standard' | 'express' | 'pickup';
@@ -383,6 +390,41 @@ class OrdersService {
         success: false,
         error: error?.message || 'Failed to fetch order statistics',
         message: error?.message || 'Failed to fetch order statistics',
+      };
+    }
+  }
+
+  // Get order analytics
+  async getOrderAnalytics(): Promise<ApiResponse<any>> {
+    try {
+      const response = await apiClient.get('/orders/analytics');
+      return response;
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error?.message || 'Failed to fetch order analytics',
+        message: error?.message || 'Failed to fetch order analytics',
+      };
+    }
+  }
+
+  // Request order return/refund
+  async requestReturn(
+    orderId: string,
+    reason: string,
+    items: string[]
+  ): Promise<ApiResponse<Order>> {
+    try {
+      const response = await apiClient.post<Order>(`/orders/${orderId}/refund-request`, {
+        reason,
+        refundItems: items.map(itemId => ({ itemId, quantity: 1 })),
+      });
+      return response;
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error?.message || 'Failed to request return',
+        message: error?.message || 'Failed to request return',
       };
     }
   }

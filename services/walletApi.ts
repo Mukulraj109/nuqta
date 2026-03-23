@@ -748,6 +748,7 @@ class WalletService {
   async purchaseGiftCard(data: {
     giftCardId: string;
     amount: number;
+    idempotencyKey?: string;
   }): Promise<ApiResponse<{ userGiftCard: any }>> {
     try {
       return await apiClient.post('/wallet/gift-cards/purchase', data);
@@ -839,6 +840,70 @@ class WalletService {
     } catch (error: any) {
       if (__DEV__) console.warn('[WalletAPI] getScheduledDrops failed:', error?.message);
       return { success: false, message: error?.message || 'Failed to fetch scheduled drops', data: null } as any;
+    }
+  }
+
+  // ========================================================================
+  // BILL SPLIT APIs
+  // ========================================================================
+
+  async createBillSplit(data: {
+    totalAmount: number;
+    splitType: 'equal' | 'custom';
+    participants: Array<{ phone: string; name?: string; amount?: number }>;
+    note?: string;
+    idempotencyKey: string;
+  }): Promise<ApiResponse<{ billSplit: any; duplicate?: boolean }>> {
+    try {
+      return await apiClient.post('/wallet/split', data);
+    } catch (error: any) {
+      if (__DEV__) console.warn('[WalletAPI] createBillSplit failed:', error?.message);
+      return { success: false, message: error?.message || 'Failed to create bill split', data: null } as any;
+    }
+  }
+
+  async listBillSplits(page = 1, limit = 10): Promise<ApiResponse<any[]>> {
+    try {
+      return await apiClient.get(`/wallet/split?page=${page}&limit=${limit}`);
+    } catch (error: any) {
+      if (__DEV__) console.warn('[WalletAPI] listBillSplits failed:', error?.message);
+      return { success: false, message: error?.message || 'Failed to fetch bill splits', data: null } as any;
+    }
+  }
+
+  async getBillSplit(id: string): Promise<ApiResponse<{ billSplit: any }>> {
+    try {
+      return await apiClient.get(`/wallet/split/${id}`);
+    } catch (error: any) {
+      if (__DEV__) console.warn('[WalletAPI] getBillSplit failed:', error?.message);
+      return { success: false, message: error?.message || 'Failed to fetch bill split', data: null } as any;
+    }
+  }
+
+  async payBillSplit(id: string): Promise<ApiResponse<{ billSplit: any }>> {
+    try {
+      return await apiClient.post(`/wallet/split/${id}/pay`, {});
+    } catch (error: any) {
+      if (__DEV__) console.warn('[WalletAPI] payBillSplit failed:', error?.message);
+      return { success: false, message: error?.message || 'Failed to pay bill split', data: null } as any;
+    }
+  }
+
+  async declineBillSplit(id: string): Promise<ApiResponse<{ billSplit: any }>> {
+    try {
+      return await apiClient.post(`/wallet/split/${id}/decline`, {});
+    } catch (error: any) {
+      if (__DEV__) console.warn('[WalletAPI] declineBillSplit failed:', error?.message);
+      return { success: false, message: error?.message || 'Failed to decline bill split', data: null } as any;
+    }
+  }
+
+  async cancelBillSplit(id: string): Promise<ApiResponse<{ billSplit: any }>> {
+    try {
+      return await apiClient.delete(`/wallet/split/${id}`);
+    } catch (error: any) {
+      if (__DEV__) console.warn('[WalletAPI] cancelBillSplit failed:', error?.message);
+      return { success: false, message: error?.message || 'Failed to cancel bill split', data: null } as any;
     }
   }
 }

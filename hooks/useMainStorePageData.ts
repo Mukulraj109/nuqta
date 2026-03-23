@@ -10,7 +10,6 @@ import { useStoreReviews } from '@/hooks/useStoreReviews';
 import { MainStoreProduct, MainStorePageProps } from '@/types/mainstore';
 import { TabKey } from '@/app/MainStoreSection';
 import reviewsApi from '@/services/reviewsApi';
-import reviewApi from '@/services/reviewApi';
 import apiClient from '@/services/apiClient';
 import wishlistApi from '@/services/wishlistApi';
 import { storesApi } from '@/services/storesApi';
@@ -334,7 +333,7 @@ export function useMainStorePageData({ productId, initialProduct }: MainStorePag
         await Promise.allSettled([
           (async () => {
             try {
-              const response = await reviewApi.canUserReviewStore(reviewStoreId);
+              const response = await reviewsApi.canUserReviewStore(reviewStoreId);
               if (response.success && response.data) setCanReview(response.data.canReview);
             } catch (err) {
               errorReporter.captureError(

@@ -27,6 +27,7 @@ import { platformAlert } from '@/utils/platformAlert';
 import { CLOUDINARY_CONFIG, getCloudinaryUploadUrl } from '@/config/cloudinary.config';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { BRAND } from '@/constants/brand';
 
 type TabType = 'upload' | 'history';
 
@@ -247,7 +248,7 @@ function PhotoUploadPage() {
           </View>
           {item.coinsAwarded > 0 && (
             <View style={styles.coinsBadge}>
-              <Ionicons name="diamond" size={12} color={Colors.gold} />
+              <CachedImage source={BRAND.COIN_IMAGE} style={{ width: 12, height: 12 }} />
               <ThemedText style={styles.coinsText}>+{item.coinsAwarded}</ThemedText>
             </View>
           )}
@@ -379,7 +380,7 @@ function PhotoUploadPage() {
 
           {/* Coin preview */}
           <View style={styles.coinPreview}>
-            <Ionicons name="diamond" size={20} color={Colors.gold} />
+            <CachedImage source={BRAND.COIN_IMAGE} style={{ width: 20, height: 20 }} />
             <ThemedText style={styles.coinPreviewText}>
               Earn {photos.length >= 3 ? '50-100' : '25-50'} coins upon approval
             </ThemedText>

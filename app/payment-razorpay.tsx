@@ -28,7 +28,7 @@ import paymentService, { PaymentMethod, PaymentResponse } from '@/services/payme
 import PaymentValidator from '@/services/paymentValidation';
 import apiClient from '@/services/apiClient';
 import travelApi from '@/services/travelApi';
-import { useGetCurrencySymbol } from '@/stores/selectors';
+import { useGetCurrencySymbol, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { getCurrencySymbol as getPaymentCurrencySymbol } from '@/config/payment';
 import * as WebBrowser from 'expo-web-browser';
 import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } from '@/utils/platformAlert';
@@ -59,6 +59,8 @@ function PaymentPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const getCurrencySymbol = useGetCurrencySymbol();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const currencySymbol = getCurrencySymbol();
   const amount = Number(params.amount) || 5000;
   const currency = ((params.currency as string) || 'INR').toUpperCase();
@@ -124,9 +126,10 @@ function PaymentPage() {
   const progressAnim = useSharedValue(0);
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     loadPaymentMethods();
     animateEntrance();
-  }, []);
+  }, [isAuthenticated, authLoading]);
 
   useEffect(() => {
     if (currentStep === 'processing') {
@@ -449,22 +452,32 @@ function PaymentPage() {
   };
 
   const openWebRazorpayCheckout = (orderData: any) => {
-    platformAlertConfirm(
-      'Payment Method',
-      'Razorpay web checkout will open in your browser.',
-      () => {
-        const t = setTimeout(() => {
-          navTimeoutsRef.current.delete(t);
-          const mockData = {
-            razorpay_order_id: orderData.razorpayOrderId,
-            razorpay_payment_id: 'pay_mock_' + Date.now(),
-            razorpay_signature: 'mock_signature_' + Date.now()};
-          handlePaymentSuccess(mockData);
-        }, 2000);
-        navTimeoutsRef.current.add(t);
-      },
-      'Continue (Mock)'
-    );
+    if (__DEV__) {
+      // Mock payment flow for development only
+      platformAlertConfirm(
+        'DEV: Mock Payment',
+        'This mock payment only works in development mode.',
+        () => {
+          const t = setTimeout(() => {
+            navTimeoutsRef.current.delete(t);
+            const mockData = {
+              razorpay_order_id: orderData.razorpayOrderId,
+              razorpay_payment_id: 'pay_mock_' + Date.now(),
+              razorpay_signature: 'mock_signature_' + Date.now()};
+            handlePaymentSuccess(mockData);
+          }, 2000);
+          navTimeoutsRef.current.add(t);
+        },
+        'Continue (Dev Mock)'
+      );
+    } else {
+      // Production: Web Razorpay not supported — inform user
+      platformAlertSimple(
+        'Payment Not Available',
+        'Online payment is not available on web. Please use the mobile app to complete your purchase.'
+      );
+      setIsProcessing(false);
+    }
   };
 
   // ==================== SHARED HANDLERS ====================

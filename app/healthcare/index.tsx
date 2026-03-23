@@ -280,8 +280,7 @@ const HealthcarePage: React.FC = () => {
           ) : featuredServices.length > 0 ? (
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               {featuredServices.map((service) => {
-                const cashback = service.metadata?.cashbackPercentage ||
-                  Math.floor(Math.random() * 15) + 10;
+                const cashback = service.metadata?.cashbackPercentage || 0;
                 const discount = service.price.discount ||
                   Math.round(((service.price.mrp - service.price.selling) / service.price.mrp) * 100);
 

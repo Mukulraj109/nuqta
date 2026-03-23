@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   View,
   Text,
@@ -39,6 +39,15 @@ function SearchHeader({
   onSubmitEditing,
   onOpenFilters,
 }: SearchHeaderProps) {
+  const searchInputRef = useRef<TextInput>(null);
+
+  // Voice search: focus the search input so the device keyboard opens
+  // (most mobile keyboards have a built-in voice input button)
+  const handleVoiceSearch = () => {
+    searchInputRef.current?.focus();
+    onFocus();
+  };
+
   return (
     <View style={styles.headerWrapper}>
       <LinearGradient
@@ -82,6 +91,7 @@ function SearchHeader({
                 <Ionicons name="search" size={16} color={NUQTA.nileBlue} />
               </LinearGradient>
               <TextInput
+                ref={searchInputRef}
                 style={[
                   styles.searchInput,
                   Platform.OS === 'web'
@@ -110,7 +120,7 @@ function SearchHeader({
                 accessibilityValue={{ text: query }}
               />
 
-              {query.length > 0 && (
+              {query.length > 0 ? (
                 <Pressable
                   onPress={() => onQueryChange('')}
                   style={styles.clearButton}
@@ -120,6 +130,18 @@ function SearchHeader({
                 >
                   <View style={styles.clearButtonInner}>
                     <Ionicons name="close" size={14} color={NUQTA.text.secondary} />
+                  </View>
+                </Pressable>
+              ) : (
+                <Pressable
+                  onPress={handleVoiceSearch}
+                  style={styles.micButton}
+                  accessibilityLabel="Voice search"
+                  accessibilityRole="button"
+                  accessibilityHint="Opens keyboard with voice input for hands-free search"
+                >
+                  <View style={styles.micButtonInner}>
+                    <Ionicons name="mic-outline" size={18} color={NUQTA.nileBlue} />
                   </View>
                 </Pressable>
               )}
@@ -306,6 +328,18 @@ const styles = StyleSheet.create({
     height: 28,
     borderRadius: 14,
     backgroundColor: NUQTA.lavenderMist,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  micButton: {
+    marginLeft: Spacing.xs,
+    marginRight: 6,
+  },
+  micButtonInner: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: `${NUQTA.lightMustard}30`,
     justifyContent: 'center',
     alignItems: 'center',
   },

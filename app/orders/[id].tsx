@@ -1,17 +1,21 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, StyleSheet, ScrollView, Pressable, ActivityIndicator, Platform } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { router, useLocalSearchParams, Stack, useNavigation } from 'expo-router';
 import ordersService, { Order } from '@/services/ordersApi';
+import apiClient from '@/services/apiClient';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { mapBackendOrderToFrontend } from '@/utils/dataMappers';
 import ReorderButton from '@/components/orders/ReorderButton';
 import { useGetCurrencySymbol } from '@/stores/selectors';
-import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } from '@/utils/platformAlert';
-import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformAlert';
+import { Colors } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { Ionicons } from '@expo/vector-icons';
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
 
 function OrderDetailsScreen() {
   const isMounted = useIsMounted();
@@ -22,6 +26,7 @@ function OrderDetailsScreen() {
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
   const [cancelling, setCancelling] = useState(false);
+  const [downloadingInvoice, setDownloadingInvoice] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleBackPress = () => {
@@ -96,6 +101,58 @@ function OrderDetailsScreen() {
       setCancelling(false);
     }
   };
+
+  const handleDownloadInvoice = useCallback(async () => {
+    if (!order || downloadingInvoice) return;
+    const txId = (order as any).payment?.transactionId || order.id;
+
+    try {
+      setDownloadingInvoice(true);
+
+      if (Platform.OS === 'web') {
+        // On web, fetch as blob and open in new tab
+        const baseURL = apiClient.getBaseURL();
+        const token = apiClient.getAuthToken();
+        const response = await fetch(`${baseURL}/billing/invoice/${txId}/download`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+        if (!response.ok) throw new Error('Failed to download invoice');
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+        setTimeout(() => URL.revokeObjectURL(url), 60000);
+      } else {
+        // On mobile, download file then share
+        const baseURL = apiClient.getBaseURL();
+        const token = apiClient.getAuthToken();
+        const fileUri = `${FileSystem.cacheDirectory}invoice-${order.orderNumber}.pdf`;
+        const downloadResult = await FileSystem.downloadAsync(
+          `${baseURL}/billing/invoice/${txId}/download`,
+          fileUri,
+          { headers: token ? { Authorization: `Bearer ${token}` } : {} }
+        );
+
+        if (downloadResult.status !== 200) {
+          throw new Error('Failed to download invoice');
+        }
+
+        const canShare = await Sharing.isAvailableAsync();
+        if (canShare) {
+          await Sharing.shareAsync(downloadResult.uri, {
+            mimeType: 'application/pdf',
+            dialogTitle: `Invoice - Order #${order.orderNumber}`,
+          });
+        } else {
+          platformAlertSimple('Downloaded', 'Invoice saved to cache');
+        }
+      }
+    } catch (err: any) {
+      platformAlertSimple('Error', err?.message || 'Failed to download invoice');
+    } finally {
+      if (!isMounted()) return;
+      setDownloadingInvoice(false);
+    }
+  }, [order, downloadingInvoice, isMounted]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -376,6 +433,24 @@ function OrderDetailsScreen() {
           <Text style={styles.paymentMethod}>
             Method: {(order.payment?.method || 'N/A').toUpperCase()}
           </Text>
+
+          {/* Download Invoice Button */}
+          {(order.payment?.status === 'paid' || order.paymentStatus === 'paid') && (
+            <Pressable
+              style={styles.invoiceButton}
+              onPress={handleDownloadInvoice}
+              disabled={downloadingInvoice}
+            >
+              {downloadingInvoice ? (
+                <ActivityIndicator size="small" color={colors.nileBlue} />
+              ) : (
+                <>
+                  <Ionicons name="document-text-outline" size={18} color={colors.nileBlue} />
+                  <Text style={styles.invoiceButtonText}>Download Invoice</Text>
+                </>
+              )}
+            </Pressable>
+          )}
         </View>
       </View>
 
@@ -745,6 +820,24 @@ const styles = StyleSheet.create({
   paymentMethod: {
     fontSize: 14,
     color: colors.neutral[500],
+  },
+  invoiceButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    marginTop: 14,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    backgroundColor: colors.neutral[50],
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: colors.neutral[200],
+  },
+  invoiceButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.nileBlue,
   },
   timelineCard: {
     backgroundColor: colors.background.primary,

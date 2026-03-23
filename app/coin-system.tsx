@@ -29,7 +29,7 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useTotalBalance, useWalletLoading } from '@/stores/selectors';
+import { useTotalBalance, useWalletLoading, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import walletApi from '@/services/walletApi';
@@ -259,19 +259,22 @@ const CoinSystemPage = () => {
   const router = useRouter();
   const walletBalance = useTotalBalance();
   const loadingWallet = useWalletLoading();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
   const isMounted = useIsMounted();
   const [liveExpiryConfig, setLiveExpiryConfig] = useState<Record<string, { expiryDays: number; maxUsagePct: number }> | null>(null);
 
   // Fetch live coin expiry config from admin settings
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     walletApi.getCoinRules().then((res: any) => {
       if (!isMounted()) return;
       if (res?.success && res.data?.coinExpiryConfig) {
         setLiveExpiryConfig(res.data.coinExpiryConfig);
       }
     }).catch(() => {/* use defaults */});
-  }, []);
+  }, [isAuthenticated, authLoading]);
 
   // Convert expiryDays to user-friendly string
   const getExpiryText = (coinType: string, defaultText: string): string => {
@@ -549,7 +552,6 @@ const CoinSystemPage = () => {
           </Pressable>
         </View>
 
-        <View style={{ height: 40 }} />
       </ScrollView>
     </View>
   );
@@ -903,9 +905,6 @@ const styles = StyleSheet.create({
     color: Colors.text.primary,
     flex: 1,
     marginRight: 12,
-  },
-  faqAnswerContainer: {
-    overflow: 'hidden',
   },
   faqAnswerText: {
     fontSize: 14,

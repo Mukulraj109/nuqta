@@ -14,6 +14,7 @@ import {
   StatusBar,
   Platform,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -21,7 +22,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuthLoading, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import { CachedImage } from '@/components/ui/CachedImage';
-import { platformAlert } from '@/utils/platformAlert';
+import { platformAlertSimple } from '@/utils/platformAlert';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
@@ -33,15 +34,17 @@ import {
   getProviders,
   fetchBill,
   payBill,
+  getPlans,
   getPaymentHistory,
   BillTypeInfo,
   BillProviderInfo,
+  BillPlanInfo,
   FetchedBillInfo,
   BillPaymentRecord,
 } from '@/services/billPaymentApi';
 import { useIsMounted } from '@/hooks/useIsMounted';
 
-type PageStep = 'types' | 'providers' | 'input' | 'bill';
+type PageStep = 'types' | 'providers' | 'input' | 'plans' | 'bill';
 
 function BillPaymentPage() {
   const isMounted = useIsMounted();
@@ -58,6 +61,19 @@ function BillPaymentPage() {
   const [providers, setProviders] = useState<BillProviderInfo[]>([]);
   const [recentPayments, setRecentPayments] = useState<BillPaymentRecord[]>([]);
   const [fetchedBill, setFetchedBill] = useState<FetchedBillInfo | null>(null);
+
+  // Plans state (for mobile_prepaid recharge)
+  const [plans, setPlans] = useState<BillPlanInfo[]>([]);
+  const [popularPlans, setPopularPlans] = useState<BillPlanInfo[]>([]);
+  const [selectedPlan, setSelectedPlan] = useState<BillPlanInfo | null>(null);
+  const [loadingPlans, setLoadingPlans] = useState(false);
+
+  // Payment success state (inline success view instead of alert)
+  const [paymentSuccess, setPaymentSuccess] = useState<{
+    amount: number;
+    promoCoinsEarned: number;
+    providerName: string;
+  } | null>(null);
 
   // UI state
   const [selectedType, setSelectedType] = useState(initialType);
@@ -190,9 +206,30 @@ function BillPaymentPage() {
       setLoadingBill(true);
       const res = await fetchBill(selectedProvider._id, consumerNumber.trim());
       if (res.success && res.data) {
+        const data = res.data as any;
+        // If backend says this provider requires plan selection (mobile_prepaid)
+        if (data.requiresPlanSelection) {
+          // Fetch plans for this provider
+          setLoadingPlans(true);
+          try {
+            const plansRes = await getPlans(selectedProvider._id);
+            if (plansRes.success && plansRes.data) {
+              setPlans(plansRes.data.allPlans || []);
+              setPopularPlans(plansRes.data.popular || []);
+            }
+          } catch {
+            setPlans([]);
+            setPopularPlans([]);
+          } finally {
+            if (isMounted()) setLoadingPlans(false);
+          }
+          setSelectedPlan(null);
+          // Don't set fetchedBill — go to plans step instead
+          return;
+        }
         setFetchedBill(res.data);
       } else {
-        platformAlert('Error', res.message || 'Could not fetch bill details');
+        platformAlertSimple('Error', res.message || 'Could not fetch bill details');
       }
     } catch (err) {
       errorReporter.captureError(
@@ -200,7 +237,7 @@ function BillPaymentPage() {
         { context: 'BillPaymentPage.handleFetchBill' },
         'warning'
       );
-      platformAlert('Error', 'Failed to fetch bill. Please try again.');
+      platformAlertSimple('Error', 'Failed to fetch bill. Please try again.');
     } finally {
       if (!isMounted()) return;
       setLoadingBill(false);
@@ -208,26 +245,36 @@ function BillPaymentPage() {
   }, [selectedProvider, consumerNumber]);
 
   const handlePayBill = useCallback(async () => {
-    if (!fetchedBill || !selectedProvider) return;
+    const amount = fetchedBill?.amount ?? selectedPlan?.price;
+    if (!selectedProvider || !amount) return;
+    if (!fetchedBill && !selectedPlan) return;
     try {
       setLoadingPay(true);
       const res = await payBill(
         selectedProvider._id,
         consumerNumber.trim(),
-        fetchedBill.amount
+        amount,
+        undefined,
+        selectedPlan?.id
       );
-      if (res.success) {
-        platformAlert('Success', `Bill paid successfully! Cashback: ${currencySymbol}${fetchedBill.cashbackAmount.toLocaleString()}`);
-        // Reset form & refresh history
+      if (res.success && res.data) {
+        const { promoCoinsEarned = 0 } = res.data;
+        // Show inline success view
         if (!isMounted()) return;
+        setPaymentSuccess({
+          amount,
+          promoCoinsEarned,
+          providerName: selectedProvider.name,
+        });
         setFetchedBill(null);
-        if (!isMounted()) return;
+        setSelectedPlan(null);
+        setPlans([]);
+        setPopularPlans([]);
         setConsumerNumber('');
-        if (!isMounted()) return;
         setSelectedProvider(null);
         loadHistory(1);
       } else {
-        platformAlert('Error', res.message || 'Payment failed');
+        platformAlertSimple('Error', res.message || 'Payment failed');
       }
     } catch (err) {
       errorReporter.captureError(
@@ -235,12 +282,12 @@ function BillPaymentPage() {
         { context: 'BillPaymentPage.handlePayBill' },
         'warning'
       );
-      platformAlert('Error', 'Payment failed. Please try again.');
+      platformAlertSimple('Error', 'Payment failed. Please try again.');
     } finally {
       if (!isMounted()) return;
       setLoadingPay(false);
     }
-  }, [fetchedBill, selectedProvider, consumerNumber, currencySymbol, loadHistory]);
+  }, [fetchedBill, selectedPlan, selectedProvider, consumerNumber, loadHistory]);
 
   const handleLoadMoreHistory = useCallback(() => {
     if (!hasMoreHistory || loadingMoreHistory) return;
@@ -491,6 +538,90 @@ function BillPaymentPage() {
           </View>
         )}
 
+        {/* Plans Selection (mobile_prepaid recharge) */}
+        {(plans.length > 0 || loadingPlans) && selectedProvider && !fetchedBill && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Select a Plan</Text>
+            {loadingPlans ? (
+              <View style={styles.centeredLoader}>
+                <ActivityIndicator size="small" color={Colors.gold} />
+              </View>
+            ) : (
+              <>
+                {/* Popular Plans horizontal scroll */}
+                {popularPlans.length > 0 && (
+                  <View style={{ marginBottom: Spacing.base }}>
+                    <Text style={styles.plansSectionLabel}>Popular Plans</Text>
+                    <View style={{ height: 130 }}>
+                      <ScrollView
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        contentContainerStyle={{ paddingRight: Spacing.base, alignItems: 'center', gap: Spacing.md }}
+                      >
+                        {popularPlans.map((plan) => {
+                          const isActive = selectedPlan?.id === plan.id;
+                          return (
+                            <Pressable
+                              key={plan.id}
+                              style={[styles.popularPlanCard, isActive && styles.popularPlanCardActive]}
+                              onPress={() => setSelectedPlan(plan)}
+                            >
+                              <Text style={[styles.popularPlanPrice, isActive && styles.popularPlanPriceActive]}>
+                                {currencySymbol}{plan.price}
+                              </Text>
+                              <Text style={styles.popularPlanValidity}>{plan.validity}</Text>
+                              {plan.data && (
+                                <Text style={styles.popularPlanData}>{plan.data}</Text>
+                              )}
+                              {isActive && (
+                                <View style={styles.popularPlanCheck}>
+                                  <Ionicons name="checkmark-circle" size={18} color={Colors.gold} />
+                                </View>
+                              )}
+                            </Pressable>
+                          );
+                        })}
+                      </ScrollView>
+                    </View>
+                  </View>
+                )}
+
+                {/* All Plans list */}
+                <Text style={styles.plansSectionLabel}>All Plans</Text>
+                <View style={styles.allPlansList}>
+                  {plans.map((plan) => {
+                    const isActive = selectedPlan?.id === plan.id;
+                    return (
+                      <Pressable
+                        key={plan.id}
+                        style={[styles.allPlanRow, isActive && styles.allPlanRowActive]}
+                        onPress={() => setSelectedPlan(plan)}
+                      >
+                        <View style={{ flex: 1 }}>
+                          <Text style={styles.allPlanName}>{plan.name}</Text>
+                          <View style={styles.allPlanMeta}>
+                            <Text style={styles.allPlanMetaText}>{plan.validity}</Text>
+                            {plan.data && <Text style={styles.allPlanMetaText}>{plan.data}</Text>}
+                            {plan.calls && <Text style={styles.allPlanMetaText}>{plan.calls}</Text>}
+                          </View>
+                        </View>
+                        <Text style={styles.allPlanPrice}>
+                          {currencySymbol}{plan.price}
+                        </Text>
+                        {isActive ? (
+                          <Ionicons name="checkmark-circle" size={22} color={Colors.gold} />
+                        ) : (
+                          <View style={styles.allPlanRadio} />
+                        )}
+                      </Pressable>
+                    );
+                  })}
+                </View>
+              </>
+            )}
+          </View>
+        )}
+
         {/* Fetched Bill Details */}
         {fetchedBill && (
           <View style={styles.billCard}>
@@ -538,6 +669,44 @@ function BillPaymentPage() {
           </View>
         )}
 
+        {/* Payment Success Inline View */}
+        {paymentSuccess && (
+          <View style={styles.successCard}>
+            <View style={styles.successCheckCircle}>
+              <Ionicons name="checkmark-circle" size={56} color="#10B981" />
+            </View>
+            <Text style={styles.successTitle}>Payment Successful!</Text>
+            <Text style={styles.successAmount}>
+              {currencySymbol}{paymentSuccess.amount.toLocaleString()}
+            </Text>
+            <Text style={styles.successProvider}>
+              Paid to {paymentSuccess.providerName}
+            </Text>
+            {paymentSuccess.promoCoinsEarned > 0 && (
+              <View style={styles.successCoinsBadge}>
+                <Ionicons name="sparkles" size={16} color={Colors.gold} />
+                <Text style={styles.successCoinsText}>
+                  You earned {paymentSuccess.promoCoinsEarned} Promo Coins!
+                </Text>
+              </View>
+            )}
+            {paymentSuccess.promoCoinsEarned > 0 && (
+              <Text style={styles.successHint}>
+                Use them at any merchant within 30 days
+              </Text>
+            )}
+            <Pressable
+              style={styles.successBackButton}
+              onPress={() => {
+                setPaymentSuccess(null);
+                router.canGoBack() ? router.back() : router.replace('/(tabs)');
+              }}
+            >
+              <Text style={styles.successBackButtonText}>Back to Home</Text>
+            </Pressable>
+          </View>
+        )}
+
         {/* Recent Payments Header */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Recent Payments</Text>
@@ -577,6 +746,11 @@ function BillPaymentPage() {
     renderProviderCard,
     getBillTypeMeta,
     handleFetchBill,
+    plans,
+    popularPlans,
+    selectedPlan,
+    loadingPlans,
+    paymentSuccess,
   ]);
 
   // ============================================
@@ -626,7 +800,7 @@ function BillPaymentPage() {
       />
 
       {/* Bottom CTA */}
-      {fetchedBill && (
+      {(fetchedBill || selectedPlan) && !paymentSuccess && (
         <View style={styles.bottomCta}>
           <Pressable
             style={[styles.payButton, loadingPay && styles.payButtonDisabled]}
@@ -638,9 +812,17 @@ function BillPaymentPage() {
             ) : (
               <>
                 <Text style={styles.payButtonText}>
-                  Pay {currencySymbol}{fetchedBill.amount.toLocaleString()}
+                  {selectedPlan
+                    ? `Recharge ${currencySymbol}${selectedPlan.price.toLocaleString()}`
+                    : `Pay ${currencySymbol}${fetchedBill!.amount.toLocaleString()}`}
                 </Text>
-                <Ionicons name="arrow-forward" size={20} color={Colors.background.primary} />
+                {selectedProvider?.promoCoinsFixed && selectedProvider.promoCoinsFixed > 0 ? (
+                  <Text style={styles.payButtonCoins}>
+                    Earn {selectedProvider.promoCoinsFixed} coins
+                  </Text>
+                ) : (
+                  <Ionicons name="arrow-forward" size={20} color={Colors.background.primary} />
+                )}
               </>
             )}
           </Pressable>
@@ -992,6 +1174,170 @@ const styles = StyleSheet.create({
   footerLoader: {
     paddingVertical: Spacing.lg,
     alignItems: 'center',
+  },
+  payButtonCoins: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: Colors.text.inverse,
+    opacity: 0.9,
+  },
+  // Plans styles
+  plansSectionLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: Colors.text.secondary,
+    marginBottom: Spacing.sm,
+  },
+  popularPlanCard: {
+    width: 110,
+    backgroundColor: Colors.background.primary,
+    borderRadius: BorderRadius.md,
+    padding: Spacing.md,
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: 'transparent',
+    ...Platform.select({
+      ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.06, shadowRadius: 3 },
+      android: { elevation: 1 },
+    }),
+  },
+  popularPlanCardActive: {
+    borderColor: Colors.gold,
+  },
+  popularPlanPrice: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: Colors.text.primary,
+    marginBottom: 4,
+  },
+  popularPlanPriceActive: {
+    color: Colors.gold,
+  },
+  popularPlanValidity: {
+    fontSize: 12,
+    color: Colors.text.secondary,
+    marginBottom: 2,
+  },
+  popularPlanData: {
+    fontSize: 11,
+    fontWeight: '500',
+    color: Colors.text.secondary,
+  },
+  popularPlanCheck: {
+    position: 'absolute',
+    top: 4,
+    right: 4,
+  },
+  allPlansList: {
+    gap: Spacing.sm,
+  },
+  allPlanRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.background.primary,
+    borderRadius: BorderRadius.md,
+    padding: Spacing.base,
+    gap: Spacing.md,
+    borderWidth: 2,
+    borderColor: 'transparent',
+  },
+  allPlanRowActive: {
+    borderColor: Colors.gold,
+  },
+  allPlanName: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: Colors.text.primary,
+    marginBottom: 2,
+  },
+  allPlanMeta: {
+    flexDirection: 'row',
+    gap: Spacing.sm,
+  },
+  allPlanMetaText: {
+    fontSize: 12,
+    color: Colors.text.secondary,
+  },
+  allPlanPrice: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: Colors.text.primary,
+    marginRight: Spacing.sm,
+  },
+  allPlanRadio: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    borderWidth: 2,
+    borderColor: Colors.border.default,
+  },
+  // Success view styles
+  successCard: {
+    marginHorizontal: Spacing.base,
+    marginBottom: Spacing.xl,
+    backgroundColor: Colors.background.primary,
+    borderRadius: BorderRadius.lg,
+    padding: Spacing.xl,
+    alignItems: 'center',
+  },
+  successCheckCircle: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: Spacing.base,
+  },
+  successTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: Colors.text.primary,
+    marginBottom: Spacing.sm,
+  },
+  successAmount: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: Colors.text.primary,
+    marginBottom: 4,
+  },
+  successProvider: {
+    fontSize: 14,
+    color: Colors.text.secondary,
+    marginBottom: Spacing.base,
+  },
+  successCoinsBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.xs,
+    backgroundColor: 'rgba(255, 205, 87, 0.15)',
+    paddingHorizontal: Spacing.base,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.xl,
+    marginBottom: Spacing.sm,
+  },
+  successCoinsText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: Colors.gold,
+  },
+  successHint: {
+    fontSize: 12,
+    color: Colors.text.secondary,
+    textAlign: 'center',
+    marginBottom: Spacing.lg,
+  },
+  successBackButton: {
+    backgroundColor: Colors.gold,
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.md,
+    marginTop: Spacing.sm,
+  },
+  successBackButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: Colors.text.inverse,
   },
 });
 

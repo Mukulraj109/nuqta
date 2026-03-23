@@ -29,7 +29,7 @@ import {
   calculateLockedTotal,
   getLockedItemCount,
   updateLockedProductTimers,
-} from '@/utils/mockCartData';
+} from '@/utils/cartHelpers';
 import { useCartValidation } from '@/hooks/useCartValidation';
 import { useCartStore } from '@/stores/cartStore';
 import { useTotalBalance, useWalletLoading, useIsAuthenticated } from '@/stores';

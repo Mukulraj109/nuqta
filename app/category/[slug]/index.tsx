@@ -15,7 +15,7 @@ import { StatusBar } from 'expo-status-bar';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { useCategory, useCategoryItems } from '@/contexts/CategoryContext';
-import { useCartActions } from '@/stores/selectors';
+import { useCartActions, useAuthUser } from '@/stores/selectors';
 import CategoryHeader from '@/components/category/CategoryHeader';
 import CategoryGrid from '@/components/category/CategoryGrid';
 import CategoryFilters from '@/components/category/CategoryFilters';
@@ -24,6 +24,7 @@ import CategoryCarousel from '@/components/category/CategoryCarousel';
 import { CategoryItem, CategoryCarouselItem } from '@/types/category.types';
 import { handleCarouselAction } from '@/utils/carouselUtils';
 import { showToast } from '@/components/common/ToastManager';
+import analyticsService from '@/services/analyticsService';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 
 // New Components
@@ -45,6 +46,7 @@ function CategoryPage() {
   const { state, actions } = useCategory();
   const { items, totalCount, filteredCount, hasMore, loading } = useCategoryItems();
   const cartActions = useCartActions();
+  const user = useAuthUser();
   const [refreshing, setRefreshing] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [loyaltyStats, setLoyaltyStats] = useState({ ordersCount: 0, brandsCount: 0 });
@@ -217,9 +219,8 @@ function CategoryPage() {
       // Handle carousel action with backend-ready analytics and logging
       const actionResult = await handleCarouselAction(
         carouselItem,
-        slug || ''
-        // TODO: Get user ID from auth context
-        // authContext.user?.id
+        slug || '',
+        user?.id
       );
 
       if (actionResult.success && carouselItem.action) {
@@ -239,10 +240,9 @@ function CategoryPage() {
             break;
         }
 
-        // TODO: Send analytics event to backend
-        // if (actionResult.analyticsEvent) {
-        //   await analyticsService.track(actionResult.analyticsEvent);
-        // }
+        if (actionResult.analyticsEvent) {
+          analyticsService.track(actionResult.analyticsEvent.event, actionResult.analyticsEvent.properties);
+        }
       }
     } catch (error) {
       // silently handle

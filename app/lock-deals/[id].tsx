@@ -28,10 +28,13 @@ import { DetailPageSkeleton } from '@/components/skeletons';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const LockDealDetailPage: React.FC = () => {
   const isMounted = useIsMounted();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -41,8 +44,9 @@ const LockDealDetailPage: React.FC = () => {
   const [isLocking, setIsLocking] = useState(false);
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     if (id) fetchDeal();
-  }, [id]);
+  }, [id, authLoading, isAuthenticated]);
 
   const fetchDeal = async () => {
     try {

@@ -30,7 +30,7 @@ import productsApi from '@/services/productsApi';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { useProductReviews } from '@/hooks/useProductReviews';
-import { useCurrency, useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
+import { useCurrency, useGetCurrencySymbol, useGetLocale, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import ProductReviewsSection from '@/components/reviews/ProductReviewsSection';
 import BusBookingFlow from '../../components/bus/BusBookingFlow';
 import BusBookingConfirmation from '../../components/bus/BusBookingConfirmation';
@@ -128,6 +128,8 @@ function BusDetailsPage() {
   const getLocale = useGetLocale();
   const currencySymbol = getCurrencySymbol();
   const locale = getLocale();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   const [bus, setBus] = useState<BusDetails | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -154,10 +156,11 @@ function BusDetailsPage() {
     autoLoad: true });
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     if (id) {
       loadBusDetails();
     }
-  }, [id]);
+  }, [id, isAuthenticated, authLoading]);
 
   const loadBusDetails = async () => {
     try {

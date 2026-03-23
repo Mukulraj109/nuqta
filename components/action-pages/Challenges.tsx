@@ -4,10 +4,10 @@
  * Shows fitness challenges users can join to earn rewards
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View, Text, StyleSheet, Pressable, ScrollView,
-  RefreshControl, ActivityIndicator, Image,
+  RefreshControl, ActivityIndicator,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -45,68 +45,12 @@ interface Challenge {
   tasks: string[];
 }
 
-const CHALLENGES: Challenge[] = [
-  {
-    id: '30-day-gym',
-    title: '30-Day Gym Challenge',
-    description: 'Visit the gym every day for 30 days. Earn 500 bonus coins!',
-    icon: '\uD83C\uDFCB\uFE0F',
-    duration: '30 days',
-    reward: 500,
-    difficulty: 'Hard',
-    participants: 1247,
-    gradient: [colors.error, colors.error],
-    tasks: ['Visit gym daily', 'Log each workout', 'Complete 30 check-ins'],
-  },
-  {
-    id: '7-day-yoga',
-    title: '7-Day Yoga Streak',
-    description: 'Practice yoga for 7 consecutive days. Perfect for beginners!',
-    icon: '\uD83E\uDDD8',
-    duration: '7 days',
-    reward: 150,
-    difficulty: 'Easy',
-    participants: 3456,
-    gradient: [colors.brand.purpleLight, colors.brand.purple],
-    tasks: ['Attend a yoga class', 'Practice at least 30 min', 'Complete 7 sessions'],
-  },
-  {
-    id: 'try-5-workouts',
-    title: 'Try 5 Different Workouts',
-    description: 'Explore different fitness activities. Try 5 unique workout types!',
-    icon: '\uD83D\uDD25',
-    duration: '14 days',
-    reward: 250,
-    difficulty: 'Medium',
-    participants: 2189,
-    gradient: [colors.brand.orange, colors.brand.orangeDark],
-    tasks: ['Try 5 different workout types', 'Rate each experience', 'Share your journey'],
-  },
-  {
-    id: 'swimming-10',
-    title: '10 Swimming Sessions',
-    description: 'Complete 10 swimming sessions this month for water fitness!',
-    icon: '\uD83C\uDFCA',
-    duration: '30 days',
-    reward: 300,
-    difficulty: 'Medium',
-    participants: 892,
-    gradient: [colors.infoScale[400], colors.brand.blue],
-    tasks: ['Swim at least 30 min per session', 'Complete 10 sessions', 'Track your progress'],
-  },
-  {
-    id: 'morning-warrior',
-    title: 'Morning Warrior',
-    description: 'Work out before 8 AM for 14 days straight. Early bird gets the gains!',
-    icon: '\uD83C\uDF05',
-    duration: '14 days',
-    reward: 350,
-    difficulty: 'Hard',
-    participants: 1567,
-    gradient: [colors.warningScale[400], colors.warningScale[700]],
-    tasks: ['Check in before 8:00 AM', 'Complete a workout', '14 consecutive mornings'],
-  },
-];
+// Map difficulty to gradient colors for challenges fetched from API
+const DIFFICULTY_GRADIENTS: Record<string, [string, string]> = {
+  Easy: [colors.brand.purpleLight, colors.brand.purple],
+  Medium: [colors.brand.orange, colors.brand.orangeDark],
+  Hard: [colors.error, colors.error],
+};
 
 const getDifficultyColor = (difficulty: Challenge['difficulty']): string => {
   switch (difficulty) {
@@ -124,17 +68,52 @@ const formatParticipants = (count: number): string => {
 
 function ChallengesPage() {
   const router = useRouter();
+  const [challenges, setChallenges] = useState<Challenge[]>([]);
+  const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [joinedChallenges, setJoinedChallenges] = useState<Set<string>>(new Set());
   const isMounted = useIsMounted();
 
+  const fetchChallenges = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await apiClient.get('/gamification/challenges');
+      if (!isMounted()) return;
+      if (response.success && response.data) {
+        const raw = response.data.challenges || response.data || [];
+        // Normalize API data to match Challenge interface
+        const mapped: Challenge[] = raw.map((c: any) => ({
+          id: c.id || c._id || c.slug,
+          title: c.title || c.name,
+          description: c.description || '',
+          icon: c.icon || '\uD83C\uDFC6',
+          duration: c.duration || '7 days',
+          reward: c.reward ?? c.coins ?? 0,
+          difficulty: c.difficulty || 'Medium',
+          participants: c.participants ?? c.participantCount ?? 0,
+          gradient: DIFFICULTY_GRADIENTS[c.difficulty] || DIFFICULTY_GRADIENTS.Medium,
+          tasks: c.tasks || c.steps || [],
+        }));
+        setChallenges(mapped);
+      }
+    } catch {
+      // Keep empty array as fallback
+    } finally {
+      if (!isMounted()) return;
+      setLoading(false);
+    }
+  }, [isMounted]);
+
+  useEffect(() => {
+    fetchChallenges();
+  }, [fetchChallenges]);
+
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    // Static data - simulate refresh
+    await fetchChallenges();
     if (!isMounted()) return;
-    await new Promise(resolve => setTimeout(resolve, 800));
     setRefreshing(false);
-  }, []);
+  }, [fetchChallenges, isMounted]);
 
   const handleJoinChallenge = (challenge: Challenge) => {
     if (joinedChallenges.has(challenge.id)) {
@@ -152,7 +131,47 @@ function ChallengesPage() {
     );
   };
 
-  const featuredChallenge = CHALLENGES[0];
+  const featuredChallenge = challenges[0];
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <Pressable onPress={() => router.back()} style={styles.backBtn}>
+            <Ionicons name="arrow-back" size={24} color={COLORS.textPrimary} />
+          </Pressable>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.headerTitle}>Fitness Challenges</Text>
+            <Text style={styles.headerSubtitle}>Push your limits, earn rewards</Text>
+          </View>
+        </View>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ActivityIndicator size="large" color={COLORS.orange} />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (challenges.length === 0) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <Pressable onPress={() => router.back()} style={styles.backBtn}>
+            <Ionicons name="arrow-back" size={24} color={COLORS.textPrimary} />
+          </Pressable>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.headerTitle}>Fitness Challenges</Text>
+            <Text style={styles.headerSubtitle}>Push your limits, earn rewards</Text>
+          </View>
+        </View>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 32 }}>
+          <Ionicons name="trophy-outline" size={64} color={COLORS.textSecondary} />
+          <Text style={{ fontSize: 17, fontWeight: '700', color: COLORS.textPrimary, marginTop: 16 }}>No challenges available</Text>
+          <Text style={{ fontSize: 13, color: COLORS.textSecondary, marginTop: 6, textAlign: 'center' }}>Check back soon for new fitness challenges!</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -236,7 +255,7 @@ function ChallengesPage() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>All Challenges</Text>
 
-          {CHALLENGES.map((challenge) => (
+          {challenges.map((challenge) => (
             <View key={challenge.id} style={styles.challengeCard}>
               {/* Gradient accent strip on left */}
               <LinearGradient

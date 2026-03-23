@@ -47,10 +47,14 @@ const ReelDetailPage = () => {
   const [submittingComment, setSubmittingComment] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
   const commentInputRef = useRef<TextInput>(null);
+  const videoRef = useRef<Video>(null);
   const isMountedRef = useRef(true);
 
   useEffect(() => {
-    return () => { isMountedRef.current = false; };
+    return () => {
+      isMountedRef.current = false;
+      videoRef.current?.unloadAsync();
+    };
   }, []);
 
   // API state
@@ -374,6 +378,7 @@ const ReelDetailPage = () => {
             />
           ) : (
             <Video
+              ref={videoRef}
               source={reel.videoUrl}
               posterSource={reel.thumbnailUrl ? { uri: reel.thumbnailUrl } : undefined}
               style={styles.mediaVideo}

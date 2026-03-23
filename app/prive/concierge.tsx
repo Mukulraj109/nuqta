@@ -13,9 +13,12 @@ import { ChatSkeleton } from '@/components/skeletons';
 import { Colors } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { catchAndReport } from '@/utils/catchAndReport';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { useIsMounted } from '@/hooks/useIsMounted';
 
 function ConciergeScreen() {
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const { tier } = usePriveEligibility();
   const tierRank: Record<string, number> = { none: 0, entry: 1, signature: 2, elite: 3 };
 
@@ -39,7 +42,10 @@ function ConciergeScreen() {
   }, []);
 
   const isMounted = useIsMounted();
-  useEffect(() => { fetchTickets(); }, [fetchTickets]);
+  useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
+    fetchTickets();
+  }, [fetchTickets, isAuthenticated, authLoading]);
   const onRefresh = () => { setIsRefreshing(true); fetchTickets(); };
 
   const handleSubmit = async () => {

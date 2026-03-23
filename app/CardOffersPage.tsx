@@ -25,7 +25,7 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import discountsApi, { Discount } from '@/services/discountsApi';
-import { useCartState, useCartActions, useAuthUser, useIsAuthenticated, useGetCurrencySymbol } from '@/stores/selectors';
+import { useCartState, useCartActions, useAuthUser, useIsAuthenticated, useAuthLoading, useGetCurrencySymbol } from '@/stores/selectors';
 import { triggerImpact, triggerNotification } from '@/utils/haptics';
 import { showToast } from '@/components/common/ToastManager';
 import { platformAlert } from '@/utils/platformAlert';
@@ -57,6 +57,7 @@ function CardOffersPage() {
   const cartActions = useCartActions();
   const user = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const { isOnline } = useNetworkStatus();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -131,8 +132,9 @@ function CardOffersPage() {
   }, [storeId, currentOrderValue, fadeAnim]);
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     fetchCardOffers();
-  }, [fetchCardOffers]);
+  }, [fetchCardOffers, isAuthenticated, authLoading]);
 
   useEffect(() => {
     if (storeId) {
@@ -492,7 +494,7 @@ function CardOffersPage() {
             {cardOffers.map((offer, index) => renderOfferCard(offer, index))}
 
             {/* Bottom Spacing */}
-            <View style={{ height: 20 }} />
+            <View style={{ height: 100 }} />
           </ScrollView>
         )}
 

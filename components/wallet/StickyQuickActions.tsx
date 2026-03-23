@@ -21,6 +21,7 @@ interface QuickAction {
 const ACTIONS: QuickAction[] = [
   { id: 'transactions', icon: 'receipt', label: 'History', route: '/earnings-history', color: colors.nileBlue },
   { id: 'transfer', icon: 'swap-horizontal', label: 'Transfer', route: '/wallet/transfer', color: colors.brand.indigo },
+  { id: 'split', icon: 'people', label: 'Split Bill', route: '/wallet/bill-split', color: colors.brand.teal || '#0D9488' },
   { id: 'expiry', icon: 'time', label: 'Expiry', route: '/wallet/expiry-tracker', color: colors.warning },
   { id: 'gift-cards', icon: 'card', label: 'Gift Cards', route: '/wallet/gift-cards', color: colors.lightMustard },
   { id: 'gift', icon: 'gift', label: 'Gift', route: '/wallet/gift', color: colors.brand.pink },

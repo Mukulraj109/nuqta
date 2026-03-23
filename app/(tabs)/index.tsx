@@ -79,7 +79,7 @@ const PriveSectionContainer = lazyWithRetry(() =>
 );
 import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
 // Profile now from Zustand store (imported above)
-import { profileMenuSections } from '@/data/profileData';
+import { profileMenuSections } from '@/constants/profileMenu';
 import LocationDisplay from '@/components/location/LocationDisplay';
 // LocationPickerModal lazy-loaded below (modal — only needed on tap)
 import { useCurrentLocation, useLocationPermission } from '@/hooks/useLocation';
@@ -88,6 +88,7 @@ import { AddressSearchResult } from '@/types/location.types';
 import { HomepageCacheWarmer } from '@/services/homepageApi';
 // Wallet now from Zustand selectors (imported above)
 import StoriesRow from '@/components/whats-new/StoriesRow';
+import { useFeatureFlag } from '@/hooks/useFeatureFlag';
 // HomeTab now from Zustand selectors (imported above)
 import CachedImage, { prefetchImages } from '@/components/ui/CachedImage';
 import HomepageSkeleton from '@/components/homepage/HomepageSkeleton';
@@ -260,6 +261,7 @@ function HomeScreen() {
   // Zustand selectors for home tab — granular subscriptions
   const activeTab = useActiveTab();
   const setActiveTab = useSetActiveTab();
+  const storiesRowEnabled = useFeatureFlag('storiesRowEnabled');
   const priveEligibility = usePriveEligibility();
   const isPriveEligible = useIsPriveEligible();
   const activeHomeTab = useActiveHomeTab();
@@ -869,8 +871,8 @@ function HomeScreen() {
         </View>
       )}
 
-      {/* Stories Row — What's New (Instagram-style) */}
-      {activeTab !== 'prive' && (
+      {/* Stories Row — What's New (Instagram-style, gated by storiesRowEnabled flag) */}
+      {activeTab !== 'prive' && storiesRowEnabled && (
         <StoriesRow variant={tabStyles.whatsNewVariant} />
       )}
 

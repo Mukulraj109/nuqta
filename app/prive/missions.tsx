@@ -13,11 +13,14 @@ import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { catchAndReport } from '@/utils/catchAndReport';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { useIsMounted } from '@/hooks/useIsMounted';
 
 type Tab = 'available' | 'active' | 'completed';
 
 function MissionsScreen() {
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const [activeTab, setActiveTab] = useState<Tab>('available');
   const [available, setAvailable] = useState<any[]>([]);
   const [active, setActive] = useState<any[]>([]);
@@ -47,7 +50,10 @@ function MissionsScreen() {
   }, []);
 
   const isMounted = useIsMounted();
-  useEffect(() => { fetchData(); }, [fetchData]);
+  useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
+    fetchData();
+  }, [fetchData, isAuthenticated, authLoading]);
 
   const onRefresh = () => { setIsRefreshing(true); fetchData(); };
 

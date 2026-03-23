@@ -26,6 +26,7 @@ import { cartApi } from '@/services/cartApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 
 const COLORS = {
   white: Colors.background.primary,
@@ -178,6 +179,8 @@ interface Product {
 const GroceryCategoryPage: React.FC = () => {
   const isMounted = useIsMounted();
   const router = useRouter();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const { category } = useLocalSearchParams<{ category: string }>();
 
   // State
@@ -284,8 +287,9 @@ const GroceryCategoryPage: React.FC = () => {
 
   // Initial load
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     fetchProducts(1);
-  }, [fetchProducts]);
+  }, [fetchProducts, authLoading, isAuthenticated]);
 
   // Handle refresh
   const onRefresh = useCallback(() => {
@@ -518,7 +522,7 @@ function getFallbackProducts(category: string): Product[] {
     images: [{ url: image, alt: title }],
     pricing: { basePrice: 50 + i * 20, salePrice: 45 + i * 18 },
     unit: '1 kg',
-    rating: { average: 4.2 + Math.random() * 0.6, count: 50 + i * 10 },
+    rating: { average: 4.0, count: 50 + i * 10 },
     cashback: { percentage: 8 + i },
     store: { id: 'store-1', name: 'Local Store' },
     inStock: true,

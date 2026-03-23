@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   View,
   Text,
   ScrollView,
+  FlatList,
   Pressable,
   Platform,
   Dimensions,
   Share,
   StyleSheet,
+  ListRenderItemInfo,
 } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -213,85 +215,94 @@ function SearchResultsView({
     );
   }
 
-  // Fallback to regular results display
-  return (
-    <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-      {/* Search Results Header */}
-      <View style={styles.searchResultsHeader}>
-        <View style={styles.searchResultsTitleContainer}>
-          <View style={styles.searchResultsIconContainer}>
-            <Ionicons name="search" size={20} color={NUQTA.nileBlue} />
-          </View>
-          <Text style={styles.searchResultsTitle}>
-            Search Results
-          </Text>
-        </View>
-        <Text style={styles.searchResultsCount}>
-          {loading ? 'Searching...' : `${results.length} ${results.length === 1 ? 'result' : 'results'} found`}
-        </Text>
-        <Text style={styles.searchQueryText}>
-          for "{query}"
-        </Text>
-      </View>
-
-      {/* Results Grid */}
-      <View style={styles.resultsGrid}>
-        {results.map((result, index) => (
-          <Pressable
-            key={result.id}
-            style={styles.resultCard}
-            onPress={() => onResultPress(result, index + 1)}
-            accessibilityLabel={`${result.title}, ${result.category}, ${result.cashbackPercentage}% cashback`}
-            accessibilityRole="button"
-            accessibilityHint={`Opens details page for ${result.title}`}
+  // Fallback to regular results display — uses FlatList for virtualization
+  const renderResultItem = useCallback(({ item: result, index }: ListRenderItemInfo<SearchResult>) => (
+    <Pressable
+      style={styles.resultCard}
+      onPress={() => onResultPress(result, index + 1)}
+      accessibilityLabel={`${result.title}, ${result.category}, ${result.cashbackPercentage}% cashback`}
+      accessibilityRole="button"
+      accessibilityHint={`Opens details page for ${result.title}`}
+    >
+      <View style={styles.resultImageContainer}>
+        {result.image ? (
+          <CachedImage
+            source={result.image}
+            style={styles.resultImage}
+            contentFit="cover"
+            accessibilityLabel={`${result.title} image`}
+            accessibilityRole="image"
+          />
+        ) : (
+          <LinearGradient
+            colors={[NUQTA.lavenderMist, NUQTA.lavenderDark]}
+            style={styles.resultImagePlaceholder}
+            accessibilityLabel={`${result.title} placeholder image`}
           >
-            <View style={styles.resultImageContainer}>
-              {result.image ? (
-                <CachedImage
-                  source={result.image}
-                  style={styles.resultImage}
-                  contentFit="cover"
-                  accessibilityLabel={`${result.title} image`}
-                  accessibilityRole="image"
-                />
-              ) : (
-                <LinearGradient
-                  colors={[NUQTA.lavenderMist, NUQTA.lavenderDark]}
-                  style={styles.resultImagePlaceholder}
-                  accessibilityLabel={`${result.title} placeholder image`}
-                >
-                  <Text style={styles.resultImageText}>{result.title.charAt(0)}</Text>
-                </LinearGradient>
-              )}
-            </View>
-
-            <View style={styles.resultInfo}>
-              <Text style={styles.resultTitle} numberOfLines={2}>{result.title}</Text>
-              <Text style={styles.resultDescription} numberOfLines={2}>
-                {result.description}
-              </Text>
-              {result.cashbackPercentage > 0 && (
-                <Text style={styles.resultSaveAmount}>
-                  SAVE {Math.round((result.cashbackPercentage / 100) * (result.price?.current || 500))}
-                </Text>
-              )}
-              <View style={styles.resultMeta}>
-                <LinearGradient
-                  colors={[NUQTA.nileBlue, NUQTA.nileBlueLight]}
-                  style={styles.resultCashback}
-                >
-                  <Ionicons name="wallet-outline" size={12} color={NUQTA.lightMustard} />
-                  <Text style={styles.resultCashbackText}>{result.cashbackPercentage}%</Text>
-                </LinearGradient>
-                <View style={styles.categoryTag}>
-                  <Text style={styles.categoryTagText}>{result.category}</Text>
-                </View>
-              </View>
-            </View>
-          </Pressable>
-        ))}
+            <Text style={styles.resultImageText}>{result.title.charAt(0)}</Text>
+          </LinearGradient>
+        )}
       </View>
-    </ScrollView>
+
+      <View style={styles.resultInfo}>
+        <Text style={styles.resultTitle} numberOfLines={2}>{result.title}</Text>
+        <Text style={styles.resultDescription} numberOfLines={2}>
+          {result.description}
+        </Text>
+        {result.cashbackPercentage > 0 && (
+          <Text style={styles.resultSaveAmount}>
+            SAVE {Math.round((result.cashbackPercentage / 100) * (result.price?.current || 500))}
+          </Text>
+        )}
+        <View style={styles.resultMeta}>
+          <LinearGradient
+            colors={[NUQTA.nileBlue, NUQTA.nileBlueLight]}
+            style={styles.resultCashback}
+          >
+            <Ionicons name="wallet-outline" size={12} color={NUQTA.lightMustard} />
+            <Text style={styles.resultCashbackText}>{result.cashbackPercentage}%</Text>
+          </LinearGradient>
+          <View style={styles.categoryTag}>
+            <Text style={styles.categoryTagText}>{result.category}</Text>
+          </View>
+        </View>
+      </View>
+    </Pressable>
+  ), [onResultPress]);
+
+  const resultKeyExtractor = useCallback((item: SearchResult) => item.id, []);
+
+  const ResultsHeader = useCallback(() => (
+    <View style={styles.searchResultsHeader}>
+      <View style={styles.searchResultsTitleContainer}>
+        <View style={styles.searchResultsIconContainer}>
+          <Ionicons name="search" size={20} color={NUQTA.nileBlue} />
+        </View>
+        <Text style={styles.searchResultsTitle}>
+          Search Results
+        </Text>
+      </View>
+      <Text style={styles.searchResultsCount}>
+        {loading ? 'Searching...' : `${results.length} ${results.length === 1 ? 'result' : 'results'} found`}
+      </Text>
+      <Text style={styles.searchQueryText}>
+        for "{query}"
+      </Text>
+    </View>
+  ), [loading, results.length, query]);
+
+  return (
+    <FlatList
+      data={results}
+      renderItem={renderResultItem}
+      keyExtractor={resultKeyExtractor}
+      numColumns={2}
+      columnWrapperStyle={styles.resultsGridRow}
+      style={styles.content}
+      contentContainerStyle={styles.scrollContent}
+      showsVerticalScrollIndicator={false}
+      ListHeaderComponent={ResultsHeader}
+    />
   );
 }
 
@@ -582,13 +593,9 @@ const styles = StyleSheet.create({
     color: NUQTA.text.secondary,
     fontStyle: 'italic',
   },
-  resultsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+  resultsGridRow: {
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.base,
-    paddingTop: Spacing.sm,
-    paddingBottom: Spacing.lg,
   },
   resultCard: {
     width: (width - 48) / 2,

@@ -26,6 +26,7 @@ import { storesApi } from '@/services/storesApi';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 interface Store {
   id: string;
   _id?: string;
@@ -55,6 +56,8 @@ interface Store {
 const GroceryStoresPage: React.FC = () => {
   const isMounted = useIsMounted();
   const router = useRouter();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   // State
   const [stores, setStores] = useState<Store[]>([]);
@@ -125,8 +128,9 @@ const GroceryStoresPage: React.FC = () => {
   }, [selectedFilter]);
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     fetchStores();
-  }, [fetchStores]);
+  }, [fetchStores, authLoading, isAuthenticated]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);

@@ -25,7 +25,7 @@ import storesApi from '@/services/storesApi';
 import productsApi from '@/services/productsApi';
 import cartApi from '@/services/cartApi';
 import { campaignsApi } from '@/services/campaignsApi';
-import { useGetCurrencySymbol } from '@/stores/selectors';
+import { useGetCurrencySymbol, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import analytics from '@/services/analytics/AnalyticsService';
 import { ANALYTICS_EVENTS } from '@/services/analytics/events';
@@ -88,6 +88,8 @@ interface ActiveDeal {
 
 function BookingPage() {
   const isMounted = useIsMounted();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   // URL params: storeId (required), bookingType ('table' | 'service'), productId (for service)
   // Redemption params: redemptionCode, redemptionId, dealCashback, dealCoins, dealDiscount
   const {
@@ -151,8 +153,9 @@ function BookingPage() {
   useBackButton(handleBackPress);
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     loadDetails();
-  }, [storeId, productId]);
+  }, [storeId, productId, authLoading, isAuthenticated]);
 
   // Deep-link parameter validation guard
   if (!storeId || typeof storeId !== 'string') {

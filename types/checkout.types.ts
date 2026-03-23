@@ -19,12 +19,18 @@ export interface FulfillmentState {
   tableNumber?: string;
   vehicleInfo?: string;
   pickupInstructions?: string;
+  deliverySlot?: string;
+  scheduledDate?: string;
+  isScheduled?: boolean;
 }
 
 export interface FulfillmentDetails {
   tableNumber?: string;
   vehicleInfo?: string;
   pickupInstructions?: string;
+  deliverySlot?: string;
+  scheduledDate?: string;
+  isScheduled?: boolean;
 }
 
 // ── Cart / Items ───────────────────────────────────────────────────

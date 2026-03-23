@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import walletApi, { TransactionResponse } from '@/services/walletApi';
 import storePaymentApi from '@/services/storePaymentApi';
-import { useGetCurrencySymbol } from '@/stores/selectors';
+import { useGetCurrencySymbol, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
@@ -47,6 +47,8 @@ const TransactionDetailPage = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const [transaction, setTransaction] = useState<TransactionResponse | null>(null);
   const [storePayment, setStorePayment] = useState<StorePaymentDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -57,10 +59,11 @@ const TransactionDetailPage = () => {
   const isStorePayment = id?.startsWith('SP-');
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     if (id) {
       fetchTransactionDetail();
     }
-  }, [id]);
+  }, [id, authLoading, isAuthenticated]);
 
   const fetchTransactionDetail = async () => {
     try {

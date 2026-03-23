@@ -15,7 +15,7 @@ import {
   BORDER_RADIUS,
   STORE_STATUS 
 } from '@/constants/search-constants';
-import { formatDistance, getStoreStatusText, getStoreStatusColor } from '@/utils/mock-store-search-data';
+import { formatDistance, getStoreStatusText, getStoreStatusColor } from '@/utils/storeTransformers';
 import { storeSearchService } from '@/services/storeSearchService';
 import { colors } from '@/constants/theme';
 

@@ -30,7 +30,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { PRIVE_COLORS, PRIVE_SPACING, PRIVE_RADIUS } from '@/components/prive/priveTheme';
 import { Colors } from '@/constants/DesignSystem';
 import { usePriveSection } from '@/hooks/usePriveSection';
-import { useRefreshWallet } from '@/stores/selectors';
+import { useRefreshWallet, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import priveApi, { RedeemConfig } from '@/services/priveApi';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
@@ -79,6 +79,8 @@ function RedeemScreen() {
   const router = useRouter();
   const { userData, isLoading: priveLoading, error: priveError, refresh: priveRefresh } = usePriveSection();
   const refreshWallet = useRefreshWallet();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   const [config, setConfig] = useState<RedeemConfig>(FALLBACK_CONFIG);
   const [configLoading, setConfigLoading] = useState(true);
@@ -114,8 +116,9 @@ function RedeemScreen() {
   const isMounted = useIsMounted();
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     fetchConfig();
-  }, [fetchConfig]);
+  }, [fetchConfig, authLoading, isAuthenticated]);
 
   // Animated balance counter effect
   useEffect(() => {

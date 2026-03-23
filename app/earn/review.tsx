@@ -29,6 +29,7 @@ import { CLOUDINARY_CONFIG, getCloudinaryUploadUrl } from '@/config/cloudinary.c
 import { FormPageSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 
 interface PendingReview {
   id: string;
@@ -43,6 +44,8 @@ interface PendingReview {
 function ReviewToEarnPage() {
   const isMounted = useIsMounted();
   const router = useRouter();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const [pendingReviews, setPendingReviews] = useState<PendingReview[]>([]);
   const [potentialEarnings, setPotentialEarnings] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -86,8 +89,9 @@ function ReviewToEarnPage() {
 
   useFocusEffect(
     useCallback(() => {
+      if (authLoading || !isAuthenticated) return;
       fetchReviewableItems();
-    }, [fetchReviewableItems])
+    }, [fetchReviewableItems, authLoading, isAuthenticated])
   );
 
   const handlePickPhoto = async () => {
@@ -216,7 +220,7 @@ function ReviewToEarnPage() {
         <ThemedText style={styles.reviewDate}>Purchased {item.purchaseDate}</ThemedText>
       </View>
       <View style={styles.coinsBadge}>
-        <Ionicons name="diamond" size={16} color={Colors.gold} />
+        <CachedImage source={BRAND.COIN_IMAGE} style={{ width: 16, height: 16 }} />
         <ThemedText style={styles.coinsValue}>{item.coins}</ThemedText>
         {item.bonusCoins && (
           <ThemedText style={styles.bonusText}>+{item.bonusCoins}</ThemedText>
@@ -294,7 +298,7 @@ function ReviewToEarnPage() {
               <ThemedText style={styles.charCount}>{review.length}/500</ThemedText>
               {review.length > 100 && (
                 <View style={styles.bonusBadge}>
-                  <ThemedText style={styles.bonusBadgeText}>+5 RC for detailed review!</ThemedText>
+                  <ThemedText style={styles.bonusBadgeText}>+5 {BRAND.COIN_SHORT} for detailed review!</ThemedText>
                 </View>
               )}
             </View>
@@ -306,7 +310,7 @@ function ReviewToEarnPage() {
               <ThemedText style={styles.sectionTitle}>Add Photos (Optional)</ThemedText>
               {photos.length === 0 && (
                 <View style={styles.photoBonusBadge}>
-                  <ThemedText style={styles.photoBonusText}>+{selectedItem.bonusCoins || 5} RC</ThemedText>
+                  <ThemedText style={styles.photoBonusText}>+{selectedItem.bonusCoins || 5} {BRAND.COIN_SHORT}</ThemedText>
                 </View>
               )}
             </View>
@@ -335,8 +339,8 @@ function ReviewToEarnPage() {
           <View style={styles.coinPreview}>
             <ThemedText style={styles.coinPreviewLabel}>You'll earn</ThemedText>
             <View style={styles.coinPreviewValue}>
-              <Ionicons name="diamond" size={24} color={Colors.gold} />
-              <ThemedText style={styles.coinPreviewAmount}>{calculateCoins()} RC</ThemedText>
+              <CachedImage source={BRAND.COIN_IMAGE} style={{ width: 24, height: 24 }} />
+              <ThemedText style={styles.coinPreviewAmount}>{calculateCoins()} {BRAND.COIN_SHORT}</ThemedText>
             </View>
           </View>
 

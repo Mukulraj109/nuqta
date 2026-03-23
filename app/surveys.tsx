@@ -5,6 +5,7 @@ import {
   Text,
   StyleSheet,
   ScrollView,
+  FlatList,
   Pressable,
   Platform,
   StatusBar,
@@ -16,12 +17,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, Stack } from 'expo-router';
-import surveyApiService, { Survey, SurveyCategory, UserSurveyStats } from '@/services/surveyApi';
+import surveyApiService, { Survey, SurveyCategory, UserSurveyStats } from '@/services/surveysApi';
 
-import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 // Category emoji mapping
 const categoryEmojis: Record<string, string> = {
   'Shopping': '📦',
@@ -60,6 +62,8 @@ const difficultyColors = {
 
 function SurveysPage() {
   const router = useRouter();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const [activeCategory, setActiveCategory] = useState('All');
   const [surveys, setSurveys] = useState<Survey[]>([]);
   const [categories, setCategories] = useState<SurveyCategory[]>([]);
@@ -72,22 +76,39 @@ function SurveysPage() {
   });
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const PAGE_LIMIT = 20;
 
   // Load all data
-  const loadData = useCallback(async (showLoading = true) => {
-    if (showLoading) setLoading(true);
+  const loadData = useCallback(async (showLoading = true, pageNum = 1) => {
+    if (showLoading && pageNum === 1) setLoading(true);
+    if (pageNum > 1) setLoadingMore(true);
     try {
-      const [surveysData, categoriesData, statsData] = await Promise.all([
-        surveyApiService.getSurveys(activeCategory !== 'All' ? activeCategory : undefined),
-        surveyApiService.getCategories(),
-        surveyApiService.getUserStats(),
-      ]);
+      const offset = (pageNum - 1) * PAGE_LIMIT;
+      const surveysData = await surveyApiService.getSurveys(
+        activeCategory !== 'All' ? activeCategory : undefined,
+        PAGE_LIMIT,
+        offset
+      );
       if (!isMounted()) return;
-      setSurveys(surveysData);
-      if (!isMounted()) return;
-      setCategories(categoriesData);
-      if (!isMounted()) return;
-      setUserStats(statsData);
+      if (pageNum === 1) {
+        setSurveys(surveysData);
+        // Only fetch categories and stats on first page
+        const [categoriesData, statsData] = await Promise.all([
+          surveyApiService.getCategories(),
+          surveyApiService.getUserStats(),
+        ]);
+        if (!isMounted()) return;
+        setCategories(categoriesData);
+        if (!isMounted()) return;
+        setUserStats(statsData);
+      } else {
+        setSurveys(prev => [...prev, ...surveysData]);
+      }
+      setPage(pageNum);
+      setHasMore(surveysData.length >= PAGE_LIMIT);
     } catch (error) {
       // silently handle
     } finally {
@@ -95,19 +116,16 @@ function SurveysPage() {
       setLoading(false);
       if (!isMounted()) return;
       setRefreshing(false);
+      setLoadingMore(false);
     }
   }, [activeCategory]);
   const isMounted = useIsMounted();
 
-  // Initial load
+  // Initial load + reload when category changes
   useEffect(() => {
-    loadData();
-  }, []);
-
-  // Reload when category changes
-  useEffect(() => {
-    loadData();
-  }, [activeCategory]);
+    if (authLoading || !isAuthenticated) return;
+    loadData(true, 1);
+  }, [authLoading, isAuthenticated, activeCategory]);
 
   // Pull to refresh
   const onRefresh = useCallback(() => {
@@ -118,7 +136,14 @@ function SurveysPage() {
   // Handle category change
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
+    setPage(1);
+    setHasMore(true);
   };
+
+  const loadMore = useCallback(() => {
+    if (loadingMore || !hasMore) return;
+    loadData(false, page + 1);
+  }, [loadingMore, hasMore, page, loadData]);
 
   // Navigate to survey detail
   const handleStartSurvey = (surveyId: string) => {
@@ -180,9 +205,266 @@ function SurveysPage() {
           </View>
         </View>
 
-        <ScrollView
+        <FlatList
+          data={surveys}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item: survey }) => {
+            const catInfo = getCategoryInfo(survey.subcategory);
+            const difficulty = survey.difficulty || 'easy';
+            const diffColors = difficultyColors[difficulty] || difficultyColors.easy;
+            const completionPercent = survey.targetResponses > 0
+              ? Math.round((survey.completedCount / survey.targetResponses) * 100)
+              : 0;
+
+            return (
+              <Pressable
+                style={styles.surveyCard}
+                onPress={() => handleStartSurvey(survey._id)}
+              >
+                {/* Header */}
+                <View style={styles.surveyHeader}>
+                  <View
+                    style={[
+                      styles.surveyIcon,
+                      { backgroundColor: catInfo.colors.bg, borderColor: catInfo.colors.border },
+                    ]}
+                  >
+                    <Text style={styles.surveyEmoji}>{catInfo.emoji}</Text>
+                  </View>
+                  <View style={styles.surveyHeaderContent}>
+                    <View style={styles.surveyBadges}>
+                      <View
+                        style={[
+                          styles.difficultyBadge,
+                          {
+                            backgroundColor: diffColors.bg,
+                            borderColor: diffColors.border,
+                          },
+                        ]}
+                      >
+                        <Text
+                          style={[
+                            styles.difficultyText,
+                            { color: diffColors.text },
+                          ]}
+                        >
+                          {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+                        </Text>
+                      </View>
+                      {survey.isFeatured && (
+                        <View style={styles.trendingBadge}>
+                          <Ionicons name="sparkles" size={10} color={colors.brand.orange} />
+                          <Text style={styles.trendingText}>Featured</Text>
+                        </View>
+                      )}
+                    </View>
+                    <Text style={styles.surveyTitle}>{survey.title}</Text>
+                    <View style={styles.sponsorRow}>
+                      <Ionicons name="pricetag" size={12} color={Colors.text.tertiary} />
+                      <Text style={styles.sponsorText}>{survey.subcategory || 'General'}</Text>
+                    </View>
+                  </View>
+                </View>
+
+                {/* Details Grid */}
+                <View style={styles.detailsGrid}>
+                  <View style={styles.detailItem}>
+                    <Ionicons name="time-outline" size={14} color={Colors.text.tertiary} />
+                    <Text style={styles.detailText}>{formatTime(survey.estimatedTime)}</Text>
+                  </View>
+                  <View style={styles.detailItem}>
+                    <Ionicons name="document-text-outline" size={14} color={Colors.text.tertiary} />
+                    <Text style={styles.detailText}>{survey.questionsCount} questions</Text>
+                  </View>
+                  <View style={styles.detailItem}>
+                    <Ionicons name="people-outline" size={14} color={Colors.text.tertiary} />
+                    <Text style={styles.detailText}>{survey.completedCount.toLocaleString()}</Text>
+                  </View>
+                </View>
+
+                {/* Completion Rate */}
+                <View style={styles.completionSection}>
+                  <View style={styles.completionHeader}>
+                    <Text style={styles.completionLabel}>Responses</Text>
+                    <Text style={styles.completionValue}>
+                      {survey.completedCount}/{survey.targetResponses}
+                    </Text>
+                  </View>
+                  <View style={styles.progressBar}>
+                    <View
+                      style={[
+                        styles.progressFill,
+                        { width: `${Math.min(completionPercent, 100)}%` },
+                      ]}
+                    />
+                  </View>
+                </View>
+
+                {/* Reward & CTA */}
+                <View style={styles.surveyFooter}>
+                  <View style={styles.rewardSection}>
+                    <Ionicons name="wallet" size={20} color={Colors.gold} />
+                    <View>
+                      <Text style={styles.rewardValue}>+{survey.reward}</Text>
+                      <Text style={styles.rewardLabel}>{BRAND.COIN_NAME}</Text>
+                    </View>
+                  </View>
+                  <Pressable
+                    style={styles.startButton}
+                    onPress={() => handleStartSurvey(survey._id)}
+                  >
+                    <LinearGradient
+                      colors={[colors.infoScale[400], colors.brand.purpleLight]}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 0 }}
+                      style={styles.startButtonGradient}
+                    >
+                      <Text style={styles.startButtonText}>Start Now</Text>
+                      <Ionicons name="chevron-forward" size={16} color={colors.background.primary} />
+                    </LinearGradient>
+                  </Pressable>
+                </View>
+              </Pressable>
+            );
+          }}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 120 }}
+          contentContainerStyle={{ paddingBottom: 120, paddingHorizontal: Spacing.base }}
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.3}
+          ListHeaderComponent={
+            <>
+              {/* Hero Stats */}
+              <View style={styles.heroSection}>
+                <LinearGradient
+                  colors={['rgba(59, 130, 246, 0.08)', 'rgba(139, 92, 246, 0.08)', 'rgba(236, 72, 153, 0.08)']}
+                  style={styles.heroGradient}
+                >
+                  <View style={styles.statsGrid}>
+                    <View style={styles.statItem}>
+                      <View style={[styles.statIcon, { backgroundColor: 'rgba(255, 205, 87, 0.15)' }]}>
+                        <Ionicons name="wallet" size={18} color={Colors.gold} />
+                      </View>
+                      <Text style={styles.statValue}>{userStats.totalEarned}</Text>
+                      <Text style={styles.statLabel}>Earned</Text>
+                    </View>
+                    <View style={styles.statItem}>
+                      <View style={[styles.statIcon, { backgroundColor: 'rgba(59, 130, 246, 0.15)' }]}>
+                        <Ionicons name="checkmark-circle" size={18} color={colors.infoScale[400]} />
+                      </View>
+                      <Text style={styles.statValue}>{userStats.surveysCompleted}</Text>
+                      <Text style={styles.statLabel}>Completed</Text>
+                    </View>
+                    <View style={styles.statItem}>
+                      <View style={[styles.statIcon, { backgroundColor: 'rgba(249, 115, 22, 0.15)' }]}>
+                        <Ionicons name="time" size={18} color={colors.brand.orange} />
+                      </View>
+                      <Text style={styles.statValue}>{formatAvgTime(userStats.averageTime)}</Text>
+                      <Text style={styles.statLabel}>Avg Time</Text>
+                    </View>
+                    <View style={styles.statItem}>
+                      <View style={[styles.statIcon, { backgroundColor: 'rgba(236, 72, 153, 0.15)' }]}>
+                        <Ionicons name="trending-up" size={18} color={colors.brand.pink} />
+                      </View>
+                      <Text style={styles.statValue}>{userStats.completionRate}%</Text>
+                      <Text style={styles.statLabel}>Success</Text>
+                    </View>
+                  </View>
+                </LinearGradient>
+              </View>
+
+              {/* Category Filters */}
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.categoryContainer}
+              >
+                {categories.map((cat) => (
+                  <Pressable
+                    key={cat.name}
+                    style={[
+                      styles.categoryButton,
+                      activeCategory === cat.name && styles.categoryButtonActive,
+                    ]}
+                    onPress={() => handleCategoryChange(cat.name)}
+                  >
+                    <Text
+                      style={[
+                        styles.categoryText,
+                        activeCategory === cat.name && styles.categoryTextActive,
+                      ]}
+                    >
+                      {cat.name} ({cat.count})
+                    </Text>
+                  </Pressable>
+                ))}
+              </ScrollView>
+
+              {/* Info Banner */}
+              <View style={styles.infoBanner}>
+                <LinearGradient
+                  colors={['rgba(139, 92, 246, 0.1)', 'rgba(236, 72, 153, 0.1)']}
+                  style={styles.infoBannerGradient}
+                >
+                  <Ionicons name="document-text" size={32} color={colors.brand.purpleLight} />
+                  <View style={styles.infoBannerText}>
+                    <Text style={styles.infoBannerTitle}>Earn While You Share</Text>
+                    <Text style={styles.infoBannerDesc}>
+                      Your opinions help brands improve. Get rewarded for every completed survey!
+                    </Text>
+                  </View>
+                </LinearGradient>
+              </View>
+
+            </>
+          }
+          ListEmptyComponent={
+            <View style={styles.emptyState}>
+              <Ionicons name="document-text-outline" size={48} color={Colors.text.tertiary} />
+              <Text style={styles.emptyStateText}>No surveys available</Text>
+              <Text style={styles.emptyStateSubtext}>Check back later for new surveys</Text>
+            </View>
+          }
+          ListFooterComponent={
+            <>
+              {loadingMore && (
+                <View style={{ paddingVertical: 16, alignItems: 'center' }}>
+                  <ActivityIndicator size="small" color={Colors.gold} />
+                </View>
+              )}
+
+              {/* Bottom CTA */}
+              <View style={styles.bottomCTA}>
+                <LinearGradient
+                  colors={['rgba(255, 205, 87, 0.08)', 'rgba(59, 130, 246, 0.08)']}
+                  style={styles.bottomCTAGradient}
+                >
+                  <View style={styles.bottomCTAIcon}>
+                    <Ionicons name="bar-chart" size={28} color={colors.background.primary} />
+                  </View>
+                  <Text style={styles.bottomCTATitle}>New Surveys Daily</Text>
+                  <Text style={styles.bottomCTADesc}>
+                    Check back often for fresh surveys from top brands
+                  </Text>
+                  <View style={styles.bottomCTAFeatures}>
+                    <View style={styles.featureItem}>
+                      <Ionicons name="trophy" size={14} color={Colors.text.tertiary} />
+                      <Text style={styles.featureText}>High Rewards</Text>
+                    </View>
+                    <View style={styles.featureItem}>
+                      <Ionicons name="time" size={14} color={Colors.text.tertiary} />
+                      <Text style={styles.featureText}>Quick Surveys</Text>
+                    </View>
+                    <View style={styles.featureItem}>
+                      <Ionicons name="checkmark-circle" size={14} color={Colors.text.tertiary} />
+                      <Text style={styles.featureText}>Easy Tasks</Text>
+                    </View>
+                  </View>
+                </LinearGradient>
+              </View>
+
+              <View style={{ height: 40 }} />
+            </>
+          }
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
@@ -191,254 +473,7 @@ function SurveysPage() {
               tintColor={Colors.gold}
             />
           }
-        >
-          {/* Hero Stats */}
-          <View style={styles.heroSection}>
-            <LinearGradient
-              colors={['rgba(59, 130, 246, 0.08)', 'rgba(139, 92, 246, 0.08)', 'rgba(236, 72, 153, 0.08)']}
-              style={styles.heroGradient}
-            >
-              <View style={styles.statsGrid}>
-                <View style={styles.statItem}>
-                  <View style={[styles.statIcon, { backgroundColor: 'rgba(255, 205, 87, 0.15)' }]}>
-                    <Ionicons name="wallet" size={18} color={Colors.gold} />
-                  </View>
-                  <Text style={styles.statValue}>{userStats.totalEarned}</Text>
-                  <Text style={styles.statLabel}>Earned</Text>
-                </View>
-                <View style={styles.statItem}>
-                  <View style={[styles.statIcon, { backgroundColor: 'rgba(59, 130, 246, 0.15)' }]}>
-                    <Ionicons name="checkmark-circle" size={18} color={colors.infoScale[400]} />
-                  </View>
-                  <Text style={styles.statValue}>{userStats.surveysCompleted}</Text>
-                  <Text style={styles.statLabel}>Completed</Text>
-                </View>
-                <View style={styles.statItem}>
-                  <View style={[styles.statIcon, { backgroundColor: 'rgba(249, 115, 22, 0.15)' }]}>
-                    <Ionicons name="time" size={18} color={colors.brand.orange} />
-                  </View>
-                  <Text style={styles.statValue}>{formatAvgTime(userStats.averageTime)}</Text>
-                  <Text style={styles.statLabel}>Avg Time</Text>
-                </View>
-                <View style={styles.statItem}>
-                  <View style={[styles.statIcon, { backgroundColor: 'rgba(236, 72, 153, 0.15)' }]}>
-                    <Ionicons name="trending-up" size={18} color={colors.brand.pink} />
-                  </View>
-                  <Text style={styles.statValue}>{userStats.completionRate}%</Text>
-                  <Text style={styles.statLabel}>Success</Text>
-                </View>
-              </View>
-            </LinearGradient>
-          </View>
-
-          {/* Category Filters */}
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.categoryContainer}
-          >
-            {categories.map((cat) => (
-              <Pressable
-                key={cat.name}
-                style={[
-                  styles.categoryButton,
-                  activeCategory === cat.name && styles.categoryButtonActive,
-                ]}
-                onPress={() => handleCategoryChange(cat.name)}
-              >
-                <Text
-                  style={[
-                    styles.categoryText,
-                    activeCategory === cat.name && styles.categoryTextActive,
-                  ]}
-                >
-                  {cat.name} ({cat.count})
-                </Text>
-              </Pressable>
-            ))}
-          </ScrollView>
-
-          {/* Info Banner */}
-          <View style={styles.infoBanner}>
-            <LinearGradient
-              colors={['rgba(139, 92, 246, 0.1)', 'rgba(236, 72, 153, 0.1)']}
-              style={styles.infoBannerGradient}
-            >
-              <Ionicons name="document-text" size={32} color={colors.brand.purpleLight} />
-              <View style={styles.infoBannerText}>
-                <Text style={styles.infoBannerTitle}>Earn While You Share</Text>
-                <Text style={styles.infoBannerDesc}>
-                  Your opinions help brands improve. Get rewarded for every completed survey!
-                </Text>
-              </View>
-            </LinearGradient>
-          </View>
-
-          {/* Surveys List */}
-          <View style={styles.surveysContainer}>
-            {surveys.length === 0 ? (
-              <View style={styles.emptyState}>
-                <Ionicons name="document-text-outline" size={48} color={Colors.text.tertiary} />
-                <Text style={styles.emptyStateText}>No surveys available</Text>
-                <Text style={styles.emptyStateSubtext}>Check back later for new surveys</Text>
-              </View>
-            ) : (
-              surveys.map((survey) => {
-                const catInfo = getCategoryInfo(survey.subcategory);
-                const difficulty = survey.difficulty || 'easy';
-                const diffColors = difficultyColors[difficulty] || difficultyColors.easy;
-                const completionPercent = survey.targetResponses > 0
-                  ? Math.round((survey.completedCount / survey.targetResponses) * 100)
-                  : 0;
-
-                return (
-                  <Pressable
-                    key={survey._id}
-                    style={styles.surveyCard}
-                   
-                    onPress={() => handleStartSurvey(survey._id)}
-                  >
-                    {/* Header */}
-                    <View style={styles.surveyHeader}>
-                      <View
-                        style={[
-                          styles.surveyIcon,
-                          { backgroundColor: catInfo.colors.bg, borderColor: catInfo.colors.border },
-                        ]}
-                      >
-                        <Text style={styles.surveyEmoji}>{catInfo.emoji}</Text>
-                      </View>
-                      <View style={styles.surveyHeaderContent}>
-                        <View style={styles.surveyBadges}>
-                          <View
-                            style={[
-                              styles.difficultyBadge,
-                              {
-                                backgroundColor: diffColors.bg,
-                                borderColor: diffColors.border,
-                              },
-                            ]}
-                          >
-                            <Text
-                              style={[
-                                styles.difficultyText,
-                                { color: diffColors.text },
-                              ]}
-                            >
-                              {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
-                            </Text>
-                          </View>
-                          {survey.isFeatured && (
-                            <View style={styles.trendingBadge}>
-                              <Ionicons name="sparkles" size={10} color={colors.brand.orange} />
-                              <Text style={styles.trendingText}>Featured</Text>
-                            </View>
-                          )}
-                        </View>
-                        <Text style={styles.surveyTitle}>{survey.title}</Text>
-                        <View style={styles.sponsorRow}>
-                          <Ionicons name="pricetag" size={12} color={Colors.text.tertiary} />
-                          <Text style={styles.sponsorText}>{survey.subcategory || 'General'}</Text>
-                        </View>
-                      </View>
-                    </View>
-
-                    {/* Details Grid */}
-                    <View style={styles.detailsGrid}>
-                      <View style={styles.detailItem}>
-                        <Ionicons name="time-outline" size={14} color={Colors.text.tertiary} />
-                        <Text style={styles.detailText}>{formatTime(survey.estimatedTime)}</Text>
-                      </View>
-                      <View style={styles.detailItem}>
-                        <Ionicons name="document-text-outline" size={14} color={Colors.text.tertiary} />
-                        <Text style={styles.detailText}>{survey.questionsCount} questions</Text>
-                      </View>
-                      <View style={styles.detailItem}>
-                        <Ionicons name="people-outline" size={14} color={Colors.text.tertiary} />
-                        <Text style={styles.detailText}>{survey.completedCount.toLocaleString()}</Text>
-                      </View>
-                    </View>
-
-                    {/* Completion Rate */}
-                    <View style={styles.completionSection}>
-                      <View style={styles.completionHeader}>
-                        <Text style={styles.completionLabel}>Responses</Text>
-                        <Text style={styles.completionValue}>
-                          {survey.completedCount}/{survey.targetResponses}
-                        </Text>
-                      </View>
-                      <View style={styles.progressBar}>
-                        <View
-                          style={[
-                            styles.progressFill,
-                            { width: `${Math.min(completionPercent, 100)}%` },
-                          ]}
-                        />
-                      </View>
-                    </View>
-
-                    {/* Reward & CTA */}
-                    <View style={styles.surveyFooter}>
-                      <View style={styles.rewardSection}>
-                        <Ionicons name="wallet" size={20} color={Colors.gold} />
-                        <View>
-                          <Text style={styles.rewardValue}>+{survey.reward}</Text>
-                          <Text style={styles.rewardLabel}>{BRAND.COIN_NAME}</Text>
-                        </View>
-                      </View>
-                      <Pressable
-                        style={styles.startButton}
-                        onPress={() => handleStartSurvey(survey._id)}
-                      >
-                        <LinearGradient
-                          colors={[colors.infoScale[400], colors.brand.purpleLight]}
-                          start={{ x: 0, y: 0 }}
-                          end={{ x: 1, y: 0 }}
-                          style={styles.startButtonGradient}
-                        >
-                          <Text style={styles.startButtonText}>Start Now</Text>
-                          <Ionicons name="chevron-forward" size={16} color={colors.background.primary} />
-                        </LinearGradient>
-                      </Pressable>
-                    </View>
-                  </Pressable>
-                );
-              })
-            )}
-          </View>
-
-          {/* Bottom CTA */}
-          <View style={styles.bottomCTA}>
-            <LinearGradient
-              colors={['rgba(255, 205, 87, 0.08)', 'rgba(59, 130, 246, 0.08)']}
-              style={styles.bottomCTAGradient}
-            >
-              <View style={styles.bottomCTAIcon}>
-                <Ionicons name="bar-chart" size={28} color={colors.background.primary} />
-              </View>
-              <Text style={styles.bottomCTATitle}>New Surveys Daily</Text>
-              <Text style={styles.bottomCTADesc}>
-                Check back often for fresh surveys from top brands
-              </Text>
-              <View style={styles.bottomCTAFeatures}>
-                <View style={styles.featureItem}>
-                  <Ionicons name="trophy" size={14} color={Colors.text.tertiary} />
-                  <Text style={styles.featureText}>High Rewards</Text>
-                </View>
-                <View style={styles.featureItem}>
-                  <Ionicons name="time" size={14} color={Colors.text.tertiary} />
-                  <Text style={styles.featureText}>Quick Surveys</Text>
-                </View>
-                <View style={styles.featureItem}>
-                  <Ionicons name="checkmark-circle" size={14} color={Colors.text.tertiary} />
-                  <Text style={styles.featureText}>Easy Tasks</Text>
-                </View>
-              </View>
-            </LinearGradient>
-          </View>
-
-          <View style={{ height: 40 }} />
-        </ScrollView>
+        />
       </SafeAreaView>
     </>
   );

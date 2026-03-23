@@ -109,6 +109,10 @@ export default function PriveLayout() {
           name="notifications"
           options={{ title: 'Alerts & Expiry' }}
         />
+        <Stack.Screen
+          name="campaigns"
+          options={{ headerShown: false }}
+        />
       </Stack>
     </PriveProvider>
   );

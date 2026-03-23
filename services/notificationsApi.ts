@@ -164,32 +164,56 @@ export interface NotificationTemplate {
 class NotificationsService {
   // Get user notifications with filtering and pagination
   async getNotifications(query: NotificationsQuery = {}): Promise<ApiResponse<NotificationsResponse>> {
-    return apiClient.get('/notifications', query);
+    try {
+      return await apiClient.get('/notifications', query);
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to fetch notifications' };
+    }
   }
 
   // Get single notification by ID
   async getNotificationById(notificationId: string): Promise<ApiResponse<Notification>> {
-    return apiClient.get(`/notifications/${notificationId}`);
+    try {
+      return await apiClient.get(`/notifications/${notificationId}`);
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to fetch notification' };
+    }
   }
 
   // Mark notification as read
   async markAsRead(notificationId: string): Promise<ApiResponse<{ message: string }>> {
-    return apiClient.patch('/notifications/read', { notificationIds: [notificationId] });
+    try {
+      return await apiClient.patch('/notifications/read', { notificationIds: [notificationId] });
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to mark notification as read' };
+    }
   }
 
   // Mark all notifications as read
   async markAllAsRead(): Promise<ApiResponse<{ message: string; count: number }>> {
-    return apiClient.patch('/notifications/read');
+    try {
+      return await apiClient.patch('/notifications/read');
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to mark all as read' };
+    }
   }
 
   // Mark notification as unread
   async markAsUnread(notificationId: string): Promise<ApiResponse<{ message: string }>> {
-    return apiClient.patch(`/notifications/${notificationId}/unread`);
+    try {
+      return await apiClient.patch(`/notifications/${notificationId}/unread`);
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to mark notification as unread' };
+    }
   }
 
   // Delete notification
   async deleteNotification(notificationId: string): Promise<ApiResponse<{ message: string }>> {
-    return apiClient.delete(`/notifications/${notificationId}`);
+    try {
+      return await apiClient.delete(`/notifications/${notificationId}`);
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to delete notification' };
+    }
   }
 
   // Delete multiple notifications
@@ -197,26 +221,42 @@ class NotificationsService {
     message: string;
     deleted: number;
   }>> {
-    return apiClient.post('/notifications/bulk-delete', {
-      ids: notificationIds
-    });
+    try {
+      return await apiClient.post('/notifications/bulk-delete', {
+        ids: notificationIds
+      });
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to delete notifications' };
+    }
   }
 
   // Clear all notifications
   async clearAllNotifications(): Promise<ApiResponse<{ message: string; count: number }>> {
-    return apiClient.delete('/notifications/clear-all');
+    try {
+      return await apiClient.delete('/notifications/clear-all');
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to clear notifications' };
+    }
   }
 
   // Get notification preferences
   async getNotificationPreferences(): Promise<ApiResponse<NotificationPreferences>> {
-    return apiClient.get('/notifications/preferences');
+    try {
+      return await apiClient.get('/notifications/preferences');
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to fetch preferences' };
+    }
   }
 
   // Update notification preferences
   async updateNotificationPreferences(
     preferences: Partial<NotificationPreferences>
   ): Promise<ApiResponse<NotificationPreferences>> {
-    return apiClient.patch('/notifications/preferences', preferences);
+    try {
+      return await apiClient.patch('/notifications/preferences', preferences);
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to update preferences' };
+    }
   }
 
   // Subscribe to push notifications
@@ -233,20 +273,32 @@ class NotificationsService {
       version?: string;
     };
   }): Promise<ApiResponse<PushSubscription>> {
-    return apiClient.post('/notifications/push/subscribe', subscription);
+    try {
+      return await apiClient.post('/notifications/push/subscribe', subscription);
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to subscribe to push' };
+    }
   }
 
   // Unsubscribe from push notifications
   async unsubscribeFromPush(subscriptionId?: string): Promise<ApiResponse<{ message: string }>> {
-    if (subscriptionId) {
-      return apiClient.delete(`/notifications/push/subscribe/${subscriptionId}`);
+    try {
+      if (subscriptionId) {
+        return await apiClient.delete(`/notifications/push/subscribe/${subscriptionId}`);
+      }
+      return await apiClient.delete('/notifications/push/subscribe');
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to unsubscribe from push' };
     }
-    return apiClient.delete('/notifications/push/subscribe');
   }
 
   // Get push subscriptions
   async getPushSubscriptions(): Promise<ApiResponse<PushSubscription[]>> {
-    return apiClient.get('/notifications/push/subscriptions');
+    try {
+      return await apiClient.get('/notifications/push/subscriptions');
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to fetch push subscriptions' };
+    }
   }
 
   // Test push notification
@@ -254,9 +306,13 @@ class NotificationsService {
     subscriptionId: string,
     message: string
   ): Promise<ApiResponse<{ message: string }>> {
-    return apiClient.post(`/notifications/push/test/${subscriptionId}`, {
-      message
-    });
+    try {
+      return await apiClient.post(`/notifications/push/test/${subscriptionId}`, {
+        message
+      });
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to send test push' };
+    }
   }
 
   // Send notification (admin/system use)
@@ -277,7 +333,11 @@ class NotificationsService {
     sent: number;
     failed: number;
   }>> {
-    return apiClient.post('/notifications/send', notification);
+    try {
+      return await apiClient.post('/notifications/send', notification);
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to send notification' };
+    }
   }
 
   // Get notification statistics
@@ -308,12 +368,20 @@ class NotificationsService {
       unsubscribeRate: number;
     };
   }>> {
-    return apiClient.get('/notifications/stats', dateRange);
+    try {
+      return await apiClient.get('/notifications/stats', dateRange);
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to fetch stats' };
+    }
   }
 
   // Get notification templates (admin use)
   async getNotificationTemplates(): Promise<ApiResponse<NotificationTemplate[]>> {
-    return apiClient.get('/notifications/templates');
+    try {
+      return await apiClient.get('/notifications/templates');
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to fetch templates' };
+    }
   }
 
   // Create notification template (admin use)
@@ -326,7 +394,11 @@ class NotificationsService {
     variables?: string[];
     channels: ('push' | 'email' | 'sms' | 'inApp')[];
   }): Promise<ApiResponse<NotificationTemplate>> {
-    return apiClient.post('/notifications/templates', template);
+    try {
+      return await apiClient.post('/notifications/templates', template);
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to create template' };
+    }
   }
 
   // Update notification template (admin use)
@@ -341,7 +413,11 @@ class NotificationsService {
       active: boolean;
     }>
   ): Promise<ApiResponse<NotificationTemplate>> {
-    return apiClient.patch(`/notifications/templates/${templateId}`, updates);
+    try {
+      return await apiClient.patch(`/notifications/templates/${templateId}`, updates);
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to update template' };
+    }
   }
 
   // Send notification using template
@@ -359,7 +435,11 @@ class NotificationsService {
     sent: number;
     failed: number;
   }>> {
-    return apiClient.post(`/notifications/templates/${templateId}/send`, data);
+    try {
+      return await apiClient.post(`/notifications/templates/${templateId}/send`, data);
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to send from template' };
+    }
   }
 
   // Get unread notifications count
@@ -368,7 +448,11 @@ class NotificationsService {
     byType: Record<Notification['type'], number>;
     byPriority: Record<Notification['priority'], number>;
   }>> {
-    return apiClient.get('/notifications/unread-count');
+    try {
+      return await apiClient.get('/notifications/unread-count');
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to fetch unread count' };
+    }
   }
 
   // Snooze notification
@@ -376,29 +460,49 @@ class NotificationsService {
     notificationId: string,
     snoozeUntil: string
   ): Promise<ApiResponse<{ message: string }>> {
-    return apiClient.patch(`/notifications/${notificationId}/snooze`, {
-      snoozeUntil
-    });
+    try {
+      return await apiClient.patch(`/notifications/${notificationId}/snooze`, {
+        snoozeUntil
+      });
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to snooze notification' };
+    }
   }
 
   // Pin notification
   async pinNotification(notificationId: string): Promise<ApiResponse<{ message: string }>> {
-    return apiClient.patch(`/notifications/${notificationId}/pin`);
+    try {
+      return await apiClient.patch(`/notifications/${notificationId}/pin`);
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to pin notification' };
+    }
   }
 
   // Unpin notification
   async unpinNotification(notificationId: string): Promise<ApiResponse<{ message: string }>> {
-    return apiClient.patch(`/notifications/${notificationId}/unpin`);
+    try {
+      return await apiClient.patch(`/notifications/${notificationId}/unpin`);
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to unpin notification' };
+    }
   }
 
   // Get pinned notifications
   async getPinnedNotifications(): Promise<ApiResponse<Notification[]>> {
-    return apiClient.get('/notifications/pinned');
+    try {
+      return await apiClient.get('/notifications/pinned');
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to fetch pinned notifications' };
+    }
   }
 
   // Archive notification
   async archiveNotification(notificationId: string): Promise<ApiResponse<{ message: string }>> {
-    return apiClient.patch(`/notifications/${notificationId}/archive`);
+    try {
+      return await apiClient.patch(`/notifications/${notificationId}/archive`);
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to archive notification' };
+    }
   }
 
   // Get archived notifications
@@ -406,12 +510,20 @@ class NotificationsService {
     page: number = 1,
     limit: number = 20
   ): Promise<ApiResponse<NotificationsResponse>> {
-    return apiClient.get('/notifications/archived', { page, limit });
+    try {
+      return await apiClient.get('/notifications/archived', { page, limit });
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to fetch archived notifications' };
+    }
   }
 
   // Restore archived notification
   async restoreNotification(notificationId: string): Promise<ApiResponse<{ message: string }>> {
-    return apiClient.patch(`/notifications/${notificationId}/restore`);
+    try {
+      return await apiClient.patch(`/notifications/${notificationId}/restore`);
+    } catch (error: any) {
+      return { success: false, data: null as any, message: error?.message || 'Failed to restore notification' };
+    }
   }
 }
 

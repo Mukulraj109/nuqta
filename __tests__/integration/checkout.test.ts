@@ -11,7 +11,7 @@
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { cartApi } from '@/services/cartApi';
-import { orderApi } from '@/services/orderApi';
+import orderApi from '@/services/ordersApi';
 import { paymentService } from '@/services/paymentService';
 import { addressApi } from '@/services/addressApi';
 import apiClient from '@/services/apiClient';

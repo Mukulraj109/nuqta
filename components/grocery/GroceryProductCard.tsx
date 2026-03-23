@@ -84,6 +84,7 @@ export interface GroceryProduct {
 interface GroceryProductCardProps {
   product: GroceryProduct;
   onAddToCart?: (product: GroceryProduct) => void;
+  onQuantityChange?: (product: GroceryProduct, quantity: number) => void;
   variant?: 'default' | 'compact' | 'horizontal';
   showStore?: boolean;
 }
@@ -91,6 +92,7 @@ interface GroceryProductCardProps {
 const GroceryProductCard: React.FC<GroceryProductCardProps> = ({
   product,
   onAddToCart,
+  onQuantityChange,
   variant = 'default',
   showStore = false,
 }) => {
@@ -126,11 +128,15 @@ const GroceryProductCard: React.FC<GroceryProductCardProps> = ({
   };
 
   const handleIncrement = () => {
-    setQuantity(q => q + 1);
+    const newQty = quantity + 1;
+    setQuantity(newQty);
+    onQuantityChange?.(product, newQty);
   };
 
   const handleDecrement = () => {
-    setQuantity(q => (q > 0 ? q - 1 : 0));
+    const newQty = quantity > 0 ? quantity - 1 : 0;
+    setQuantity(newQty);
+    onQuantityChange?.(product, newQty);
   };
 
   const discount = originalPrice

@@ -14,7 +14,7 @@ import { ThemedView } from '@/components/ThemedView';
 import ReviewItem from './ReviewItem';
 import RatingStars from './RatingStars';
 import { Review, ReviewFilters, ReviewStats } from '@/types/review.types';
-import reviewService from '@/services/reviewApi';
+import reviewService from '@/services/reviewsApi';
 import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';

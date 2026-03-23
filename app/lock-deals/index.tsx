@@ -29,6 +29,7 @@ import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 48) / 2;
@@ -39,6 +40,8 @@ type FilterTab = 'all' | 'featured' | 'ending_soon';
 const LockDealsPage: React.FC = () => {
   const isMounted = useIsMounted();
   const router = useRouter();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const [deals, setDeals] = useState<LockPriceDeal[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -48,8 +51,9 @@ const LockDealsPage: React.FC = () => {
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     fetchDeals(true);
-  }, [activeTab]);
+  }, [activeTab, authLoading, isAuthenticated]);
 
   const fetchDeals = async (reset = false) => {
     try {

@@ -38,6 +38,12 @@ export const useScratchCard = (): UseScratchCardReturn => {
   const [error, setError] = useState<string | null>(null);
   const [cooldownSeconds, setCooldownSeconds] = useState(0);
   const cooldownRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => { mountedRef.current = false; };
+  }, []);
 
   // Tick cooldown timer every second
   useEffect(() => {
@@ -61,6 +67,7 @@ export const useScratchCard = (): UseScratchCardReturn => {
       setError(null);
 
       const response = await scratchCardApi.checkEligibility();
+      if (!mountedRef.current) return;
       if (response.success && response.data) {
         const elig = response.data;
         setEligibility(elig);
@@ -91,6 +98,7 @@ export const useScratchCard = (): UseScratchCardReturn => {
       setError(null);
 
       const response = await scratchCardApi.createSession();
+      if (!mountedRef.current) return null;
       if (response.success && response.data) {
         setSession(response.data);
         setState('scratching');
@@ -112,6 +120,7 @@ export const useScratchCard = (): UseScratchCardReturn => {
       setError(null);
 
       const response = await scratchCardApi.play(sessionId);
+      if (!mountedRef.current) return null;
       if (response.success && response.data) {
         const completedSession = response.data;
         setSession(completedSession);
@@ -148,6 +157,7 @@ export const useScratchCard = (): UseScratchCardReturn => {
       setError(null);
 
       const response = await scratchCardApi.retryClaim(sessionId);
+      if (!mountedRef.current) return false;
       if (response.success && response.data) {
         const completedSession = response.data;
         setSession(completedSession);

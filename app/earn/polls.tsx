@@ -24,6 +24,8 @@ import pollApi, { Poll, PollOption, PollVoteHistory } from '@/services/pollApi';
 import { platformAlert } from '@/utils/platformAlert';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import CachedImage from '@/components/ui/CachedImage';
+import { BRAND } from '@/constants/brand';
 
 type TabType = 'active' | 'history';
 
@@ -167,7 +169,7 @@ function PollsPage() {
             ) : null}
           </View>
           <View style={styles.coinBadge}>
-            <Ionicons name="diamond" size={14} color={Colors.gold} />
+            <CachedImage source={BRAND.COIN_IMAGE} style={{ width: 14, height: 14 }} />
             <ThemedText style={styles.coinBadgeText}>{poll.coinsPerVote}</ThemedText>
           </View>
         </View>
@@ -253,7 +255,7 @@ function PollsPage() {
           <ThemedText style={styles.historyTitle}>{item.poll.title}</ThemedText>
           {item.coinsAwarded > 0 && (
             <View style={styles.coinBadge}>
-              <Ionicons name="diamond" size={12} color={Colors.gold} />
+              <CachedImage source={BRAND.COIN_IMAGE} style={{ width: 12, height: 12 }} />
               <ThemedText style={styles.coinBadgeText}>+{item.coinsAwarded}</ThemedText>
             </View>
           )}
@@ -282,8 +284,8 @@ function PollsPage() {
           </Pressable>
           <ThemedText style={styles.headerTitle}>Vote in Polls</ThemedText>
           <View style={styles.headerRight}>
-            <Ionicons name="diamond" size={18} color={Colors.gold} />
-            <ThemedText style={styles.headerCoins}>10/vote</ThemedText>
+            <CachedImage source={BRAND.COIN_IMAGE} style={{ width: 18, height: 18 }} />
+            <ThemedText style={styles.headerCoins}>{BRAND.COIN_SHORT}/vote</ThemedText>
           </View>
         </View>
       </LinearGradient>

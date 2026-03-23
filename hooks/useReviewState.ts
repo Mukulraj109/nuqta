@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import reviewService from '@/services/reviewApi';
+import reviewService from '@/services/reviewsApi';
 
 export interface ReviewData {
   id?: string;
@@ -58,7 +58,7 @@ export const useReviewState = () => {
     setError(null);
 
     try {
-      const response = await reviewService.createReview(targetId, {
+      const response = await reviewService.createStoreReview(targetId, {
         rating,
         comment: reviewText,
         images: [],

@@ -18,7 +18,7 @@ import * as Haptics from 'expo-haptics';
 import { ThemedText } from '@/components/ThemedText';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import ordersApi from '@/services/ordersApi';
-import { useGetCurrencySymbol } from '@/stores/selectors';
+import { useGetCurrencySymbol, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import analytics from '@/services/analytics/AnalyticsService';
@@ -79,6 +79,8 @@ interface OrderDetails {
 function PaymentSuccessPage() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const currencySymbol = getCurrencySymbol();
   const { orderId, transactionId, paymentMethod } = useLocalSearchParams<{
     orderId: string;
@@ -98,6 +100,7 @@ function PaymentSuccessPage() {
 
   // Fetch order details for all orders
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     const fetchOrders = async () => {
       if (orderIds.length === 0) {
         setLoading(false);
@@ -214,7 +217,7 @@ function PaymentSuccessPage() {
     };
 
     fetchOrders();
-  }, [orderId, paymentMethod]);
+  }, [orderId, paymentMethod, isAuthenticated, authLoading]);
 
   // For backward compatibility, get first order
   const order = orders[0] || null;

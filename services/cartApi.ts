@@ -233,14 +233,6 @@ export interface ApplyCouponRequest {
   couponCode: string;
 }
 
-export interface ShippingEstimate {
-  method: string;
-  name: string;
-  cost: number;
-  estimatedDays: number;
-  description?: string;
-}
-
 /**
  * Validates cart data structure
  */
@@ -762,67 +754,6 @@ class CartService {
       devLog.error('[CART API] Error validating cart:', error);
       return createErrorResponse(error, 'Failed to validate cart. Please try again.');
     }
-  }
-
-  /**
-   * Get shipping estimates
-   */
-  async getShippingEstimates(
-    zipCode?: string,
-    country?: string
-  ): Promise<ApiResponse<ShippingEstimate[]>> {
-    devLog.warn('[CART API] getShippingEstimates is not yet available');
-    return {
-      success: false,
-      error: 'This feature is not yet available',
-    };
-  }
-
-  /**
-   * Move item to wishlist
-   */
-  async moveToWishlist(productId: string): Promise<ApiResponse<{ message: string }>> {
-    if (!productId) {
-      return {
-        success: false,
-        error: 'Product ID is required',
-      };
-    }
-
-    devLog.warn('[CART API] moveToWishlist is not yet available');
-    return {
-      success: false,
-      error: 'This feature is not yet available',
-    };
-  }
-
-  /**
-   * Save cart for later
-   */
-  async saveCartForLater(): Promise<ApiResponse<{ message: string }>> {
-    devLog.warn('[CART API] saveCartForLater is not yet available');
-    return {
-      success: false,
-      error: 'This feature is not yet available',
-    };
-  }
-
-  /**
-   * Merge guest cart with user cart
-   */
-  async mergeCart(guestCartId: string): Promise<ApiResponse<Cart>> {
-    if (!guestCartId) {
-      return {
-        success: false,
-        error: 'Guest cart ID is required',
-      };
-    }
-
-    devLog.warn('[CART API] mergeCart is not yet available');
-    return {
-      success: false,
-      error: 'This feature is not yet available',
-    };
   }
 
   /**

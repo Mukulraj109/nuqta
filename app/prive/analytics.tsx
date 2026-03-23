@@ -13,9 +13,12 @@ import usePriveEligibility from '@/hooks/usePriveEligibility';
 import priveApi from '@/services/priveApi';
 import { colors } from '@/constants/theme';
 import { catchAndReport } from '@/utils/catchAndReport';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { useIsMounted } from '@/hooks/useIsMounted';
 
 function AnalyticsScreen() {
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const { tier } = usePriveEligibility();
   const tierRank: Record<string, number> = { none: 0, entry: 1, signature: 2, elite: 3 };
 
@@ -35,7 +38,10 @@ function AnalyticsScreen() {
   }, [period]);
 
   const isMounted = useIsMounted();
-  useEffect(() => { setIsLoading(true); fetchData(); }, [fetchData]);
+  useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
+    setIsLoading(true); fetchData();
+  }, [fetchData, isAuthenticated, authLoading]);
   const onRefresh = () => { setIsRefreshing(true); fetchData(); };
 
   const periods = [30, 60, 90];

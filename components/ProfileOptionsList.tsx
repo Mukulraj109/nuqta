@@ -4,7 +4,7 @@ import { View, Text, Pressable, StyleSheet } from "react-native";
 import { FlashList } from '@shopify/flash-list';
 import { Ionicons } from "@expo/vector-icons";
 import { ProfileOption, ProfileOptionsListProps } from "@/types/profile";
-import { useRegion } from "@/contexts/RegionContext";
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 // Dummy data (Replace with backend data later)
@@ -48,7 +48,7 @@ const ProfileOptionsList: React.FC<ProfileOptionsListProps> = ({
   onOptionPress,
   isLoading = false
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const defaultOptionsData = getDefaultOptionsData(currencySymbol);
   const optionsToRender = options || defaultOptionsData;

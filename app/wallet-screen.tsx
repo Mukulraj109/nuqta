@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { useFocusEffect } from 'expo-router';
+import { useFocusEffect, useLocalSearchParams } from 'expo-router';
 import RechargeWalletCard from "../components/RechargeWalletCard";
 import ReferAndEarnCard from "@/components/ReferAndEarnCard";
 import {
@@ -47,6 +47,14 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { useIsMounted } from '@/hooks/useIsMounted';
 import { useUserIdentityStore } from '@/stores/userIdentityStore';
 
+const MODE_THEMES: Record<string, { accent: string; label: string; icon: string }> = {
+  'near-u': { accent: '#7C3AED', label: 'Near U', icon: 'location-outline' },
+  'mall': { accent: '#3B82F6', label: 'REZ Mall', icon: 'storefront-outline' },
+  'prive': { accent: '#D4AF37', label: 'Privé', icon: 'diamond-outline' },
+  'cashstore': { accent: '#10B981', label: 'Cash Store', icon: 'cash-outline' },
+  'default': { accent: '#7C3AED', label: '', icon: '' },
+};
+
 const WalletScreen: React.FC<WalletScreenProps> = ({
   onNavigateBack,
   onCoinPress,
@@ -71,6 +79,32 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
   const refreshWallet = useRefreshWallet();
 
   const { segment, statedIdentity } = useUserIdentityStore();
+  const { mode: modeParam } = useLocalSearchParams<{ mode?: string }>();
+  const activeMode = modeParam && MODE_THEMES[modeParam] ? modeParam : 'default';
+  const modeTheme = MODE_THEMES[activeMode];
+
+  const renderModeBadge = useCallback(() => {
+    if (activeMode === 'default' || !modeTheme.label) return null;
+    return (
+      <View style={{
+        alignSelf: 'center',
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: modeTheme.accent + '14',
+        borderRadius: 20,
+        paddingHorizontal: 14,
+        paddingVertical: 6,
+        marginTop: 8,
+        gap: 6,
+      }}>
+        <Ionicons name={modeTheme.icon as any} size={14} color={modeTheme.accent} />
+        <Text style={{ fontSize: 12, fontWeight: '600', color: modeTheme.accent }}>
+          {modeTheme.label}
+        </Text>
+      </View>
+    );
+  }, [activeMode, modeTheme]);
+
   const { completionStatus, isLoading: profileLoading, error: profileError } = useProfile();
 
   const { referralData, isLoading: referralLoading, error: referralError } = useReferral({
@@ -445,6 +479,9 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
             onCoinPress={handleCoinTypePress}
             currencySymbol={currencySymbol}
           />
+
+          {/* Mode Badge */}
+          {renderModeBadge()}
 
           {/* Coin Proportion Bar */}
           <CoinProportionBar

@@ -18,7 +18,7 @@ export async function checkAreaServiceability(
     const res = await apiClient.get('/stores/nearby', {
       lat: latitude,
       lng: longitude,
-      radius: 5000,
+      radius: 5,
       limit: 1,
     });
 

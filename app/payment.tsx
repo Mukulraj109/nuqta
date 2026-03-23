@@ -30,7 +30,7 @@ import { StripeCardForm } from '@/components/payment';
 import paymentService, { PaymentMethod, PaymentResponse } from '@/services/paymentService';
 import PaymentValidator from '@/services/paymentValidation';
 import financialServicesApi, { FinancialService } from '@/services/financialServicesApi';
-import { useGetCurrencySymbol, useGetCurrency } from '@/stores/selectors';
+import { useGetCurrencySymbol, useGetCurrency, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { FormPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
@@ -44,6 +44,8 @@ function PaymentPage() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const getCurrency = useGetCurrency();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const regionCurrency = getCurrencySymbol();
   const params = useLocalSearchParams();
   const amount = Number(params.amount) || 5000;
@@ -97,6 +99,7 @@ function PaymentPage() {
   const progressAnim = useSharedValue(0);
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     loadPaymentMethods();
     animateEntrance();
 
@@ -116,7 +119,7 @@ function PaymentPage() {
         }
       }).catch(() => {});
     }
-  }, [isFinancialService, serviceId]);
+  }, [isFinancialService, serviceId, isAuthenticated, authLoading]);
 
   const loadFinancialService = async () => {
     if (!serviceId) return;

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { View, Text, Pressable, TextInput, StyleSheet, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { RechargeWalletCardProps } from "@/types/profile";
-import { useRegion } from "@/contexts/RegionContext";
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import paymentService from "@/services/paymentService";
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
@@ -15,7 +15,7 @@ const RechargeWalletCard: React.FC<RechargeWalletCardProps> = ({
   isLoading = false,
   currency: currencyProp,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currency = currencyProp || getCurrencySymbol();
   const [selectedAmount, setSelectedAmount] = useState<"other" | number>(amountOptions[0] ?? "other");
   const [customAmount, setCustomAmount] = useState(amountOptions[0]?.toString() ?? "");

@@ -317,7 +317,6 @@ function DineInScanScreen() {
             </View>
           )}
 
-          <View style={{ height: 100 }} />
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -338,7 +337,7 @@ const styles = StyleSheet.create({
   headerTitle: { fontSize: 18, fontWeight: '700', color: Colors.nileBlue },
   headerSubtitle: { fontSize: 12, color: Colors.text.secondary, marginTop: 2, textAlign: 'center' },
 
-  scrollContent: { paddingTop: 16 },
+  scrollContent: { paddingTop: 16, paddingBottom: 120 },
 
   manualSearchButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginHorizontal: Spacing.base, marginBottom: Spacing.lg, paddingVertical: 14, borderRadius: BorderRadius.md, borderWidth: 2, borderColor: Colors.gold, backgroundColor: Colors.background.secondary, gap: 8 },
   manualSearchText: { fontSize: 15, fontWeight: '600', color: Colors.gold },

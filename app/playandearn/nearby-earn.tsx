@@ -5,6 +5,7 @@ import {
   Text,
   StyleSheet,
   ScrollView,
+  FlatList,
   Pressable,
   Dimensions,
   ActivityIndicator,
@@ -23,6 +24,7 @@ import { MapViewSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 
 const { width, height } = Dimensions.get('window');
 
@@ -76,6 +78,10 @@ const getChipColor = (type: EarningOpportunity['type']): { bg: string; text: str
 
 const NearbyEarnPage = () => {
   const router = useRouter();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
+
+  const PAGE_LIMIT = 20;
 
   // State
   const [stores, setStores] = useState<NearbyStore[]>([]);
@@ -86,6 +92,9 @@ const NearbyEarnPage = () => {
   const [locationPermission, setLocationPermission] = useState<boolean>(false);
   const [refreshing, setRefreshing] = useState(false);
   const [locationLoading, setLocationLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const isMounted = useIsMounted();
 
   // Request location permission on mount
@@ -119,17 +128,22 @@ const NearbyEarnPage = () => {
 
   // Fetch stores when location is available
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     if (!location) return;
     fetchStores();
-  }, [location]);
+  }, [location, authLoading, isAuthenticated]);
 
-  const fetchStores = useCallback(async (isRefresh = false) => {
+  const fetchStores = useCallback(async (isRefresh = false, pageNum = 1) => {
     if (!location) return;
     try {
-      if (isRefresh) {
-        setRefreshing(true);
+      if (isRefresh || pageNum === 1) {
+        if (isRefresh) {
+          setRefreshing(true);
+        } else {
+          setLoading(true);
+        }
       } else {
-        setLoading(true);
+        setLoadingMore(true);
       }
       setError(null);
 
@@ -137,11 +151,22 @@ const NearbyEarnPage = () => {
         lat: location.lat,
         lng: location.lng,
         radius: 10,
+        limit: PAGE_LIMIT,
       });
 
       if (res.success && res.data) {
         if (!isMounted()) return;
-        setStores(res.data);
+        const newStores = res.data;
+        // Client-side pagination since API may not support page param
+        const startIdx = (pageNum - 1) * PAGE_LIMIT;
+        const paginated = newStores.slice(startIdx, startIdx + PAGE_LIMIT);
+        if (pageNum === 1) {
+          setStores(paginated);
+        } else {
+          setStores(prev => [...prev, ...paginated]);
+        }
+        setPage(pageNum);
+        setHasMore(startIdx + PAGE_LIMIT < newStores.length);
       } else {
         if (!isMounted()) return;
         setError(res.error || 'Failed to load nearby stores');
@@ -154,6 +179,7 @@ const NearbyEarnPage = () => {
       setLoading(false);
       if (!isMounted()) return;
       setRefreshing(false);
+      setLoadingMore(false);
     }
   }, [location]);
 
@@ -474,45 +500,61 @@ const NearbyEarnPage = () => {
     </View>
   );
 
+  const loadMoreStores = useCallback(() => {
+    if (loadingMore || !hasMore) return;
+    fetchStores(false, page + 1);
+  }, [loadingMore, hasMore, page, fetchStores]);
+
   // --- Render: List View ---
-  const renderListView = () => (
-    <ScrollView
-      style={styles.listScrollView}
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={styles.listContent}
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-          colors={[colors.lightMustard]}
-          tintColor={colors.lightMustard}
-        />
-      }
-    >
-      {/* Loading State */}
-      {loading && !refreshing && (
-        <MapViewSkeleton />
-      )}
+  const renderListView = () => {
+    if (loading && !refreshing) {
+      return <MapViewSkeleton />;
+    }
+    if (error && !loading) {
+      return renderError();
+    }
+    if (!loading && !error && stores.length === 0) {
+      return renderEmpty();
+    }
 
-      {/* Error State */}
-      {error && !loading && renderError()}
-
-      {/* Empty State */}
-      {!loading && !error && stores.length === 0 && renderEmpty()}
-
-      {/* Store Cards */}
-      {!loading && !error && stores.length > 0 && (
-        <View style={styles.storeListContainer}>
-          <Text style={styles.resultCountText}>
-            {stores.length} store{stores.length !== 1 ? 's' : ''} with earning opportunities nearby
-          </Text>
-          {stores.map((store, index) => renderStoreCard(store, index))}
-        </View>
-      )}
-
-      <View style={{ height: 100 }} />
-    </ScrollView>
-  );
+    return (
+      <FlatList
+        data={stores}
+        keyExtractor={(item) => item._id}
+        renderItem={({ item, index }) => renderStoreCard(item, index)}
+        style={styles.listScrollView}
+        contentContainerStyle={styles.listContent}
+        showsVerticalScrollIndicator={false}
+        onEndReached={loadMoreStores}
+        onEndReachedThreshold={0.3}
+        ListHeaderComponent={
+          <View style={styles.storeListContainer}>
+            <Text style={styles.resultCountText}>
+              {stores.length} store{stores.length !== 1 ? 's' : ''} with earning opportunities nearby
+            </Text>
+          </View>
+        }
+        ListFooterComponent={
+          <>
+            {loadingMore && (
+              <View style={{ paddingVertical: 16, alignItems: 'center' }}>
+                <ActivityIndicator size="small" color={colors.lightMustard} />
+              </View>
+            )}
+            <View style={{ height: 100 }} />
+          </>
+        }
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={[colors.lightMustard]}
+            tintColor={colors.lightMustard}
+          />
+        }
+      />
+    );
+  };
 
   // --- Main Render ---
   return (

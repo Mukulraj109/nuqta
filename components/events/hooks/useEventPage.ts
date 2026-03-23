@@ -16,8 +16,7 @@ import { showAlert, alertOk, confirmAlert } from '@/utils/alert';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { EventItem } from '@/types/homepage.types';
 import eventsApiService from '@/services/eventsApi';
-import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
-import { useRegion } from '@/contexts/RegionContext';
+import { useAuthUser, useIsAuthenticated, useGetCurrencySymbol } from '@/stores/selectors';
 import { BUSINESS_CONFIG } from '@/config/env';
 import eventAnalytics from '@/services/eventAnalytics';
 import { getCategoryTheme, CategoryTheme } from '@/constants/categoryThemes';
@@ -110,7 +109,7 @@ export function useEventPage(props?: { eventId?: string; initialEvent?: EventIte
   const params = useLocalSearchParams();
   const user = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [screenData, setScreenData] = useState(Dimensions.get('window'));
   const resizeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);

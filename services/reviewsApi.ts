@@ -1,7 +1,17 @@
 // Reviews API Service
 // Handles product and store reviews, ratings, and feedback
 
+import { Platform } from 'react-native';
 import apiClient, { ApiResponse } from './apiClient';
+import {
+  Review as ReviewTypeReview,
+  ReviewsResponse as ReviewTypeReviewsResponse,
+  CreateReviewData,
+  UpdateReviewData,
+  ReviewFilters,
+  UserReview,
+  CanReviewResponse
+} from '@/types/review.types';
 
 export interface Review {
   id: string;
@@ -434,6 +444,110 @@ class ReviewsService {
       action,
       reason
     });
+  }
+
+  // ── Convenience methods (migrated from reviewApi.ts) ──
+
+  // Get reviews for a store (uses review.types interfaces)
+  async getStoreReviews(
+    storeId: string,
+    filters: ReviewFilters = {}
+  ): Promise<ApiResponse<ReviewTypeReviewsResponse>> {
+    const params = new URLSearchParams();
+    if (filters.page) params.append('page', filters.page.toString());
+    if (filters.limit) params.append('limit', filters.limit.toString());
+    if (filters.rating) params.append('rating', filters.rating.toString());
+    if (filters.sortBy) params.append('sortBy', filters.sortBy);
+    const queryString = params.toString();
+    const endpoint = `/reviews/store/${storeId}${queryString ? `?${queryString}` : ''}`;
+    return apiClient.get<ReviewTypeReviewsResponse>(endpoint);
+  }
+
+  // Create a new review for a store (uses review.types interfaces)
+  async createStoreReview(
+    storeId: string,
+    reviewData: CreateReviewData
+  ): Promise<ApiResponse<{ review: ReviewTypeReview }>> {
+    return apiClient.post<{ review: ReviewTypeReview }>(
+      `/reviews/store/${storeId}`,
+      reviewData
+    );
+  }
+
+  // Update an existing review (uses review.types interfaces)
+  async updateStoreReview(
+    reviewId: string,
+    updates: UpdateReviewData
+  ): Promise<ApiResponse<{ review: ReviewTypeReview }>> {
+    return apiClient.put<{ review: ReviewTypeReview }>(
+      `/reviews/${reviewId}`,
+      updates
+    );
+  }
+
+  // Mark a review as helpful (returns count)
+  async markReviewHelpful(reviewId: string): Promise<ApiResponse<{ helpful: number }>> {
+    return apiClient.post<{ helpful: number }>(
+      `/reviews/${reviewId}/helpful`
+    );
+  }
+
+  // Get user's own reviews (paginated, uses review.types interfaces)
+  async getUserOwnReviews(
+    page: number = 1,
+    limit: number = 20
+  ): Promise<ApiResponse<{
+    reviews: UserReview[];
+    pagination: {
+      currentPage: number;
+      totalPages: number;
+      totalReviews: number;
+      hasNextPage: boolean;
+      hasPrevPage: boolean;
+    };
+  }>> {
+    return apiClient.get<{
+      reviews: UserReview[];
+      pagination: {
+        currentPage: number;
+        totalPages: number;
+        totalReviews: number;
+        hasNextPage: boolean;
+        hasPrevPage: boolean;
+      };
+    }>(`/reviews/user/my-reviews?page=${page}&limit=${limit}`);
+  }
+
+  // Check if user can review a store (uses review.types interfaces)
+  async canUserReviewStore(storeId: string): Promise<ApiResponse<CanReviewResponse>> {
+    return apiClient.get<CanReviewResponse>(
+      `/reviews/store/${storeId}/can-review`
+    );
+  }
+
+  // Upload review image to Cloudinary
+  async uploadReviewImage(imageUri: string): Promise<ApiResponse<{ url: string; publicId: string }>> {
+    const formData = new FormData();
+    const filename = imageUri.split('/').pop() || 'review-image.jpg';
+    const match = /\.(\w+)$/.exec(filename);
+    const type = match ? `image/${match[1]}` : 'image/jpeg';
+
+    if (Platform.OS === 'web') {
+      const response = await fetch(imageUri);
+      const blob = await response.blob();
+      formData.append('image', blob, filename);
+    } else {
+      formData.append('image', {
+        uri: Platform.OS === 'android' ? imageUri : imageUri.replace('file://', ''),
+        name: filename,
+        type,
+      } as any);
+    }
+
+    return apiClient.uploadFile<{ url: string; publicId: string }>(
+      '/reviews/upload-image',
+      formData
+    );
   }
 
   // Get review analytics (admin/store owner)

@@ -7,6 +7,7 @@ import {
   Pressable,
   Dimensions,
   Platform,
+  Share,
 } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -32,6 +33,8 @@ function ArticleDetailPage() {
   const [article, setArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState(!isCreateMode);
   const [error, setError] = useState<string | null>(null);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
 
   // Fetch article from backend
   useEffect(() => {
@@ -45,11 +48,18 @@ function ArticleDetailPage() {
       setLoading(true);
       setError(null);
 
-      const response = await articlesService.getArticleById(id as string);
+      const [response, engagementRes] = await Promise.all([
+        articlesService.getArticleById(id as string),
+        articlesService.getArticleEngagement(id as string).catch(() => null),
+      ]);
 
       if (response.success && response.data.article) {
         if (!isMounted()) return;
         setArticle(response.data.article as any);
+        if (engagementRes?.success && engagementRes.data?.userInteraction) {
+          setIsLiked(engagementRes.data.userInteraction.liked);
+          setIsBookmarked(engagementRes.data.userInteraction.bookmarked);
+        }
       } else {
         if (!isMounted()) return;
         setError('Article not found');
@@ -227,13 +237,57 @@ function ArticleDetailPage() {
 
               {/* Action Buttons */}
               <View style={styles.actionButtons}>
-                <Pressable style={styles.actionButton}>
-                  <Ionicons name="heart-outline" size={24} color={Colors.error} />
+                <Pressable
+                  style={styles.actionButton}
+                  onPress={async () => {
+                    if (!article) return;
+                    const prevLiked = isLiked;
+                    setIsLiked(!prevLiked);
+                    try {
+                      const res = await articlesService.toggleArticleLike(id as string);
+                      if (res.success && res.data) {
+                        setIsLiked(res.data.liked);
+                      }
+                    } catch {
+                      setIsLiked(prevLiked);
+                    }
+                  }}
+                >
+                  <Ionicons name={isLiked ? 'heart' : 'heart-outline'} size={24} color={Colors.error} />
                 </Pressable>
-                <Pressable style={styles.actionButton}>
-                  <Ionicons name="bookmark-outline" size={24} color={Colors.brand.purpleLight} />
+                <Pressable
+                  style={styles.actionButton}
+                  onPress={async () => {
+                    if (!article) return;
+                    const prevBookmarked = isBookmarked;
+                    setIsBookmarked(!prevBookmarked);
+                    try {
+                      const res = await articlesService.toggleArticleBookmark(id as string);
+                      if (res.success && res.data) {
+                        setIsBookmarked(res.data.bookmarked);
+                      }
+                    } catch {
+                      setIsBookmarked(prevBookmarked);
+                    }
+                  }}
+                >
+                  <Ionicons name={isBookmarked ? 'bookmark' : 'bookmark-outline'} size={24} color={Colors.brand.purpleLight} />
                 </Pressable>
-                <Pressable style={styles.actionButton}>
+                <Pressable
+                  style={styles.actionButton}
+                  onPress={async () => {
+                    if (!article) return;
+                    try {
+                      await Share.share({
+                        message: article.title,
+                        url: (article as any).url || '',
+                      });
+                      articlesService.shareArticle(id as string).catch(() => {});
+                    } catch {
+                      // user cancelled or share failed
+                    }
+                  }}
+                >
                   <Ionicons name="share-social-outline" size={24} color={Colors.info} />
                 </Pressable>
               </View>

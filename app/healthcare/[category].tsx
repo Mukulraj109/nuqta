@@ -240,7 +240,7 @@ const HealthcareCategoryPage: React.FC = () => {
   };
 
   const renderStoreCard = (store: Store) => {
-    const cashback = store.metadata?.cashbackPercentage || Math.floor(Math.random() * 15) + 10;
+    const cashback = store.metadata?.cashbackPercentage || 0;
 
     return (
       <Pressable

@@ -3,7 +3,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Main customer support hub with quick actions, tickets, and FAQs
 
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, StyleSheet, Pressable, StatusBar, Platform, RefreshControl } from 'react-native';
+import { View, ScrollView, StyleSheet, Pressable, StatusBar, Platform, RefreshControl, Linking } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, Stack } from 'expo-router';
@@ -14,6 +14,8 @@ import { Colors, Spacing, Gradients } from '@/constants/DesignSystem';
 import { SectionListSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+
+const EMERGENCY_PHONE = '1800-123-4567';
 
 function SupportHubPage() {
   const router = useRouter();
@@ -117,6 +119,34 @@ function SupportHubPage() {
       default:
         handleCreateTicket();
     }
+  };
+
+  const handleEmergencySOS = () => {
+    platformAlertConfirm(
+      'Emergency Support',
+      'This will create a high-priority support ticket and connect you to our support line immediately. Continue?',
+      async () => {
+        try {
+          // Create a high-priority emergency ticket
+          await supportService.createTicket({
+            subject: 'EMERGENCY - Urgent Support Needed',
+            category: 'other',
+            priority: 'urgent',
+            message: 'User triggered emergency SOS from Support Hub. Requires immediate assistance.',
+          });
+          platformAlertSimple(
+            'Ticket Created',
+            'A high-priority ticket has been created. Connecting you to support now...'
+          );
+        } catch {
+          // Even if ticket creation fails, still attempt the call
+        }
+        // Open phone dialer for immediate call
+        Linking.openURL(`tel:${EMERGENCY_PHONE}`).catch(() => {
+          platformAlertSimple('Call Failed', `Please call ${EMERGENCY_PHONE} directly for emergency support.`);
+        });
+      }
+    );
   };
 
   const getStatusColor = (status: string) => {
@@ -261,6 +291,27 @@ function SupportHubPage() {
         contentContainerStyle={{ paddingBottom: 120 }}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
       >
+        {/* Emergency SOS Button */}
+        <View style={styles.section}>
+          <Pressable style={styles.sosButton} onPress={handleEmergencySOS}>
+            <LinearGradient
+              colors={['#DC2626', '#B91C1C']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.sosGradient}
+            >
+              <View style={styles.sosIconContainer}>
+                <Ionicons name="warning-outline" size={24} color="#fff" />
+              </View>
+              <View style={styles.sosTextContainer}>
+                <ThemedText style={styles.sosTitle}>Emergency Support</ThemedText>
+                <ThemedText style={styles.sosSubtitle}>Immediate help for urgent issues</ThemedText>
+              </View>
+              <Ionicons name="call" size={20} color="#fff" />
+            </LinearGradient>
+          </Pressable>
+        </View>
+
         {/* Quick Actions */}
         <View style={styles.section}>
           <ThemedText style={styles.sectionTitle}>Quick Actions</ThemedText>
@@ -704,6 +755,42 @@ const styles = StyleSheet.create({
   loadingContainer: {
     padding: 40,
     alignItems: 'center',
+  },
+  sosButton: {
+    borderRadius: 14,
+    overflow: 'hidden',
+    elevation: 4,
+    shadowColor: '#DC2626',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+  },
+  sosGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    gap: 12,
+  },
+  sosIconContainer: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sosTextContainer: {
+    flex: 1,
+  },
+  sosTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#fff',
+  },
+  sosSubtitle: {
+    fontSize: 12,
+    color: 'rgba(255,255,255,0.85)',
+    marginTop: 2,
   },
 });
 

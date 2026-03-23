@@ -27,7 +27,6 @@ import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { useOnlineVoucher } from '@/hooks/useOnlineVoucher';
 import { Brand, Category } from '@/types/voucher.types';
-import VoucherData from '@/data/voucherData';
 import { useDebounce } from '@/hooks/useDebounce';
 import { ErrorState } from '@/components/common/ErrorState';
 import { LoadingState } from '@/components/common/LoadingState';

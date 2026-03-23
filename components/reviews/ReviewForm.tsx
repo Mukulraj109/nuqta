@@ -16,7 +16,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import RatingStars from './RatingStars';
 import { CreateReviewData, Review } from '@/types/review.types';
-import reviewService from '@/services/reviewApi';
+import reviewService from '@/services/reviewsApi';
 import SuccessModal from '@/components/common/SuccessModal';
 import ErrorModal from '@/components/common/ErrorModal';
 import { colors } from '@/constants/theme';
@@ -95,10 +95,10 @@ function ReviewForm({
         if (!reviewId) {
           throw new Error('Review ID not found');
         }
-        response = await reviewService.updateReview(reviewId, reviewData);
+        response = await reviewService.updateStoreReview(reviewId, reviewData);
       } else {
         // Create new review
-        response = await reviewService.createReview(storeId, reviewData);
+        response = await reviewService.createStoreReview(storeId, reviewData);
       }
 
       if (response.success && response.data?.review) {

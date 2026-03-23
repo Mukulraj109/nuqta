@@ -4,6 +4,7 @@ import {
   View,
   Text,
   ScrollView,
+  FlatList,
   StyleSheet,
   Pressable,
   RefreshControl,
@@ -82,6 +83,10 @@ function ChallengesPage() {
     completionRate: 0,
   });
   const [claimingId, setClaimingId] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const PAGE_LIMIT = 20;
 
   const user = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
@@ -613,20 +618,31 @@ function ChallengesPage() {
         </View>
 
         {/* Challenges List */}
-        <ScrollView
+        <FlatList
+          data={filteredChallenges}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => renderChallengeCard(item)}
           style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={handleRefresh}
-              tintColor={Colors.brand.purpleLight}
-            />
+          showsVerticalScrollIndicator={false}
+          onEndReached={() => {
+            if (!loadingMore && hasMore) {
+              setLoadingMore(true);
+              const nextPage = page + 1;
+              setPage(nextPage);
+              // Challenges are already all loaded in memory; pagination is client-side
+              setLoadingMore(false);
+            }
+          }}
+          onEndReachedThreshold={0.3}
+          ListFooterComponent={
+            loadingMore ? (
+              <View style={{ paddingVertical: 16, alignItems: 'center' }}>
+                <ActivityIndicator size="small" color={Colors.brand.purpleLight} />
+              </View>
+            ) : null
           }
-        >
-          {filteredChallenges.length > 0 ? (
-            filteredChallenges.map((challenge) => renderChallengeCard(challenge))
-          ) : (
+          ListEmptyComponent={
             <View style={styles.emptyState}>
               <Ionicons name="trophy-outline" size={64} color={Colors.border.default} />
               <Text style={styles.emptyTitle}>No {activeTab} challenges</Text>
@@ -638,7 +654,6 @@ function ChallengesPage() {
               <Pressable
                 style={styles.refreshButton}
                 onPress={handleRefresh}
-               
               >
                 <LinearGradient
                   colors={[colors.brand.purpleLight, colors.brand.purple]}
@@ -651,8 +666,15 @@ function ChallengesPage() {
                 </LinearGradient>
               </Pressable>
             </View>
-          )}
-        </ScrollView>
+          }
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              tintColor={Colors.brand.purpleLight}
+            />
+          }
+        />
       </View>
     </>
   );

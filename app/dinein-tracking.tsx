@@ -13,7 +13,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useOrderTracking } from '@/hooks/useOrderTracking';
-import { useGetCurrencySymbol } from '@/stores/selectors';
+import { useGetCurrencySymbol, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -37,6 +37,8 @@ function DineInTrackingScreen() {
   const { orderId } = useLocalSearchParams<{ orderId: string }>();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const currency = getCurrencySymbol();
 
   const {
@@ -46,7 +48,7 @@ function DineInTrackingScreen() {
     statusUpdate,
     isLive,
     refresh,
-  } = useOrderTracking(orderId || null);
+  } = useOrderTracking((!authLoading && isAuthenticated && orderId) ? orderId : null);
 
   const currentStatus = statusUpdate?.status || order?.status || 'placed';
   const currentStep = getStepIndex(currentStatus);
@@ -74,6 +76,7 @@ function DineInTrackingScreen() {
   return (
     <ScrollView
       style={styles.container}
+      contentContainerStyle={{ paddingBottom: 120 }}
       refreshControl={<RefreshControl refreshing={loading} onRefresh={refresh} />}
     >
       {/* Header */}
@@ -180,7 +183,6 @@ function DineInTrackingScreen() {
         </Pressable>
       )}
 
-      <View style={{ height: 40 }} />
     </ScrollView>
   );
 }
@@ -188,7 +190,6 @@ function DineInTrackingScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background.secondary },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: Spacing.lg },
-  loadingText: { marginTop: Spacing.md, ...Typography.body, color: Colors.text.tertiary },
   errorText: { marginTop: Spacing.md, ...Typography.body, color: Colors.error, textAlign: 'center' },
   retryBtn: { marginTop: Spacing.base, paddingHorizontal: Spacing.xl, paddingVertical: 10, backgroundColor: Colors.nileBlue, borderRadius: BorderRadius.sm },
   retryText: { color: Colors.text.inverse, fontWeight: '600' },

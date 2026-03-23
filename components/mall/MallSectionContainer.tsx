@@ -418,6 +418,30 @@ const MallSectionContainer: React.FC<MallSectionContainerProps> = ({
         onViewAllPress={handleViewAllRewardBoosters}
       />
 
+      {/* 7b. Social Cashback CTA */}
+      <Pressable
+        style={styles.socialCashbackCta}
+        onPress={() => router.push('/prive/campaigns' as any)}
+      >
+        <LinearGradient
+          colors={['#7C3AED', '#5B21B6']}
+          style={styles.socialCashbackGradient}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+        >
+          <View style={styles.socialCashbackIconWrap}>
+            <Ionicons name="camera" size={22} color="#FFFFFF" />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.socialCashbackTitle}>Earn Social Cashback</Text>
+            <Text style={styles.socialCashbackSubtitle}>
+              Post about your purchase on Instagram & earn extra cashback
+            </Text>
+          </View>
+          <Ionicons name="chevron-forward" size={20} color="rgba(255,255,255,0.7)" />
+        </LinearGradient>
+      </Pressable>
+
       {/* 8. Top Rated Brands */}
       <MallTopRated
         brands={topRatedBrands}
@@ -451,6 +475,38 @@ const MallSectionContainer: React.FC<MallSectionContainerProps> = ({
 };
 
 const styles = StyleSheet.create({
+  socialCashbackCta: {
+    marginHorizontal: 16,
+    marginTop: 16,
+    marginBottom: 4,
+    borderRadius: 14,
+    overflow: 'hidden',
+  },
+  socialCashbackGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    gap: 12,
+  },
+  socialCashbackIconWrap: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  socialCashbackTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    marginBottom: 2,
+  },
+  socialCashbackSubtitle: {
+    fontSize: 12,
+    color: 'rgba(255,255,255,0.8)',
+  },
   outerContainer: {
     flex: 1,
     position: 'relative',

@@ -23,6 +23,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
 import { Platform } from 'react-native';
+import { useFeatureFlag } from '@/hooks/useFeatureFlag';
 
 // Real MapView — native only
 let MapView: any = null;
@@ -62,6 +63,7 @@ const markerColors = [
 const ExploreMapPage = () => {
   const isMounted = useIsMounted();
   const router = useRouter();
+  const mapEnabled = useFeatureFlag('mapViewEnabled');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedStore, setSelectedStore] = useState<string | null>(null);
 
@@ -160,6 +162,28 @@ const ExploreMapPage = () => {
     { left: 75, top: 55 },
     { left: 55, top: 25 },
   ];
+
+  // Feature flag gate
+  if (!mapEnabled) {
+    return (
+      <SafeAreaView style={styles.container} edges={['top']}>
+        <StatusBar barStyle="dark-content" backgroundColor={colors.background.primary} />
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 40 }}>
+          <Ionicons name="map-outline" size={56} color="#9CA3AF" />
+          <Text style={{ fontSize: 18, fontWeight: '700', color: '#111827', marginTop: 16 }}>Map Coming Soon</Text>
+          <Text style={{ fontSize: 13, color: '#6B7280', textAlign: 'center', marginTop: 6 }}>
+            We're working on bringing the map experience to you. Stay tuned!
+          </Text>
+          <Pressable
+            style={{ marginTop: 20, paddingHorizontal: 20, paddingVertical: 10, backgroundColor: '#7C3AED', borderRadius: 8 }}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
+          >
+            <Text style={{ color: '#FFF', fontWeight: '600' }}>Go Back</Text>
+          </Pressable>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>

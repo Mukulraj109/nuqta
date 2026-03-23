@@ -14,6 +14,7 @@ import {
   ScrollView,
   Dimensions,
   RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { CardGridSkeleton } from '@/components/skeletons';
@@ -27,6 +28,7 @@ import { achievementApi, Achievement as ApiAchievement } from '@/services/achiev
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 48 - 12) / 2;
@@ -75,11 +77,17 @@ const TIER_COLORS: Record<string, string> = {
 const BadgesScreen: React.FC = () => {
   const isMounted = useIsMounted();
   const router = useRouter();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const [activeCategory, setActiveCategory] = useState('All');
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [allAchievements, setAllAchievements] = useState<Achievement[]>([]);
   const [stats, setStats] = useState({
     unlocked: 0,
     total: 0,
@@ -87,6 +95,7 @@ const BadgesScreen: React.FC = () => {
     completionPercent: 0,
   });
   const fetchingRef = React.useRef(false); // Prevent duplicate API calls
+  const PAGE_LIMIT = 20;
 
   // Fetch achievements from API
   const fetchAchievements = useCallback(async (isRefresh = false) => {
@@ -133,7 +142,11 @@ const BadgesScreen: React.FC = () => {
           }));
 
         if (!isMounted()) return;
-        setAchievements(mapped);
+        setAllAchievements(mapped);
+        // Show first page
+        setAchievements(mapped.slice(0, PAGE_LIMIT));
+        setPage(1);
+        setHasMore(mapped.length > PAGE_LIMIT);
         if (!isMounted()) return;
         setStats({
           unlocked: response.data.summary.unlocked,
@@ -158,8 +171,9 @@ const BadgesScreen: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     fetchAchievements();
-  }, [fetchAchievements]);
+  }, [fetchAchievements, authLoading, isAuthenticated]);
 
   const onRefresh = useCallback(() => {
     fetchAchievements(true);
@@ -167,6 +181,18 @@ const BadgesScreen: React.FC = () => {
 
   // Derive categories dynamically from API data
   const categories = useMemo(() => ['All', ...Array.from(new Set(achievements.map(a => a.category))).sort()], [achievements]);
+
+  const loadMoreAchievements = useCallback(() => {
+    if (loadingMore || !hasMore) return;
+    setLoadingMore(true);
+    const nextPage = page + 1;
+    const startIdx = (nextPage - 1) * PAGE_LIMIT;
+    const nextSlice = allAchievements.slice(startIdx, startIdx + PAGE_LIMIT);
+    setAchievements(prev => [...prev, ...nextSlice]);
+    setPage(nextPage);
+    setHasMore(startIdx + PAGE_LIMIT < allAchievements.length);
+    setLoadingMore(false);
+  }, [loadingMore, hasMore, page, allAchievements]);
 
   const filteredAchievements = useMemo(() => activeCategory === 'All'
     ? achievements
@@ -284,6 +310,12 @@ const BadgesScreen: React.FC = () => {
   ), [achievements.length, loading]);
 
   const listFooter = useCallback(() => (
+    <>
+    {loadingMore && (
+      <View style={{ paddingVertical: 16, alignItems: 'center' }}>
+        <ActivityIndicator size="small" color={COLORS.purple500} />
+      </View>
+    )}
     <View style={styles.ctasSection}>
       <Text style={styles.ctasTitle}>Quick Actions to Unlock More</Text>
 
@@ -374,7 +406,8 @@ const BadgesScreen: React.FC = () => {
         </LinearGradient>
       </Pressable>
     </View>
-  ), [router]);
+    </>
+  ), [router, loadingMore]);
 
   // Loading state
   if (loading) {
@@ -427,6 +460,8 @@ const BadgesScreen: React.FC = () => {
         ListFooterComponent={listFooter}
         ListEmptyComponent={listEmpty}
         contentContainerStyle={{ paddingBottom: 120 }}
+        onEndReached={loadMoreAchievements}
+        onEndReachedThreshold={0.3}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}

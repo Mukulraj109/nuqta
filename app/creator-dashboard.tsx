@@ -24,6 +24,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 
 const NUQTA_COIN = BRAND.COIN_IMAGE;
 
@@ -44,6 +45,8 @@ const tierColors: Record<string, { bg: string; text: string; border: string }> =
 function CreatorDashboard() {
   const isMounted = useIsMounted();
   const router = useRouter();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -93,8 +96,9 @@ function CreatorDashboard() {
   }, []);
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     fetchDashboardData();
-  }, [fetchDashboardData]);
+  }, [fetchDashboardData, isAuthenticated, authLoading]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -970,7 +974,7 @@ const styles = StyleSheet.create({
   merchantRewardRow: { flexDirection: 'row', alignItems: 'center', marginTop: 2, paddingLeft: 56, gap: 4 },
   merchantRewardText: { fontSize: 11, color: Colors.nileBlue, fontWeight: '500' },
   convCoinRow: { flexDirection: 'row', alignItems: 'center', gap: 3 },
-  bottomSpacer: { height: 40 },
+  bottomSpacer: { height: 120 },
   coinIcon13: { width: 13, height: 13, borderRadius: 7 },
   coinIcon14: { width: 14, height: 14, borderRadius: 7 },
   coinIcon28: { width: 28, height: 28, borderRadius: 14 },

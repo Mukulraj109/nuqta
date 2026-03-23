@@ -20,7 +20,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ThemedText';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import apiClient from '@/services/apiClient';
-import { useAuthUser, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
+import { useAuthUser, useGetCurrencySymbol, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { showAlert } from '@/utils/alert';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
@@ -66,6 +66,7 @@ function SubmissionDetailPage() {
   const params = useLocalSearchParams();
   const user = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const submissionId = params.submissionId as string;
@@ -90,8 +91,9 @@ function SubmissionDetailPage() {
   }, [navigation]);
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     loadSubmission();
-  }, [submissionId, projectId]);
+  }, [submissionId, projectId, isAuthenticated, authLoading]);
 
   // Deep-link parameter validation guard
   if (!submissionId || typeof submissionId !== 'string') {

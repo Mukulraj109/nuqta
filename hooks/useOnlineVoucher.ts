@@ -13,13 +13,9 @@ import {
   Category,
   FilterOptions
 } from '@/types/voucher.types';
-import VoucherData from '@/data/voucherData';
 import realVouchersApi from '@/services/realVouchersApi';
 import logger from '@/utils/logger';
 import { colors } from '@/constants/theme';
-
-// PRODUCTION: Always use real API - no mock fallback
-const USE_REAL_API = true; // Force production mode - always use backend API
 
 // Category icon mapping
 const CATEGORY_ICONS: { [key: string]: string } = {
@@ -54,7 +50,25 @@ export const useOnlineVoucher = (): UseVoucherReturn => {
   const rezBalance = useRezBalance();
   const isAuthenticated = useIsAuthenticated();
   const authLoading = useAuthLoading();
-  const [state, setState] = useState<VoucherState>(VoucherData.initialState);
+  const [state, setState] = useState<VoucherState>({
+    currentView: 'main',
+    searchQuery: '',
+    selectedCategory: null,
+    selectedBrand: null,
+    brands: [],
+    allBrands: [],
+    categories: [],
+    featuredOffers: [],
+    loading: false,
+    error: null,
+    userCoins: 0,
+    filters: {
+      cashbackRange: [0, 30],
+      minRating: 0,
+      sortBy: 'popularity',
+      categories: []
+    }
+  });
   const searchAbortControllerRef = useRef<AbortController | null>(null);
 
   const [heroCarousel, setHeroCarousel] = useState<any[]>([]);

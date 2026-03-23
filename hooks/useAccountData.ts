@@ -10,6 +10,7 @@ import {
 import { getSectionsForTab } from '@/data/accountData';
 import { fetchAccountBadges, AccountBadgeData } from '@/services/accountApi';
 import apiClient from '@/services/apiClient';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 
 export interface UserStats {
   totalOrders?: number;
@@ -67,6 +68,8 @@ export default function useAccountData(
   const [refreshing, setRefreshing] = useState(false);
   const [userStats, setUserStats] = useState<UserStats | null>(null);
   const fetchingRef = useRef(false);
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   const loadData = useCallback(
     async (isRefresh = false) => {
@@ -101,6 +104,7 @@ export default function useAccountData(
 
   // Fetch user stats (orders count, savings, member since) for overview tab
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     if (activeTab === 'overview') {
       apiClient.get('/user/stats').then((res: any) => {
         if (res.success && res.data) {
@@ -108,11 +112,12 @@ export default function useAccountData(
         }
       }).catch(() => { /* non-blocking */ });
     }
-  }, [activeTab]);
+  }, [activeTab, authLoading, isAuthenticated]);
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     loadData(false);
-  }, [loadData]);
+  }, [loadData, authLoading, isAuthenticated]);
 
   const refresh = useCallback(() => {
     loadData(true);

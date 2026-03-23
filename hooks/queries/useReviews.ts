@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { queryKeys } from '@/lib/queryKeys';
-import reviewApi from '@/services/reviewApi';
+import reviewApi from '@/services/reviewsApi';
 import type { ReviewFilters } from '@/types/review.types';
 
 export function useStoreReviews(storeId: string, filters?: ReviewFilters) {
@@ -11,10 +11,10 @@ export function useStoreReviews(storeId: string, filters?: ReviewFilters) {
   });
 }
 
-export function useUserReviews(filters?: ReviewFilters) {
+export function useUserReviews(page: number = 1, limit: number = 20) {
   return useQuery({
-    queryKey: ['reviews', 'user', filters] as const,
-    queryFn: () => reviewApi.getUserReviews(filters),
+    queryKey: ['reviews', 'user', page, limit] as const,
+    queryFn: () => reviewApi.getUserOwnReviews(page, limit),
   });
 }
 

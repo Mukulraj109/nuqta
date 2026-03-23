@@ -25,6 +25,8 @@ import offerCommentApi, { CommentableOffer, MyCommentItem } from '@/services/off
 import { platformAlert } from '@/utils/platformAlert';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import CachedImage from '@/components/ui/CachedImage';
+import { BRAND } from '@/constants/brand';
 
 type TabType = 'offers' | 'my-comments';
 
@@ -152,7 +154,7 @@ function OfferCommentsPage() {
       )}
       <View style={styles.offerFooter}>
         <View style={styles.coinPreview}>
-          <Ionicons name="diamond" size={14} color={Colors.gold} />
+          <CachedImage source={BRAND.COIN_IMAGE} style={{ width: 14, height: 14 }} />
           <ThemedText style={styles.coinPreviewText}>15-20 coins</ThemedText>
         </View>
         {item.endDate && (
@@ -183,7 +185,7 @@ function OfferCommentsPage() {
         <View style={styles.myCommentFooter}>
           {item.coinsAwarded > 0 && (
             <View style={styles.coinPreview}>
-              <Ionicons name="diamond" size={12} color={Colors.gold} />
+              <CachedImage source={BRAND.COIN_IMAGE} style={{ width: 12, height: 12 }} />
               <ThemedText style={styles.coinPreviewText}>+{item.coinsAwarded}</ThemedText>
             </View>
           )}
@@ -209,7 +211,7 @@ function OfferCommentsPage() {
           </Pressable>
           <ThemedText style={styles.headerTitle}>Comment on Offers</ThemedText>
           <View style={styles.headerRight}>
-            <Ionicons name="diamond" size={18} color={Colors.gold} />
+            <CachedImage source={BRAND.COIN_IMAGE} style={{ width: 18, height: 18 }} />
             <ThemedText style={styles.headerCoins}>15+</ThemedText>
           </View>
         </View>

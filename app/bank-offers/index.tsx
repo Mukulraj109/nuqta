@@ -3,7 +3,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
-  ScrollView,
+  FlatList,
   StyleSheet,
   Pressable,
   RefreshControl,
@@ -185,16 +185,16 @@ function BankOffersListScreen() {
       </View>
 
       {/* Offers List */}
-      <ScrollView
+      <FlatList
+        data={offers}
+        keyExtractor={(item) => (item._id || item.id) as string}
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor={colors.infoScale[400]} />
         }
-      >
-        {offers.map((offer) => {
-          const offerId = offer._id || offer.id;
+        renderItem={({ item: offer }) => {
           const isExpired = offer.validUntil && new Date(offer.validUntil) < new Date();
           const daysLeft = offer.validUntil
             ? Math.max(0, Math.ceil((new Date(offer.validUntil).getTime() - Date.now()) / (1000 * 60 * 60 * 24)))
@@ -202,9 +202,7 @@ function BankOffersListScreen() {
 
           return (
             <Pressable
-              key={offerId}
               style={styles.card}
-             
               onPress={() => handleOfferPress(offer)}
             >
               {/* Card Top: Bank Logo + Discount */}
@@ -286,10 +284,8 @@ function BankOffersListScreen() {
               </View>
             </Pressable>
           );
-        })}
-
-        <View style={{ height: 40 }} />
-      </ScrollView>
+        }}
+      />
     </SafeAreaView>
   );
 }
@@ -305,11 +301,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.background.secondary,
-  },
-  loadingText: {
-    ...Typography.body,
-    color: Colors.text.tertiary,
-    marginTop: Spacing.md,
   },
   errorContainer: {
     flex: 1,

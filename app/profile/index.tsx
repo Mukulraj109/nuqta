@@ -26,7 +26,7 @@ import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSys
 import {
   profileIconGridItems,
   profileMenuListItems
-} from '@/data/profileData';
+} from '@/constants/profileMenu';
 import LocationDisplay from '@/components/location/LocationDisplay';
 import TimeDisplay from '@/components/location/TimeDisplay';
 import { useUserStatistics } from '@/hooks/useUserStatistics';

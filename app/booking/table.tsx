@@ -83,10 +83,37 @@ function TableBookingPage() {
   const [customerEmail, setCustomerEmail] = useState('');
   const [specialRequests, setSpecialRequests] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [slotAvailability, setSlotAvailability] = useState<Record<string, number>>({});
 
   useEffect(() => {
     loadStoreDetails();
   }, [storeId]);
+
+  // Fetch real slot availability when date or store changes
+  useEffect(() => {
+    if (!storeId || !selectedDate) return;
+    const dateStr = selectedDate.toISOString().split('T')[0];
+    tableBookingApi.checkAvailability(storeId as string, dateStr)
+      .then((response) => {
+        if (!isMounted()) return;
+        if (response.success && response.data) {
+          // Map slot availability: { "14:00": 3, "15:30": 1, ... }
+          const availability: Record<string, number> = {};
+          const slots = response.data.slots || response.data;
+          if (Array.isArray(slots)) {
+            slots.forEach((s: any) => {
+              if (s.time || s.id) {
+                availability[s.time || s.id] = s.tablesLeft ?? s.availableTables ?? 0;
+              }
+            });
+          }
+          setSlotAvailability(availability);
+        }
+      })
+      .catch(() => {
+        // Silently fallback — slots will show without real availability
+      });
+  }, [storeId, selectedDate]);
 
   const loadStoreDetails = async () => {
     try {
@@ -158,11 +185,13 @@ function TableBookingPage() {
           (currentHour < now.getHours() ||
            (currentHour === now.getHours() && currentMinute <= now.getMinutes()));
 
+        const realTablesLeft = slotAvailability[timeString];
+        const hasAvailability = realTablesLeft !== undefined ? realTablesLeft > 0 : true;
         slots.push({
           id: timeString,
           time: displayTime,
-          available: !isPast,
-          tablesLeft: Math.floor(Math.random() * 5) + 1, // Mock data
+          available: !isPast && hasAvailability,
+          tablesLeft: realTablesLeft ?? undefined,
         });
 
         // Add slot duration
@@ -184,11 +213,13 @@ function TableBookingPage() {
         const isToday = selectedDate.toDateString() === new Date().toDateString();
         const isPast = isToday && wholeHour < new Date().getHours();
 
+        const realTablesLeft = slotAvailability[timeString];
+        const hasAvailability = realTablesLeft !== undefined ? realTablesLeft > 0 : true;
         slots.push({
           id: timeString,
           time: displayTime,
-          available: !isPast,
-          tablesLeft: Math.floor(Math.random() * 5) + 1,
+          available: !isPast && hasAvailability,
+          tablesLeft: realTablesLeft ?? undefined,
         });
       }
     }
@@ -196,7 +227,7 @@ function TableBookingPage() {
     return slots;
   };
 
-  const timeSlots = useMemo(() => generateTimeSlots(), [selectedDate, store]);
+  const timeSlots = useMemo(() => generateTimeSlots(), [selectedDate, store, slotAvailability]);
 
   const formatDate = (date: Date) => {
     const options: Intl.DateTimeFormatOptions = {

@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: Spacing.xl,
     paddingTop: Platform.OS === 'ios' ? 80 : 60,
-    paddingBottom: Spacing['2xl'],
+    paddingBottom: 120,
   },
   logoSection: {
     marginBottom: Spacing['2xl'],

@@ -26,6 +26,23 @@ export interface BillProviderInfo {
     type: 'text' | 'number';
   }>;
   cashbackPercent: number;
+  aggregatorCode?: string;
+  promoCoinsFixed?: number;
+  promoExpiryDays?: number;
+  maxRedemptionPercent?: number;
+  displayOrder?: number;
+  isFeatured?: boolean;
+}
+
+export interface BillPlanInfo {
+  id: string;
+  name: string;
+  price: number;
+  validity: string;
+  data?: string;
+  calls?: string;
+  sms?: string;
+  isPopular: boolean;
 }
 
 export interface FetchedBillInfo {
@@ -41,6 +58,11 @@ export interface FetchedBillInfo {
   dueDate: string;
   cashbackPercent: number;
   cashbackAmount: number;
+  promoCoins?: number;
+  promoExpiryDays?: number;
+  maxRedemptionPercent?: number;
+  requiresPlanSelection?: boolean;
+  additionalInfo?: Record<string, string>;
 }
 
 export interface BillPaymentRecord {
@@ -57,7 +79,10 @@ export interface BillPaymentRecord {
   customerNumber: string;
   amount: number;
   cashbackAmount: number;
-  status: 'pending' | 'processing' | 'completed' | 'failed';
+  promoCoinsIssued?: number;
+  promoExpiryDays?: number;
+  maxRedemptionPercent?: number;
+  status: 'pending' | 'processing' | 'completed' | 'failed' | 'refunded';
   transactionRef?: string;
   paidAt?: string;
   createdAt: string;
@@ -102,12 +127,38 @@ export async function fetchBill(
 export async function payBill(
   providerId: string,
   customerNumber: string,
-  amount: number
-): Promise<ApiResponse<BillPaymentRecord>> {
-  return apiClient.post<BillPaymentRecord>('/bill-payments/pay', {
-    providerId,
-    customerNumber,
-    amount,
+  amount: number,
+  razorpayPaymentId?: string,
+  planId?: string
+): Promise<ApiResponse<{ payment: BillPaymentRecord; promoCoinsEarned: number; promoExpiryDays: number; status: string; message: string }>> {
+  return apiClient.post<{ payment: BillPaymentRecord; promoCoinsEarned: number; promoExpiryDays: number; status: string; message: string }>(
+    '/bill-payments/pay',
+    {
+      providerId,
+      customerNumber,
+      amount,
+      ...(razorpayPaymentId && { razorpayPaymentId }),
+      ...(planId && { planId }),
+    }
+  );
+}
+
+export async function getPlans(
+  providerId: string,
+  circle?: string
+): Promise<ApiResponse<{ popular: BillPlanInfo[]; allPlans: BillPlanInfo[]; promoCoins?: number; expiryDays?: number }>> {
+  let url = `/bill-payments/plans?providerId=${providerId}`;
+  if (circle) url += `&circle=${encodeURIComponent(circle)}`;
+  return apiClient.get<{ popular: BillPlanInfo[]; allPlans: BillPlanInfo[]; promoCoins?: number; expiryDays?: number }>(url);
+}
+
+export async function requestRefund(
+  paymentId: string,
+  reason?: string
+): Promise<ApiResponse<{ refundId: string; status: string }>> {
+  return apiClient.post<{ refundId: string; status: string }>('/bill-payments/refund', {
+    paymentId,
+    ...(reason && { reason }),
   });
 }
 

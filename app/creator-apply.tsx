@@ -24,6 +24,7 @@ import creatorsApi, { EligibilityResult } from '@/services/creatorsApi';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 
 const categoryOptions = [
   { id: 'fashion', name: 'Fashion', icon: 'shirt-outline' },
@@ -44,6 +45,8 @@ const socialPlatforms = [
 function CreatorApplyPage() {
   const isMounted = useIsMounted();
   const router = useRouter();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const [step, setStep] = useState(0); // 0=check eligibility, 1=category, 2=profile, 3=social, 4=review
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -60,8 +63,9 @@ function CreatorApplyPage() {
 
   // Check eligibility on mount and when returning from upload
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     checkEligibility();
-  }, []);
+  }, [isAuthenticated, authLoading]);
 
   // Re-check when page regains focus (e.g., returning from upload)
   useEffect(() => {
@@ -364,7 +368,7 @@ function CreatorApplyPage() {
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        <ScrollView style={styles.content} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
           {/* STEP 1: Category */}
           {step === 1 && (
             <View>
@@ -554,7 +558,6 @@ function CreatorApplyPage() {
             </View>
           )}
 
-          <View style={{ height: 100 }} />
         </ScrollView>
 
         {/* Bottom Button */}
@@ -655,11 +658,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: Spacing['2xl'],
-  },
-  loadingText: {
-    marginTop: Spacing.md,
-    ...Typography.body,
-    color: Colors.text.tertiary,
   },
   content: {
     flex: 1,
