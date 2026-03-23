@@ -17,6 +17,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 
 interface SMSNotifications {
   enabled: boolean;
@@ -30,14 +31,17 @@ interface SMSNotifications {
 function SMSNotificationsScreen() {
   const isMounted = useIsMounted();
   const router = useRouter();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [settings, setSettings] = useState<SMSNotifications | null>(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     loadSettings();
-  }, []);
+  }, [isAuthenticated, authLoading]);
 
   const loadSettings = async () => {
     try {
@@ -307,11 +311,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.background.secondary,
-  },
-  loadingText: {
-    marginTop: Spacing.base,
-    ...Typography.bodyLarge,
-    color: Colors.text.tertiary,
   },
   errorContainer: {
     flex: 1,

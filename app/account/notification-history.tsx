@@ -7,7 +7,6 @@ import {
   Pressable,
   ActivityIndicator,
   RefreshControl,
-  Platform,
 } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useRouter } from 'expo-router';
@@ -16,6 +15,7 @@ import notificationService from '../../services/notificationService';
 import { NotificationListSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 
 interface NotificationHistoryItem {
   id: string;
@@ -32,6 +32,8 @@ const PAGE_LIMIT = 20;
 function NotificationHistoryScreen() {
   const isMounted = useIsMounted();
   const router = useRouter();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -41,8 +43,9 @@ function NotificationHistoryScreen() {
   const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     loadNotificationHistory();
-  }, []);
+  }, [isAuthenticated, authLoading]);
 
   const loadNotificationHistory = async (pageNum = 1, isRefresh = false) => {
     try {
@@ -390,9 +393,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: Colors.info,
   },
-  scrollView: {
-    flex: 1,
-  },
   scrollContent: {
     padding: Spacing.base,
   },
@@ -461,17 +461,6 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4,
     backgroundColor: Colors.info,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: Colors.background.secondary,
-  },
-  loadingText: {
-    marginTop: Spacing.base,
-    ...Typography.bodyLarge,
-    color: Colors.text.tertiary,
   },
   emptyContainer: {
     alignItems: 'center',

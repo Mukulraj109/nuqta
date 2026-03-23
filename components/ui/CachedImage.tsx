@@ -56,26 +56,34 @@ const CachedImage = memo(({
   const [hasError, setHasError] = useState(false);
   const retryCountRef = useRef(0);
   const [retryKey, setRetryKey] = useState(0);
+  const [useRawUrl, setUseRawUrl] = useState(false);
+
+  const rawUri = useMemo(() => {
+    if (typeof source === 'number') return source;
+    return typeof source === 'string' ? source : source?.uri;
+  }, [source]);
 
   const imageUri = useMemo(() => {
-    if (typeof source === 'number') return source;
-    const rawUri = typeof source === 'string' ? source : source?.uri;
+    if (typeof rawUri === 'number') return rawUri;
     if (!rawUri) return rawUri;
+    // If transformed URL failed, fall back to raw URL (no f_auto/q_auto)
+    if (useRawUrl) return rawUri;
     // Auto-optimize Cloudinary URLs with f_auto, q_auto, and width-based resizing
     const targetWidth = width ? Math.round(width * PixelRatio.get()) : undefined;
     return optimizeCloudinaryUrl(rawUri, {
       width: targetWidth,
       crop: targetWidth ? 'limit' : undefined,
     });
-  }, [source, width]);
+  }, [rawUri, width, useRawUrl]);
 
   // Reset state when source changes
   useEffect(() => {
     setIsLoading(!isLocalAsset);
     setHasError(false);
+    setUseRawUrl(false);
     retryCountRef.current = 0;
     setRetryKey(0);
-  }, [imageUri, isLocalAsset]);
+  }, [rawUri, isLocalAsset]);
 
   const handleLoad = useCallback(() => {
     setIsLoading(false);
@@ -86,14 +94,20 @@ const CachedImage = memo(({
   const handleError = useCallback(() => {
     if (retryCountRef.current < MAX_RETRIES) {
       retryCountRef.current += 1;
-      // Retry by changing the key to force remount of ExpoImage
+      setRetryKey(prev => prev + 1);
+      return;
+    }
+    // After retries exhausted, try raw URL (without Cloudinary transformations) once
+    if (!useRawUrl && typeof rawUri === 'string' && rawUri.includes('res.cloudinary.com')) {
+      setUseRawUrl(true);
+      retryCountRef.current = 0;
       setRetryKey(prev => prev + 1);
       return;
     }
     setIsLoading(false);
     setHasError(true);
     onError?.();
-  }, [onError]);
+  }, [onError, useRawUrl, rawUri]);
 
   const sizeStyle = useMemo(() => {
     const s: ViewStyle = {};

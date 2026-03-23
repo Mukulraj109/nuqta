@@ -199,8 +199,12 @@ function ProfileVisibilityPage() {
               <ThemedText style={styles.infoTitle}>About Profile Visibility</ThemedText>
             </View>
             <ThemedText style={styles.infoText}>
-              Your profile visibility setting controls who can see your profile information, 
-              activity, and posts. You can change this setting at any time.
+              <ThemedText style={{ fontWeight: '600', color: Colors.text.primary }}>Public</ThemedText>
+              {' — Anyone can view your profile, activity, and saved items.\n'}
+              <ThemedText style={{ fontWeight: '600', color: Colors.text.primary }}>Friends Only</ThemedText>
+              {' — Only users you follow back can see your profile.\n'}
+              <ThemedText style={{ fontWeight: '600', color: Colors.text.primary }}>Private</ThemedText>
+              {' — Your profile is hidden from everyone except you.'}
             </ThemedText>
           </View>
         </View>
@@ -274,12 +278,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
-  },
+    ...Platform.select({
+      ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 8 },
+      android: { elevation: 2 },
+      web: { boxShadow: '0 2px 8px rgba(0,0,0,0.05)' },
+    }),
+  } as any,
   currentLabel: {
     fontSize: Typography.bodyLarge.fontSize,
     color: Colors.text.secondary,
@@ -297,12 +301,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.primary,
     borderRadius: BorderRadius.md,
     marginBottom: Spacing.md,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
-  },
+    ...Platform.select({
+      ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 8 },
+      android: { elevation: 2 },
+      web: { boxShadow: '0 2px 8px rgba(0,0,0,0.05)' },
+    }),
+  } as any,
   selectedOption: {
     borderWidth: 2,
     borderColor: Colors.brand.purple,
@@ -344,12 +348,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.primary,
     padding: Spacing.base,
     borderRadius: BorderRadius.md,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
-  },
+    ...Platform.select({
+      ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 8 },
+      android: { elevation: 2 },
+      web: { boxShadow: '0 2px 8px rgba(0,0,0,0.05)' },
+    }),
+  } as any,
   infoHeader: {
     flexDirection: 'row',
     alignItems: 'center',

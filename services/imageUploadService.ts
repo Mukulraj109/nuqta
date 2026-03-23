@@ -50,8 +50,16 @@ export const uploadProfileImage = async (imageUri: string, token?: string): Prom
           error: `Image too large. Please select an image smaller than ${formatFileSize(FILE_SIZE_LIMITS.MAX_IMAGE_SIZE)}.`
         };
       }
-      
-      formData.append('avatar', blob, filename);
+
+      // Blob URLs have no extension — derive from blob MIME type so backend accepts it
+      const extMap: Record<string, string> = {
+        'image/jpeg': '.jpg', 'image/png': '.png', 'image/webp': '.webp',
+        'image/gif': '.gif', 'image/bmp': '.bmp', 'image/heic': '.heic',
+      };
+      const ext = extMap[blob.type] || '.jpg';
+      const safeFilename = filename.includes('.') ? filename : `avatar${ext}`;
+
+      formData.append('avatar', blob, safeFilename);
     } else {
       // On mobile (React Native)
       formData.append('avatar', {

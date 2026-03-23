@@ -2,7 +2,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Profile Edit Page
 // Edit user profile information with photo upload
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { View, ScrollView, StyleSheet, Pressable, StatusBar, Platform, TextInput, SafeAreaView, ActivityIndicator, Modal } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
@@ -18,6 +18,7 @@ import { PROFILE_COLORS } from '@/types/profile.types';
 import { getImagePicker } from '@/utils/lazyImports';
 import { uploadProfileImage } from '@/services/imageUploadService';
 import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive, platformAlertError } from '@/utils/platformAlert';
+import authApi from '@/services/authApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
@@ -55,6 +56,13 @@ function ProfileEditPage() {
   const [hasChanges, setHasChanges] = useState(false);
   const [showGenderModal, setShowGenderModal] = useState(false);
   const isMounted = useIsMounted();
+  const imagePickerRef = useRef<typeof import('expo-image-picker') | null>(null);
+
+  // Pre-load image picker so the click handler stays synchronous on web
+  // (browsers block programmatic file input clicks outside direct user gesture)
+  useEffect(() => {
+    getImagePicker().then(mod => { imagePickerRef.current = mod; });
+  }, []);
 
   const genderOptions = [
     { label: 'Male', value: 'male' },
@@ -134,7 +142,10 @@ function ProfileEditPage() {
 
   const handleImageUpload = async () => {
     try {
-      const ImagePicker = await getImagePicker();
+      // Use pre-loaded ref (critical for web — browsers block file picker if
+      // an await happens between user click and input.click())
+      const ImagePicker = imagePickerRef.current ?? await getImagePicker();
+      imagePickerRef.current = ImagePicker;
 
       // Request permission (not needed on web)
       if (Platform.OS !== 'web') {
@@ -179,9 +190,9 @@ function ProfileEditPage() {
           }
         }
 
-        if (uploadResult?.success) {
-          // Refresh user data to show new avatar
-          await authActions.checkAuthStatus();
+        if (uploadResult?.success && uploadResult.avatarUrl) {
+          // Update profile context with new avatar URL directly
+          await updateUser({ avatar: uploadResult.avatarUrl });
           platformAlertSimple('Success', 'Profile picture updated successfully!');
         } else {
           platformAlertSimple('Upload Failed', `After ${retryCount} attempts: ${uploadResult?.error || 'Failed to upload image'}\n\nCloudinary connection is slow. Try different network or smaller image.`);
@@ -441,27 +452,10 @@ function ProfileEditPage() {
         {/* Account Settings */}
         <View style={styles.section}>
           <ThemedText style={styles.sectionTitle}>Account Settings</ThemedText>
-          
-          <Pressable
-            style={styles.settingItem}
-            accessibilityLabel="Change Password"
-            accessibilityRole="button"
-            accessibilityHint="Double tap to update your account password"
-          >
-            <View style={styles.settingItemLeft}>
-              <Ionicons name="key-outline" size={24} color={PROFILE_COLORS.gold} />
-              <View style={styles.settingItemText}>
-                <ThemedText style={styles.settingItemTitle}>Change Password</ThemedText>
-                <ThemedText style={styles.settingItemDescription}>
-                  Update your account password
-                </ThemedText>
-              </View>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color={colors.neutral[300]} />
-          </Pressable>
 
           <Pressable
             style={styles.settingItem}
+            onPress={() => router.push('/account/notifications' as any)}
             accessibilityLabel="Notification Preferences"
             accessibilityRole="button"
             accessibilityHint="Double tap to manage your notification settings"
@@ -480,6 +474,7 @@ function ProfileEditPage() {
 
           <Pressable
             style={styles.settingItem}
+            onPress={() => router.push('/account/profile-visibility' as any)}
             accessibilityLabel="Privacy Settings"
             accessibilityRole="button"
             accessibilityHint="Double tap to control who can see your profile"
@@ -500,16 +495,25 @@ function ProfileEditPage() {
         {/* Danger Zone */}
         <View style={styles.section}>
           <ThemedText style={styles.sectionTitle}>Danger Zone</ThemedText>
-          
+
           <Pressable
             style={styles.dangerItem}
             onPress={() => {
               platformAlertDestructive(
                 'Delete Account',
-                'Are you sure you want to delete your account? This action cannot be undone.',
+                'Are you sure you want to delete your account? This action cannot be undone. All your data, coins, and history will be permanently removed.',
                 'Delete',
-                () => {
-                  platformAlertSimple('Account Deleted', 'Your account has been scheduled for deletion.');
+                async () => {
+                  try {
+                    const response = await authApi.deleteAccount();
+                    if (response.success) {
+                      await authActions.logout();
+                    } else {
+                      platformAlertError('Error', response.error || 'Failed to delete account. Please try again.');
+                    }
+                  } catch {
+                    platformAlertError('Error', 'Failed to delete account. Please try again or contact support.');
+                  }
                 }
               );
             }}

@@ -12,6 +12,7 @@ import {
 } from '@/types/profile.types';
 import { useAuthUser, useIsAuthenticated, useAuthLoading, useAuthActions } from '@/stores/selectors';
 import authService, { User as BackendUser, ProfileUpdate } from '@/services/authApi';
+import { saveUser as saveUserToStorage } from '@/utils/authStorage';
 import profileApi from '@/services/profileApi';
 import walletApi from '@/services/walletApi';
 import { mapBackendUserToProfileUser } from '@/utils/profileMapper';
@@ -145,10 +146,10 @@ export const ProfileProvider = ({ children }: ProfileProviderProps) => {
         throw new Error(response.error || response.message || 'Failed to update profile');
       }
 
-      // Update user state manually since we're bypassing AuthContext
+      // Persist updated user to storage so checkAuthStatus picks it up
       if (response.data) {
-        await authActions.checkAuthStatus(); // Refresh the auth state
-        // Refresh completion status since profile fields may have changed
+        await saveUserToStorage(response.data as any);
+        await authActions.checkAuthStatus();
         refreshCompletionStatus();
       }
     } catch (err) {

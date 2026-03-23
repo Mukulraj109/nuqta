@@ -282,9 +282,12 @@ function LocationDisplay({
     }
   };
 
-  const formatLastUpdated = (date: Date) => {
+  const formatLastUpdated = (date: Date | string | undefined | null) => {
+    if (!date) return 'Unknown';
+    const d = date instanceof Date ? date : new Date(date);
+    if (isNaN(d.getTime())) return 'Unknown';
     const now = new Date();
-    const diff = now.getTime() - date.getTime();
+    const diff = now.getTime() - d.getTime();
     const minutes = Math.floor(diff / 60000);
     
     if (minutes < 1) return 'Just now';

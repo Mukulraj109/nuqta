@@ -41,7 +41,9 @@ export const mapBackendUserToProfileUser = (backendUser: BackendUser): User => {
     id: backendUser.id,
     name: getDisplayName(),
     email: backendUser.email || '',
-    avatar: backendUser.profile?.avatar,
+    avatar: backendUser.profile?.avatar && !backendUser.profile.avatar.includes('ui-avatars.com')
+      ? backendUser.profile.avatar
+      : undefined,
     bio: backendUser.profile?.bio || '',
     location: backendUser.profile?.location?.address || '',
     website: backendUser.profile?.website || '',
