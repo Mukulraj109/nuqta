@@ -8,6 +8,7 @@ import {
   AddressSearchResult,
   LocationAddress,
 } from '@/types/location.types';
+import { locationService } from '@/services/locationService';
 
 /**
  * Hook for managing location permission
@@ -233,22 +234,25 @@ export function useLocationFeatures() {
   const [isLoadingStores, setIsLoadingStores] = useState(false);
 
   const getNearbyStores = useCallback(async (radius: number = 5, limit: number = 20) => {
-    if (!state.currentLocation || !isAuthenticated) {
+    if (!state.currentLocation) {
       return [];
     }
 
     setIsLoadingStores(true);
     try {
-      // This would call the backend API for nearby stores
-      // For now, return empty array
-      setNearbyStores([]);
-      return [];
+      const stores = await locationService.getNearbyStores(
+        state.currentLocation.coordinates,
+        radius,
+        limit
+      );
+      setNearbyStores(stores);
+      return stores;
     } catch (error) {
       return [];
     } finally {
       setIsLoadingStores(false);
     }
-  }, [state.currentLocation, isAuthenticated]);
+  }, [state.currentLocation]);
 
   const isLocationAvailable = state.currentLocation !== null;
   const locationCity = state.currentLocation?.address.city || 'Unknown';
