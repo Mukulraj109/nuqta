@@ -101,7 +101,7 @@ function BestDiscountSection({
   }, [fetchCategories]);
 
   const handleViewAll = useCallback(() => {
-    router.push('/categories?filter=best-discount' as any);
+    router.push('/(tabs)/categories' as any);
   }, [router]);
 
   const handleCategoryPress = useCallback((category: Category) => {

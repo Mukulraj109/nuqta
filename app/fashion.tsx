@@ -439,7 +439,7 @@ const FashionPage: React.FC = () => {
                     <Pressable
                       key={cat._id}
                       style={styles.categoryCard}
-                      onPress={() => router.push(`/categories/${cat.slug}` as any)}
+                      onPress={() => router.push(`/category/${cat.slug}` as any)}
                     >
                       <View style={styles.categoryIcon}>
                         {cat.icon ? (

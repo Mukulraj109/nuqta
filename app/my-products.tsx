@@ -122,31 +122,48 @@ const MyProductsPage = () => {
         limit: 20
       };
 
-      if (activeTab !== 'all') {
-        params.status = activeTab;
+      // Map frontend tab statuses to backend order statuses
+      if (activeTab === 'delivered') {
+        params.status = 'delivered';
+      } else if (activeTab === 'in_transit') {
+        // Backend uses shipped/dispatched/processing — use statusGroup or fetch all
+        // Fetch all and let client-side filter handle it
+      } else if (activeTab === 'cancelled') {
+        params.status = 'cancelled';
       }
 
       const response = await ordersService.getOrders(params);
 
       if (response.data?.orders) {
         const mappedProducts: PurchasedProduct[] = response.data.orders.flatMap(order =>
-          order.items.map(item => ({
-            id: item.id,
-            productId: item.product.id,
-            orderId: order.orderNumber,
-            name: item.product.name,
-            image: item.product.images[0]?.url,
-            variant: item.variant ? {
-              type: Object.keys(item.variant.attributes || {})[0] || 'Variant',
-              value: Object.values(item.variant.attributes || {})[0]?.toString() || item.variant.name
-            } : undefined,
-            price: item.unitPrice,
-            quantity: item.quantity,
-            orderDate: order.createdAt,
-            deliveryStatus: mapOrderStatusToDelivery(order.status),
-            canReorder: order.status === 'delivered',
-            canReview: order.status === 'delivered'
-          }))
+          order.items.map((item: any) => {
+            // Use populated product data with snapshot fallbacks
+            const product = typeof item.product === 'object' && item.product ? item.product : null;
+            const productImage = product?.images?.[0]?.url || item.image || '';
+            const productName = product?.name || item.name || 'Product';
+            const productId = product?._id || product?.id || item.product || '';
+
+            return {
+              id: item._id || item.id || `${order._id}-${productId}`,
+              _id: item._id || item.id,
+              productId: String(productId),
+              storeId: typeof item.store === 'object' ? (item.store?._id || item.store?.id) : item.store,
+              store: typeof item.store === 'object' ? item.store : undefined,
+              orderId: order.orderNumber,
+              name: productName,
+              image: productImage,
+              variant: item.variant ? {
+                type: item.variant.type || Object.keys(item.variant.attributes || {})[0] || 'Variant',
+                value: item.variant.value || Object.values(item.variant.attributes || {})[0]?.toString() || item.variant.name || ''
+              } : undefined,
+              price: item.price || item.unitPrice || 0,
+              quantity: item.quantity,
+              orderDate: order.createdAt,
+              deliveryStatus: mapOrderStatusToDelivery(order.status),
+              canReorder: order.status === 'delivered',
+              canReview: order.status === 'delivered'
+            };
+          })
         );
         if (append) {
           if (!isMounted()) return;
@@ -323,12 +340,18 @@ const MyProductsPage = () => {
         accessibilityRole="button"
         accessibilityHint="Double tap to view product details"
       >
-        <CachedImage
-          source={item.image}
-          style={styles.productImage}
-          accessibilityLabel={`Product image for ${item.name}`}
-          accessible={true}
-        />
+        {item.image ? (
+          <CachedImage
+            source={{ uri: item.image }}
+            style={styles.productImage}
+            accessibilityLabel={`Product image for ${item.name}`}
+            accessible={true}
+          />
+        ) : (
+          <View style={[styles.productImage, styles.productImagePlaceholder]}>
+            <Ionicons name="cube-outline" size={28} color={Colors.text.tertiary} />
+          </View>
+        )}
 
         <View style={styles.productInfo}>
           <Text style={styles.productName} numberOfLines={2}>
@@ -346,7 +369,7 @@ const MyProductsPage = () => {
             accessibilityLabel={`Price: ${item.price} rupees. Quantity: ${item.quantity}`}
             accessibilityRole="text"
           >
-            <Text style={styles.productPrice}>{currencySymbol}{item.price}</Text>
+            <Text style={styles.productPrice}>{currencySymbol}{(item.price || 0).toFixed(2)}</Text>
             <Text style={styles.productQuantity}>Qty: {item.quantity}</Text>
           </View>
 
@@ -667,6 +690,10 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: BorderRadius.sm,
     backgroundColor: Colors.background.secondary,
+  },
+  productImagePlaceholder: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   productInfo: {
     flex: 1,

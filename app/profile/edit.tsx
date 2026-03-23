@@ -2,24 +2,22 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Profile Edit Page
 // Edit user profile information with photo upload
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { View, ScrollView, StyleSheet, Pressable, StatusBar, Platform, TextInput, SafeAreaView, ActivityIndicator, Modal } from 'react-native';
-import { FlashList } from '@shopify/flash-list';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, ScrollView, StyleSheet, Pressable, StatusBar, Platform, TextInput, SafeAreaView, ActivityIndicator, Modal, FlatList } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { useProfile } from '@/contexts/ProfileContext';
-import { useAuthActions } from '@/stores/selectors';
+import { useAuthActions, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { useSafeNavigation } from '@/hooks/useSafeNavigation';
-import { HeaderBackButton } from '@/components/navigation/SafeBackButton';
 import { PROFILE_COLORS } from '@/types/profile.types';
 import { getImagePicker } from '@/utils/lazyImports';
 import { uploadProfileImage } from '@/services/imageUploadService';
-import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive, platformAlertError } from '@/utils/platformAlert';
+import { platformAlertSimple, platformAlertDestructive, platformAlertError } from '@/utils/platformAlert';
 import authApi from '@/services/authApi';
-import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
 
@@ -39,6 +37,8 @@ function ProfileEditPage() {
   const { goBack } = useSafeNavigation();
   const { user, updateUser } = useProfile();
   const authActions = useAuthActions();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   const [formData, setFormData] = useState<ProfileFormData>({
     name: user?.name || '',
@@ -106,7 +106,7 @@ function ProfileEditPage() {
     user?.location, user?.website, user?.dateOfBirth, user?.gender,
   ]);
 
-  const handleBackPress = () => {
+  const handleBackPress = useCallback(() => {
     if (hasChanges) {
       platformAlertDestructive(
         'Unsaved Changes',
@@ -119,26 +119,16 @@ function ProfileEditPage() {
     } else {
       goBack('/profile' as any);
     }
-  };
+  }, [hasChanges, goBack]);
 
-  const handleInputChange = (field: keyof ProfileFormData, value: string) => {
+  const handleInputChange = useCallback((field: keyof ProfileFormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-  };
+  }, []);
 
-  const handleGenderSelect = (gender: string) => {
+  const handleGenderSelect = useCallback((gender: string) => {
     setFormData(prev => ({ ...prev, gender }));
     setShowGenderModal(false);
-  };
-
-  const formatDateForInput = (dateString: string) => {
-    if (!dateString) return '';
-    try {
-      const date = new Date(dateString);
-      return date.toISOString().split('T')[0]; // YYYY-MM-DD format
-    } catch {
-      return dateString;
-    }
-  };
+  }, []);
 
   const handleImageUpload = async () => {
     try {
@@ -162,7 +152,7 @@ function ProfileEditPage() {
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [1, 1],
-        quality: 0.2, // Extreme compression (20% quality) for slow Cloudinary connection
+        quality: 0.6, // Balanced compression — Cloudinary applies further optimization (f_auto, q_auto)
         base64: false,
         allowsMultipleSelection: false,
         exif: false,
@@ -206,7 +196,7 @@ function ProfileEditPage() {
     }
   };
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     if (!formData.name.trim()) {
       platformAlertSimple('Validation Error', 'Name is required');
       return;
@@ -245,7 +235,27 @@ function ProfileEditPage() {
       if (!isMounted()) return;
       setIsSaving(false);
     }
-  };
+  }, [formData, updateUser, goBack, isMounted]);
+
+  // Show loading skeleton while auth is being restored
+  if (authLoading || !isAuthenticated) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="light-content" backgroundColor={PROFILE_COLORS.gold} translucent={false} />
+        <LinearGradient colors={[PROFILE_COLORS.gold, PROFILE_COLORS.primaryLight]} style={styles.header}>
+          <View style={styles.headerContent}>
+            <View style={styles.backButton} />
+            <ThemedText style={styles.headerTitle}>Edit Profile</ThemedText>
+            <View style={{ width: 80 }} />
+          </View>
+        </LinearGradient>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ActivityIndicator size="large" color={PROFILE_COLORS.gold} />
+          <ThemedText style={{ marginTop: 12, color: PROFILE_COLORS.textSecondary }}>Loading profile...</ThemedText>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   const renderFormField = (
     label: string,
@@ -455,6 +465,25 @@ function ProfileEditPage() {
 
           <Pressable
             style={styles.settingItem}
+            onPress={() => router.push('/account/change-password' as any)}
+            accessibilityLabel="Change Password"
+            accessibilityRole="button"
+            accessibilityHint="Double tap to update your account password"
+          >
+            <View style={styles.settingItemLeft}>
+              <Ionicons name="key-outline" size={24} color={PROFILE_COLORS.gold} />
+              <View style={styles.settingItemText}>
+                <ThemedText style={styles.settingItemTitle}>Change Password</ThemedText>
+                <ThemedText style={styles.settingItemDescription}>
+                  Update your account password
+                </ThemedText>
+              </View>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color={colors.neutral[300]} />
+          </Pressable>
+
+          <Pressable
+            style={styles.settingItem}
             onPress={() => router.push('/account/notifications' as any)}
             accessibilityLabel="Notification Preferences"
             accessibilityRole="button"
@@ -556,10 +585,9 @@ function ProfileEditPage() {
               </Pressable>
             </View>
             
-            <FlashList
+            <FlatList
               data={genderOptions}
               keyExtractor={(item) => item.value}
-          estimatedItemSize={44}
               renderItem={renderGenderOption}
             />
           </View>
@@ -572,18 +600,18 @@ function ProfileEditPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: PROFILE_COLORS.background.secondary,
+    backgroundColor: PROFILE_COLORS.background,
     paddingTop: Platform.OS === 'ios' ? 20 : 0,
   },
   header: {
     paddingTop: Platform.OS === 'android' ? 25 : 15,
     paddingBottom: Spacing.lg,
     paddingHorizontal: Spacing.lg,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
+    ...Platform.select({
+      ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 8 },
+      android: { elevation: 5 },
+      web: { boxShadow: '0 2px 8px rgba(0,0,0,0.1)' },
+    }),
   },
   headerContent: {
     flexDirection: 'row',
@@ -597,11 +625,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.25)',
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 6,
-    elevation: 3,
+    ...Platform.select({
+      ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.15, shadowRadius: 6 },
+      android: { elevation: 3 },
+      web: { boxShadow: '0 2px 6px rgba(0,0,0,0.15)' },
+    }),
   },
   headerTitle: {
     flex: 1,
@@ -618,11 +646,11 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     backgroundColor: 'rgba(255, 255, 255, 0.25)',
     minWidth: 80,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 6,
-    elevation: 3,
+    ...Platform.select({
+      ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.15, shadowRadius: 6 },
+      android: { elevation: 3 },
+      web: { boxShadow: '0 2px 6px rgba(0,0,0,0.15)' },
+    }),
   },
   saveButtonDisabled: {
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -649,11 +677,11 @@ const styles = StyleSheet.create({
     marginTop: Spacing.lg,
     borderRadius: BorderRadius.xl,
     padding: Spacing.lg,
-    shadowColor: PROFILE_COLORS.text,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.12,
-    shadowRadius: 12,
-    elevation: 6,
+    ...Platform.select({
+      ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.08, shadowRadius: 12 },
+      android: { elevation: 4 },
+      web: { boxShadow: '0 4px 12px rgba(0,0,0,0.08)' },
+    }),
   },
   sectionTitle: {
     ...Typography.h3,
@@ -664,7 +692,7 @@ const styles = StyleSheet.create({
   },
   sectionDescription: {
     ...Typography.body,
-    color: PROFILE_COLORS.text.secondary,
+    color: PROFILE_COLORS.textSecondary,
     marginBottom: Spacing.base,
     lineHeight: 20,
   },
@@ -688,11 +716,11 @@ const styles = StyleSheet.create({
     color: PROFILE_COLORS.text,
     backgroundColor: Colors.background.secondary,
     minHeight: 52,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
+    ...Platform.select({
+      ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 4 },
+      android: { elevation: 1 },
+      web: { boxShadow: '0 1px 4px rgba(0,0,0,0.05)' },
+    }),
   },
   multilineInput: {
     height: 100,
@@ -732,7 +760,7 @@ const styles = StyleSheet.create({
   },
   settingItemDescription: {
     ...Typography.body,
-    color: PROFILE_COLORS.text.secondary,
+    color: PROFILE_COLORS.textSecondary,
     lineHeight: 20,
   },
   dangerItem: {
@@ -755,7 +783,7 @@ const styles = StyleSheet.create({
   },
   dangerItemDescription: {
     ...Typography.body,
-    color: PROFILE_COLORS.text.secondary,
+    color: PROFILE_COLORS.textSecondary,
     lineHeight: 20,
   },
   bottomSpace: {
@@ -845,11 +873,11 @@ const styles = StyleSheet.create({
     backgroundColor: PROFILE_COLORS.gold,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 5,
+    ...Platform.select({
+      ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 8 },
+      android: { elevation: 5 },
+      web: { boxShadow: '0 4px 8px rgba(0,0,0,0.15)' },
+    }),
   },
   photoImage: {
     width: '100%',
@@ -884,11 +912,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 3,
     borderColor: 'white',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 4,
+    ...Platform.select({
+      ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 4 },
+      android: { elevation: 4 },
+      web: { boxShadow: '0 2px 4px rgba(0,0,0,0.2)' },
+    }),
   },
   photoTextContainer: {
     flex: 1,
@@ -901,7 +929,7 @@ const styles = StyleSheet.create({
   },
   photoSubtext: {
     ...Typography.bodySmall,
-    color: PROFILE_COLORS.text.secondary,
+    color: PROFILE_COLORS.textSecondary,
   },
 });
 export default withErrorBoundary(ProfileEditPage, 'ProfileEdit');

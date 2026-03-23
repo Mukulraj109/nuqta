@@ -117,7 +117,7 @@ const CategoryGridSection: React.FC<CategoryGridSectionProps> = ({
         <Text style={styles.sectionTitle}>Shop by Category</Text>
         <Pressable
           style={styles.seeAllButton}
-          onPress={() => router.push(`/categories?parent=${categorySlug}` as any)}
+          onPress={() => router.push('/(tabs)/categories' as any)}
           accessibilityLabel="See all categories"
         >
           <Text style={styles.seeAllText}>See All</Text>

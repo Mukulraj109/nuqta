@@ -101,7 +101,7 @@ function BestSellerSection({
   }, [fetchCategories]);
 
   const handleViewAll = useCallback(() => {
-    router.push('/categories?filter=best-seller' as any);
+    router.push('/(tabs)/categories' as any);
   }, [router]);
 
   const handleCategoryPress = useCallback((category: Category) => {

@@ -1,5 +1,5 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -40,6 +40,13 @@ function PushNotificationsScreen() {
   const [saving, setSaving] = useState(false);
   const [settings, setSettings] = useState<PushNotifications | null>(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const successTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+
+  useEffect(() => {
+    return () => {
+      if (successTimeoutRef.current) clearTimeout(successTimeoutRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (authLoading || !isAuthenticated) return;
@@ -96,7 +103,9 @@ function PushNotificationsScreen() {
       } else {
         if (!isMounted()) return;
         setShowSuccessMessage(true);
-        setTimeout(() => setShowSuccessMessage(false), 2000);
+        successTimeoutRef.current = setTimeout(() => {
+          if (isMounted()) setShowSuccessMessage(false);
+        }, 2000);
       }
     } catch (error) {
       platformAlertSimple('Error', 'Failed to update push notification settings. Please check your connection and try again.');
@@ -365,7 +374,7 @@ const styles = StyleSheet.create({
   },
   savingIndicator: {
     position: 'absolute',
-    bottom: 16,
+    bottom: 120,
     alignSelf: 'center',
     backgroundColor: Colors.info,
     flexDirection: 'row',
@@ -387,7 +396,7 @@ const styles = StyleSheet.create({
   },
   successIndicator: {
     position: 'absolute',
-    bottom: 16,
+    bottom: 120,
     alignSelf: 'center',
     backgroundColor: Colors.success,
     flexDirection: 'row',

@@ -263,6 +263,39 @@ function PlayScreen() {
           </Pressable>
         </View>
 
+        {/* Create Reel Banner */}
+        <Pressable
+          style={styles.createReelBanner}
+          onPress={() => isAuthenticated ? router.push('/social/upload') : platformAlertConfirm(
+            'Sign In Required',
+            'Please sign in to create reels and earn coins.',
+            () => router.push('/sign-in'),
+            'Sign In'
+          )}
+          accessibilityLabel="Create a reel and earn coins"
+          accessibilityRole="button"
+        >
+          <LinearGradient
+            colors={['#7C3AED', '#EC4899', '#F59E0B']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.createReelGradient}
+          >
+            <View style={styles.createReelLeft}>
+              <View style={styles.createReelIconCircle}>
+                <Ionicons name="videocam" size={22} color="#fff" />
+              </View>
+              <View>
+                <ThemedText style={styles.createReelTitle}>Create a Reel</ThemedText>
+                <ThemedText style={styles.createReelSubtitle}>Share content & earn 50-200 coins</ThemedText>
+              </View>
+            </View>
+            <View style={styles.createReelArrow}>
+              <Ionicons name="arrow-forward-circle" size={28} color="rgba(255,255,255,0.9)" />
+            </View>
+          </LinearGradient>
+        </Pressable>
+
         {/* Inline error banner for refresh failures */}
         {state.error && state.allVideos.length > 0 && (
           <Pressable
@@ -440,6 +473,47 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
     fontSize: Typography.body.fontSize + 1,
     fontWeight: '700' },
+  createReelBanner: {
+    marginHorizontal: Spacing.base,
+    marginBottom: Spacing.md,
+    borderRadius: BorderRadius.lg,
+    overflow: 'hidden',
+    ...Shadows.md,
+  },
+  createReelGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 14,
+    paddingHorizontal: Spacing.base,
+  },
+  createReelLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    flex: 1,
+  },
+  createReelIconCircle: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.25)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  createReelTitle: {
+    color: '#fff',
+    fontSize: 15,
+    fontWeight: '700',
+  },
+  createReelSubtitle: {
+    color: 'rgba(255,255,255,0.85)',
+    fontSize: 12,
+    marginTop: 1,
+  },
+  createReelArrow: {
+    marginLeft: Spacing.sm,
+  },
   errorBanner: {
     flexDirection: 'row',
     alignItems: 'center',

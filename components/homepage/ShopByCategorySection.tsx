@@ -218,7 +218,7 @@ const ShopByCategorySection: React.FC = () => {
   };
 
   const handleViewAll = () => {
-    router.push('/categories' as any);
+    router.push('/(tabs)/categories' as any);
   };
 
   if (isLoading) {
