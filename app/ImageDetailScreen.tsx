@@ -159,12 +159,10 @@ function ImageDetailScreen() {
     if (!image?.creator) return { name: '', avatar: null };
 
     const name = image.creator.name || image.creator.username || '';
-    const avatar = image.creator.avatar || image.creator.profile?.avatar;
-    const defaultAvatar = name
-      ? `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=F59E0B&color=fff&size=100`
-      : null;
+    const rawAvatar = image.creator.avatar || image.creator.profile?.avatar;
+    const avatar = rawAvatar && !rawAvatar.includes('ui-avatars.com') ? rawAvatar : null;
 
-    return { name, avatar: avatar || defaultAvatar };
+    return { name, avatar };
   };
 
   // Get image URL

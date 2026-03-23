@@ -83,7 +83,9 @@ function AccountProfilePage() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
-  const [avatarUri, setAvatarUri] = useState<string | undefined>(user?.profile?.avatar);
+  const rawAvatar = user?.profile?.avatar;
+  const safeAvatar = rawAvatar && !rawAvatar.includes('ui-avatars.com') ? rawAvatar : undefined;
+  const [avatarUri, setAvatarUri] = useState<string | undefined>(safeAvatar);
   const [isEditing, setIsEditing] = useState(false);
   const [editedFirstName, setEditedFirstName] = useState(user?.profile?.firstName || '');
   const [editedLastName, setEditedLastName] = useState(user?.profile?.lastName || '');
@@ -300,9 +302,9 @@ function AccountProfilePage() {
               <View style={styles.avatar}>
                 {uploadingPhoto ? (
                   <ActivityIndicator color="#FFCD57" />
-                ) : (avatarUri || user.profile?.avatar) ? (
+                ) : (avatarUri || safeAvatar) ? (
                   <CachedImage
-                    source={{ uri: avatarUri || user.profile?.avatar }}
+                    source={{ uri: avatarUri || safeAvatar }}
                     style={{ width: 64, height: 64, borderRadius: 32 }}
                   />
                 ) : (

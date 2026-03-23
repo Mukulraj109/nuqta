@@ -10,6 +10,7 @@ import {
   Pressable} from "react-native";
 import Animated, {
   useAnimatedStyle,
+  useSharedValue,
   withSpring} from 'react-native-reanimated';
 import CachedImage from '@/components/ui/CachedImage';
 import { type ImageSource } from 'expo-image';

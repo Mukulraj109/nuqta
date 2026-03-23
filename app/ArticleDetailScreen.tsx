@@ -301,11 +301,9 @@ function ArticleDetailScreen() {
   const getAuthorInfo = useMemo(() => {
     if (!article?.author) return { name: '', avatar: null };
     const name = article.author.name || article.author.username || '';
-    const avatar = article.author.avatar || article.author.profile?.avatar;
-    const defaultAvatar = name
-      ? `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=3B82F6&color=fff&size=100`
-      : null;
-    return { name, avatar: avatar || defaultAvatar };
+    const rawAvatar = article.author.avatar || article.author.profile?.avatar;
+    const avatar = rawAvatar && !rawAvatar.includes('ui-avatars.com') ? rawAvatar : null;
+    return { name, avatar };
   }, [article]);
 
   // Get image URL - skip if it looks like a video

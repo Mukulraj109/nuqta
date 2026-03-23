@@ -4,7 +4,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
  * Connected to /api/categories
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -14,14 +14,13 @@ import {
   Platform,
   Dimensions,
   TextInput,
-  ActivityIndicator,
   RefreshControl,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import categoriesApi, { Category } from '@/services/categoriesApi';
-import { CardGridSkeleton } from '@/components/skeletons';
+import { CategoryGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
@@ -182,13 +181,14 @@ const CategoriesPage: React.FC = () => {
     try {
       const response = await categoriesApi.getCategories({ isActive: true });
 
-      if (response.success && response.data && response.data.length > 0) {
-        const groupedSections = groupCategoriesByType(response.data);
+      const categories = response.data?.categories ?? response.data;
+      if (response.success && Array.isArray(categories) && categories.length > 0) {
+        const groupedSections = groupCategoriesByType(categories);
         if (groupedSections.length > 0) {
           setSections(groupedSections);
         }
         if (!isMounted()) return;
-        setTotalCategories(response.data.length);
+        setTotalCategories(categories.length);
       }
     } catch (error) {
       // Keep fallback data
@@ -209,17 +209,20 @@ const CategoriesPage: React.FC = () => {
     fetchCategories();
   }, [fetchCategories]);
 
-  const filteredCategories = sections
-    .map((section) => ({
-      ...section,
-      items: section.items.filter((item) =>
-        item.title.toLowerCase().includes(searchQuery.toLowerCase())
-      ),
-    }))
-    .filter((section) => section.items.length > 0);
+  const filteredCategories = useMemo(() => {
+    const query = searchQuery.toLowerCase();
+    return sections
+      .map((section) => ({
+        ...section,
+        items: section.items.filter((item) =>
+          item.title.toLowerCase().includes(query)
+        ),
+      }))
+      .filter((section) => section.items.length > 0);
+  }, [sections, searchQuery]);
 
   if (isLoading) {
-    return <CardGridSkeleton />;
+    return <CategoryGridSkeleton numItems={12} numColumns={3} />;
   }
 
   return (
@@ -314,7 +317,6 @@ const CategoriesPage: React.FC = () => {
             </View>
           </LinearGradient>
         </View>
-        <View style={{ height: 100 }} />
       </ScrollView>
     </View>
   );
@@ -324,15 +326,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
-  },
-  loadingContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loadingText: {
-    marginTop: 12,
-    fontSize: 14,
-    color: COLORS.gray600,
   },
   header: {
     paddingTop: Platform.OS === 'ios' ? 56 : 16,
@@ -395,6 +388,20 @@ const styles = StyleSheet.create({
     padding: Spacing.md,
     backgroundColor: COLORS.gray50,
     borderRadius: BorderRadius.lg,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.06,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 2,
+      },
+      web: {
+        boxShadow: '0px 1px 4px rgba(0, 0, 0, 0.06)',
+      },
+    }),
   },
   categoryIcon: {
     width: 48,

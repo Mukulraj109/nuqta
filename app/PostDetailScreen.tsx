@@ -165,12 +165,10 @@ function PostDetailScreen() {
     if (!post?.creator) return { name: '', avatar: null };
 
     const name = post.creator.name || post.creator.username || '';
-    const avatar = post.creator.avatar || post.creator.profile?.avatar;
-    const defaultAvatar = name
-      ? `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=8B5CF6&color=fff&size=100`
-      : null;
+    const rawAvatar = post.creator.avatar || post.creator.profile?.avatar;
+    const avatar = rawAvatar && !rawAvatar.includes('ui-avatars.com') ? rawAvatar : null;
 
-    return { name, avatar: avatar || defaultAvatar };
+    return { name, avatar };
   };
 
   const creatorInfo = getCreatorInfo();

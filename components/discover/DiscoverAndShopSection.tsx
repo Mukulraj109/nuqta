@@ -365,11 +365,11 @@ function DiscoverAndShopSection({
           const views = formatViews(reel.engagement?.views || reel.metrics?.views || 0);
           const storeName = reel.store?.name || reel.products?.[0]?.store?.name || '';
           const userName = reel.creator?.name || reel.creator?.username || reel.store?.name || '';
-          const userAvatar = reel.creator?.avatar;
+          const rawAvatar = reel.creator?.avatar;
+          const userAvatar = rawAvatar && !rawAvatar.includes('ui-avatars.com') ? rawAvatar : undefined;
           const thumbnailUrl = reel.thumbnail || reel.products?.[0]?.image;
           const hasValidThumbnail = thumbnailUrl && isValidImageUrl(thumbnailUrl);
-          // Generate default avatar URL if no avatar provided
-          const defaultAvatarUrl = userName ? `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=1a3a52&color=fff&size=56` : null;
+          const defaultAvatarUrl = null;
 
         return (
             <Pressable
@@ -547,10 +547,10 @@ function DiscoverAndShopSection({
             : (Array.isArray(post.engagement?.likes) ? post.engagement.likes.length : 0);
           const views = post.engagement?.views || 0;
           const userName = post.creator?.name || post.creator?.username || '';
-          const userAvatar = post.creator?.avatar;
+          const rawPostAvatar = post.creator?.avatar;
+          const userAvatar = rawPostAvatar && !rawPostAvatar.includes('ui-avatars.com') ? rawPostAvatar : undefined;
           const productCount = post.products?.length || 0;
-          // Generate default avatar URL using ui-avatars.com
-          const defaultAvatarUrl = userName ? `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=8B5CF6&color=fff&size=56` : null;
+          const defaultAvatarUrl = null;
           // Check if this is a merchant/brand post
           const isMerchantPost = post.contentType === 'merchant';
 
@@ -697,10 +697,10 @@ function DiscoverAndShopSection({
           const isValidImage = isValidImageUrl(article.featuredImage);
           const views = article.engagement?.views || 0;
           const authorName = article.author?.name || article.author?.username || '';
-          const authorAvatar = article.author?.avatar;
+          const rawAuthorAvatar = article.author?.avatar;
+          const authorAvatar = rawAuthorAvatar && !rawAuthorAvatar.includes('ui-avatars.com') ? rawAuthorAvatar : undefined;
           const productCount = article.products?.length || 0;
-          // Generate default avatar URL using ui-avatars.com (blue theme for articles)
-          const defaultAvatarUrl = authorName ? `https://ui-avatars.com/api/?name=${encodeURIComponent(authorName)}&background=3B82F6&color=fff&size=32` : null;
+          const defaultAvatarUrl = null;
 
         return (
             <Pressable
@@ -830,10 +830,10 @@ function DiscoverAndShopSection({
             ? image.engagement.likes
             : (Array.isArray(image.engagement?.likes) ? image.engagement.likes.length : 0);
           const userName = image.creator?.name || image.creator?.username || '';
-          const userAvatar = image.creator?.avatar;
+          const rawImageAvatar = image.creator?.avatar;
+          const userAvatar = rawImageAvatar && !rawImageAvatar.includes('ui-avatars.com') ? rawImageAvatar : undefined;
           const productCount = image.products?.length || 0;
-          // Generate default avatar URL using ui-avatars.com
-          const defaultAvatarUrl = userName ? `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=F59E0B&color=fff&size=56` : null;
+          const defaultAvatarUrl = null;
 
           return (
             <Pressable

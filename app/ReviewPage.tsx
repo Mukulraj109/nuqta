@@ -112,7 +112,7 @@ function ReviewPage() {
           id: txn._id || txn.id,
           userId: txn.user?._id || txn.user?.id || txn.userId,
           userName: txn.user?.profile?.name || txn.metadata?.userName || 'User',
-          userAvatar: txn.user?.profile?.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(txn.user?.profile?.name || 'User'),
+          userAvatar: (txn.user?.profile?.avatar && !txn.user.profile.avatar.includes('ui-avatars.com')) ? txn.user.profile.avatar : undefined,
           amount: txn.amount || 0,
           productId: txn.metadata?.productId || '',
           reviewId: txn.metadata?.reviewId || '',

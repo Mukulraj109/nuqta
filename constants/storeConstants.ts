@@ -307,7 +307,7 @@ export const STATUS_COLORS = {
 export const PLACEHOLDER_IMAGES = {
   PRODUCT: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=900&h=1100&fit=crop',
   STORE: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=800&fit=crop',
-  USER: 'https://ui-avatars.com/api/?background=7C3AED&color=fff&name=User',
+  USER: '',
   NO_IMAGE: 'https://via.placeholder.com/400x400?text=No+Image',
 } as const;
 

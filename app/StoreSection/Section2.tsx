@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { View, Pressable, StyleSheet, ViewStyle, TextStyle, Linking, Platform} from "react-native";
 import Animated, {
   useAnimatedStyle,
+  useSharedValue,
   withSpring} from 'react-native-reanimated';
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";

@@ -610,9 +610,9 @@ function UGCDetailScreen() {
   }, [video?.creator, video?.store?.name]);
 
   const creatorAvatar = useMemo(() => {
-    const defaultAvatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(creatorName)}&background=8B5CF6&color=fff&size=100`;
-    return video?.creator?.profile?.avatar || video?.creator?.avatar || defaultAvatarUrl;
-  }, [video?.creator, creatorName]);
+    const raw = video?.creator?.profile?.avatar || video?.creator?.avatar || null;
+    return raw && !raw.includes('ui-avatars.com') ? raw : null;
+  }, [video?.creator]);
 
   // Deep-link parameter validation guard: requires either item (JSON) or id
   if (!params.item && !params.id) {
@@ -816,10 +816,18 @@ function UGCDetailScreen() {
               router.push(`/creator/${creatorId}` as any);
             }
           }}>
-            <CachedImage
-              source={creatorAvatar}
-              style={styles.creatorAvatar}
-            />
+            {creatorAvatar ? (
+              <CachedImage
+                source={creatorAvatar}
+                style={styles.creatorAvatar}
+              />
+            ) : (
+              <View style={[styles.creatorAvatar, { backgroundColor: '#8B5CF6', justifyContent: 'center', alignItems: 'center' }]}>
+                <Text style={{ color: '#fff', fontWeight: '700', fontSize: 18 }}>
+                  {creatorName?.[0]?.toUpperCase() || 'U'}
+                </Text>
+              </View>
+            )}
           </Pressable>
           {!isFollowing && (
             <Pressable style={styles.followBadge} onPress={handleFollow}>

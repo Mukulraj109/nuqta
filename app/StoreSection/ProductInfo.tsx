@@ -11,6 +11,7 @@ import {
   useWindowDimensions} from "react-native";
 import Animated, {
   useAnimatedStyle,
+  useSharedValue,
   withTiming,
   Easing} from 'react-native-reanimated';
 import { Ionicons } from "@expo/vector-icons";
