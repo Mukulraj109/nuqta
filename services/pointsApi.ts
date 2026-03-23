@@ -338,11 +338,11 @@ class PointsApiService {
       
       return { success: false, error: response.error || 'Failed to get check-in status' };
     } catch (error) {
-      // Return default values instead of throwing
+      // Return canCheckIn: false on error to prevent cascading checkin calls
       return {
-        success: true,
+        success: false,
         data: {
-          canCheckIn: true,
+          canCheckIn: false,
           lastCheckInDate: null,
           currentStreak: 0,
           longestStreak: 0,
